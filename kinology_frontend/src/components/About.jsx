@@ -6,7 +6,9 @@ const About = () => {
       <h2>Fullstack open project</h2>
       <h2>About me</h2>
       <ul>
-        <li>github</li>
+        <li>
+          <a href="https://github.com/timmchi">github</a>
+        </li>
         <li>portfolio</li>
         <li>contact me</li>
         <li>my favorite movies</li>

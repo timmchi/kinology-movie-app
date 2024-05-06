@@ -10,6 +10,14 @@ import User from "./components/User";
 import Movie from "./components/Movie";
 
 function App() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    console.log("logging in with", username, password);
+  };
   return (
     <>
       <Navigation />
@@ -18,7 +26,18 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/movie/:id" element={<Movie />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<LogIn />} />
+        <Route
+          path="/login"
+          element={
+            <LogIn
+              username={username}
+              password={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+              handleSubmit={handleLogin}
+            />
+          }
+        />
         <Route path="/logout" element={<LogOut />} />
         <Route path="/about" element={<About />} />
       </Routes>
