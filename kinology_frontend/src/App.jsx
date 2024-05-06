@@ -6,23 +6,17 @@ import About from "./components/About";
 import LogIn from "./components/LogIn";
 import LogOut from "./components/LogOut";
 import SignUp from "./components/SignUp";
+import User from "./components/User";
+import Movie from "./components/Movie";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1>Beginning of kinology!</h1>
-      <div>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
       <Navigation />
       <Routes>
-        <Route path="/users/:id" />
+        <Route path="/users/:id" element={<User />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/movie/:id" />
+        <Route path="/movie/:id" element={<Movie />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/logout" element={<LogOut />} />
