@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -11,6 +12,15 @@ function App() {
           count is {count}
         </button>
       </div>
+      <Routes>
+        <Route path="/users/:id" />
+        <Route path="/" />
+        <Route path="/movie/:id" />
+        <Route path="/signup" />
+        <Route path="/login" />
+        <Route path="/logout" />
+        <Route path="/about" />
+      </Routes>
     </>
   );
 }
