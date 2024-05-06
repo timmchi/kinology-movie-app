@@ -8,6 +8,8 @@ import LogOut from "./components/LogOut";
 import SignUp from "./components/SignUp";
 import User from "./components/User";
 import Movie from "./components/Movie";
+import loginService from "./services/login";
+import userService from "./services/users";
 
 function App() {
   const [username, setUsername] = useState("");
@@ -17,6 +19,20 @@ function App() {
   const handleLogin = async (event) => {
     event.preventDefault();
     console.log("logging in with", username, password);
+
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+
+      userService.setToken(user.token);
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      console.log("wrong credentials");
+    }
   };
   return (
     <>
@@ -25,7 +41,7 @@ function App() {
         <Route path="/users/:id" element={<User />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/movie/:id" element={<Movie />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp user={user} />} />
         <Route
           path="/login"
           element={
@@ -35,10 +51,11 @@ function App() {
               handleUsernameChange={({ target }) => setUsername(target.value)}
               handlePasswordChange={({ target }) => setPassword(target.value)}
               handleSubmit={handleLogin}
+              user={user}
             />
           }
         />
-        <Route path="/logout" element={<LogOut />} />
+        <Route path="/logout" element={<LogOut user={user} />} />
         <Route path="/about" element={<About />} />
       </Routes>
     </>

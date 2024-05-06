@@ -1,17 +1,28 @@
+import { useNavigate } from "react-router-dom";
+
 const LogIn = ({
   username,
   password,
   handleUsernameChange,
   handlePasswordChange,
   handleSubmit,
+  user,
 }) => {
+  const navigate = useNavigate();
+
+  if (user) navigate("/");
   return (
     <div>
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <div>
           username:{" "}
-          <input type="text" value={username} onChange={handleUsernameChange} />
+          <input
+            type="text"
+            value={username}
+            onChange={handleUsernameChange}
+            name="Username"
+          />
         </div>
         <div>
           password:{" "}
@@ -19,6 +30,7 @@ const LogIn = ({
             type="password"
             value={password}
             onChange={handlePasswordChange}
+            name="Password"
           />
         </div>
         <button type="submit">log in</button>
