@@ -1,6 +1,7 @@
 // links to implement = /movie/:id, /user/:id
 
 import { Link, NavLink } from "react-router-dom";
+import LogOut from "./LogOut";
 
 const Navigation = ({ user = null }) => {
   const padding = {
@@ -21,8 +22,8 @@ const Navigation = ({ user = null }) => {
           </li>
           {user ? (
             <li>
-              <NavLink style={padding} to="/logout">
-                Log out
+              <NavLink style={padding}>
+                <LogOut />
               </NavLink>
             </li>
           ) : (

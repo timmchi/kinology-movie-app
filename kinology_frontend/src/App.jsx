@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Navigation from "./components/Navigation";
 import About from "./components/About";
 import LogIn from "./components/LogIn";
-import LogOut from "./components/LogOut";
 import SignUp from "./components/SignUp";
 import User from "./components/User";
 import Movie from "./components/Movie";
@@ -16,6 +15,15 @@ function App() {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      userService.setToken(user.token);
+    }
+  }, []);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     console.log("logging in with", username, password);
@@ -26,6 +34,7 @@ function App() {
         password,
       });
 
+      window.localStorage.setItem("loggedKinologyUser", JSON.stringify(user));
       userService.setToken(user.token);
       setUser(user);
       setUsername("");
@@ -34,6 +43,7 @@ function App() {
       console.log("wrong credentials");
     }
   };
+
   return (
     <>
       <Navigation />
@@ -55,7 +65,6 @@ function App() {
             />
           }
         />
-        <Route path="/logout" element={<LogOut user={user} />} />
         <Route path="/about" element={<About />} />
       </Routes>
     </>
