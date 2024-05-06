@@ -15,7 +15,7 @@ const createOption = (label) => ({
 const SearchBar = () => {
   const [genres, setGenres] = useState([]);
   const [director, setDirector] = useState("");
-  const [year, setYear] = useState(1888);
+  const [year, setYear] = useState("");
   const [ratingUpper, setRatingUpper] = useState(10);
   const [ratingLower, setRatingLower] = useState(0);
   const [actor, setActor] = useState("");
@@ -33,6 +33,12 @@ const SearchBar = () => {
       actors.map((actor) => actor.value),
       country
     );
+    setDirector("");
+    setYear("");
+    setRatingLower(0);
+    setRatingUpper(10);
+    setActors([]);
+    setCountry("");
   };
 
   const handleKeyDown = (event) => {
