@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
+import SearchBar from "./components/SearchBar";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,6 +22,7 @@ function App() {
         <Route path="/logout" />
         <Route path="/about" />
       </Routes>
+      <SearchBar />
     </>
   );
 }

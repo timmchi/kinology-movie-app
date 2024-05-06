@@ -1,5 +1,7 @@
-import React, { useState, KeyboardEventHandler } from "react";
-import CreatableSelect from "react-select";
+import React, { useState } from "react";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
+import genreOptions from "../data/genres";
 
 const components = {
   DropdownIndicator: null,
@@ -11,7 +13,7 @@ const createOption = (label) => ({
 });
 
 const SearchBar = () => {
-  const [genre, setGenre] = useState("");
+  const [genres, setGenres] = useState([]);
   const [director, setDirector] = useState("");
   const [year, setYear] = useState(1888);
   const [ratingUpper, setRatingUpper] = useState(10);
@@ -20,7 +22,18 @@ const SearchBar = () => {
   const [actors, setActors] = useState([]);
   const [country, setCountry] = useState("");
 
-  const searchForMovies = () => {};
+  const searchForMovies = (e) => {
+    e.preventDefault();
+    console.log(
+      genres,
+      director,
+      year,
+      ratingUpper,
+      ratingLower,
+      actors.map((actor) => actor.value),
+      country
+    );
+  };
 
   const handleKeyDown = (event) => {
     if (!actor) return;
@@ -32,18 +45,33 @@ const SearchBar = () => {
         event.preventDefault();
     }
   };
+  //   const handleKeyDown = (event, input, setInput, setList) => {
+  //     if (!input) return;
+  //     switch (event.key) {
+  //       case "Enter":
+  //       case "Tab":
+  //         setList((prev) => [...prev, createOption(input)]);
+  //         setInput("");
+  //         event.preventDefault();
+  //     }
+  //   };
+
+  const onGenresChange = (e) => {
+    const updatedGenres = e.map((genre) => genre.value);
+    setGenres(updatedGenres);
+  };
 
   return (
     <div>
       <h1>search bar</h1>
       <form onSubmit={searchForMovies}>
         <div>
-          genre
-          <input
-            value={genre}
-            onChange={(event) => setGenre(event.target.value)}
-            placeholder="Genre"
-            data-testid="genre"
+          <Select
+            closeMenuOnSelect={false}
+            isMulti
+            options={genreOptions}
+            placeholder="Select genres"
+            onChange={onGenresChange}
           />
         </div>
         <div>
@@ -62,7 +90,7 @@ const SearchBar = () => {
             min="1888"
             max={new Date().getFullYear()}
             value={year}
-            onChange={(event) => setGenre(event.target.value)}
+            onChange={(event) => setYear(event.target.value)}
             placeholder="Year"
             data-testid="year"
           />
@@ -95,7 +123,8 @@ const SearchBar = () => {
             isClearable
             isMulti
             menuIsOpen={false}
-            onChange={(newActor) => setActor(newActor)}
+            onChange={(newActor) => setActors(newActor)}
+            onInputChange={(newActor) => setActor(newActor)}
             onKeyDown={handleKeyDown}
             placeholder="Type in name/names of actor/actors and press enter"
             value={actors}
@@ -110,6 +139,7 @@ const SearchBar = () => {
             data-testid="country"
           />
         </div>
+        <button type="submit">Search</button>
       </form>
     </div>
   );
