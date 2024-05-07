@@ -23,17 +23,33 @@ const errorHandler = (error, request, response, next) => {
   if (
     error.name === "MongoServerError" &&
     error.message.includes("E11000 duplicate key error")
-  ) {
+  )
     return response
       .status(400)
       .json({ error: "expected `username` to be unique" });
-  }
+
+  if (error.name === "TokenExperiedError")
+    return response.status(401).json({ error: "token expired" });
 
   next(error);
+};
+
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get("authorization");
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    try {
+      req.decodedToken = jwt.verify(authorization.substring(7), SECRET);
+      req.token = authorization.substring(7);
+    } catch {
+      return res.status(401).json({ error: "token invalid" });
+    }
+  }
+  next();
 };
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
+  tokenExtractor,
 };
