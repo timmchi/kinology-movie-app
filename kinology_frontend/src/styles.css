@@ -54,21 +54,18 @@ body {
   height: 55px;
   border-radius: 100vw;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
   font-size: 0.6rem;
 }
 
-.searchBar div {
-  background: hsl(0 0% 94%);
-}
-
-input[type="text"] {
+input {
   background: none;
   border: none;
-  padding: 0.2rem 0 0 0;
+  padding: 0.2rem 0.3rem;
 }
 
-input[type="text"]:focus {
+input:focus {
   outline: none;
 }
 
@@ -95,6 +92,18 @@ input[type="text"]:focus {
   background: transparent;
 }
 
-.searchBar > div:hover::before {
-  background: transparent;
+.country {
+  position: relative;
+}
+.country button {
+  position: absolute;
+  top: 50%;
+  right: 1em;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  padding: 0.6rem;
+  border-radius: 50%;
+  border-width: 0;
+  background: #549a71;
+  color: white;
 }

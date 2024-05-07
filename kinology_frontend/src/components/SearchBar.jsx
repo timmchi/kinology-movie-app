@@ -3,6 +3,8 @@ import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import genreOptions from "../data/genres";
 
+import SearchIcon from "@mui/icons-material/Search";
+
 const components = {
   DropdownIndicator: null,
 };
@@ -71,6 +73,7 @@ const SearchBar = () => {
     <div>
       <h1>search bar</h1>
       <form onSubmit={searchForMovies} className="searchBar">
+        {/* <div className="container"> */}
         <div className="genres">
           <Select
             closeMenuOnSelect={false}
@@ -81,8 +84,9 @@ const SearchBar = () => {
           />
         </div>
         <div className="director">
-          director
+          <p>director</p>
           <input
+            type="text"
             value={director}
             onChange={(event) => setDirector(event.target.value)}
             placeholder="Director"
@@ -90,7 +94,7 @@ const SearchBar = () => {
           />
         </div>
         <div className="year">
-          year
+          <p>year</p>
           <input
             type="number"
             min="1888"
@@ -102,7 +106,7 @@ const SearchBar = () => {
           />
         </div>
         <div className="rating">
-          upper and lower boundary for rating
+          <p>Lowest to highest rating</p>
           <input
             type="number"
             min="0"
@@ -132,20 +136,25 @@ const SearchBar = () => {
             onChange={(newActor) => setActors(newActor)}
             onInputChange={(newActor) => setActor(newActor)}
             onKeyDown={handleKeyDown}
-            placeholder="Type in name/names of actor/actors and press enter"
+            placeholder="Type in actor and press enter"
             value={actors}
           />
         </div>
         <div className="country">
-          country
+          <p>country</p>
           <input
+            type="text"
             value={country}
             onChange={(event) => setCountry(event.target.value)}
             placeholder="Country"
             data-testid="country"
           />
+          <button type="submit">
+            <SearchIcon />
+          </button>
         </div>
-        <button type="submit">Search</button>
+
+        {/* </div> */}
       </form>
     </div>
   );
