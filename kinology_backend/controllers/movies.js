@@ -1,5 +1,5 @@
 const axios = require("axios");
-0;
+const { isoCountrySearch } = require("../utils/isoSearch");
 const moviesRouter = require("express").Router();
 const config = require("../utils/config");
 
@@ -13,17 +13,12 @@ const headers = {
   Authorization: `Bearer ${config.TMDB_TOKEN}`,
 };
 
-// genres, director, year, rating (bottom - top), actors, country
-// with_genres, with_crew, year, vote_average.gte - vote_average.lte, with_cast, with_origin_country
-// query=leonardo%20dicaprio
-
 const peopleSearch = async (people) => {
   const peopleIds = await Promise.all(
     people.map(async (name) => {
       const response = await axios.get(`${basePersonUrl}&query=${name}`, {
         headers,
       });
-      // console.log(response.data.results[0].id);
       return response.data.results[0].id;
     })
   );
@@ -38,6 +33,21 @@ const queryCreator = (params) => {
   const with_crew = `&with_crew=${params.director}`;
   const with_people = `&with_people=${params.actors.join("%2C%20")}`;
   const year = `&year=${params.year}`;
+  const origin_country = `&with_origin_country=${isoCountrySearch(
+    params.country
+  )}`;
+
+  console.log(
+    [
+      vote_gte,
+      vote_lte,
+      with_genres,
+      with_crew,
+      with_people,
+      year,
+      origin_country,
+    ].join("")
+  );
 };
 
 moviesRouter.post("/", async (request, response) => {
@@ -51,6 +61,15 @@ moviesRouter.post("/", async (request, response) => {
 
   if (actors.length !== 0) actors = await peopleSearch(actors);
 
+  queryCreator({
+    genres,
+    year,
+    ratingUpper,
+    ratingLower,
+    country,
+    director,
+    actors,
+  });
   response.status(200).send({ actors, director });
 });
 

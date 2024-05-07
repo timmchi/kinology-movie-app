@@ -1,6 +1,6 @@
 const { isoCodes } = require("../data/isocodes");
 
-const isoCountrySearch = (countryName, isoCodes) => {
+const isoCountrySearch = (countryName) => {
   let left = 0;
   let right = isoCodes.length - 1;
 
