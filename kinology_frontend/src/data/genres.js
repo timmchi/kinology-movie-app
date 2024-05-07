@@ -1,78 +1,78 @@
 const genreOptions = [
   {
-    value: "Action",
+    value: 28,
     label: "Action",
   },
   {
-    value: "Adventure",
+    value: 12,
     label: "Adventure",
   },
   {
-    value: "Animation",
+    value: 16,
     label: "Animation",
   },
   {
-    value: "Comedy",
+    value: 35,
     label: "Comedy",
   },
   {
-    value: "Crime",
+    value: 80,
     label: "Crime",
   },
   {
-    value: "Documentary",
+    value: 99,
     label: "Documentary",
   },
   {
-    value: "Drama",
+    value: 18,
     label: "Drama",
   },
   {
-    value: "Family",
+    value: 10751,
     label: "Family",
   },
   {
-    value: "Fantasy",
+    value: 14,
     label: "Fantasy",
   },
   {
-    value: "History",
+    value: 36,
     label: "History",
   },
   {
-    value: "Horror",
+    value: 27,
     label: "Horror",
   },
   {
-    value: "Music",
+    value: 10402,
     label: "Music",
   },
   {
-    value: "Mystery",
+    value: 9648,
     label: "Mystery",
   },
   {
-    value: "Romance",
+    value: 10749,
     label: "Romance",
   },
   {
-    value: "Science Fiction",
+    value: 878,
     label: "Science Fiction",
   },
   {
-    value: "TV Movie",
+    value: 10770,
     label: "TV Movie",
   },
   {
-    id: "Thriller",
+    value: 53,
     label: "Thriller",
   },
   {
-    id: "War",
+    value: 10752,
     label: "War",
   },
   {
-    id: "Western",
+    value: 37,
     label: "Western",
   },
 ];

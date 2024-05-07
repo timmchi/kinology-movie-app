@@ -4,6 +4,7 @@ import CreatableSelect from "react-select/creatable";
 import genreOptions from "../data/genres";
 
 import SearchIcon from "@mui/icons-material/Search";
+import moviesService from "../services/movies";
 
 const components = {
   DropdownIndicator: null,
@@ -24,7 +25,7 @@ const SearchBar = () => {
   const [actors, setActors] = useState([]);
   const [country, setCountry] = useState("");
 
-  const searchForMovies = (e) => {
+  const searchForMovies = async (e) => {
     e.preventDefault();
     console.log(
       genres,
@@ -35,6 +36,16 @@ const SearchBar = () => {
       actors.map((actor) => actor.value),
       country
     );
+    const actorsQuery = actors.map((actor) => actor.value);
+    await moviesService.search({
+      genres,
+      director,
+      year,
+      ratingUpper,
+      ratingLower,
+      actors: actorsQuery,
+      country,
+    });
     setDirector("");
     setYear("");
     setRatingLower(0);
