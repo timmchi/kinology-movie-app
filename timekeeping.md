@@ -1,16 +1,16 @@
 # Fullstack open project timekeeping - project Kinology
 
-| day | hours | tasks                                                    |
-| :-: | :---- | :------------------------------------------------------- |
-| 5.5 | 1     | Setting up the repository and the project                |
-| 5.5 | 1     | Flowchart creation                                       |
-| 6.5 | 2     | Working on search bar, Nav bar                           |
-| 6.5 | 2     | Front end structure, log in functionality                |
-| 6.5 | 1     | Working on back end structure and log in functionality   |
-| 6.5 | 1     | Code to run backend, Mongoose models created             |
-| 7.5 |       | Styling the search bar                                   |
-| 7.5 |       | User creation and authentication in backend and frontend |
-| 7.5 |       | Fetching movies in backend                               |
-|     |       |                                                          |
-|     |       |                                                          |
-| tot | 8     |                                                          |
+| day | hours | tasks                                                                |
+| :-: | :---- | :------------------------------------------------------------------- |
+| 5.5 | 1     | Setting up the repository and the project                            |
+| 5.5 | 1     | Flowchart creation                                                   |
+| 6.5 | 2     | Working on search bar, Nav bar                                       |
+| 6.5 | 2     | Front end structure, log in functionality                            |
+| 6.5 | 1     | Working on back end structure and log in functionality               |
+| 6.5 | 1     | Code to run backend, Mongoose models created                         |
+| 7.5 | 0.5   | Styling the search bar                                               |
+| 7.5 | 0.5   | User creation and authentication in backend and frontend             |
+| 7.5 | 4     | Key functionality: Fetching movies in backend through frontend query |
+|     |       |                                                                      |
+|     |       |                                                                      |
+| tot | 13    |                                                                      |
