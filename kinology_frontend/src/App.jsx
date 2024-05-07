@@ -46,7 +46,7 @@ function App() {
 
   return (
     <>
-      <Navigation />
+      <Navigation user={user} />
       <Routes>
         <Route path="/users/:id" element={<User />} />
         <Route path="/" element={<LandingPage />} />

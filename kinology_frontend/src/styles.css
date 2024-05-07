@@ -59,13 +59,13 @@ body {
   font-size: 0.8rem;
 }
 
-input {
+.bar-input {
   background: none;
   border: none;
   padding: 0.2rem 0.3rem;
 }
 
-input:focus {
+.bar-input:focus {
   outline: none;
 }
 

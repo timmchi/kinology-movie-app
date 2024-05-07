@@ -94,6 +94,7 @@ const SearchBar = () => {
           <p>director</p>
           <input
             type="text"
+            className="bar-input"
             value={director}
             onChange={(event) => setDirector(event.target.value)}
             placeholder="Director"
@@ -104,6 +105,7 @@ const SearchBar = () => {
           <p>year</p>
           <input
             type="number"
+            className="bar-input"
             min="1888"
             max={new Date().getFullYear()}
             value={year}
@@ -116,6 +118,7 @@ const SearchBar = () => {
           <p>Lowest to highest rating</p>
           <input
             type="number"
+            className="bar-input"
             min="0"
             max="10"
             value={ratingLower}
@@ -125,6 +128,7 @@ const SearchBar = () => {
           />
           <input
             type="number"
+            className="bar-input"
             min="0"
             max="10"
             value={ratingUpper}
@@ -157,6 +161,7 @@ const SearchBar = () => {
           <p>country</p>
           <input
             type="text"
+            className="bar-input"
             value={country}
             onChange={(event) => setCountry(event.target.value)}
             placeholder="Country"

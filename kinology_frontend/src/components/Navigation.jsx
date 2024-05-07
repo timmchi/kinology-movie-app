@@ -3,7 +3,7 @@
 import { Link, NavLink } from "react-router-dom";
 import LogOut from "./LogOut";
 
-const Navigation = ({ user = null }) => {
+const Navigation = ({ user }) => {
   const padding = {
     padding: 5,
   };

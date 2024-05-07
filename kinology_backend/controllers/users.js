@@ -3,7 +3,7 @@ const usersRouter = require("express").Router();
 const User = require("../models/user");
 
 usersRouter.post("/", async (request, response) => {
-  const body = require.body;
+  const body = request.body;
 
   if (
     !(
@@ -22,10 +22,10 @@ usersRouter.post("/", async (request, response) => {
 
   const user = new User({
     username: body.username,
-    name: body.username ?? "",
+    name: body.name ?? "",
     passwordHash,
-    biography: body.biography ?? "",
-    avatar: body.avatar ?? "",
+    biography: "",
+    avatar: "",
   });
 
   const savedUser = await user.save();
@@ -58,5 +58,7 @@ usersRouter.get("/:id", async (request, response) => {
 
   response.json(user);
 });
+
+// usersRouter.post('/:id') will be used to upload avatar, biography, etc.
 
 module.exports = usersRouter;
