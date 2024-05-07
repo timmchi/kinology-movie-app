@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import genreOptions from "../data/genres";
@@ -27,17 +27,8 @@ const SearchBar = () => {
 
   const searchForMovies = async (e) => {
     e.preventDefault();
-    console.log(
-      genres,
-      director,
-      year,
-      ratingUpper,
-      ratingLower,
-      actors.map((actor) => actor.value),
-      country
-    );
     const actorsQuery = actors.map((actor) => actor.value);
-    await moviesService.search({
+    const movies = await moviesService.search({
       genres,
       director,
       year,
@@ -46,6 +37,8 @@ const SearchBar = () => {
       actors: actorsQuery,
       country,
     });
+    console.log(movies);
+
     setDirector("");
     setYear("");
     setRatingLower(0);

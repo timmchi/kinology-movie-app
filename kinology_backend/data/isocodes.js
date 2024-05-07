@@ -234,7 +234,7 @@ const isoCodes = [
   { code: "AE", name: "United Arab Emirates" },
   { code: "GB", name: "United Kingdom of Great Britain and Northern Ireland" },
   { code: "UM", name: "United States Minor Outlying Islands" },
-  { code: "US", name: "USA" },
+  { code: "US", name: "United States of America" },
   { code: "UY", name: "Uruguay" },
   { code: "UZ", name: "Uzbekistan" },
   { code: "VU", name: "Vanuatu" },

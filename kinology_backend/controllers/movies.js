@@ -89,9 +89,15 @@ moviesRouter.post("/", async (request, response) => {
 
   const movieResponse = await axios.get(url, { headers });
 
-  console.log(movieResponse.data.results);
+  const movieResults = movieResponse.data.results;
 
-  response.status(200).send({ query });
+  const movieToFrontObjectArray = movieResults.map((movie) => ({
+    id: movie.id,
+    title: movie.title,
+    image: movie.poster_path,
+  }));
+
+  response.status(200).send({ movieToFrontObjectArray });
 });
 
 module.exports = moviesRouter;
