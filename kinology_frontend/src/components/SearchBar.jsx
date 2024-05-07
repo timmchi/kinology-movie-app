@@ -70,8 +70,8 @@ const SearchBar = () => {
   return (
     <div>
       <h1>search bar</h1>
-      <form onSubmit={searchForMovies}>
-        <div>
+      <form onSubmit={searchForMovies} className="searchBar">
+        <div className="genres">
           <Select
             closeMenuOnSelect={false}
             isMulti
@@ -80,7 +80,7 @@ const SearchBar = () => {
             onChange={onGenresChange}
           />
         </div>
-        <div>
+        <div className="director">
           director
           <input
             value={director}
@@ -89,7 +89,7 @@ const SearchBar = () => {
             data-testid="director"
           />
         </div>
-        <div>
+        <div className="year">
           year
           <input
             type="number"
@@ -101,7 +101,7 @@ const SearchBar = () => {
             data-testid="year"
           />
         </div>
-        <div>
+        <div className="rating">
           upper and lower boundary for rating
           <input
             type="number"
@@ -122,7 +122,7 @@ const SearchBar = () => {
             data-testid="ratingHigh"
           />
         </div>
-        <div>
+        <div className="actors">
           <CreatableSelect
             components={components}
             inputValue={actor}
@@ -136,7 +136,7 @@ const SearchBar = () => {
             value={actors}
           />
         </div>
-        <div>
+        <div className="country">
           country
           <input
             value={country}

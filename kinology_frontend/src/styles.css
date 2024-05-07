@@ -6,6 +6,7 @@ body {
   margin: 0;
   background-color: #00532f;
   color: #bdac4e;
+  font-family: sans-serif;
 }
 
 .nav {
@@ -45,4 +46,55 @@ body {
 
 .nav li:hover {
   background-color: #438761;
+}
+
+.searchBar {
+  background: white;
+  box-shadow: 0 0 5px hsl(0 0% 78%);
+  height: 55px;
+  border-radius: 100vw;
+  display: flex;
+  justify-content: center;
+  font-size: 0.6rem;
+}
+
+.searchBar div {
+  background: hsl(0 0% 94%);
+}
+
+input[type="text"] {
+  background: none;
+  border: none;
+  padding: 0.2rem 0 0 0;
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+::placeholder {
+  font-size: 0.75rem;
+}
+
+.searchBar > div {
+  position: relative;
+}
+
+.searchBar > div::before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 55%;
+  background: hsl(0 0% 90%);
+}
+
+.searchBar > div:nth-of-type(1)::before {
+  background: transparent;
+}
+
+.searchBar > div:hover::before {
+  background: transparent;
 }

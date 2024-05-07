@@ -19,3 +19,5 @@ const createComment = async (newComment, userId) => {
   );
   return response.data;
 };
+
+export default { setToken, createComment };
