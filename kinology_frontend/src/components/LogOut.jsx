@@ -1,6 +1,8 @@
 const LogOut = () => {
-  const handleLogout = () =>
+  const handleLogout = (event) => {
+    console.log("logging out...");
     window.localStorage.removeItem("loggedKinologyUser");
+  };
 
   return (
     <form onSubmit={handleLogout}>

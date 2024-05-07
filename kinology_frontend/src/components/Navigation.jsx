@@ -22,9 +22,7 @@ const Navigation = ({ user }) => {
           </li>
           {user ? (
             <li>
-              <NavLink style={padding}>
-                <LogOut />
-              </NavLink>
+              <LogOut />
             </li>
           ) : (
             <>
