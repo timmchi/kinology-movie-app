@@ -76,6 +76,13 @@ const SearchBar = () => {
         {/* <div className="container"> */}
         <div className="genres">
           <Select
+            styles={{
+              control: (baseStyles) => ({
+                ...baseStyles,
+                borderWidth: 0,
+                borderRadius: 10,
+              }),
+            }}
             closeMenuOnSelect={false}
             isMulti
             options={genreOptions}
@@ -129,6 +136,12 @@ const SearchBar = () => {
         <div className="actors">
           <CreatableSelect
             components={components}
+            styles={{
+              control: (baseStyles) => ({
+                ...baseStyles,
+                borderWidth: 0,
+              }),
+            }}
             inputValue={actor}
             isClearable
             isMulti
