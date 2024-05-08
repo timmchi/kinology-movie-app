@@ -21,9 +21,16 @@ const Navigation = ({ user }) => {
             </NavLink>
           </li>
           {user ? (
-            <li>
-              <LogOut />
-            </li>
+            <>
+              <li>
+                <NavLink style={padding} to="/users">
+                  Users
+                </NavLink>
+              </li>
+              <li>
+                <LogOut />
+              </li>
+            </>
           ) : (
             <>
               <li>

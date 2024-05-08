@@ -6,6 +6,7 @@ import About from "./components/About";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import User from "./components/User";
+import Users from "./components/Users";
 import Movie from "./components/Movie";
 import loginService from "./services/login";
 import userService from "./services/users";
@@ -67,6 +68,7 @@ function App() {
           }
         />
         <Route path="/about" element={<About />} />
+        <Route path="/users" element={<Users />} />
       </Routes>
     </>
   );
