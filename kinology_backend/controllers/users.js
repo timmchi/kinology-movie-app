@@ -116,28 +116,27 @@ usersRouter.post(
   }
 );
 
-// usersRouter.put('/:id') will be used to upload avatar, biography, etc.
 usersRouter.put(
   "/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
     const user = request.user;
+    const profileOwner = await User.findById(request.params.id);
+
+    if (!profileOwner || user._id?.toString() !== profileOwner?._id?.toString())
+      return response.status(401).json({ error: "token invalid" });
+
     const { biography, avatar, name } = request.body;
 
     user.biography = biography;
     user.avatar = avatar;
     user.name = name;
 
-    const updatedUser = User.findByIdAndUpdate(request.params.id, user, {
-      new: true,
-    })
-      .populate("watchedMovies")
-      .populate("favoriteMovies")
-      .populate("authoredComments")
-      .populate("profileComments");
+    console.log("user after updating", user);
+    await user.save();
 
-    response.json(updatedUser);
+    response.json(user);
   }
 );
 

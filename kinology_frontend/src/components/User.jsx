@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import Togglable from "./Togglable";
+import UserUpdateForm from "./UserUpdateForm";
 import usersService from "../services/users";
 
 const User = () => {
   let { id } = useParams();
   const [user, setUser] = useState("");
-  const [formVisible, setFormVisible] = useState(false);
+  const updateFormRef = useRef();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -15,10 +17,25 @@ const User = () => {
     fetchUser();
   }, [id]);
 
+  const updateUser = async (updatedInformation) => {
+    updateFormRef.current.toggleVisibility();
+    const updatedUser = await usersService.updateUser(id, updatedInformation);
+    setUser(updatedUser);
+  };
+
+  const updateForm = () => {
+    return (
+      <Togglable buttonLabel="update profile" ref={updateFormRef}>
+        <UserUpdateForm updateUser={updateUser} />
+      </Togglable>
+    );
+  };
+
   console.log(user.watchedMovies);
   return (
     <div>
       <h1>User</h1>
+      {updateForm()}
       <p>
         <strong>{user.name}</strong>
       </p>

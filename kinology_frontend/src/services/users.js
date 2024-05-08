@@ -43,10 +43,23 @@ const addMovieToProfile = async (movie, button, userId) => {
   return response.data;
 };
 
+const updateUser = async (id, updatedInformation) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.put(
+    `${baseUrl}/${id}`,
+    updatedInformation,
+    config
+  );
+  return response.data;
+};
+
 export default {
   setToken,
   createComment,
   getUsers,
   getUser,
   addMovieToProfile,
+  updateUser,
 };
