@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import moviesService from "../services/movies";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
-const Movie = () => {
+const Movie = ({ onButtonPress, user }) => {
   let { id } = useParams();
   const [movie, setMovie] = useState("");
 
@@ -18,8 +18,6 @@ const Movie = () => {
     fetchMovie();
   }, [id]);
 
-  //   console.log(movie);
-  //   console.log(`${basePosterUrl}${movie?.image}`);
   return (
     <div>
       <div className="singleMovieContainer">
@@ -32,6 +30,9 @@ const Movie = () => {
         </div>
         <div className="singleMovieDescription">
           <h1>{movie.title}</h1>
+          <p>
+            <i>{movie.slogan}</i>
+          </p>
           <p>{movie.overview}</p>
           <ul>
             {movie?.genres?.map((genre) => (
@@ -41,9 +42,20 @@ const Movie = () => {
           <p>{movie.rating} rating</p>
           <p> released {movie.release}</p>
           <p>{movie.runtime} minutes</p>
-          <p>{movie.slogan}</p>
-          <button>Add to watch list</button>
-          <button>Watched</button>
+          {user ? (
+            <>
+              <button
+                onClick={(event) => onButtonPress(event, "watchList", id)}
+              >
+                Add to watch list
+              </button>
+              <button onClick={(event) => onButtonPress(event, "watched", id)}>
+                Watched
+              </button>
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className="singleMovieComments">

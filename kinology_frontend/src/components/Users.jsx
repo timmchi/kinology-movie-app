@@ -9,8 +9,8 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 
-const Users = () => {
-  const [users, setUsers] = useState([]);
+const Users = ({ users, setUsers }) => {
+  //   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {

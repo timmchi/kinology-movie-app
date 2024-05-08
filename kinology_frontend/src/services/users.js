@@ -30,4 +30,17 @@ const getUser = async (id) => {
   return response.data;
 };
 
-export default { setToken, createComment, getUsers, getUser };
+const addMovieToProfile = async (movie, button, userId) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const response = await axios.post(
+    `${baseUrl}/${userId}/movies`,
+    { movie, button },
+    config
+  );
+  return response.data;
+};
+
+export default { setToken, createComment, getUsers, getUser, addMovieTo };

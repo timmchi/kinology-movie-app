@@ -15,7 +15,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  //   const [movies, setMovies] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");
@@ -25,6 +25,16 @@ function App() {
       userService.setToken(user.token);
     }
   }, []);
+
+  const handleMovieButton = async (event, button, movieId) => {
+    event.preventDefault();
+    try {
+      const currentUserId = users.find((u) => u.username === user.username).id;
+      await userService.addMovieToProfile(movieId, button, currentUserId);
+    } catch (exception) {
+      console.log("somewhing went wrong when adding a movie to your profile");
+    }
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -52,7 +62,10 @@ function App() {
       <Routes>
         <Route path="/users/:id" element={<User />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/movies/:id" element={<Movie />} />
+        <Route
+          path="/movies/:id"
+          element={<Movie onButtonPress={handleMovieButton} user={user} />}
+        />
         <Route path="/signup" element={<SignUp user={user} />} />
         <Route
           path="/login"
@@ -68,7 +81,10 @@ function App() {
           }
         />
         <Route path="/about" element={<About />} />
-        <Route path="/users" element={<Users />} />
+        <Route
+          path="/users"
+          element={<Users users={users} setUsers={setUsers} />}
+        />
       </Routes>
     </>
   );
