@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import usersService from "../services/users";
 
 const User = () => {
   let { id } = useParams();
   const [user, setUser] = useState("");
+  const [formVisible, setFormVisible] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {

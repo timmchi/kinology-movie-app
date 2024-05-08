@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import usersService from "../services/users";
 
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -9,7 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 
-const Users = ({ users, setUsers }) => {
+const Users = ({ users }) => {
   console.log(users);
   return (
     <div>

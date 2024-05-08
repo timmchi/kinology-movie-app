@@ -91,10 +91,7 @@ function App() {
           }
         />
         <Route path="/about" element={<About />} />
-        <Route
-          path="/users"
-          element={<Users users={users} setUsers={setUsers} />}
-        />
+        <Route path="/users" element={<Users users={users} />} />
       </Routes>
     </>
   );
