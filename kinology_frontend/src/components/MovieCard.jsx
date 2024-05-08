@@ -12,10 +12,11 @@ const MovieCard = ({ movie }) => {
   return (
     <Card
       sx={{
-        maxWidth: 300,
+        maxWidth: 250,
         borderRadius: 5,
         marginBottom: 3,
         textAlign: "center",
+        backgroundColor: "#F7E382",
       }}
       className="movieCard"
     >
@@ -25,7 +26,7 @@ const MovieCard = ({ movie }) => {
           alt="movie poster"
           height="280"
           image={`${basePosterUrl}${movie.image}`}
-          sx={{ objectFit: "cover" }}
+          sx={{ objectFit: "contain", marginTop: 3 }}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -34,8 +35,12 @@ const MovieCard = ({ movie }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <button size="small">Add to watch list</button>
-        <button size="small">Add to already seen</button>
+        <Button size="small" variant="outlined">
+          Add to watch list
+        </Button>
+        <Button size="small" variant="outlined">
+          Add to already seen
+        </Button>
       </CardActions>
     </Card>
   );
