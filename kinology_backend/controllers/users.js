@@ -45,7 +45,7 @@ usersRouter.get("/", async (request, response) => {
 });
 
 usersRouter.get("/:id", async (request, response) => {
-  const { id } = req.params;
+  const { id } = request.params;
 
   const user = await User.findById(id)
     .populate("watchedMovies")
