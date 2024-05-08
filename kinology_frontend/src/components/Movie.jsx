@@ -22,26 +22,31 @@ const Movie = () => {
   //   console.log(`${basePosterUrl}${movie?.image}`);
   return (
     <div>
-      <h1>Movie</h1>
-      <img
-        src={`${basePosterUrl}${movie?.image}`}
-        alt="movie poster"
-        width="400"
-      ></img>
-      <p>
-        <strong>{movie.title}</strong>
-      </p>
-      <p>{movie.overview}</p>
-      <ul>
-        {movie?.genres?.map((genre) => (
-          <li key={genre.id}>{genre.name}</li>
-        ))}
-      </ul>
-      <p>{movie.rating}</p>
-      <p>{movie.release}</p>
-      <p>{movie.runtime}</p>
-      <p>{movie.slogan}</p>
-      <div>
+      <div className="singleMovieContainer">
+        <div className="singleMovieImage">
+          <img
+            src={`${basePosterUrl}${movie?.image}`}
+            alt="movie poster"
+            width="400"
+          ></img>
+        </div>
+        <div className="singleMovieDescription">
+          <h1>{movie.title}</h1>
+          <p>{movie.overview}</p>
+          <ul>
+            {movie?.genres?.map((genre) => (
+              <li key={genre.id}>{genre.name}</li>
+            ))}
+          </ul>
+          <p>{movie.rating} rating</p>
+          <p> released {movie.release}</p>
+          <p>{movie.runtime} minutes</p>
+          <p>{movie.slogan}</p>
+          <button>Add to watch list</button>
+          <button>Watched</button>
+        </div>
+      </div>
+      <div className="singleMovieComments">
         <h2>Comments</h2>
       </div>
     </div>

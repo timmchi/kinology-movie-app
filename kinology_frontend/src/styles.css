@@ -124,3 +124,24 @@ listContainer, cardsContainer, movieCard */
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1;
 }
+
+/* "singleMovieContainer">
+      <div className="singleMovieImage"> */
+/* className="singleMovieDescription" */
+/* "singleMovieComments" */
+
+.singleMovieContainer {
+  display: flex;
+}
+
+.singleMovieImage {
+  padding: 3em;
+}
+
+.singleMovieDescription {
+  padding: 1.3em;
+}
+
+.singleMovieComments {
+  padding-left: 3em;
+}
