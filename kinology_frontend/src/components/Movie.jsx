@@ -44,10 +44,8 @@ const Movie = ({ onButtonPress, user }) => {
           <p>{movie.runtime} minutes</p>
           {user ? (
             <>
-              <button
-                onClick={(event) => onButtonPress(event, "watchList", id)}
-              >
-                Add to watch list
+              <button onClick={(event) => onButtonPress(event, "favorite", id)}>
+                Add to favorites
               </button>
               <button onClick={(event) => onButtonPress(event, "watched", id)}>
                 Watched

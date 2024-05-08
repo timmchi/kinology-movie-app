@@ -72,43 +72,43 @@ usersRouter.post(
     const { movie, button } = request.body;
 
     const user = request.user;
-    let movieMongo;
-    let savedMovie;
+    // let movieMongo;
+    // let savedMovie;
     let updatedSavedMovie;
 
     console.log(movie, button, user);
 
-    switch (button) {
-      case "watched":
-        movieMongo = new Movie({
-          tmdbId: movie,
-          watchedBy: [user._id],
-        });
-        savedMovie = await movieMongo.save();
-        user.watchedMovies = user.watchedMovies.concat(savedMovie._id);
+    if (button === "watched") {
+      const movieMongo = new Movie({
+        tmdbId: movie,
+        watchedBy: [user._id],
+      });
+      const savedMovie = await movieMongo.save();
+      user.watchedMovies = user.watchedMovies.concat(savedMovie._id);
 
-        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
-          "watchedBy",
-          {
-            username: 1,
-            name: 1,
-          }
-        );
-      case "watchList":
-        movieMongo = new Movie({
-          tmdbId: movie,
-          favoritedBy: [user._id],
-        });
-        savedMovie = await movieMongo.save();
-        user.favoriteMovies = user.favoriteMovies.concat(savedMovie._id);
+      updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+        "watchedBy",
+        {
+          username: 1,
+          name: 1,
+        }
+      );
+    }
+    if (button === "favorite") {
+      const movieMongo = new Movie({
+        tmdbId: movie,
+        favoritedBy: [user._id],
+      });
+      const savedMovie = await movieMongo.save();
+      user.favoriteMovies = user.favoriteMovies.concat(savedMovie._id);
 
-        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
-          "favoritedBy",
-          {
-            username: 1,
-            name: 1,
-          }
-        );
+      updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+        "favoritedBy",
+        {
+          username: 1,
+          name: 1,
+        }
+      );
     }
 
     await user.save();
