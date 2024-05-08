@@ -38,6 +38,7 @@ const SearchBar = ({ setMovies }) => {
       country,
     });
     console.log(movies);
+    setMovies(movies);
 
     setDirector("");
     setYear("");

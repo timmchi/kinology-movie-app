@@ -103,3 +103,23 @@ body {
   background: #549a71;
   color: white;
 }
+/* 
+listContainer, cardsContainer, movieCard */
+
+.listContainer {
+  padding: 2em 9%;
+  padding-bottom: 100px;
+}
+
+.movieListHeading {
+  text-align: center;
+  padding-bottom: 2em;
+  color: #fff;
+  text-shadow: 0 0.5em 1.5em rgba(0, 0, 0, 0.2);
+  font-size: 3rem;
+}
+
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}

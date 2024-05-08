@@ -14,7 +14,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [movies, setMovies] = useState([]);
+  //   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");

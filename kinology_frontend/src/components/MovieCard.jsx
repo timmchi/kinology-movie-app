@@ -16,7 +16,10 @@ const MovieCard = ({ movie }) => {
     //   <button>Add to watch list</button>
     //   <button>Add to already seen</button>
     // </div>
-    <Card sx={{ maxWidth: 200 }}>
+    <Card
+      sx={{ maxWidth: 200, borderRadius: 5, marginBottom: 3 }}
+      className="movieCard"
+    >
       <CardActionArea>
         <CardMedia
           component="img"
