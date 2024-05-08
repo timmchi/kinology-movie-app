@@ -11,6 +11,30 @@
 | 7.5 | 0.5   | Styling the search bar                                               |
 | 7.5 | 0.5   | User creation and authentication in backend and frontend             |
 | 7.5 | 4     | Key functionality: Fetching movies in backend through frontend query |
+| 8.5 | 1     | Movie list view - returning cards and styling them                   |
+| 8.5 | 1.5   | Single movie route, Single movie view, basic styling for it          |
+| 8.5 | 1     | Users view and single user view                                      |
+| 8.5 | 2     | Adding movies to user profile, both frontend and backend             |
+| 8.5 | 1     | Updating user profile backend/frontend                               |
 |     |       |                                                                      |
 |     |       |                                                                      |
-| tot | 13    |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+|     |       |                                                                      |
+
+| tot | 19.5 | |
