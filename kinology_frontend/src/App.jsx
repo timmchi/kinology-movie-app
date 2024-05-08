@@ -47,7 +47,7 @@ function App() {
 
   return (
     <>
-      <Navigation user={user} setMovies={setMovies} />
+      <Navigation user={user} />
       <Routes>
         <Route path="/users/:id" element={<User />} />
         <Route path="/" element={<LandingPage />} />

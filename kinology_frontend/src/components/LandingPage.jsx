@@ -1,9 +1,11 @@
 import SearchBar from "./SearchBar";
+import MovieList from "./MovieList";
 
-const LandingPage = () => {
+const LandingPage = ({ setMovies, movies }) => {
   return (
     <>
-      <SearchBar />
+      <SearchBar setMovies={setMovies} />
+      <MovieList movies={movies} />
     </>
   );
 };

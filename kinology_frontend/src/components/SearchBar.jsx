@@ -15,7 +15,7 @@ const createOption = (label) => ({
   value: label,
 });
 
-const SearchBar = () => {
+const SearchBar = ({ setMovies }) => {
   const [genres, setGenres] = useState([]);
   const [director, setDirector] = useState("");
   const [year, setYear] = useState("");
