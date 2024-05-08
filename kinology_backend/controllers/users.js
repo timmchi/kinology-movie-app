@@ -63,6 +63,7 @@ usersRouter.get("/:id", async (request, response) => {
   response.json(user);
 });
 
+// TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
 usersRouter.post(
   "/:id/movies",
   middleware.tokenExtractor,
@@ -115,6 +116,29 @@ usersRouter.post(
   }
 );
 
-// usersRouter.post('/:id') will be used to upload avatar, biography, etc.
+// usersRouter.put('/:id') will be used to upload avatar, biography, etc.
+usersRouter.put(
+  "/:id",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {
+    const user = request.user;
+    const { biography, avatar, name } = request.body;
+
+    user.biography = biography;
+    user.avatar = avatar;
+    user.name = name;
+
+    const updatedUser = User.findByIdAndUpdate(request.params.id, user, {
+      new: true,
+    })
+      .populate("watchedMovies")
+      .populate("favoriteMovies")
+      .populate("authoredComments")
+      .populate("profileComments");
+
+    response.json(updatedUser);
+  }
+);
 
 module.exports = usersRouter;
