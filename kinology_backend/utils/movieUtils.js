@@ -1,3 +1,14 @@
+const axios = require("axios");
+const config = require("./config");
+const { isoCountrySearch } = require("./isoSearch");
+
+const basePersonUrl =
+  "https://api.themoviedb.org/3/search/person?include_adult=false&page=1&";
+const headers = {
+  accept: "application/json",
+  Authorization: `Bearer ${config.TMDB_TOKEN}`,
+};
+
 const peopleSearch = async (people) => {
   const peopleIds = await Promise.all(
     people.map(async (name) => {
@@ -47,3 +58,5 @@ const queryCreator = (params) => {
     origin_country,
   ].join("");
 };
+
+module.exports = { queryCreator, peopleSearch };
