@@ -7,4 +7,9 @@ const search = async (queryDetails) => {
   return response.data;
 };
 
-export default { search };
+const getSingleMovie = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
+  return response.data;
+};
+
+export default { search, getSingleMovie };

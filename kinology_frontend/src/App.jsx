@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Navigation from "./components/Navigation";
 import About from "./components/About";
@@ -51,7 +51,7 @@ function App() {
       <Routes>
         <Route path="/users/:id" element={<User />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/movie/:id" element={<Movie />} />
+        <Route path="/movies/:id" element={<Movie />} />
         <Route path="/signup" element={<SignUp user={user} />} />
         <Route
           path="/login"

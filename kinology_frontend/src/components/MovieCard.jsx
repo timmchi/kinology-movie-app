@@ -1,4 +1,5 @@
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
+import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -18,7 +19,7 @@ const MovieCard = ({ movie }) => {
       }}
       className="movieCard"
     >
-      <CardActionArea>
+      <CardActionArea component={Link} to={`/movies/${movie.id}`}>
         <CardMedia
           component="img"
           alt="movie poster"
