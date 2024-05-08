@@ -9,23 +9,22 @@ import { CardActionArea } from "@mui/material";
 
 const MovieCard = ({ movie }) => {
   return (
-    // <div>
-    //   <h1>Movie</h1>
-    //   <img href={`${basePosterUrl}${movie.image}`}></img>
-    //   <p>{movie.title}</p>
-    //   <button>Add to watch list</button>
-    //   <button>Add to already seen</button>
-    // </div>
     <Card
-      sx={{ maxWidth: 200, borderRadius: 5, marginBottom: 3 }}
+      sx={{
+        maxWidth: 300,
+        borderRadius: 5,
+        marginBottom: 3,
+        textAlign: "center",
+      }}
       className="movieCard"
     >
       <CardActionArea>
         <CardMedia
           component="img"
           alt="movie poster"
-          height="200"
+          height="280"
           image={`${basePosterUrl}${movie.image}`}
+          sx={{ objectFit: "cover" }}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
