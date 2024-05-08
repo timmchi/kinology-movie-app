@@ -10,17 +10,6 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 
 const Users = ({ users, setUsers }) => {
-  //   const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const fetchedUsers = await usersService.getUsers();
-      setUsers(fetchedUsers);
-    };
-
-    fetchUsers();
-  }, []);
-
   console.log(users);
   return (
     <div>

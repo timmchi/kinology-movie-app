@@ -14,7 +14,7 @@ const User = () => {
     fetchUser();
   }, [id]);
 
-  console.log(user);
+  console.log(user.watchedMovies);
   return (
     <div>
       <h1>User</h1>
@@ -30,7 +30,7 @@ const User = () => {
         <h3>favorite movies</h3>
         <ul>
           {user?.favoriteMovies?.map((movie) => (
-            <li key={movie.id}>{movie.title}</li>
+            <li key={movie.id}>{movie.tmdbId}</li>
           ))}
         </ul>
       </div>
@@ -38,7 +38,7 @@ const User = () => {
         <h3>watched movies</h3>
         <ul>
           {user?.watchedMovies?.map((movie) => (
-            <li key={movie.id}>{movie.title}</li>
+            <li key={movie.id}>{movie.tmdbId}</li>
           ))}
         </ul>
       </div>

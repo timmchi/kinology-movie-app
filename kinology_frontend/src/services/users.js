@@ -43,4 +43,10 @@ const addMovieToProfile = async (movie, button, userId) => {
   return response.data;
 };
 
-export default { setToken, createComment, getUsers, getUser, addMovieTo };
+export default {
+  setToken,
+  createComment,
+  getUsers,
+  getUser,
+  addMovieToProfile,
+};

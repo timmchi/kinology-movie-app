@@ -26,14 +26,24 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const fetchedUsers = await userService.getUsers();
+      setUsers(fetchedUsers);
+    };
+
+    fetchUsers();
+  }, []);
+
   const handleMovieButton = async (event, button, movieId) => {
     event.preventDefault();
-    try {
-      const currentUserId = users.find((u) => u.username === user.username).id;
-      await userService.addMovieToProfile(movieId, button, currentUserId);
-    } catch (exception) {
-      console.log("somewhing went wrong when adding a movie to your profile");
-    }
+    // try {
+    const currentUserId = users.find((u) => u.username === user.username)?.id;
+    console.log(movieId, button, currentUserId);
+    await userService.addMovieToProfile(movieId, button, currentUserId);
+    // } catch (exception) {
+    //   console.log("somewhing went wrong when adding a movie to your profile");
+    // }
   };
 
   const handleLogin = async (event) => {

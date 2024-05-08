@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
+const middleware = require("../utils/middleware");
 const Movie = require("../models/movie");
 const UserComment = require("../models/userComment");
 const User = require("../models/user");
+const movie = require("../models/movie");
 
 usersRouter.post("/", async (request, response) => {
   const body = request.body;
@@ -60,6 +62,58 @@ usersRouter.get("/:id", async (request, response) => {
 
   response.json(user);
 });
+
+usersRouter.post(
+  "/:id/movies",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {
+    const { movie, button } = request.body;
+
+    const user = request.user;
+    let movieMongo;
+    let savedMovie;
+    let updatedSavedMovie;
+
+    console.log(movie, button, user);
+
+    switch (button) {
+      case "watched":
+        movieMongo = new Movie({
+          tmdbId: movie,
+          watchedBy: [user._id],
+        });
+        savedMovie = await movieMongo.save();
+        user.watchedMovies = user.watchedMovies.concat(savedMovie._id);
+
+        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+          "watchedBy",
+          {
+            username: 1,
+            name: 1,
+          }
+        );
+      case "watchList":
+        movieMongo = new Movie({
+          tmdbId: movie,
+          favoritedBy: [user._id],
+        });
+        savedMovie = await movieMongo.save();
+        user.favoriteMovies = user.favoriteMovies.concat(savedMovie._id);
+
+        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+          "favoritedBy",
+          {
+            username: 1,
+            name: 1,
+          }
+        );
+    }
+
+    await user.save();
+    response.status(201).json(updatedSavedMovie);
+  }
+);
 
 // usersRouter.post('/:id') will be used to upload avatar, biography, etc.
 

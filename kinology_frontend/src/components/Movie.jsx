@@ -7,7 +7,7 @@ const Movie = ({ onButtonPress, user }) => {
   let { id } = useParams();
   const [movie, setMovie] = useState("");
 
-  //   console.log(id);
+  console.log("id in movie", id);
 
   useEffect(() => {
     const fetchMovie = async () => {
