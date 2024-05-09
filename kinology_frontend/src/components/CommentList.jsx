@@ -38,7 +38,7 @@ const CommentList = ({ comments, onEdit, onDelete }) => {
           <Button
             variant="contained"
             size="small"
-            onClick={onDelete}
+            onClick={() => onDelete(comment.id)}
             color="error"
           >
             Delete comment

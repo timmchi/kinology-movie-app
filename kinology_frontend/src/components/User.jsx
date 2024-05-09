@@ -62,6 +62,18 @@ const User = ({ currentUser }) => {
     );
   };
 
+  const deleteComment = async (commentId) => {
+    if (window.confirm("Are you sure you want to delete the comment?")) {
+      const filteredComments = comments.filter((c) => c.id !== commentId);
+      setComments(filteredComments);
+      await commentsService.deleteProfileComment(
+        user.id,
+        commentId,
+        currentUser
+      );
+    }
+  };
+
   return (
     <div>
       <h1>User</h1>
@@ -93,7 +105,7 @@ const User = ({ currentUser }) => {
       <div>
         <h2>comments</h2>
         {currentUser && commentForm()}
-        <CommentList comments={comments} />
+        <CommentList comments={comments} onDelete={deleteComment} />
       </div>
     </div>
   );

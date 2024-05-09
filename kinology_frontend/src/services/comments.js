@@ -1,22 +1,38 @@
 import axios from "axios";
 const baseUrl = "http://localhost:3001/api/comments";
 
-const getProfileComments = async (id) => {
-  const response = await axios.get(`${baseUrl}/profile/${id}`);
+const getProfileComments = async (profileId) => {
+  const response = await axios.get(`${baseUrl}/profile/${profileId}`);
   return response.data;
 };
 
-const createProfileComment = async (id, comment, currentUser) => {
+const createProfileComment = async (profileId, comment, currentUser) => {
   const config = {
     headers: { Authorization: `Bearer ${currentUser.token}` },
   };
 
   const response = await axios.post(
-    `${baseUrl}/profile/${id}`,
+    `${baseUrl}/profile/${profileId}`,
     { content: comment },
     config
   );
   return response.data;
 };
 
-export default { getProfileComments, createProfileComment };
+const deleteProfileComment = async (profileId, commentId, currentUser) => {
+  const config = {
+    headers: { Authorization: `Bearer ${currentUser.token}` },
+  };
+
+  const response = await axios.delete(
+    `${baseUrl}/profile/${profileId}/${commentId}`,
+    config
+  );
+  return response.data;
+};
+
+export default {
+  getProfileComments,
+  createProfileComment,
+  deleteProfileComment,
+};
