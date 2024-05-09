@@ -51,7 +51,9 @@ commentsRouter.put(
       commentId,
       { content: request.body.content },
       { new: true }
-    );
+    )
+      .populate("author", { name: 1, avatar: 1 })
+      .populate("receiver");
 
     if (!updatedComment)
       return response.status(404).json({ error: "no note found" });
