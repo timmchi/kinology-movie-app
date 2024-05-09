@@ -51,6 +51,20 @@ const Movie = ({ onButtonPress, user }) => {
     }
   };
 
+  const updateComment = async (commentId, content, authorId) => {
+    console.log("authorId in Movie component", authorId);
+    const updatedComment = await commentsService.updateMovieComment(
+      id,
+      commentId,
+      user,
+      content,
+      authorId
+    );
+    setComments(
+      comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
+    );
+  };
+
   return (
     <div>
       <div className="singleMovieContainer">
@@ -96,6 +110,7 @@ const Movie = ({ onButtonPress, user }) => {
           comments={comments}
           currentUser={user}
           onDelete={deleteComment}
+          onEdit={updateComment}
         />
       </div>
     </div>

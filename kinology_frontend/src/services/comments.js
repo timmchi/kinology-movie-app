@@ -89,6 +89,26 @@ const deleteMovieComment = async (
   return response.data;
 };
 
+const updateMovieComment = async (
+  movieId,
+  commentId,
+  currentUser,
+  content,
+  authorId
+) => {
+  const config = {
+    headers: { Authorization: `Bearer ${currentUser.token}` },
+  };
+  console.log("authorId in service", authorId);
+
+  const response = await axios.put(
+    `${baseUrl}/movie/${movieId}/${commentId}`,
+    { content: content, authorId: authorId },
+    config
+  );
+  return response.data;
+};
+
 export default {
   getProfileComments,
   createProfileComment,
@@ -97,4 +117,5 @@ export default {
   getMovieComments,
   createMovieComment,
   deleteMovieComment,
+  updateMovieComment,
 };

@@ -10,20 +10,26 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 
-const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
+const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
   console.log(comments);
 
   const editCommentRef = useRef();
 
-  const editComment = (content, commentId) => {
+  const editComment = (content, commentId, authorId) => {
+    console.log("authorId in editComment in CommentList");
     editCommentRef.current.toggleVisibility();
-    onEdit(commentId, content);
+    onEdit(commentId, content, authorId);
   };
 
-  const editForm = (commentId) => {
+  const editForm = (commentId, authorId) => {
+    console.log("authorId in editForm in CommentList", authorId);
     return (
       <Togglable buttonLabel="edit comment" ref={editCommentRef}>
-        <CommentForm commentAction={editComment} commentId={commentId} />
+        <CommentForm
+          commentAction={editComment}
+          commentId={commentId}
+          authorId={authorId}
+        />
       </Togglable>
     );
   };
@@ -47,7 +53,7 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
           </ListItem>
           {currentUser && currentUser?.username === comment.author.username && (
             <>
-              {editForm(comment.id)}
+              {editForm(comment.id, comment.author.id)}
               <Button
                 variant="contained"
                 size="small"

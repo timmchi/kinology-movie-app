@@ -161,14 +161,14 @@ commentsRouter.put(
   async (request, response) => {
     const { commentId } = request.params;
     const user = request.user;
-    const { authorId } = request.body;
+    const { authorId, content } = request.body;
 
     if (!user || user._id.toString() !== authorId)
       return response.status(401).json({ error: "not authorized" });
 
     const updatedComment = await UserComment.findByIdAndUpdate(
       commentId,
-      { content: request.body.content },
+      { content },
       { new: true }
     )
       .populate("author", { name: 1, avatar: 1, username: 1, id: 1 })
