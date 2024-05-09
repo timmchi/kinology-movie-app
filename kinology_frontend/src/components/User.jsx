@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
+import CommentList from "./CommentList";
 import usersService from "../services/users";
 import commentsService from "../services/comments";
 
@@ -92,11 +93,7 @@ const User = ({ currentUser }) => {
       <div>
         <h2>comments</h2>
         {currentUser && commentForm()}
-        <ul>
-          {comments?.map((comment) => (
-            <li key={comment.id}>{comment.content}</li>
-          ))}
-        </ul>
+        <CommentList comments={comments} />
       </div>
     </div>
   );

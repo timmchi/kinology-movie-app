@@ -10,8 +10,6 @@ const createProfileComment = async (id, comment, currentUser) => {
   const config = {
     headers: { Authorization: `Bearer ${currentUser.token}` },
   };
-  console.log("token in frontend comments service", currentUser.token);
-  console.log("config in frontend comments service", config);
 
   const response = await axios.post(
     `${baseUrl}/profile/${id}`,

@@ -5,7 +5,7 @@ const UserComment = require("../models/userComment");
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params.id;
   const comments = await UserComment.find({ receiver: id })
-    .populate("author")
+    .populate("author", { name: 1, avatar: 1 })
     .populate("receiver");
 
   response.status(200).send(comments);

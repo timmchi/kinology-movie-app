@@ -21,25 +21,27 @@ const Users = ({ users }) => {
         className="userList"
       >
         {users?.map((user) => (
-          <ListItem
-            alignItems="flex-start"
-            key={user.id}
-            sx={{
-              backgroundColor: "#79C094",
-              color: "#fff",
-              borderRadius: 10,
-            }}
-            component={Link}
-            to={`/users/${user.id}`}
-          >
-            <ListItemAvatar>
-              <Avatar alt={user.name} src={user.avatar}></Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={user.name}
-              secondary="Favorite movie: Godfather II"
-            />
-          </ListItem>
+          <div key={user.id}>
+            <ListItem
+              alignItems="flex-start"
+              sx={{
+                backgroundColor: "#79C094",
+                color: "#fff",
+                borderRadius: 10,
+              }}
+              component={Link}
+              to={`/users/${user.id}`}
+            >
+              <ListItemAvatar>
+                <Avatar alt={user.name} src={user.avatar}></Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={user.name}
+                secondary="Favorite movie: Godfather II"
+              />
+            </ListItem>
+            <Divider variant="inset" component="li" />
+          </div>
         ))}
       </List>
     </div>
