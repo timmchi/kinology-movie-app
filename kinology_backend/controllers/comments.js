@@ -89,7 +89,15 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   if (!movie) response.status(200).json({ comments: -1 });
 
-  await movie.populate("comments", { author: 1, content: 1 });
+  //   await movie.populate("comments", { author: 1, content: 1 });
+  await movie.populate({
+    path: "comments",
+    populate: {
+      path: "author",
+      select: "name",
+    },
+    select: "content",
+  });
 
   const comments = await UserComment.find({ movieReceiver: movie._id });
 
@@ -121,7 +129,15 @@ commentsRouter.post(
     });
     const savedComment = await movieComment.save();
 
-    await movie.populate("comments", { author: 1, content: 1 });
+    // await movie.populate("comments", { author: 1, content: 1 });
+    await movie.populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: "name",
+      },
+      select: "content",
+    });
 
     response.status(201).send(savedComment);
   }

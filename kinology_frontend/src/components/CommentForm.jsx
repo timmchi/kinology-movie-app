@@ -14,7 +14,6 @@ const CommentForm = ({ commentAction, commentId }) => {
       <p>comment form</p>
       <form onSubmit={submitComment}>
         <div>
-          content
           <input
             onChange={({ target }) => setContent(target.value)}
             placeholder="Your comment..."

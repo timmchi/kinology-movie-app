@@ -1,13 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import CommentForm from "./CommentForm";
 import moviesService from "../services/movies";
+import commentsService from "../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
 const Movie = ({ onButtonPress, user }) => {
   let { id } = useParams();
   const [movie, setMovie] = useState("");
+  const [comments, setComments] = useState([]);
 
   console.log("id in movie", id);
+  console.log(comments);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -17,6 +21,26 @@ const Movie = ({ onButtonPress, user }) => {
 
     fetchMovie();
   }, [id]);
+
+  // movie.id or id better?
+  useEffect(() => {
+    const fetchComments = async () => {
+      const fetchedComments = await commentsService.getMovieComments(id);
+      setComments(fetchedComments);
+    };
+
+    fetchComments();
+  }, [id]);
+
+  // movie.id or id better?
+  const createComment = async (content) => {
+    const createdComment = await commentsService.createMovieComment(
+      id,
+      content,
+      user
+    );
+    setComments(comments.concat(createdComment));
+  };
 
   return (
     <div>
@@ -58,6 +82,12 @@ const Movie = ({ onButtonPress, user }) => {
       </div>
       <div className="singleMovieComments">
         <h2>Comments</h2>
+        <CommentForm commentAction={createComment} />
+        <ul>
+          {comments?.map((comment) => (
+            <li key={comment.id}>{comment.content}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
