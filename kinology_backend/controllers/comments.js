@@ -89,17 +89,20 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   if (!movie) response.status(200).json({ comments: -1 });
 
+  // not sure if any of these commented out lines should stay...
   //   await movie.populate("comments", { author: 1, content: 1 });
-  await movie.populate({
-    path: "comments",
-    populate: {
-      path: "author",
-      select: "name",
-    },
-    select: "content",
-  });
+  //   await movie.populate({
+  //     path: "comments",
+  //     populate: {
+  //       path: "author",
+  //       select: "name",
+  //     },
+  //     select: "content",
+  //   });
 
-  const comments = await UserComment.find({ movieReceiver: movie._id });
+  const comments = await UserComment.find({
+    movieReceiver: movie._id,
+  }).populate("author", { name: 1, id: 1 });
 
   response.status(200).send(comments);
 });
@@ -129,15 +132,18 @@ commentsRouter.post(
     });
     const savedComment = await movieComment.save();
 
+    // not sure if any of these commented out lines should stay...
     // await movie.populate("comments", { author: 1, content: 1 });
-    await movie.populate({
-      path: "comments",
-      populate: {
-        path: "author",
-        select: "name",
-      },
-      select: "content",
-    });
+    // await movie.populate({
+    //   path: "comments",
+    //   populate: {
+    //     path: "author",
+    //     select: "name",
+    //   },
+    //   select: "content",
+    // });
+
+    await savedComment.populate("author", { name: 1, id: 1 });
 
     response.status(201).send(savedComment);
   }

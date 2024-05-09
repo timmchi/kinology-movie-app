@@ -83,11 +83,15 @@ const Movie = ({ onButtonPress, user }) => {
       <div className="singleMovieComments">
         <h2>Comments</h2>
         <CommentForm commentAction={createComment} />
-        <ul>
-          {comments?.map((comment) => (
-            <li key={comment.id}>{comment.content}</li>
-          ))}
-        </ul>
+
+        {comments?.map((comment) => (
+          <div key={comment.id}>
+            <p>
+              <strong>{comment.author.name}</strong>
+            </p>
+            <p>{comment.content}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
