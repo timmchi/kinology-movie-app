@@ -35,14 +35,43 @@ commentsRouter.put(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
-  async (request, response) => {}
+  async (request, response) => {
+    const { id } = request.params.id;
+    const { commentId } = request.params.id;
+    const user = request.user;
+
+    if (!user || user._id.toString() !== id)
+      return response.status(401).json({ error: "not authorized" });
+
+    const updatedComment = await UserComment.findByIdAndUpdate(
+      commentId,
+      { content: request.body.content },
+      { new: true }
+    );
+
+    if (!updatedComment)
+      return response.status(404).json({ error: "no note found" });
+
+    response.status(200).send(updatedComment);
+  }
 );
 
 commentsRouter.delete(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
-  async (request, response) => {}
+  async (request, response) => {
+    const { id } = request.params.id;
+    const { commentId } = request.params.id;
+    const user = request.user;
+
+    if (!user || user._id.toString() !== id)
+      return response.status(401).json({ error: "not authorized" });
+
+    const commentToDelete = await UserComment.findByIdAndDelete(commentId);
+
+    response.status(200);
+  }
 );
 
 commentsRouter.get("/movie/:id", async (request, response) => {});
