@@ -4,7 +4,7 @@ import Togglable from "./Togglable";
 import UserUpdateForm from "./UserUpdateForm";
 import usersService from "../services/users";
 
-const User = () => {
+const User = ({ currentUser }) => {
   let { id } = useParams();
   const [user, setUser] = useState("");
   const updateFormRef = useRef();
@@ -31,11 +31,10 @@ const User = () => {
     );
   };
 
-  console.log(user.watchedMovies);
   return (
     <div>
       <h1>User</h1>
-      {updateForm()}
+      {currentUser && currentUser?.username === user.username && updateForm()}
       <p>
         <strong>{user.name}</strong>
       </p>

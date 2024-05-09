@@ -70,7 +70,7 @@ function App() {
     <>
       <Navigation user={user} />
       <Routes>
-        <Route path="/users/:id" element={<User />} />
+        <Route path="/users/:id" element={<User currentUser={user} />} />
         <Route path="/" element={<LandingPage />} />
         <Route
           path="/movies/:id"
