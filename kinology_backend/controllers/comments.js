@@ -28,14 +28,18 @@ commentsRouter.post(
 
     const savedComment = await newComment.save();
 
-    const commentsAuthor = await User.findById(user._id)
-      .populate("authoredComments")
-      .populate("profileComments");
-    const commentsReceiver = await User.findById(id)
-      .populate("authoredComments")
-      .populate("profileComments");
+    const addedComment = await UserComment.findById(savedComment._id)
+      .populate("author", { name: 1, avatar: 1 })
+      .populate("receiver");
 
-    response.status(201).send(savedComment);
+    // const commentsAuthor = await User.findById(user._id)
+    //   .populate("authoredComments")
+    //   .populate("profileComments");
+    // const commentsReceiver = await User.findById(id)
+    //   .populate("authoredComments")
+    //   .populate("profileComments");
+
+    response.status(201).send(addedComment);
   }
 );
 
