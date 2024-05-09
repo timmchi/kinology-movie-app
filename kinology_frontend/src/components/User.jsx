@@ -57,7 +57,7 @@ const User = ({ currentUser }) => {
   const commentCreateForm = () => {
     return (
       <Togglable buttonLabel="leave a comment" ref={commentFormRef}>
-        <CommentForm createAction={createComment} />
+        <CommentForm commentAction={createComment} />
       </Togglable>
     );
   };

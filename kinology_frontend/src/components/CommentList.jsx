@@ -81,16 +81,4 @@ const CommentList = ({ comments, onEdit, onDelete }) => {
   );
 };
 
-// const updateComment = async (commentId, comment) => {
-//     const updatedComment = await commentsService.updateProfileComment(
-//       id,
-//       commentId,
-//       currentUser,
-//       comment
-//     );
-//     setComments(
-//       comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
-//     );
-//   };
-
 export default CommentList;
