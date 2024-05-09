@@ -10,7 +10,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 
-const CommentList = ({ comments, onEdit, onDelete }) => {
+const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
   console.log(comments);
 
   const editCommentRef = useRef();
@@ -19,18 +19,6 @@ const CommentList = ({ comments, onEdit, onDelete }) => {
     editCommentRef.current.toggleVisibility();
     onEdit(commentId, content);
   };
-
-  //   const updateComment = async (commentId, comment) => {
-  //     const updatedComment = await commentsService.updateProfileComment(
-  //       id,
-  //       commentId,
-  //       currentUser,
-  //       comment
-  //     );
-  //     setComments(
-  //       comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
-  //     );
-  //   };
 
   const editForm = (commentId) => {
     return (
@@ -57,23 +45,20 @@ const CommentList = ({ comments, onEdit, onDelete }) => {
               secondary={comment.content}
             />
           </ListItem>
-          {/* <Button
-            variant="contained"
-            size="small"
-            sx={{ marginRight: 2 }}
-            onClick={openEditModal}
-          >
-            Edit comment
-          </Button> */}
-          {editForm(comment.id)}
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => onDelete(comment.id)}
-            color="error"
-          >
-            Delete comment
-          </Button>
+          {currentUser && currentUser?.username === comment.author.username && (
+            <>
+              {editForm(comment.id)}
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => onDelete(comment.id)}
+                color="error"
+              >
+                Delete comment
+              </Button>
+            </>
+          )}
+
           <Divider variant="inset" component="li" />
         </div>
       ))}

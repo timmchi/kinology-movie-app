@@ -6,7 +6,7 @@ const User = require("../models/user");
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params;
   const comments = await UserComment.find({ receiver: id })
-    .populate("author", { name: 1, avatar: 1 })
+    .populate("author", { name: 1, avatar: 1, username: 1 })
     .populate("receiver");
 
   response.status(200).send(comments);
@@ -29,7 +29,7 @@ commentsRouter.post(
     const savedComment = await newComment.save();
 
     const addedComment = await UserComment.findById(savedComment._id)
-      .populate("author", { name: 1, avatar: 1 })
+      .populate("author", { name: 1, avatar: 1, username: 1 })
       .populate("receiver");
 
     response.status(201).send(addedComment);
@@ -52,7 +52,7 @@ commentsRouter.put(
       { content: request.body.content },
       { new: true }
     )
-      .populate("author", { name: 1, avatar: 1 })
+      .populate("author", { name: 1, avatar: 1, username: 1 })
       .populate("receiver");
 
     if (!updatedComment)

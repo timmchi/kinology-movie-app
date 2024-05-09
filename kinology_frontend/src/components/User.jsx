@@ -121,6 +121,7 @@ const User = ({ currentUser }) => {
           comments={comments}
           onDelete={deleteComment}
           onEdit={updateComment}
+          currentUser={currentUser}
         />
       </div>
     </div>
