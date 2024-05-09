@@ -17,6 +17,12 @@ const movieSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserComment",
+    },
+  ],
 });
 
 movieSchema.set("toJSON", {
@@ -27,4 +33,5 @@ movieSchema.set("toJSON", {
   },
 });
 
-module.exports = mongoose.model("Movie", movieSchema);
+const Movie = mongoose.model("Movie", movieSchema);
+module.exports = Movie;

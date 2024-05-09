@@ -2,22 +2,69 @@ const loginRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const UserComment = require("../models/userComment");
 
-commentsRouter.get("/user/:id", async (request, response) => {});
+commentsRouter.get("/user/:id", async (request, response) => {
+  const { id } = request.params.id;
+  const comments = await UserComment.find({ receiver: id })
+    .populate("author")
+    .populate("receiver");
 
-commentsRouter.post("/user/:id", async (request, response) => {});
+  response.status(200).send(comments);
+});
 
-commentsRouter.put("/user/:id/:commentId", async (request, response) => {});
+commentsRouter.post(
+  "/user/:id",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {
+    const { id } = request.params.id;
+    const user = request.user;
 
-commentsRouter.delete("/user/:id/:commentId", async (request, response) => {});
+    const newComment = new UserComment({
+      content: request.body.content,
+      author: user._id,
+      receiver: id,
+    });
+
+    const savedComment = await newComment.save();
+
+    response.status(201).send(savedComment);
+  }
+);
+
+commentsRouter.put(
+  "/user/:id/:commentId",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {}
+);
+
+commentsRouter.delete(
+  "/user/:id/:commentId",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {}
+);
 
 commentsRouter.get("/movies/:id", async (request, response) => {});
 
-commentsRouter.post("/movies/:id", async (request, response) => {});
+commentsRouter.post(
+  "/movies/:id",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {}
+);
 
-commentsRouter.put("/movies/:id/:commentId", async (request, response) => {});
+commentsRouter.put(
+  "/movies/:id/:commentId",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {}
+);
 
 commentsRouter.delete(
   "/movies/:id/:commentId",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
   async (request, response) => {}
 );
 

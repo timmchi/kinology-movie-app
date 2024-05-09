@@ -13,6 +13,10 @@ const userCommentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  movieReceiver: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Movie",
+  },
 });
 
 userCommentSchema.set("toJSON", {
@@ -23,4 +27,5 @@ userCommentSchema.set("toJSON", {
   },
 });
 
-module.exports = mongoose.model("UserComment", userCommentSchema);
+const UserComment = mongoose.model("UserComment", userCommentSchema);
+module.exports = UserComment;
