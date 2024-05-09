@@ -1,8 +1,8 @@
-const loginRouter = require("express").Router();
+const commentsRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const UserComment = require("../models/userComment");
 
-commentsRouter.get("/user/:id", async (request, response) => {
+commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params.id;
   const comments = await UserComment.find({ receiver: id })
     .populate("author")
@@ -12,7 +12,7 @@ commentsRouter.get("/user/:id", async (request, response) => {
 });
 
 commentsRouter.post(
-  "/user/:id",
+  "/profile/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
@@ -32,40 +32,40 @@ commentsRouter.post(
 );
 
 commentsRouter.put(
-  "/user/:id/:commentId",
+  "/profile/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {}
 );
 
 commentsRouter.delete(
-  "/user/:id/:commentId",
+  "/profile/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {}
 );
 
-commentsRouter.get("/movies/:id", async (request, response) => {});
+commentsRouter.get("/movie/:id", async (request, response) => {});
 
 commentsRouter.post(
-  "/movies/:id",
+  "/movie/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {}
 );
 
 commentsRouter.put(
-  "/movies/:id/:commentId",
+  "/movie/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {}
 );
 
 commentsRouter.delete(
-  "/movies/:id/:commentId",
+  "/movie/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {}
 );
 
-module.exports = loginRouter;
+module.exports = commentsRouter;

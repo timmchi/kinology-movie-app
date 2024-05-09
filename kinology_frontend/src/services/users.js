@@ -7,18 +7,18 @@ const setToken = (newToken) => {
   token = `Bearer ${newToken}`;
 };
 
-const createComment = async (newComment, userId) => {
-  const config = {
-    headers: { Authorization: token },
-  };
+// const createComment = async (newComment, userId) => {
+//   const config = {
+//     headers: { Authorization: token },
+//   };
 
-  const response = await axios.post(
-    `${baseUrl}/${userId}/comments`,
-    newComment,
-    config
-  );
-  return response.data;
-};
+//   const response = await axios.post(
+//     `${baseUrl}/${userId}/comments`,
+//     newComment,
+//     config
+//   );
+//   return response.data;
+// };
 
 const getUsers = async () => {
   const response = await axios.get(baseUrl);
@@ -57,9 +57,9 @@ const updateUser = async (id, updatedInformation) => {
 
 export default {
   setToken,
-  createComment,
   getUsers,
   getUser,
   addMovieToProfile,
   updateUser,
+  token,
 };

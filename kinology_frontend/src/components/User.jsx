@@ -1,13 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import Togglable from "./Togglable";
+import CommentForm from "./CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
 import usersService from "../services/users";
+import commentsService from "../services/comments";
 
 const User = ({ currentUser }) => {
   let { id } = useParams();
   const [user, setUser] = useState("");
+  const [comments, setComments] = useState([]);
   const updateFormRef = useRef();
+  const commentFormRef = useRef();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -15,6 +19,14 @@ const User = ({ currentUser }) => {
       setUser(fetchedUser);
     };
     fetchUser();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const fetchedComments = await commentsService.getProfileComments(id);
+      setComments(fetchedComments);
+    };
+    fetchComments();
   }, [id]);
 
   const updateUser = async (updatedInformation) => {
@@ -27,6 +39,24 @@ const User = ({ currentUser }) => {
     return (
       <Togglable buttonLabel="update profile" ref={updateFormRef}>
         <UserUpdateForm updateUser={updateUser} />
+      </Togglable>
+    );
+  };
+
+  const createComment = async (comment) => {
+    commentFormRef.current.toggleVisibility();
+    const createdComment = await commentsService.createProfileComment(
+      id,
+      comment,
+      currentUser
+    );
+    setComments(comments.concat(createdComment));
+  };
+
+  const commentForm = () => {
+    return (
+      <Togglable buttonLabel="leave a comment" ref={commentFormRef}>
+        <CommentForm createComment={createComment} />
       </Togglable>
     );
   };
@@ -61,8 +91,9 @@ const User = ({ currentUser }) => {
       </div>
       <div>
         <h2>comments</h2>
+        {currentUser && commentForm()}
         <ul>
-          {user?.profileComments?.map((comment) => (
+          {comments?.map((comment) => (
             <li key={comment.id}>{comment.content}</li>
           ))}
         </ul>
