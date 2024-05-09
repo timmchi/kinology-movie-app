@@ -102,7 +102,7 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   const comments = await UserComment.find({
     movieReceiver: movie._id,
-  }).populate("author", { name: 1, id: 1, username: 1 });
+  }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
 
   response.status(200).send(comments);
 });
@@ -143,7 +143,12 @@ commentsRouter.post(
     //   select: "content",
     // });
 
-    await savedComment.populate("author", { name: 1, id: 1, username: 1 });
+    await savedComment.populate("author", {
+      name: 1,
+      id: 1,
+      username: 1,
+      avatar: 1,
+    });
 
     response.status(201).send(savedComment);
   }
@@ -153,7 +158,27 @@ commentsRouter.put(
   "/movie/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
-  async (request, response) => {}
+  async (request, response) => {
+    const { commentId } = request.params;
+    const user = request.user;
+    const { authorId } = request.body;
+
+    if (!user || user._id.toString() !== authorId)
+      return response.status(401).json({ error: "not authorized" });
+
+    const updatedComment = await UserComment.findByIdAndUpdate(
+      commentId,
+      { content: request.body.content },
+      { new: true }
+    )
+      .populate("author", { name: 1, avatar: 1, username: 1, id: 1 })
+      .populate("movieReceiver");
+
+    if (!updatedComment)
+      return response.status(404).json({ error: "no note found" });
+
+    response.status(200).send(updatedComment);
+  }
 );
 
 commentsRouter.delete(
@@ -161,11 +186,11 @@ commentsRouter.delete(
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
-    const { id, commentId } = request.params;
+    const { commentId } = request.params;
     const user = request.user;
     const { authorId } = request.body;
 
-    console.log("ids in backend", user._id, authorId, commentId);
+    // console.log("ids in backend", user._id, authorId, commentId);
 
     if (!user || user._id.toString() !== authorId)
       return response.status(401).json({ error: "not authorized" });
