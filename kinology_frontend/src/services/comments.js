@@ -31,8 +31,27 @@ const deleteProfileComment = async (profileId, commentId, currentUser) => {
   return response.data;
 };
 
+const updateProfileComment = async (
+  profileId,
+  commentId,
+  currentUser,
+  content
+) => {
+  const config = {
+    headers: { Authorization: `Bearer ${currentUser.token}` },
+  };
+
+  const response = await axios.put(
+    `${baseUrl}/profile/${profileId}/${commentId}`,
+    { content: content },
+    config
+  );
+  return response.data;
+};
+
 export default {
   getProfileComments,
   createProfileComment,
   deleteProfileComment,
+  updateProfileComment,
 };

@@ -32,13 +32,6 @@ commentsRouter.post(
       .populate("author", { name: 1, avatar: 1 })
       .populate("receiver");
 
-    // const commentsAuthor = await User.findById(user._id)
-    //   .populate("authoredComments")
-    //   .populate("profileComments");
-    // const commentsReceiver = await User.findById(id)
-    //   .populate("authoredComments")
-    //   .populate("profileComments");
-
     response.status(201).send(addedComment);
   }
 );

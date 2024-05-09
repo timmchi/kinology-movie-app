@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-const CommentForm = ({ createComment }) => {
+const CommentForm = ({ commentAction, commentId }) => {
   const [content, setContent] = useState("");
 
   const submitComment = (event) => {
     event.preventDefault();
-    createComment(content);
+    commentAction(content, commentId);
     setContent("");
   };
 

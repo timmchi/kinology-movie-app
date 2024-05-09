@@ -54,10 +54,10 @@ const User = ({ currentUser }) => {
     setComments(comments.concat(createdComment));
   };
 
-  const commentForm = () => {
+  const commentCreateForm = () => {
     return (
       <Togglable buttonLabel="leave a comment" ref={commentFormRef}>
-        <CommentForm createComment={createComment} />
+        <CommentForm createAction={createComment} />
       </Togglable>
     );
   };
@@ -72,6 +72,18 @@ const User = ({ currentUser }) => {
         currentUser
       );
     }
+  };
+
+  const updateComment = async (commentId, comment) => {
+    const updatedComment = await commentsService.updateProfileComment(
+      id,
+      commentId,
+      currentUser,
+      comment
+    );
+    setComments(
+      comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
+    );
   };
 
   return (
@@ -104,8 +116,12 @@ const User = ({ currentUser }) => {
       </div>
       <div>
         <h2>comments</h2>
-        {currentUser && commentForm()}
-        <CommentList comments={comments} onDelete={deleteComment} />
+        {currentUser && commentCreateForm()}
+        <CommentList
+          comments={comments}
+          onDelete={deleteComment}
+          onEdit={updateComment}
+        />
       </div>
     </div>
   );
