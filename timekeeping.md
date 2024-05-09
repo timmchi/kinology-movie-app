@@ -16,6 +16,7 @@
 | 8.5 | 1     | Users view and single user view                                      |
 | 8.5 | 2     | Adding movies to user profile, both frontend and backend             |
 | 8.5 | 1     | Updating user profile backend/frontend                               |
+| 9.5 | 4     | Adding user profile comments frontend and backend                    |
 |     |       |                                                                      |
 |     |       |                                                                      |
 |     |       |                                                                      |
@@ -35,6 +36,4 @@
 |     |       |                                                                      |
 |     |       |                                                                      |
 |     |       |                                                                      |
-|     |       |                                                                      |
-
-| tot | 19.5 | |
+| tot | 19.5  |                                                                      |

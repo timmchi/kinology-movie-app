@@ -49,9 +49,29 @@ const updateProfileComment = async (
   return response.data;
 };
 
+const getMovieComments = async (movieId) => {
+  const response = await axios.get(`${baseUrl}/movie/${movieId}`);
+  return response.data;
+};
+
+const createMovieComment = async (movieId, comment, currentUser) => {
+  const config = {
+    headers: { Authorization: `Bearer ${currentUser.token}` },
+  };
+
+  const response = await axios.post(
+    `${baseUrl}/movie/${movieId}`,
+    { content: comment },
+    config
+  );
+  return response.data;
+};
+
 export default {
   getProfileComments,
   createProfileComment,
   deleteProfileComment,
   updateProfileComment,
+  getMovieComments,
+  createMovieComment,
 };

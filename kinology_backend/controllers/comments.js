@@ -2,6 +2,7 @@ const commentsRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const UserComment = require("../models/userComment");
 const User = require("../models/user");
+const Movie = require("../models/movie");
 
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params;
@@ -81,13 +82,49 @@ commentsRouter.delete(
   }
 );
 
-commentsRouter.get("/movie/:id", async (request, response) => {});
+commentsRouter.get("/movie/:id", async (request, response) => {
+  const { id } = request.params;
+
+  const movie = await Movie.findOne({ tmdbId: id });
+
+  if (!movie) response.status(200).json({ comments: -1 });
+
+  await movie.populate("comments", { author: 1, content: 1 });
+
+  const comments = await UserComment.find({ movieReceiver: movie._id });
+
+  response.status(200).send(comments);
+});
 
 commentsRouter.post(
   "/movie/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
-  async (request, response) => {}
+  async (request, response) => {
+    const { id } = request.params;
+    const user = request.user;
+    const { content } = request.body;
+
+    let movie = await Movie.findOne({ tmdbId: id });
+
+    if (!movie) {
+      movie = new Movie({
+        tmdbId: id,
+      });
+      await movie.save();
+    }
+
+    const movieComment = new UserComment({
+      content,
+      author: user._id,
+      movieReceiver: movie._id,
+    });
+    const savedComment = await movieComment.save();
+
+    await movie.populate("comments", { author: 1, content: 1 });
+
+    response.status(201).send(savedComment);
+  }
 );
 
 commentsRouter.put(
