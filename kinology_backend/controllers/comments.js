@@ -71,14 +71,14 @@ commentsRouter.delete(
     const { id, commentId } = request.params;
     const user = request.user;
 
-    console.log("ids in backend", user._id, id, commentId);
+    // console.log("ids in backend", user._id, id, commentId);
 
     if (!user || user._id.toString() !== id)
       return response.status(401).json({ error: "not authorized" });
 
     const commentToDelete = await UserComment.findByIdAndDelete(commentId);
 
-    response.status(200);
+    response.status(200).end();
   }
 );
 
@@ -102,7 +102,7 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   const comments = await UserComment.find({
     movieReceiver: movie._id,
-  }).populate("author", { name: 1, id: 1 });
+  }).populate("author", { name: 1, id: 1, username: 1 });
 
   response.status(200).send(comments);
 });
@@ -143,7 +143,7 @@ commentsRouter.post(
     //   select: "content",
     // });
 
-    await savedComment.populate("author", { name: 1, id: 1 });
+    await savedComment.populate("author", { name: 1, id: 1, username: 1 });
 
     response.status(201).send(savedComment);
   }
@@ -160,7 +160,20 @@ commentsRouter.delete(
   "/movie/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
-  async (request, response) => {}
+  async (request, response) => {
+    const { id, commentId } = request.params;
+    const user = request.user;
+    const { authorId } = request.body;
+
+    console.log("ids in backend", user._id, authorId, commentId);
+
+    if (!user || user._id.toString() !== authorId)
+      return response.status(401).json({ error: "not authorized" });
+
+    const commentToDelete = await UserComment.findByIdAndDelete(commentId);
+
+    response.status(200).end();
+  }
 );
 
 module.exports = commentsRouter;

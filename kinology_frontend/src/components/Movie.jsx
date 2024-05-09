@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CommentForm from "./CommentForm";
+import CommentList from "./CommentList";
 import moviesService from "../services/movies";
 import commentsService from "../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
@@ -40,6 +41,14 @@ const Movie = ({ onButtonPress, user }) => {
       user
     );
     setComments(comments.concat(createdComment));
+  };
+
+  const deleteComment = async (commentId, authorId) => {
+    if (window.confirm("Are you sure you want to delete the comment?")) {
+      const filteredComments = comments.filter((c) => c.id !== commentId);
+      setComments(filteredComments);
+      await commentsService.deleteMovieComment(id, commentId, user, authorId);
+    }
   };
 
   return (
@@ -83,15 +92,11 @@ const Movie = ({ onButtonPress, user }) => {
       <div className="singleMovieComments">
         <h2>Comments</h2>
         <CommentForm commentAction={createComment} />
-
-        {comments?.map((comment) => (
-          <div key={comment.id}>
-            <p>
-              <strong>{comment.author.name}</strong>
-            </p>
-            <p>{comment.content}</p>
-          </div>
-        ))}
+        <CommentList
+          comments={comments}
+          currentUser={user}
+          onDelete={deleteComment}
+        />
       </div>
     </div>
   );

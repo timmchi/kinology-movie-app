@@ -49,6 +49,8 @@ const updateProfileComment = async (
   return response.data;
 };
 
+// Big TODO - refactor these so I can use same service for both movie and profile comments. These functions repeat a lot, so I'm thinking base it on a word movie/profile?
+
 const getMovieComments = async (movieId) => {
   const response = await axios.get(`${baseUrl}/movie/${movieId}`);
   return response.data;
@@ -67,6 +69,26 @@ const createMovieComment = async (movieId, comment, currentUser) => {
   return response.data;
 };
 
+const deleteMovieComment = async (
+  movieId,
+  commentId,
+  currentUser,
+  authorId
+) => {
+  const config = {
+    headers: { Authorization: `Bearer ${currentUser.token}` },
+    data: {
+      authorId,
+    },
+  };
+
+  const response = await axios.delete(
+    `${baseUrl}/movie/${movieId}/${commentId}`,
+    config
+  );
+  return response.data;
+};
+
 export default {
   getProfileComments,
   createProfileComment,
@@ -74,4 +96,5 @@ export default {
   updateProfileComment,
   getMovieComments,
   createMovieComment,
+  deleteMovieComment,
 };
