@@ -8,6 +8,7 @@ import SignUp from "./components/SignUp";
 import User from "./components/User";
 import Users from "./components/Users";
 import Movie from "./components/Movie";
+import NotificationAlert from "./components/Notification";
 import loginService from "./services/login";
 import userService from "./services/users";
 
@@ -74,6 +75,7 @@ function App() {
   return (
     <>
       <Navigation user={user} />
+      <NotificationAlert />
       <Routes>
         <Route
           path="/users/:id"
