@@ -41,25 +41,25 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
           <ListItem
             alignItems="flex-start"
             component={Link}
-            to={`/users/${comment.author.id}`}
+            to={comment.author ? `/users/${comment.author?.id}` : "/users"}
           >
             <ListItemAvatar>
-              <Avatar alt={comment.author.name} src={comment.author.avatar} />
+              <Avatar alt={comment.author?.name} src={comment.author?.avatar} />
             </ListItemAvatar>
             <ListItemText
-              primary={comment.author.name}
+              primary={comment.author?.name ?? "Deleted user"}
               secondary={comment.content}
             />
           </ListItem>
           {currentUser && (
             <>
-              {currentUser.username === comment.author.username && (
+              {currentUser.username === comment.author?.username && (
                 <>
-                  {editForm(comment.id, comment.author.id)}
+                  {editForm(comment.id, comment.author?.id)}
                   <Button
                     variant="contained"
                     size="small"
-                    onClick={() => onDelete(comment.id, comment.author.id)}
+                    onClick={() => onDelete(comment.id, comment.author?.id)}
                     color="error"
                   >
                     Delete comment
@@ -67,11 +67,11 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
                 </>
               )}
               {currentUser.username === comment.receiver?.username &&
-                currentUser.username !== comment.author.username && (
+                currentUser.username !== comment.author?.username && (
                   <Button
                     variant="contained"
                     size="small"
-                    onClick={() => onDelete(comment.id, comment.author.id)}
+                    onClick={() => onDelete(comment.id, comment.author?.id)}
                     color="error"
                   >
                     Delete comment

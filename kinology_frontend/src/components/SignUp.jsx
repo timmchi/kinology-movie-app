@@ -4,7 +4,7 @@ import signUpService from "../services/signup";
 
 // repeating the password field will need to be implemented along with some validation
 
-const SignUp = ({ user }) => {
+const SignUp = ({ user, setUsers, users }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +19,7 @@ const SignUp = ({ user }) => {
       setUsername("");
       setName("");
       setPassword("");
+      setUsers(users.concat(user));
     } catch (exception) {
       console.log("something went wrong in signup");
     }

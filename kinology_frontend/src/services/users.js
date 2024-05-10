@@ -44,11 +44,21 @@ const updateUser = async (id, updatedInformation) => {
   return response.data;
 };
 
+const deleteUser = async (id) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const response = await axios.delete(`${baseUrl}/${id}`, config);
+
+  return response.data;
+};
+
 export default {
   setToken,
   getUsers,
   getUser,
   addMovieToProfile,
   updateUser,
-  token,
+  deleteUser,
 };

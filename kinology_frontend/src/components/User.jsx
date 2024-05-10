@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
@@ -7,15 +8,17 @@ import CommentList from "./CommentList";
 import MovieSmallCard from "./MovieSmallCard";
 import usersService from "../services/users";
 import commentsService from "../services/comments";
+import { Button } from "@mui/material";
 
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
-const User = ({ currentUser }) => {
+const User = ({ currentUser, removeUser }) => {
   let { id } = useParams();
   const [user, setUser] = useState("");
   const [comments, setComments] = useState([]);
   const updateFormRef = useRef();
   const commentFormRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -93,12 +96,35 @@ const User = ({ currentUser }) => {
     );
   };
 
-  //   console.log(user?.favoriteMovies);
+  const deleteUser = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete your profile? This can't be undone"
+      )
+    ) {
+      await usersService.deleteUser(user.id);
+      removeUser(user.id);
+      window.localStorage.removeItem("loggedKinologyUser");
+      navigate("/users");
+    }
+  };
 
   return (
     <div className="userPage">
       <h1>User</h1>
-      {currentUser && currentUser?.username === user.username && updateForm()}
+      {currentUser && currentUser?.username === user.username && (
+        <>
+          {updateForm()}
+          <Button
+            color="error"
+            variant="contained"
+            size="small"
+            onClick={deleteUser}
+          >
+            Delete user
+          </Button>
+        </>
+      )}
       <p>
         <strong>{user.name}</strong>
       </p>

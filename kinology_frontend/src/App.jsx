@@ -35,6 +35,10 @@ function App() {
     fetchUsers();
   }, []);
 
+  const removeUser = (userId) => {
+    setUsers(users.filter((user) => user.id !== userId));
+  };
+
   // movie buttons continues here
   const handleMovieButton = async (event, button, movie) => {
     event.preventDefault();
@@ -71,13 +75,19 @@ function App() {
     <>
       <Navigation user={user} />
       <Routes>
-        <Route path="/users/:id" element={<User currentUser={user} />} />
+        <Route
+          path="/users/:id"
+          element={<User currentUser={user} removeUser={removeUser} />}
+        />
         <Route path="/" element={<LandingPage />} />
         <Route
           path="/movies/:id"
           element={<Movie onButtonPress={handleMovieButton} user={user} />}
         />
-        <Route path="/signup" element={<SignUp user={user} />} />
+        <Route
+          path="/signup"
+          element={<SignUp user={user} users={users} setUsers={setUsers} />}
+        />
         <Route
           path="/login"
           element={
@@ -92,7 +102,10 @@ function App() {
           }
         />
         <Route path="/about" element={<About />} />
-        <Route path="/users" element={<Users users={users} />} />
+        <Route
+          path="/users"
+          element={<Users users={users} removeUser={removeUser} />}
+        />
       </Routes>
     </>
   );
