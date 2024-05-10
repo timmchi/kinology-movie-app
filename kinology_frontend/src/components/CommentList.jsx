@@ -33,6 +33,7 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
     );
   };
 
+  if (comments.length === 0) return "no comments yet...";
   return (
     <List sx={{ width: "100%", maxWidth: 600, bgcolor: "background.paper" }}>
       {comments?.map((comment) => (

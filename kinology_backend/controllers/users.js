@@ -149,4 +149,21 @@ usersRouter.put(
   }
 );
 
+usersRouter.delete(
+  "/:id",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {
+    const user = request.user;
+    const profileOwner = await User.findById(request.params.id);
+
+    if (!profileOwner || user._id?.toString() !== profileOwner?._id?.toString())
+      return response.status(401).json({ error: "token invalid" });
+
+    await profileOwner.deleteOne();
+
+    response.status(200).end();
+  }
+);
+
 module.exports = usersRouter;

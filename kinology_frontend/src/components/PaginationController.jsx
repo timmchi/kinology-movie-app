@@ -18,6 +18,7 @@ const PaginationController = ({ pages, page, setPage, pageChange }) => {
         count={pages > 10 ? 10 : pages}
         page={page}
         onChange={handleChange}
+        sx={{ backgroundColor: "#BDAC4E" }}
       />
     </Stack>
   );
