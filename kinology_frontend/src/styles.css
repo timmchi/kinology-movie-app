@@ -125,11 +125,6 @@ listContainer, cardsContainer, movieCard */
   /* gap: 1; */
 }
 
-/* "singleMovieContainer">
-      <div className="singleMovieImage"> */
-/* className="singleMovieDescription" */
-/* "singleMovieComments" */
-
 .singleMovieContainer {
   display: flex;
 }
@@ -144,4 +139,27 @@ listContainer, cardsContainer, movieCard */
 
 .singleMovieComments {
   padding-left: 3em;
+}
+
+.profileMovieContainer {
+  display: flex;
+}
+
+.movieSmallCard {
+  margin-right: 0.5em;
+  transition: all 0.3s;
+}
+.movieSmallCard:hover {
+  transform: scale(1.1);
+}
+
+.movieList {
+  margin: 0 1em;
+}
+
+.movieCard {
+  transition: all 0.3s;
+}
+.movieCard:hover {
+  transform: scale(1.1);
 }

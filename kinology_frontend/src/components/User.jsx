@@ -4,6 +4,7 @@ import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
 import CommentList from "./CommentList";
+import MovieSmallCard from "./MovieSmallCard";
 import usersService from "../services/users";
 import commentsService from "../services/comments";
 
@@ -106,35 +107,27 @@ const User = ({ currentUser }) => {
         <h2>About me</h2>
         <p>{user.biography}</p>
       </div>
-      <div>
+      <div className="movieList">
         <h3>favorite movies</h3>
-
-        {user?.favoriteMovies?.map((movie) => (
-          <div key={`${movie.id} favorite`}>
-            {movie.tmdbId} {movie.title}{" "}
-            <img
-              alt={`${movie.title} poster`}
-              src={`${basePosterUrl}/${movie.poster}`}
-              width="100"
-              height="150"
-            />
-          </div>
-        ))}
+        {/* 
+        good candidate for refactoring, along with MovieList and big movie card */}
+        <div className="profileMovieContainer">
+          {user?.favoriteMovies?.map((movie) => (
+            <div key={`${movie.id} favorite`} className="movieSmallCard">
+              <MovieSmallCard movie={movie} />
+            </div>
+          ))}
+        </div>
       </div>
-      <div>
+      <div className="movieList">
         <h3>watched movies</h3>
-
-        {user?.watchedMovies?.map((movie) => (
-          <div key={`${movie.id} watched`}>
-            {movie.tmdbId} {movie.title}{" "}
-            <img
-              alt={`${movie.title} poster`}
-              src={`${basePosterUrl}/${movie.poster}`}
-              width="100"
-              height="150"
-            />
-          </div>
-        ))}
+        <div className="profileMovieContainer">
+          {user?.watchedMovies?.map((movie) => (
+            <div key={`${movie.id} watched`} className="movieSmallCard">
+              <MovieSmallCard movie={movie} />
+            </div>
+          ))}
+        </div>
       </div>
       <div>
         <h2>comments</h2>
