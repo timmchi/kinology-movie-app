@@ -10,6 +10,7 @@ const LogIn = ({
 }) => {
   const navigate = useNavigate();
 
+  // this needs to be changed
   if (user) navigate("/");
   return (
     <div>

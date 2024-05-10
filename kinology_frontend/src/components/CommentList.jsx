@@ -51,17 +51,48 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
               secondary={comment.content}
             />
           </ListItem>
-          {currentUser && currentUser?.username === comment.author.username && (
+          {/* {currentUser && currentUser?.username === comment.author.username && (
             <>
               {editForm(comment.id, comment.author.id)}
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => onDelete(comment.id, comment.author.id)}
-                color="error"
-              >
-                Delete comment
-              </Button>
+              {currentUser?.username === comment.author.username ||
+                (currentUser?.username === comment.receiver?.username && (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => onDelete(comment.id, comment.author.id)}
+                    color="error"
+                  >
+                    Delete comment
+                  </Button>
+                ))}
+            </>
+          )} */}
+          {currentUser && (
+            <>
+              {currentUser.username === comment.author.username && (
+                <>
+                  {editForm(comment.id, comment.author.id)}
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => onDelete(comment.id, comment.author.id)}
+                    color="error"
+                  >
+                    Delete comment
+                  </Button>
+                </>
+              )}
+              {currentUser.username === comment.receiver?.username &&
+                currentUser.username !== comment.author.username && (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => onDelete(comment.id, comment.author.id)}
+                    color="error"
+                  >
+                    Delete comment
+                  </Button>
+                )}
             </>
           )}
 

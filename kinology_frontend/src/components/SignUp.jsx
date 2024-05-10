@@ -24,6 +24,7 @@ const SignUp = ({ user }) => {
     }
   };
 
+  // this needs to be changed
   if (user) navigate("/");
   return (
     <div>
