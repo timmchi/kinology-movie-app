@@ -43,14 +43,15 @@ commentsRouter.put(
   middleware.userExtractor,
   async (request, response) => {
     const { id, commentId } = request.params;
+    const { authorId, content } = request.body;
     const user = request.user;
 
-    if (!user || user._id.toString() !== id)
+    if (!user || user._id.toString() !== authorId)
       return response.status(401).json({ error: "not authorized" });
 
     const updatedComment = await UserComment.findByIdAndUpdate(
       commentId,
-      { content: request.body.content },
+      { content },
       { new: true }
     )
       .populate("author", { name: 1, avatar: 1, username: 1 })
@@ -69,11 +70,12 @@ commentsRouter.delete(
   middleware.userExtractor,
   async (request, response) => {
     const { id, commentId } = request.params;
+    const { authorId } = request.body;
     const user = request.user;
 
-    // console.log("ids in backend", user._id, id, commentId);
+    console.log("authorId in backend in profile comment delete", authorId);
 
-    if (!user || user._id.toString() !== id)
+    if (!user || user._id.toString() !== authorId)
       return response.status(401).json({ error: "not authorized" });
 
     const commentToDelete = await UserComment.findByIdAndDelete(commentId);

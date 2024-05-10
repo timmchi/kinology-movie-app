@@ -62,24 +62,28 @@ const User = ({ currentUser }) => {
     );
   };
 
-  const deleteComment = async (commentId) => {
+  // Adding authorId here as well
+  const deleteComment = async (commentId, authorId) => {
     if (window.confirm("Are you sure you want to delete the comment?")) {
       const filteredComments = comments.filter((c) => c.id !== commentId);
       setComments(filteredComments);
       await commentsService.deleteProfileComment(
         user.id,
         commentId,
-        currentUser
+        currentUser,
+        authorId
       );
     }
   };
 
-  const updateComment = async (commentId, comment) => {
+  // HERE I THINK
+  const updateComment = async (commentId, comment, authorId) => {
     const updatedComment = await commentsService.updateProfileComment(
       id,
       commentId,
       currentUser,
-      comment
+      comment,
+      authorId
     );
     setComments(
       comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))

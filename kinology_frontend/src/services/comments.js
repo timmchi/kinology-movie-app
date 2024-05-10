@@ -19,9 +19,17 @@ const createProfileComment = async (profileId, comment, currentUser) => {
   return response.data;
 };
 
-const deleteProfileComment = async (profileId, commentId, currentUser) => {
+const deleteProfileComment = async (
+  profileId,
+  commentId,
+  currentUser,
+  authorId
+) => {
   const config = {
     headers: { Authorization: `Bearer ${currentUser.token}` },
+    data: {
+      authorId,
+    },
   };
 
   const response = await axios.delete(
@@ -35,7 +43,8 @@ const updateProfileComment = async (
   profileId,
   commentId,
   currentUser,
-  content
+  content,
+  authorId
 ) => {
   const config = {
     headers: { Authorization: `Bearer ${currentUser.token}` },
@@ -43,7 +52,7 @@ const updateProfileComment = async (
 
   const response = await axios.put(
     `${baseUrl}/profile/${profileId}/${commentId}`,
-    { content: content },
+    { content: content, authorId },
     config
   );
   return response.data;
@@ -99,7 +108,6 @@ const updateMovieComment = async (
   const config = {
     headers: { Authorization: `Bearer ${currentUser.token}` },
   };
-  console.log("authorId in service", authorId);
 
   const response = await axios.put(
     `${baseUrl}/movie/${movieId}/${commentId}`,
