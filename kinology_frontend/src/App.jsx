@@ -11,12 +11,14 @@ import Movie from "./components/Movie";
 import NotificationAlert from "./components/Notification";
 import loginService from "./services/login";
 import userService from "./services/users";
+import { useNotificationDispatch } from "./contexts/NotificationContext";
 
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
+  const dispatch = useNotificationDispatch();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");
@@ -37,19 +39,53 @@ function App() {
   }, []);
 
   const removeUser = (userId) => {
-    setUsers(users.filter((user) => user.id !== userId));
+    try {
+      setUsers(users.filter((user) => user.id !== userId));
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: "User deleted",
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Something went wrong when deleting user`,
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   // movie buttons continues here
   const handleMovieButton = async (event, button, movie) => {
     event.preventDefault();
-    // try {
-    const currentUserId = users.find((u) => u.username === user.username)?.id;
-    console.log(movie, button, currentUserId);
-    await userService.addMovieToProfile(movie, button, currentUserId);
-    // } catch (exception) {
-    //   console.log("somewhing went wrong when adding a movie to your profile");
-    // }
+    try {
+      const currentUserId = users.find((u) => u.username === user.username)?.id;
+      console.log(movie, button, currentUserId);
+      await userService.addMovieToProfile(movie, button, currentUserId);
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Successfully added ${movie.title} to ${button}`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Something went wrong when adding a movie to your profile`,
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   const handleLogin = async (event) => {
