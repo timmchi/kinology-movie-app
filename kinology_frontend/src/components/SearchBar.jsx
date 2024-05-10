@@ -27,6 +27,7 @@ const SearchBar = ({ setMovies }) => {
   const [country, setCountry] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(-1);
+  //   const [newSearch, setNewSearch] = useState(false);
 
   const searchForMovies = async (e) => {
     e.preventDefault();
@@ -47,14 +48,15 @@ const SearchBar = ({ setMovies }) => {
     setTotalPages(totalPageNumber);
     setMovies(movies);
 
-    if (page === totalPages) {
-      setDirector("");
-      setYear("");
-      setRatingLower(0);
-      setRatingUpper(10);
-      setActors([]);
-      setCountry("");
-    }
+    // if (newSearch) {
+    //   setDirector("");
+    //   setYear("");
+    //   setRatingLower(0);
+    //   setRatingUpper(10);
+    //   setActors([]);
+    //   setCountry("");
+    //   setPage();
+    // }
   };
 
   const handleKeyDown = (event) => {
@@ -73,9 +75,22 @@ const SearchBar = ({ setMovies }) => {
     setGenres(updatedGenres);
   };
 
+  const handleNewSearch = () => {
+    setDirector("");
+    setYear("");
+    setRatingLower(0);
+    setRatingUpper(10);
+    setActors([]);
+    setCountry("");
+    setPage(1);
+    setTotalPages(-1);
+    setMovies([]);
+  };
+
   return (
     <div>
       <h1>search bar</h1>
+      <button onClick={handleNewSearch}>new search</button>
       <form onSubmit={searchForMovies} className="searchBar">
         {/* <div className="container"> */}
         <div className="genres">
