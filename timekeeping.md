@@ -22,6 +22,7 @@
 | 10.5 | 0.5   | Card styles                                                              |
 | 10.5 | 2     | Pagination for movies                                                    |
 | 10.5 | 1.5   | Deleting users functionality, implementation of MovieButton, bug fixes   |
+| 10.5 | 1     | Notification reducer                                                     |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -35,5 +36,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 31    |                                                                          |
+| tot  | 32    |                                                                          |
