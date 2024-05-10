@@ -109,6 +109,8 @@ const User = ({ currentUser, removeUser }) => {
     }
   };
 
+  console.log("user favorite movies", user?.favoriteMovies);
+
   return (
     <div className="userPage">
       <h1>User</h1>

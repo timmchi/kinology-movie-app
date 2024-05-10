@@ -13,6 +13,7 @@ const MovieSmallCard = ({ movie }) => {
       <CardActionArea component={Link} to={`/movies/${movie.tmdbId}`}>
         <CardMedia
           component="img"
+          loading="lazy"
           height="150"
           alt={`${movie.title} poster`}
           src={`${basePosterUrl}/${movie.poster}`}

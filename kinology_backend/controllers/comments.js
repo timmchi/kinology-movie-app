@@ -89,7 +89,7 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   const movie = await Movie.findOne({ tmdbId: id });
 
-  if (!movie) response.status(200).send([]);
+  if (!movie) return response.status(200).send([]);
 
   // not sure if any of these commented out lines should stay...
   //   await movie.populate("comments", { author: 1, content: 1 });
@@ -103,7 +103,7 @@ commentsRouter.get("/movie/:id", async (request, response) => {
   //   });
 
   const comments = await UserComment.find({
-    movieReceiver: movie._id,
+    movieReceiver: movie?._id,
   }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
 
   response.status(200).send(comments);

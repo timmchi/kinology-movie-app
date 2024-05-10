@@ -8,7 +8,17 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 
+import MovieButton from "./MovieButton";
+
 const MovieCard = ({ movie, onButtonPress }) => {
+  const buttonPress = (event, functionWord) => {
+    onButtonPress(event, functionWord, {
+      id: movie.id,
+      title: movie.title,
+      poster: movie.image,
+    });
+  };
+
   return (
     <Card
       sx={{
@@ -23,6 +33,7 @@ const MovieCard = ({ movie, onButtonPress }) => {
       <CardActionArea component={Link} to={`/movies/${movie.id}`}>
         <CardMedia
           component="img"
+          loading="lazy"
           alt="movie poster"
           height="280"
           image={`${basePosterUrl}${movie.image}`}
@@ -38,7 +49,7 @@ const MovieCard = ({ movie, onButtonPress }) => {
         <Button size="small" variant="outlined">
           Watch later
         </Button>
-        <Button
+        {/* <Button
           size="small"
           variant="outlined"
           onClick={(event) =>
@@ -50,8 +61,13 @@ const MovieCard = ({ movie, onButtonPress }) => {
           }
         >
           Favorite
-        </Button>
-        <Button
+        </Button> */}
+        <MovieButton
+          unpressedText={"Favorite"}
+          pressedText={"Unfavorite"}
+          onButtonPress={(e) => buttonPress(e, "favorite")}
+        />
+        {/* <Button
           size="small"
           variant="outlined"
           onClick={(event) =>
@@ -63,7 +79,12 @@ const MovieCard = ({ movie, onButtonPress }) => {
           }
         >
           Already seen
-        </Button>
+        </Button> */}
+        <MovieButton
+          unpressedText={"Seen"}
+          pressedText={"Remove from seen"}
+          onButtonPress={(e) => buttonPress(e, "watched")}
+        />
       </CardActions>
     </Card>
   );

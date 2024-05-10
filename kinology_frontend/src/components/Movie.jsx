@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
+import MovieButton from "./MovieButton";
 import moviesService from "../services/movies";
 import commentsService from "../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
@@ -64,6 +65,14 @@ const Movie = ({ onButtonPress, user }) => {
     );
   };
 
+  const buttonPress = (event, functionWord) => {
+    onButtonPress(event, functionWord, {
+      id,
+      title: movie.title,
+      poster: movie.image,
+    });
+  };
+
   return (
     <div>
       <div className="singleMovieContainer">
@@ -90,29 +99,16 @@ const Movie = ({ onButtonPress, user }) => {
           <p>{movie.runtime} minutes</p>
           {user ? (
             <>
-              {/* the actions is here */}
-              <button
-                onClick={(event) =>
-                  onButtonPress(event, "favorite", {
-                    id,
-                    title: movie.title,
-                    poster: movie.image,
-                  })
-                }
-              >
-                Add to favorites
-              </button>
-              <button
-                onClick={(event) =>
-                  onButtonPress(event, "watched", {
-                    id,
-                    title: movie.title,
-                    poster: movie.image,
-                  })
-                }
-              >
-                Watched
-              </button>
+              <MovieButton
+                unpressedText={"Favorite"}
+                pressedText={"Unfavorite"}
+                onButtonPress={(e) => buttonPress(e, "favorite")}
+              />
+              <MovieButton
+                unpressedText={"Seen"}
+                pressedText={"Remove from seen"}
+                onButtonPress={(e) => buttonPress(e, "watched")}
+              />
             </>
           ) : (
             ""
