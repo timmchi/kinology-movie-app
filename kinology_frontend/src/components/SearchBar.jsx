@@ -44,14 +44,17 @@ const SearchBar = ({ setMovies }) => {
       });
     console.log(movies);
     console.log("page number in searchbar", totalPageNumber);
+    setTotalPages(totalPageNumber);
     setMovies(movies);
 
-    setDirector("");
-    setYear("");
-    setRatingLower(0);
-    setRatingUpper(10);
-    setActors([]);
-    setCountry("");
+    if (page === totalPages) {
+      setDirector("");
+      setYear("");
+      setRatingLower(0);
+      setRatingUpper(10);
+      setActors([]);
+      setCountry("");
+    }
   };
 
   const handleKeyDown = (event) => {
@@ -175,7 +178,12 @@ const SearchBar = ({ setMovies }) => {
 
         {/* </div> */}
       </form>
-      <PaginationController pages={totalPages} page={page} setPage={setPage} />
+      <PaginationController
+        pages={totalPages}
+        page={page}
+        setPage={setPage}
+        pageChange={searchForMovies}
+      />
     </div>
   );
 };
