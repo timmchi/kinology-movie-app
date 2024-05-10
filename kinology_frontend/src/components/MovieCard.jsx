@@ -46,40 +46,15 @@ const MovieCard = ({ movie, onButtonPress }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
+        {/* TODO need to implement functionality to add to watch later */}
         <Button size="small" variant="outlined">
           Watch later
         </Button>
-        {/* <Button
-          size="small"
-          variant="outlined"
-          onClick={(event) =>
-            onButtonPress(event, "favorite", {
-              id: movie.id,
-              title: movie.title,
-              poster: movie.image,
-            })
-          }
-        >
-          Favorite
-        </Button> */}
         <MovieButton
           unpressedText={"Favorite"}
           pressedText={"Unfavorite"}
           onButtonPress={(e) => buttonPress(e, "favorite")}
         />
-        {/* <Button
-          size="small"
-          variant="outlined"
-          onClick={(event) =>
-            onButtonPress(event, "watched", {
-              id: movie.id,
-              title: movie.title,
-              poster: movie.image,
-            })
-          }
-        >
-          Already seen
-        </Button> */}
         <MovieButton
           unpressedText={"Seen"}
           pressedText={"Remove from seen"}

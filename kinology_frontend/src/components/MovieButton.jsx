@@ -3,8 +3,13 @@ import Button from "@mui/material/Button";
 
 // outlined contained
 
-const MovieButton = ({ unpressedText, pressedText, onButtonPress }) => {
-  const [pressed, setPressed] = useState(false);
+const MovieButton = ({
+  unpressedText,
+  pressedText,
+  onButtonPress,
+  buttonState = false,
+}) => {
+  const [pressed, setPressed] = useState(buttonState);
 
   const pressButton = (event) => {
     setPressed(!pressed);
