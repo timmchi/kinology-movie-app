@@ -96,7 +96,7 @@ const User = ({ currentUser }) => {
   //   console.log(user?.favoriteMovies);
 
   return (
-    <div>
+    <div className="userPage">
       <h1>User</h1>
       {currentUser && currentUser?.username === user.username && updateForm()}
       <p>

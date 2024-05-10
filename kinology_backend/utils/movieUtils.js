@@ -47,6 +47,7 @@ const queryCreator = (params) => {
     params.country === ""
       ? ""
       : `&with_origin_country=${isoCountrySearch(params.country)}`;
+  const page = `&page=${params.page}`;
 
   return [
     vote_gte,
@@ -55,6 +56,7 @@ const queryCreator = (params) => {
     with_crew,
     with_people,
     year,
+    page,
     origin_country,
   ].join("");
 };

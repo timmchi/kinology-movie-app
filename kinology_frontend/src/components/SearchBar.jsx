@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
+import PaginationController from "./PaginationController";
 import genreOptions from "../data/genres";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -24,20 +25,25 @@ const SearchBar = ({ setMovies }) => {
   const [actor, setActor] = useState("");
   const [actors, setActors] = useState([]);
   const [country, setCountry] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(-1);
 
   const searchForMovies = async (e) => {
     e.preventDefault();
     const actorsQuery = actors.map((actor) => actor.value);
-    const movies = await moviesService.search({
-      genres,
-      director,
-      year,
-      ratingUpper,
-      ratingLower,
-      actors: actorsQuery,
-      country,
-    });
+    const { movieToFrontObjectArray: movies, totalPages: totalPageNumber } =
+      await moviesService.search({
+        genres,
+        director,
+        year,
+        ratingUpper,
+        ratingLower,
+        actors: actorsQuery,
+        country,
+        page,
+      });
     console.log(movies);
+    console.log("page number in searchbar", totalPageNumber);
     setMovies(movies);
 
     setDirector("");
@@ -58,16 +64,6 @@ const SearchBar = ({ setMovies }) => {
         event.preventDefault();
     }
   };
-  //   const handleKeyDown = (event, input, setInput, setList) => {
-  //     if (!input) return;
-  //     switch (event.key) {
-  //       case "Enter":
-  //       case "Tab":
-  //         setList((prev) => [...prev, createOption(input)]);
-  //         setInput("");
-  //         event.preventDefault();
-  //     }
-  //   };
 
   const onGenresChange = (e) => {
     const updatedGenres = e.map((genre) => genre.value);
@@ -179,6 +175,7 @@ const SearchBar = ({ setMovies }) => {
 
         {/* </div> */}
       </form>
+      <PaginationController pages={totalPages} page={page} setPage={setPage} />
     </div>
   );
 };

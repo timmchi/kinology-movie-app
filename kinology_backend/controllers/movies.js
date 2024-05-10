@@ -19,7 +19,8 @@ const headers = {
 
 moviesRouter.post("/", async (request, response) => {
   // these parts are fine as they are to put into query
-  const { genres, year, ratingUpper, ratingLower, country } = request.body;
+  const { genres, year, ratingUpper, ratingLower, country, page } =
+    request.body;
 
   // these need to be turned into ids with peopleSearch
   let { director, actors } = request.body;
@@ -36,6 +37,7 @@ moviesRouter.post("/", async (request, response) => {
     country,
     director,
     actors,
+    page,
   });
 
   const url = `${baseMovieUrl}${query}&sort_by=popularity.desc`;
@@ -44,6 +46,7 @@ moviesRouter.post("/", async (request, response) => {
   const movieResponse = await axios.get(url, { headers });
 
   const movieResults = movieResponse.data.results;
+  const totalPages = movieResponse.data.total_pages;
 
   const movieToFrontObjectArray = movieResults.map((movie) => ({
     id: movie.id,
@@ -51,7 +54,7 @@ moviesRouter.post("/", async (request, response) => {
     image: movie.poster_path,
   }));
 
-  response.status(200).send({ movieToFrontObjectArray });
+  response.status(200).send({ movieToFrontObjectArray, totalPages });
 });
 
 moviesRouter.get("/:id", async (request, response) => {
