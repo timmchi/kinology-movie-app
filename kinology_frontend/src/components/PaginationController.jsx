@@ -4,9 +4,9 @@ import Stack from "@mui/material/Stack";
 
 const PaginationController = ({ pages, page, setPage, pageChange }) => {
   //   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
+  const handleChange = async (event, value) => {
     setPage(value);
-    pageChange(event);
+    pageChange(event, value);
   };
 
   if (pages === -1) return "";

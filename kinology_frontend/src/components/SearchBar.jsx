@@ -29,9 +29,10 @@ const SearchBar = ({ setMovies }) => {
   const [totalPages, setTotalPages] = useState(-1);
   //   const [newSearch, setNewSearch] = useState(false);
 
-  const searchForMovies = async (e) => {
+  const searchForMovies = async (e, pageValue) => {
     e.preventDefault();
     const actorsQuery = actors.map((actor) => actor.value);
+    console.log("page in search bar searchForMovies", page);
     const { movieToFrontObjectArray: movies, totalPages: totalPageNumber } =
       await moviesService.search({
         genres,
@@ -41,22 +42,12 @@ const SearchBar = ({ setMovies }) => {
         ratingLower,
         actors: actorsQuery,
         country,
-        page,
+        page: pageValue,
       });
     console.log(movies);
     console.log("page number in searchbar", totalPageNumber);
     setTotalPages(totalPageNumber);
     setMovies(movies);
-
-    // if (newSearch) {
-    //   setDirector("");
-    //   setYear("");
-    //   setRatingLower(0);
-    //   setRatingUpper(10);
-    //   setActors([]);
-    //   setCountry("");
-    //   setPage();
-    // }
   };
 
   const handleKeyDown = (event) => {
@@ -91,7 +82,7 @@ const SearchBar = ({ setMovies }) => {
     <div>
       <h1>search bar</h1>
       <button onClick={handleNewSearch}>new search</button>
-      <form onSubmit={searchForMovies} className="searchBar">
+      <form onSubmit={(e) => searchForMovies(e, 1)} className="searchBar">
         {/* <div className="container"> */}
         <div className="genres">
           <Select
@@ -197,7 +188,7 @@ const SearchBar = ({ setMovies }) => {
         pages={totalPages}
         page={page}
         setPage={setPage}
-        pageChange={searchForMovies}
+        pageChange={(event, value) => searchForMovies(event, value)}
       />
     </div>
   );
