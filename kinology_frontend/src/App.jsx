@@ -79,7 +79,10 @@ function App() {
           path="/users/:id"
           element={<User currentUser={user} removeUser={removeUser} />}
         />
-        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/"
+          element={<LandingPage onButtonPress={handleMovieButton} />}
+        />
         <Route
           path="/movies/:id"
           element={<Movie onButtonPress={handleMovieButton} user={user} />}

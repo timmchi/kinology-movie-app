@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, onButtonPress }) => {
   return (
     <Card
       sx={{
@@ -36,10 +36,33 @@ const MovieCard = ({ movie }) => {
       </CardActionArea>
       <CardActions>
         <Button size="small" variant="outlined">
-          Add to watch list
+          Watch later
         </Button>
-        <Button size="small" variant="outlined">
-          Add to already seen
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={(event) =>
+            onButtonPress(event, "favorite", {
+              id: movie.id,
+              title: movie.title,
+              poster: movie.image,
+            })
+          }
+        >
+          Favorite
+        </Button>
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={(event) =>
+            onButtonPress(event, "watched", {
+              id: movie.id,
+              title: movie.title,
+              poster: movie.image,
+            })
+          }
+        >
+          Already seen
         </Button>
       </CardActions>
     </Card>
