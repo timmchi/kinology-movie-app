@@ -35,12 +35,13 @@ function App() {
     fetchUsers();
   }, []);
 
-  const handleMovieButton = async (event, button, movieId) => {
+  // movie buttons continues here
+  const handleMovieButton = async (event, button, movie) => {
     event.preventDefault();
     // try {
     const currentUserId = users.find((u) => u.username === user.username)?.id;
-    console.log(movieId, button, currentUserId);
-    await userService.addMovieToProfile(movieId, button, currentUserId);
+    console.log(movie, button, currentUserId);
+    await userService.addMovieToProfile(movie, button, currentUserId);
     // } catch (exception) {
     //   console.log("somewhing went wrong when adding a movie to your profile");
     // }

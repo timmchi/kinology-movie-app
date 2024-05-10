@@ -22,6 +22,8 @@ const addMovieToProfile = async (movie, button, userId) => {
     headers: { Authorization: token },
   };
 
+  console.log("movie in service", movie);
+
   const response = await axios.post(
     `${baseUrl}/${userId}/movies`,
     { movie, button },

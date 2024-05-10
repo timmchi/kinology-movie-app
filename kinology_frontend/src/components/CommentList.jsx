@@ -22,7 +22,6 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
   };
 
   const editForm = (commentId, authorId) => {
-    console.log("authorId in editForm in CommentList", authorId);
     return (
       <Togglable buttonLabel="edit comment" ref={editCommentRef}>
         <CommentForm
@@ -36,7 +35,7 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
 
   return (
     <List sx={{ width: "100%", maxWidth: 600, bgcolor: "background.paper" }}>
-      {comments.map((comment) => (
+      {comments?.map((comment) => (
         <div key={comment.id}>
           <ListItem
             alignItems="flex-start"
@@ -51,22 +50,6 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
               secondary={comment.content}
             />
           </ListItem>
-          {/* {currentUser && currentUser?.username === comment.author.username && (
-            <>
-              {editForm(comment.id, comment.author.id)}
-              {currentUser?.username === comment.author.username ||
-                (currentUser?.username === comment.receiver?.username && (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => onDelete(comment.id, comment.author.id)}
-                    color="error"
-                  >
-                    Delete comment
-                  </Button>
-                ))}
-            </>
-          )} */}
           {currentUser && (
             <>
               {currentUser.username === comment.author.username && (

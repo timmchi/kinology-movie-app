@@ -52,7 +52,6 @@ const Movie = ({ onButtonPress, user }) => {
   };
 
   const updateComment = async (commentId, content, authorId) => {
-    console.log("authorId in Movie component", authorId);
     const updatedComment = await commentsService.updateMovieComment(
       id,
       commentId,
@@ -91,10 +90,27 @@ const Movie = ({ onButtonPress, user }) => {
           <p>{movie.runtime} minutes</p>
           {user ? (
             <>
-              <button onClick={(event) => onButtonPress(event, "favorite", id)}>
+              {/* the actions is here */}
+              <button
+                onClick={(event) =>
+                  onButtonPress(event, "favorite", {
+                    id,
+                    title: movie.title,
+                    poster: movie.image,
+                  })
+                }
+              >
                 Add to favorites
               </button>
-              <button onClick={(event) => onButtonPress(event, "watched", id)}>
+              <button
+                onClick={(event) =>
+                  onButtonPress(event, "watched", {
+                    id,
+                    title: movie.title,
+                    poster: movie.image,
+                  })
+                }
+              >
                 Watched
               </button>
             </>

@@ -7,6 +7,8 @@ import CommentList from "./CommentList";
 import usersService from "../services/users";
 import commentsService from "../services/comments";
 
+const basePosterUrl = "https://image.tmdb.org/t/p/original";
+
 const User = ({ currentUser }) => {
   let { id } = useParams();
   const [user, setUser] = useState("");
@@ -90,6 +92,8 @@ const User = ({ currentUser }) => {
     );
   };
 
+  //   console.log(user?.favoriteMovies);
+
   return (
     <div>
       <h1>User</h1>
@@ -104,19 +108,33 @@ const User = ({ currentUser }) => {
       </div>
       <div>
         <h3>favorite movies</h3>
-        <ul>
-          {user?.favoriteMovies?.map((movie) => (
-            <li key={movie.id}>{movie.tmdbId}</li>
-          ))}
-        </ul>
+
+        {user?.favoriteMovies?.map((movie) => (
+          <div key={`${movie.id} favorite`}>
+            {movie.tmdbId} {movie.title}{" "}
+            <img
+              alt={`${movie.title} poster`}
+              src={`${basePosterUrl}/${movie.poster}`}
+              width="100"
+              height="150"
+            />
+          </div>
+        ))}
       </div>
       <div>
         <h3>watched movies</h3>
-        <ul>
-          {user?.watchedMovies?.map((movie) => (
-            <li key={movie.id}>{movie.tmdbId}</li>
-          ))}
-        </ul>
+
+        {user?.watchedMovies?.map((movie) => (
+          <div key={`${movie.id} watched`}>
+            {movie.tmdbId} {movie.title}{" "}
+            <img
+              alt={`${movie.title} poster`}
+              src={`${basePosterUrl}/${movie.poster}`}
+              width="100"
+              height="150"
+            />
+          </div>
+        ))}
       </div>
       <div>
         <h2>comments</h2>

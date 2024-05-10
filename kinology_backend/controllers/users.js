@@ -70,17 +70,24 @@ usersRouter.post(
   middleware.userExtractor,
   async (request, response) => {
     const { movie, button } = request.body;
+    const { id, title, poster } = movie;
 
     const user = request.user;
-    // let movieMongo;
-    // let savedMovie;
+
     let updatedSavedMovie;
 
-    console.log(movie, button, user);
+    console.log(
+      "movie in backend when pressing adding buttons",
+      id,
+      title,
+      poster
+    );
 
     if (button === "watched") {
       const movieMongo = new Movie({
-        tmdbId: movie,
+        tmdbId: id,
+        title: title,
+        poster: poster,
         watchedBy: [user._id],
       });
       const savedMovie = await movieMongo.save();
@@ -96,7 +103,9 @@ usersRouter.post(
     }
     if (button === "favorite") {
       const movieMongo = new Movie({
-        tmdbId: movie,
+        tmdbId: id,
+        title: title,
+        poster: poster,
         favoritedBy: [user._id],
       });
       const savedMovie = await movieMongo.save();
