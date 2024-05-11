@@ -5,13 +5,16 @@ const User = require("../models/user");
 const Movie = require("../models/movie");
 const v = require("valibot");
 
-// const UuidSchema
 const CommentSchema = v.object({
   content: v.string("Comment must be a string", [
     v.minLength(1, "Comments can not be empty"),
   ]),
-  author: v.optional(v.string()),
-  receiver: v.optional(v.string()),
+  author: v.optional(
+    v.string(v.hexadecimal("The authorId hexadecimal is badly formatted."))
+  ),
+  receiver: v.optional(
+    v.string(v.hexadecimal("The receiverId hexadecimal is badly formatted."))
+  ),
 });
 
 commentsRouter.get("/profile/:id", async (request, response) => {
@@ -54,21 +57,32 @@ commentsRouter.post(
   }
 );
 
+const paramsIdSchema = v.object({
+  commentId: v.string(
+    v.hexadecimal("The commentId hexadecimal is badly formatted")
+  ),
+});
+
 commentsRouter.put(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
-    const { id, commentId } = request.params;
+    const { commentId } = request.params;
     const { authorId, content } = request.body;
     const user = request.user;
 
-    if (!user || user._id.toString() !== authorId)
+    const parsedComment = v.parse(CommentSchema, { content, author: authorId });
+    const parsedParams = v.parse(paramsIdSchema, { commentId });
+
+    console.log(parsedComment, parsedParams);
+
+    if (!user || user._id.toString() !== parsedComment.author)
       return response.status(401).json({ error: "not authorized" });
 
     const updatedComment = await UserComment.findByIdAndUpdate(
-      commentId,
-      { content },
+      parsedParams.commentId,
+      { content: parsedComment.content },
       { new: true }
     )
       .populate("author", { name: 1, avatar: 1, username: 1 })
