@@ -193,12 +193,16 @@ commentsRouter.put(
     const user = request.user;
     const { authorId, content } = request.body;
 
-    if (!user || user._id.toString() !== authorId)
+    const parsedParams = v.parse(paramsIdSchema, { commentId });
+
+    const parsedComment = v.parse(CommentSchema, { content, author: authorId });
+
+    if (!user || user._id.toString() !== parsedComment.author)
       return response.status(401).json({ error: "not authorized" });
 
     const updatedComment = await UserComment.findByIdAndUpdate(
-      commentId,
-      { content },
+      parsedParams.commentId,
+      { content: parsedComment.content },
       { new: true }
     )
       .populate("author", { name: 1, avatar: 1, username: 1, id: 1 })
@@ -220,12 +224,15 @@ commentsRouter.delete(
     const user = request.user;
     const { authorId } = request.body;
 
-    // console.log("ids in backend", user._id, authorId, commentId);
+    const parsedParams = v.parse(paramsIdSchema, { commentId });
+    const parsedComment = v.parse(CommentSchema, { author: authorId });
 
-    if (!user || user._id.toString() !== authorId)
+    if (!user || user._id.toString() !== parsedComment.author)
       return response.status(401).json({ error: "not authorized" });
 
-    const commentToDelete = await UserComment.findByIdAndDelete(commentId);
+    const commentToDelete = await UserComment.findByIdAndDelete(
+      parsedParams.commentId
+    );
 
     response.status(200).end();
   }
