@@ -3,6 +3,16 @@ const middleware = require("../utils/middleware");
 const UserComment = require("../models/userComment");
 const User = require("../models/user");
 const Movie = require("../models/movie");
+const v = require("valibot");
+
+// const UuidSchema
+const CommentSchema = v.object({
+  content: v.string("Comment must be a string", [
+    v.minLength(1, "Comments can not be empty"),
+  ]),
+  author: v.optional(v.string()),
+  receiver: v.optional(v.string()),
+});
 
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params;
@@ -20,11 +30,18 @@ commentsRouter.post(
   async (request, response) => {
     const { id } = request.params;
     const user = request.user;
+    const { content } = request.body;
+
+    const parsedComment = v.parse(CommentSchema, {
+      content,
+      author: user._id.toString(),
+      receiver: id,
+    });
 
     const newComment = new UserComment({
-      content: request.body.content,
-      author: user._id,
-      receiver: id,
+      content: parsedComment.content,
+      author: parsedComment.author,
+      receiver: parsedComment.receiver,
     });
 
     const savedComment = await newComment.save();

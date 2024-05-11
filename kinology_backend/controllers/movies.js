@@ -42,6 +42,7 @@ const searchQuerySchema = v.object({
   actors: v.array(v.string()),
 });
 
+// TODO could refactor this into 2 functions - one for parsing and one for making the api request
 moviesRouter.post("/", async (request, response) => {
   // these parts are fine as they are to put into query
   let { genres, year, ratingUpper, ratingLower, country, page } = request.body;
