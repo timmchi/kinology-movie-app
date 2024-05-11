@@ -4,7 +4,6 @@ const loginRouter = require("express").Router();
 const User = require("../models/user");
 const config = require("../utils/config");
 
-// import * as v from "valibot";
 const v = require("valibot");
 
 const LoginSchema = v.object({
@@ -22,7 +21,7 @@ loginRouter.post("/", async (request, response) => {
 
   const parsedCredentials = v.parse(LoginSchema, { username, password });
 
-  console.log(parsedCredentials);
+  //   console.log(parsedCredentials);
 
   const user = await User.findOne({ username: parsedCredentials.username });
   const passwordCorrect =

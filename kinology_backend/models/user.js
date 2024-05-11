@@ -10,8 +10,14 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  email: String,
-  passwordHash: String,
+  email: {
+    type: String,
+    required: true,
+  },
+  passwordHash: {
+    type: String,
+    required: true,
+  },
   biography: String,
   avatar: String,
   watchedMovies: [

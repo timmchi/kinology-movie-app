@@ -6,30 +6,62 @@ const UserComment = require("../models/userComment");
 const User = require("../models/user");
 const movie = require("../models/movie");
 
-// import * as v from "valibot";
 const v = require("valibot");
 
-usersRouter.post("/", async (request, response) => {
-  const body = request.body;
+const RegistrationSchema = v.object(
+  {
+    email: v.string([
+      v.minLength(1, "Please enter your email."),
+      v.email("The email address is badly formatted"),
+    ]),
+    username: v.string([
+      v.minLength(1, "Please enter your username."),
+      v.minLength(3, "Username should be 3 or more symbols"),
+    ]),
+    name: v.string([
+      v.minLength(1, "Please enter your name or nickname."),
+      v.minLength(3, "Name or nickname should be 3 or more symbols"),
+    ]),
+    password: v.string([
+      v.minLength(1, "Please enter your password."),
+      v.minLength(6, "Your password must have 6 characters or more."),
+    ]),
+    passwordConfirm: v.string([v.minLength(1, "Please confirm password")]),
+  },
+  [
+    v.forward(
+      v.custom(
+        (input) => input.password === input.passwordConfirm,
+        "The two password do not match"
+      ),
+      ["password2"]
+    ),
+  ]
+);
 
-  if (
-    !(
-      body.username &&
-      body.password &&
-      body.password.length >= 3 &&
-      body.username.length >= 3
-    )
-  )
-    return response.status(400).json({
-      error: "credentials are missing or are too short",
-    });
+usersRouter.post("/", async (request, response) => {
+  const { email, username, password, passwordConfirm, name } = request.body;
+
+  const parsedCredentials = v.parse(RegistrationSchema, {
+    email,
+    username,
+    password,
+    passwordConfirm,
+    name,
+  });
+
+  //   console.log(parsedCredentials);
 
   const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(body.password, saltRounds);
+  const passwordHash = await bcrypt.hash(
+    parsedCredentials.password,
+    saltRounds
+  );
 
   const user = new User({
-    username: body.username,
-    name: body.name ?? "",
+    username: parsedCredentials.username,
+    email: parsedCredentials.email,
+    name: parsedCredentials.name,
     passwordHash,
     biography: "",
     avatar: "",

@@ -9,18 +9,28 @@ const SignUp = ({ user, setUsers, users }) => {
   const navigate = useNavigate();
   const dispatch = useNotificationDispatch();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [name, setName] = useState("");
 
   const handleSignUp = async (event) => {
     event.preventDefault();
     console.log("signing up with", username, password, name);
     try {
-      const user = await signUpService.signUp({ username, password, name });
+      const user = await signUpService.signUp({
+        username,
+        email,
+        password,
+        passwordConfirm,
+        name,
+      });
       console.log(user);
       setUsername("");
+      setEmail("");
       setName("");
       setPassword("");
+      setPasswordConfirm("");
       setUsers(users.concat(user));
       dispatch({
         type: "SHOW",
@@ -44,7 +54,7 @@ const SignUp = ({ user, setUsers, users }) => {
   };
 
   // this needs to be changed
-  if (user) navigate("/");
+  //   if (user) navigate("/");
   return (
     <div>
       <h1>Sign up</h1>
@@ -57,6 +67,17 @@ const SignUp = ({ user, setUsers, users }) => {
             onChange={({ target }) => setUsername(target.value)}
             name="Username"
             autoComplete="username"
+          />
+        </div>
+        <div>
+          email:{" "}
+          <input
+            type="email"
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
+            name="Email"
+            placeholder="user@example.com"
+            autoComplete="email"
           />
         </div>
         <div>
@@ -76,6 +97,16 @@ const SignUp = ({ user, setUsers, users }) => {
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             name="Password"
+            autoComplete="new-password"
+          />
+        </div>
+        <div>
+          confirm password:{" "}
+          <input
+            type="password"
+            value={passwordConfirm}
+            onChange={({ target }) => setPasswordConfirm(target.value)}
+            name="PasswordConfirm"
             autoComplete="new-password"
           />
         </div>
