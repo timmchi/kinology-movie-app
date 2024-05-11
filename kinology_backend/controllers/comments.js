@@ -6,9 +6,11 @@ const Movie = require("../models/movie");
 const v = require("valibot");
 
 const CommentSchema = v.object({
-  content: v.string("Comment must be a string", [
-    v.minLength(1, "Comments can not be empty"),
-  ]),
+  content: v.optional(
+    v.string("Comment must be a string", [
+      v.minLength(1, "Comments can not be empty"),
+    ])
+  ),
   author: v.optional(
     v.string(v.hexadecimal("The authorId hexadecimal is badly formatted."))
   ),
@@ -17,9 +19,19 @@ const CommentSchema = v.object({
   ),
 });
 
+const paramsIdSchema = v.object({
+  commentId: v.optional(
+    v.string(v.hexadecimal("The commentId hexadecimal is badly formatted"))
+  ),
+  movieId: v.optional(v.string(v.minValue("2"))),
+});
+
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params;
-  const comments = await UserComment.find({ receiver: id })
+
+  const parsedParams = v.parse(CommentSchema, { receiver: id });
+
+  const comments = await UserComment.find({ receiver: parsedParams.receiver })
     .populate("author", { name: 1, avatar: 1, username: 1 })
     .populate("receiver");
 
@@ -57,12 +69,6 @@ commentsRouter.post(
   }
 );
 
-const paramsIdSchema = v.object({
-  commentId: v.string(
-    v.hexadecimal("The commentId hexadecimal is badly formatted")
-  ),
-});
-
 commentsRouter.put(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
@@ -74,8 +80,6 @@ commentsRouter.put(
 
     const parsedComment = v.parse(CommentSchema, { content, author: authorId });
     const parsedParams = v.parse(paramsIdSchema, { commentId });
-
-    console.log(parsedComment, parsedParams);
 
     if (!user || user._id.toString() !== parsedComment.author)
       return response.status(401).json({ error: "not authorized" });
@@ -100,16 +104,21 @@ commentsRouter.delete(
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
-    const { id, commentId } = request.params;
+    const { commentId } = request.params;
     const { authorId } = request.body;
     const user = request.user;
 
-    console.log("authorId in backend in profile comment delete", authorId);
+    const parsedComment = v.parse(CommentSchema, { author: authorId });
+    const parsedParams = v.parse(paramsIdSchema, { commentId });
 
-    if (!user || user._id.toString() !== authorId)
+    console.log(parsedComment, parsedParams);
+
+    if (!user || user._id.toString() !== parsedComment.author)
       return response.status(401).json({ error: "not authorized" });
 
-    const commentToDelete = await UserComment.findByIdAndDelete(commentId);
+    const commentToDelete = await UserComment.findByIdAndDelete(
+      parsedParams.commentId
+    );
 
     response.status(200).end();
   }
@@ -118,20 +127,11 @@ commentsRouter.delete(
 commentsRouter.get("/movie/:id", async (request, response) => {
   const { id } = request.params;
 
-  const movie = await Movie.findOne({ tmdbId: id });
+  const parsedParams = v.parse(paramsIdSchema, { movieId: id });
+
+  const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
 
   if (!movie) return response.status(200).send([]);
-
-  // not sure if any of these commented out lines should stay...
-  //   await movie.populate("comments", { author: 1, content: 1 });
-  //   await movie.populate({
-  //     path: "comments",
-  //     populate: {
-  //       path: "author",
-  //       select: "name",
-  //     },
-  //     select: "content",
-  //   });
 
   const comments = await UserComment.find({
     movieReceiver: movie?._id,
