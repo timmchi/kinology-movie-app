@@ -169,6 +169,17 @@ usersRouter.post(
   }
 );
 
+const UserUpdateSchema = v.object({
+  biography: v.string("About me should be a string", [
+    v.minLength(1, "Please enter something about yourself."),
+  ]),
+  name: v.string("Name should be a string", [
+    v.minLength(1, "Please enter your name"),
+    v.minLength(3, "Name should be 3 or more symbols long"),
+  ]),
+});
+
+// there is a bug right now when updating a user - movies added to profile become undefined, has to do with user's name?
 usersRouter.put(
   "/:id",
   middleware.tokenExtractor,
@@ -180,11 +191,14 @@ usersRouter.put(
     if (!profileOwner || user._id?.toString() !== profileOwner?._id?.toString())
       return response.status(401).json({ error: "token invalid" });
 
-    const { biography, avatar, name } = request.body;
+    const { biography, name } = request.body;
 
-    user.biography = biography;
-    user.avatar = avatar;
-    user.name = name;
+    const parsedUserInfo = v.parse(UserUpdateSchema, { biography, name });
+
+    console.log(parsedUserInfo);
+    user.biography = parsedUserInfo.biography;
+    // user.avatar = avatar;
+    user.name = parsedUserInfo.name;
 
     console.log("user after updating", user);
     await user.save();
