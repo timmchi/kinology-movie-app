@@ -6,6 +6,7 @@ const UserComment = require("../models/userComment");
 const User = require("../models/user");
 const movie = require("../models/movie");
 
+// TODO - maybe add validation for ids - uuid?
 const v = require("valibot");
 
 const RegistrationSchema = v.object(

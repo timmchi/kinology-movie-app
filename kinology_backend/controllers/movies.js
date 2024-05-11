@@ -2,11 +2,10 @@ const axios = require("axios");
 const moviesRouter = require("express").Router();
 const config = require("../utils/config");
 const movieUtils = require("../utils/movieUtils");
+const v = require("valibot");
 
-const baseMovieUrl =
-  "https://api.themoviedb.org/3/discover/movie?include_adult=false&language=en-US&";
-
-const baseSingleMovieUrl = "https://api.themoviedb.org/3/movie/";
+const baseMovieUrl = config.BASE_MOVIES_URL;
+const baseSingleMovieUrl = config.BASE_SINGLE_MOVIE_URL;
 
 const basePersonUrl =
   "https://api.themoviedb.org/3/search/person?include_adult=false&page=1&";
@@ -16,6 +15,29 @@ const headers = {
   accept: "application/json",
   Authorization: `Bearer ${config.TMDB_TOKEN}`,
 };
+
+const searchQuerySchema = v.object({
+  genres: v.array(string()),
+  year: v.number([
+    v.minValue(1874, "Movies can not be shot before 1874"),
+    v.maxValue(
+      Number(new Date().getFullYear()),
+      "Can not search for movies shot after current year"
+    ),
+  ]),
+  ratingUpper: v.number([
+    v.minValue(0, "Rating can not be lower than 0"),
+    v.maxValue(10, "Rating can not be higher than 10"),
+  ]),
+  ratingLower: v.number([
+    v.minValue(0, "Rating can not be lower than 0"),
+    v.maxValue(10, "Rating can not be higher than 10"),
+  ]),
+  country: v.string([v.maxLength(100, "Country name can not be this long")]),
+  page: v.number([v.maxValue(10, "Can not search for movies past page 10")]),
+  director: v.string(),
+  actors: v.array(v.string()),
+});
 
 moviesRouter.post("/", async (request, response) => {
   // these parts are fine as they are to put into query

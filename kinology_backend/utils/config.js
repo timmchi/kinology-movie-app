@@ -7,6 +7,11 @@ const SECRET = process.env.SECRET;
 const TMDB_TOKEN = process.env.TMDB_TOKEN;
 const TMDB_API = process.env.TMDB_API_KEY;
 
+const BASE_MOVIES_URL =
+  "https://api.themoviedb.org/3/discover/movie?include_adult=false&language=en-US&";
+
+const BASE_SINGLE_MOVIE_URL = "https://api.themoviedb.org/3/movie/";
+
 module.exports = {
   PORT,
   MONGODB_URI,
@@ -14,4 +19,6 @@ module.exports = {
   SECRET,
   TMDB_TOKEN,
   TMDB_API,
+  BASE_MOVIES_URL,
+  BASE_SINGLE_MOVIE_URL,
 };
