@@ -23,7 +23,7 @@
 | 10.5 | 2     | Pagination for movies                                                    |
 | 10.5 | 1.5   | Deleting users functionality, implementation of MovieButton, bug fixes   |
 | 10.5 | 1     | Notification reducer                                                     |
-|      |       |                                                                          |
+| 11.5 | 1     | Implementing success/error notifications                                 |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |

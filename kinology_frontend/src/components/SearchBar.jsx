@@ -116,7 +116,7 @@ const SearchBar = ({ setMovies }) => {
           <input
             type="number"
             className="bar-input"
-            min="1888"
+            min="1874"
             max={new Date().getFullYear()}
             value={year}
             onChange={(event) => setYear(event.target.value)}

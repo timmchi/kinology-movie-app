@@ -18,7 +18,8 @@
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.3.3"
+    "mongoose": "^8.3.3",
+    "valibot": "^0.30.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin-js": "^1.8.0",
