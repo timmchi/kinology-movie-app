@@ -2,6 +2,7 @@ const LogOut = () => {
   const handleLogout = (event) => {
     console.log("logging out...");
     window.localStorage.removeItem("loggedKinologyUser");
+    window.location.reload();
   };
 
   return (

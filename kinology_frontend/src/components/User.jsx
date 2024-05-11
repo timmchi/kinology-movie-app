@@ -186,6 +186,7 @@ const User = ({ currentUser, removeUser }) => {
         await usersService.deleteUser(user.id);
         removeUser(user.id);
         window.localStorage.removeItem("loggedKinologyUser");
+        window.location.reload();
         navigate("/users");
         dispatch({
           type: "SHOW",

@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNotificationDispatch } from "../contexts/NotificationContext";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import MovieButton from "./MovieButton";
@@ -11,6 +12,7 @@ const Movie = ({ onButtonPress, user }) => {
   let { id } = useParams();
   const [movie, setMovie] = useState("");
   const [comments, setComments] = useState([]);
+  const dispatch = useNotificationDispatch();
 
   console.log("id in movie", id);
   console.log(comments);
@@ -36,33 +38,90 @@ const Movie = ({ onButtonPress, user }) => {
 
   // movie.id or id better?
   const createComment = async (content) => {
-    const createdComment = await commentsService.createMovieComment(
-      id,
-      content,
-      user
-    );
-    setComments(comments.concat(createdComment));
+    try {
+      const createdComment = await commentsService.createMovieComment(
+        id,
+        content,
+        user
+      );
+      setComments(comments.concat(createdComment));
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Comment ${content} successfully added`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Something went wrong when commenting on a movie ${movie}`,
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   const deleteComment = async (commentId, authorId) => {
     if (window.confirm("Are you sure you want to delete the comment?")) {
-      const filteredComments = comments.filter((c) => c.id !== commentId);
-      setComments(filteredComments);
-      await commentsService.deleteMovieComment(id, commentId, user, authorId);
+      try {
+        const filteredComments = comments.filter((c) => c.id !== commentId);
+        setComments(filteredComments);
+        await commentsService.deleteMovieComment(id, commentId, user, authorId);
+        dispatch({
+          type: "SHOW",
+          payload: {
+            message: `Comment successfully deleted`,
+            type: "success",
+          },
+        });
+        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      } catch (exception) {
+        dispatch({
+          type: "SHOW",
+          payload: {
+            message: `Something went wrong when deleting a comment on ${movie.title}`,
+            type: "error",
+          },
+        });
+        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      }
     }
   };
 
   const updateComment = async (commentId, content, authorId) => {
-    const updatedComment = await commentsService.updateMovieComment(
-      id,
-      commentId,
-      user,
-      content,
-      authorId
-    );
-    setComments(
-      comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
-    );
+    try {
+      const updatedComment = await commentsService.updateMovieComment(
+        id,
+        commentId,
+        user,
+        content,
+        authorId
+      );
+      setComments(
+        comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
+      );
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Comment successfully updated`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Something went wrong when updating a comment of ${user.name} on ${movie.title}`,
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   const buttonPress = (event, functionWord) => {

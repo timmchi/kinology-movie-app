@@ -23,6 +23,7 @@ const LogIn = ({
             value={username}
             onChange={handleUsernameChange}
             name="Username"
+            autoComplete="username"
           />
         </div>
         <div>
@@ -32,6 +33,7 @@ const LogIn = ({
             value={password}
             onChange={handlePasswordChange}
             name="Password"
+            autoComplete="current-password"
           />
         </div>
         <button type="submit">log in</button>
