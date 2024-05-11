@@ -41,6 +41,7 @@ function App() {
   const removeUser = (userId) => {
     try {
       setUsers(users.filter((user) => user.id !== userId));
+
       dispatch({
         type: "SHOW",
         payload: {
@@ -100,11 +101,29 @@ function App() {
 
       window.localStorage.setItem("loggedKinologyUser", JSON.stringify(user));
       userService.setToken(user.token);
+
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Successfully logged in`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+
       setUser(user);
       setUsername("");
       setPassword("");
     } catch (exception) {
       console.log("wrong credentials");
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Something went wrong when logging in`,
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
     }
   };
 

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useNotificationDispatch } from "../contexts/NotificationContext";
 import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
@@ -19,6 +20,7 @@ const User = ({ currentUser, removeUser }) => {
   const updateFormRef = useRef();
   const commentFormRef = useRef();
   const navigate = useNavigate();
+  const dispatch = useNotificationDispatch();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,9 +39,30 @@ const User = ({ currentUser, removeUser }) => {
   }, [id]);
 
   const updateUser = async (updatedInformation) => {
-    updateFormRef.current.toggleVisibility();
-    const updatedUser = await usersService.updateUser(id, updatedInformation);
-    setUser(updatedUser);
+    try {
+      updateFormRef.current.toggleVisibility();
+      const updatedUser = await usersService.updateUser(id, updatedInformation);
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `User ${
+            updatedUser.name ? updatedUser.name : ""
+          } successfully updated`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      setUser(updatedUser);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: "Something went wrong when updating user",
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   const updateForm = () => {
@@ -51,13 +74,32 @@ const User = ({ currentUser, removeUser }) => {
   };
 
   const createComment = async (comment) => {
-    commentFormRef.current.toggleVisibility();
-    const createdComment = await commentsService.createProfileComment(
-      id,
-      comment,
-      currentUser
-    );
-    setComments(comments.concat(createdComment));
+    try {
+      commentFormRef.current.toggleVisibility();
+      const createdComment = await commentsService.createProfileComment(
+        id,
+        comment,
+        currentUser
+      );
+      setComments(comments.concat(createdComment));
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Comment ${comment} successfully created`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: "Something went wrong when creating a comment",
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   const commentCreateForm = () => {
@@ -71,29 +113,67 @@ const User = ({ currentUser, removeUser }) => {
   // Adding authorId here as well
   const deleteComment = async (commentId, authorId) => {
     if (window.confirm("Are you sure you want to delete the comment?")) {
-      const filteredComments = comments.filter((c) => c.id !== commentId);
-      setComments(filteredComments);
-      await commentsService.deleteProfileComment(
-        user.id,
-        commentId,
-        currentUser,
-        authorId
-      );
+      try {
+        const filteredComments = comments.filter((c) => c.id !== commentId);
+        setComments(filteredComments);
+        await commentsService.deleteProfileComment(
+          user.id,
+          commentId,
+          currentUser,
+          authorId
+        );
+        dispatch({
+          type: "SHOW",
+          payload: {
+            message: `Comment successfully deleted`,
+            type: "success",
+          },
+        });
+        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      } catch (exception) {
+        dispatch({
+          type: "SHOW",
+          payload: {
+            message: "Something went wrong when deleting a comment",
+            type: "error",
+          },
+        });
+        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      }
     }
   };
 
   // HERE I THINK
   const updateComment = async (commentId, comment, authorId) => {
-    const updatedComment = await commentsService.updateProfileComment(
-      id,
-      commentId,
-      currentUser,
-      comment,
-      authorId
-    );
-    setComments(
-      comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
-    );
+    try {
+      const updatedComment = await commentsService.updateProfileComment(
+        id,
+        commentId,
+        currentUser,
+        comment,
+        authorId
+      );
+      setComments(
+        comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
+      );
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Comment ${comment} successfully updated`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Something went wrong when updating a comment`,
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   const deleteUser = async () => {
@@ -102,10 +182,29 @@ const User = ({ currentUser, removeUser }) => {
         "Are you sure you want to delete your profile? This can't be undone"
       )
     ) {
-      await usersService.deleteUser(user.id);
-      removeUser(user.id);
-      window.localStorage.removeItem("loggedKinologyUser");
-      navigate("/users");
+      try {
+        await usersService.deleteUser(user.id);
+        removeUser(user.id);
+        window.localStorage.removeItem("loggedKinologyUser");
+        navigate("/users");
+        dispatch({
+          type: "SHOW",
+          payload: {
+            message: `User ${user.name} successfully deleted`,
+            type: "success",
+          },
+        });
+        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      } catch (exception) {
+        dispatch({
+          type: "SHOW",
+          payload: {
+            message: `Something went wrong when deleting a comment`,
+            type: "error",
+          },
+        });
+        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      }
     }
   };
 
