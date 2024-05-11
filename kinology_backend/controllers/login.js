@@ -20,9 +20,15 @@ const LoginSchema = v.object({
 loginRouter.post("/", async (request, response) => {
   const { username, password } = request.body;
 
-  const user = await User.findOne({ username });
+  const parsedCredentials = v.parse(LoginSchema, { username, password });
+
+  console.log(parsedCredentials);
+
+  const user = await User.findOne({ username: parsedCredentials.username });
   const passwordCorrect =
-    user === null ? false : await bcrypt.compare(password, user.passwordHash);
+    user === null
+      ? false
+      : await bcrypt.compare(parsedCredentials.password, user.passwordHash);
 
   if (!(user && passwordCorrect)) {
     return response.status(401).json({

@@ -20,7 +20,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === "CastError")
     return response.status(400).send({ error: "malformatted id" });
 
-  if (error.name === "ValidationError")
+  if (error.name === "ValidationError" || error.name === "ValiError")
     return response.status(400).json({ error: error.message });
 
   if (
@@ -31,7 +31,7 @@ const errorHandler = (error, request, response, next) => {
       .status(400)
       .json({ error: "expected `username` to be unique" });
 
-  if (error.name === "TokenExperiedError")
+  if (error.name === "TokenExpiredError")
     return response.status(401).json({ error: "token expired" });
 
   next(error);
