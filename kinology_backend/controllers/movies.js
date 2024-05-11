@@ -17,13 +17,16 @@ const headers = {
 };
 
 const searchQuerySchema = v.object({
-  genres: v.array(string()),
-  year: v.number([
-    v.minValue(1874, "Movies can not be shot before 1874"),
-    v.maxValue(
-      Number(new Date().getFullYear()),
-      "Can not search for movies shot after current year"
-    ),
+  genres: v.array(v.string()),
+  year: v.union([
+    v.string([
+      v.minValue("1874", "Movies can not be shot before 1874"),
+      v.maxValue(
+        `${new Date().getFullYear()}`,
+        "Can not search for movies shot after current year"
+      ),
+    ]),
+    v.literal(""),
   ]),
   ratingUpper: v.number([
     v.minValue(0, "Rating can not be lower than 0"),
@@ -41,11 +44,24 @@ const searchQuerySchema = v.object({
 
 moviesRouter.post("/", async (request, response) => {
   // these parts are fine as they are to put into query
-  const { genres, year, ratingUpper, ratingLower, country, page } =
-    request.body;
+  let { genres, year, ratingUpper, ratingLower, country, page } = request.body;
 
   // these need to be turned into ids with peopleSearch
   let { director, actors } = request.body;
+
+  const parsedQueryParams = v.parse(searchQuerySchema, {
+    genres,
+    year,
+    ratingUpper,
+    ratingLower,
+    country,
+    page,
+    director,
+    actors,
+  });
+
+  ({ genres, year, ratingUpper, ratingLower, country, page, director, actors } =
+    parsedQueryParams);
 
   if (director !== "") director = await movieUtils.peopleSearch([director]);
 
