@@ -149,32 +149,29 @@ commentsRouter.post(
     const user = request.user;
     const { content } = request.body;
 
-    let movie = await Movie.findOne({ tmdbId: id });
+    const parsedParams = v.parse(paramsIdSchema, { movieId: id });
+
+    let movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+
+    const parsedComment = v.parse(CommentSchema, {
+      content,
+      author: user._id.toString(),
+      receiver: movie._id.toString(),
+    });
 
     if (!movie) {
       movie = new Movie({
-        tmdbId: id,
+        tmdbId: parsedParams.id,
       });
       await movie.save();
     }
 
     const movieComment = new UserComment({
-      content,
-      author: user._id,
-      movieReceiver: movie._id,
+      content: parsedComment.content,
+      author: parsedComment.author,
+      movieReceiver: parsedComment.receiver,
     });
     const savedComment = await movieComment.save();
-
-    // not sure if any of these commented out lines should stay...
-    // await movie.populate("comments", { author: 1, content: 1 });
-    // await movie.populate({
-    //   path: "comments",
-    //   populate: {
-    //     path: "author",
-    //     select: "name",
-    //   },
-    //   select: "content",
-    // });
 
     await savedComment.populate("author", {
       name: 1,
