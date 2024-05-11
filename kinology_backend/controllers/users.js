@@ -99,30 +99,39 @@ usersRouter.get("/:id", async (request, response) => {
 });
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
+const MovieActionSchema = v.object({
+  id: v.string([v.minValue("2")]),
+  title: v.string(),
+  poster: v.string([v.includes("/"), v.endsWith(".jpg")]),
+  button: v.picklist(["watched", "favorite", "later"]),
+});
+
 usersRouter.post(
   "/:id/movies",
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
     const { movie, button } = request.body;
-    const { id, title, poster } = movie;
+
+    const parsedMovieAction = v.parse(MovieActionSchema, {
+      id: movie.id,
+      title: movie.title,
+      poster: movie.poster,
+      button,
+    });
+
+    console.log(parsedMovieAction);
 
     const user = request.user;
 
     let updatedSavedMovie;
 
-    console.log(
-      "movie in backend when pressing adding buttons",
-      id,
-      title,
-      poster
-    );
-
-    if (button === "watched") {
+    // there is a problem in this route - a new object is created, should first if there is already such a movie present and it should then append the user id to the watched/favorited list
+    if (parsedMovieAction.button === "watched") {
       const movieMongo = new Movie({
-        tmdbId: id,
-        title: title,
-        poster: poster,
+        tmdbId: parsedMovieAction.id,
+        title: parsedMovieAction.title,
+        poster: parsedMovieAction.poster,
         watchedBy: [user._id],
       });
       const savedMovie = await movieMongo.save();
@@ -136,11 +145,11 @@ usersRouter.post(
         }
       );
     }
-    if (button === "favorite") {
+    if (parsedMovieAction.button === "favorite") {
       const movieMongo = new Movie({
-        tmdbId: id,
-        title: title,
-        poster: poster,
+        tmdbId: parsedMovieAction.id,
+        title: parsedMovieAction.title,
+        poster: parsedMovieAction.poster,
         favoritedBy: [user._id],
       });
       const savedMovie = await movieMongo.save();

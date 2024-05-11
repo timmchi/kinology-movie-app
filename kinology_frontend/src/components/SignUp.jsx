@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useNotificationDispatch } from "../contexts/NotificationContext";
 import signUpService from "../services/signup";
@@ -6,7 +6,7 @@ import signUpService from "../services/signup";
 // repeating the password field will need to be implemented along with some validation
 
 const SignUp = ({ user, setUsers, users }) => {
-  const navigate = useNavigate();
+  //   const navigate = useNavigate();
   const dispatch = useNotificationDispatch();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
