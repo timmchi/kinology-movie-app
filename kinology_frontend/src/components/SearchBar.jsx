@@ -12,6 +12,7 @@ import {
   maxValue,
   number,
   maxLength,
+  optional,
 } from "valibot";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
@@ -30,8 +31,17 @@ const createOption = (label) => ({
   value: label,
 });
 
+// TODO = find a way to style the errors better
+
 const searchQuerySchema = object({
-  genresSelect: array(string("Genre should be a string")),
+  genresSelect: optional(
+    array(
+      object({
+        label: string("Genre label should be a string"),
+        value: number("Genre value should be a number"),
+      })
+    )
+  ),
   year: union([
     string([
       minValue("1874", "Movies can not be shot before 1874"),
@@ -42,13 +52,13 @@ const searchQuerySchema = object({
     ]),
     literal(""),
   ]),
-  ratingUpper: number("Rating should be a number", [
+  ratingUpper: string("Rating should be a string", [
     minValue(0, "Rating can not be lower than 0"),
     maxValue(10, "Rating can not be higher than 10"),
   ]),
-  ratingLower: number("Rating should be a number", [
+  ratingLower: string("Rating should be a string", [
     minValue(0, "Rating can not be lower than 0"),
-    maxValue(10, "Rating can not be higher than 10"),
+    maxValue(11, "Rating can not be higher than 10"),
   ]),
   country: string("Country should be a string", [
     maxLength(100, "Country name can not be this long"),
@@ -71,7 +81,7 @@ const SearchBar = ({ setMovies }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: valibotResolver(searchQuerySchema),
-    defaultValues: { ratingLower: 0, ratingUpper: 10, genresSelect: [] },
+    // defaultValues: { ratingLower: 0, ratingUpper: 10, genresSelect: [] },
   });
 
   console.log(errors);
@@ -82,6 +92,13 @@ const SearchBar = ({ setMovies }) => {
     const actorsQuery = actors.map((actor) => actor.value);
     const { genresSelect, director, year, ratingUpper, ratingLower, country } =
       data;
+    console.log(genresSelect);
+    console.log(
+      ratingUpper,
+      ratingLower,
+      typeof ratingUpper,
+      typeof ratingLower
+    );
     const genres = genresSelect
       ? genresSelect?.map((genreOption) => `${genreOption.value}`)
       : [];
@@ -150,7 +167,9 @@ const SearchBar = ({ setMovies }) => {
             )}
           />
         </div>
-        {errors.genresSelect?.message ?? <p>{errors.genresSelect?.message}</p>}
+        {errors.genresSelect?.message ?? (
+          <p className="validation-error">{errors.genresSelect?.message}</p>
+        )}
         <div className="director">
           <p>director</p>
           <input {...register("director")} type="text" className="bar-input" />
@@ -167,16 +186,18 @@ const SearchBar = ({ setMovies }) => {
             {...register("ratingLower")}
             placeholder="Lower threshhold"
             type="number"
-            min="0"
-            max="10"
+            min={0}
+            max={10}
+            defaultValue={0}
             className="bar-input"
           />
           <input
             {...register("ratingUpper")}
             placeholder="Upper threshold"
             type="number"
-            min="0"
-            max="10"
+            min={0}
+            max={10}
+            defaultValue={10}
             className="bar-input"
           />
         </div>
