@@ -107,6 +107,8 @@ const MovieActionSchema = v.object({
   button: v.picklist(["watched", "favorite", "later"]),
 });
 
+// there is a problem in this route - a new object is created, should first check if there is already such a movie present and it should then append the user id to the watched/favorited list
+
 usersRouter.post(
   "/:id/movies",
   middleware.tokenExtractor,
@@ -123,22 +125,36 @@ usersRouter.post(
 
     console.log(parsedMovieAction);
 
+    const existingMovie = Movie.find({ tmdbId: parsedMovieAction.id });
+
     const user = request.user;
 
     let updatedSavedMovie;
 
-    // there is a problem in this route - a new object is created, should first if there is already such a movie present and it should then append the user id to the watched/favorited list
     if (parsedMovieAction.button === "watched") {
-      const movieMongo = new Movie({
-        tmdbId: parsedMovieAction.id,
-        title: parsedMovieAction.title,
-        poster: parsedMovieAction.poster,
-        watchedBy: [user._id],
-      });
-      const savedMovie = await movieMongo.save();
-      user.watchedMovies = user.watchedMovies.concat(savedMovie._id);
+      if (!existingMovie) {
+        const movieMongo = new Movie({
+          tmdbId: parsedMovieAction.id,
+          title: parsedMovieAction.title,
+          poster: parsedMovieAction.poster,
+          watchedBy: [user._id],
+        });
+        const savedMovie = await movieMongo.save();
+        user.watchedMovies = user.watchedMovies.concat(savedMovie._id);
 
-      updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+          "watchedBy",
+          {
+            username: 1,
+            name: 1,
+          }
+        );
+      }
+
+      existingMovie.watchedBy = existingMovie.watchedBy.concat(user._id);
+      user.watchedMovies = user.watchedMovies.concat(existingMovie._id);
+
+      updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
         "watchedBy",
         {
           username: 1,
@@ -147,16 +163,29 @@ usersRouter.post(
       );
     }
     if (parsedMovieAction.button === "favorite") {
-      const movieMongo = new Movie({
-        tmdbId: parsedMovieAction.id,
-        title: parsedMovieAction.title,
-        poster: parsedMovieAction.poster,
-        favoritedBy: [user._id],
-      });
-      const savedMovie = await movieMongo.save();
-      user.favoriteMovies = user.favoriteMovies.concat(savedMovie._id);
+      if (!existingMovie) {
+        const movieMongo = new Movie({
+          tmdbId: parsedMovieAction.id,
+          title: parsedMovieAction.title,
+          poster: parsedMovieAction.poster,
+          favoritedBy: [user._id],
+        });
+        const savedMovie = await movieMongo.save();
+        user.favoriteMovies = user.favoriteMovies.concat(savedMovie._id);
 
-      updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
+          "favoritedBy",
+          {
+            username: 1,
+            name: 1,
+          }
+        );
+      }
+
+      existingMovie.favoritedBy = existingMovie.favoritedBy.concat(user._id);
+      user.favoriteMovies = user.favoriteMovies.concat(existingMovie._id);
+
+      updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
         "favoritedBy",
         {
           username: 1,
