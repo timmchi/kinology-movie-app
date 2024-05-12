@@ -1,10 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength, endsWith } from "valibot";
-
-// email /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+import { object, string, minLength } from "valibot";
 
 const LoginSchema = object({
   username: string("Username must be a string.", [
@@ -18,38 +15,6 @@ const LoginSchema = object({
 });
 
 const LogIn = ({ handleLogin }) => {
-  //   const navigate = useNavigate();
-
-  //   // this needs to be changed
-  //   if (user) navigate("/");
-  //   return (
-  //     <div>
-  //       <h1>Log In</h1>
-  //       <form onSubmit={handleSubmit}>
-  //         <div>
-  //           username:{" "}
-  //           <input
-  //             type="text"
-  //             value={username}
-  //             onChange={handleUsernameChange}
-  //             name="Username"
-  //             autoComplete="username"
-  //           />
-  //         </div>
-  //         <div>
-  //           password:{" "}
-  //           <input
-  //             type="password"
-  //             value={password}
-  //             onChange={handlePasswordChange}
-  //             name="Password"
-  //             autoComplete="current-password"
-  //           />
-  //         </div>
-  //         <button type="submit">log in</button>
-  //       </form>
-  //     </div>
-  //   );
   const {
     register,
     handleSubmit,

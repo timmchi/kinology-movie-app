@@ -127,43 +127,6 @@ function App() {
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
     }
   };
-  //   const handleLogin = async (event) => {
-  //     event.preventDefault();
-  //     console.log("logging in with", username, password);
-
-  //   try {
-  //     const user = await loginService.login({
-  //       username,
-  //       password,
-  //     });
-
-  //     window.localStorage.setItem("loggedKinologyUser", JSON.stringify(user));
-  //     userService.setToken(user.token);
-
-  //     dispatch({
-  //       type: "SHOW",
-  //       payload: {
-  //         message: `Successfully logged in`,
-  //         type: "success",
-  //       },
-  //     });
-  //     setTimeout(() => dispatch({ type: "HIDE" }), 5000);
-
-  //     setUser(user);
-  //     setUsername("");
-  //     setPassword("");
-  //   } catch (exception) {
-  //     console.log("wrong credentials");
-  //     dispatch({
-  //       type: "SHOW",
-  //       payload: {
-  //         message: `Something went wrong when logging in`,
-  //         type: "error",
-  //       },
-  //     });
-  //     setTimeout(() => dispatch({ type: "HIDE" }), 5000);
-  //   }
-  //   };
 
   return (
     <>
@@ -186,19 +149,7 @@ function App() {
           path="/signup"
           element={<SignUp user={user} users={users} setUsers={setUsers} />}
         />
-        <Route
-          path="/login"
-          element={
-            <LogIn
-              //   username={username}
-              //   password={password}
-              //   handleUsernameChange={({ target }) => setUsername(target.value)}
-              //   handlePasswordChange={({ target }) => setPassword(target.value)}
-              handleLogin={handleLogin}
-              user={user}
-            />
-          }
-        />
+        <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />
         <Route path="/about" element={<About />} />
         <Route
           path="/users"

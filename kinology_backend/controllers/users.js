@@ -35,7 +35,7 @@ const RegistrationSchema = v.object(
         (input) => input.password === input.passwordConfirm,
         "The two password do not match"
       ),
-      ["password2"]
+      ["passwordConfirm"]
     ),
   ]
 );
