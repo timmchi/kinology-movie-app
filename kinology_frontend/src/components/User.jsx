@@ -17,6 +17,8 @@ const User = ({ currentUser, removeUser }) => {
   let { id } = useParams();
   const [user, setUser] = useState("");
   const [comments, setComments] = useState([]);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  const [watchedMovies, setWatchedMovies] = useState([]);
   const updateFormRef = useRef();
   const commentFormRef = useRef();
   const navigate = useNavigate();
@@ -26,6 +28,8 @@ const User = ({ currentUser, removeUser }) => {
     const fetchUser = async () => {
       const fetchedUser = await usersService.getUser(id);
       setUser(fetchedUser);
+      setFavoriteMovies(fetchedUser.favoriteMovies);
+      setWatchedMovies(fetchedUser.watchedMovies);
     };
     fetchUser();
   }, [id]);
@@ -210,6 +214,8 @@ const User = ({ currentUser, removeUser }) => {
   };
 
   console.log("user favorite movies", user?.favoriteMovies);
+  console.log("user watched movies", user?.favoriteMovies);
+  console.log(user);
 
   return (
     <div className="userPage">
@@ -240,8 +246,8 @@ const User = ({ currentUser, removeUser }) => {
         {/* 
         good candidate for refactoring, along with MovieList and big movie card */}
         <div className="profileMovieContainer">
-          {user?.favoriteMovies?.map((movie) => (
-            <div key={`${movie.id} favorite`} className="movieSmallCard">
+          {favoriteMovies?.map((movie) => (
+            <div key={`${movie?.id} favorite`} className="movieSmallCard">
               <MovieSmallCard movie={movie} />
             </div>
           ))}
@@ -250,7 +256,7 @@ const User = ({ currentUser, removeUser }) => {
       <div className="movieList">
         <h3>watched movies</h3>
         <div className="profileMovieContainer">
-          {user?.watchedMovies?.map((movie) => (
+          {watchedMovies?.map((movie) => (
             <div key={`${movie.id} watched`} className="movieSmallCard">
               <MovieSmallCard movie={movie} />
             </div>
