@@ -9,6 +9,7 @@ const v = require("valibot");
 const LoginSchema = v.object({
   username: v.string("Username must be a string.", [
     v.minLength(1, "Please enter your username."),
+    v.minLength(3, "Username needs to be at least 3 characters long."),
   ]),
   password: v.string("Your password must be a string.", [
     v.minLength(1, "Please enter your password."),

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Navigation from "./components/Navigation";
 import About from "./components/About";
@@ -14,11 +15,12 @@ import userService from "./services/users";
 import { useNotificationDispatch } from "./contexts/NotificationContext";
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  //   const [username, setUsername] = useState("");
+  //   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
   const dispatch = useNotificationDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");
@@ -89,9 +91,9 @@ function App() {
     }
   };
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    console.log("logging in with", username, password);
+  const handleLogin = async (data) => {
+    console.log(data);
+    const { username, password } = data;
 
     try {
       const user = await loginService.login({
@@ -112,8 +114,7 @@ function App() {
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
 
       setUser(user);
-      setUsername("");
-      setPassword("");
+      navigate("/");
     } catch (exception) {
       console.log("wrong credentials");
       dispatch({
@@ -126,6 +127,43 @@ function App() {
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
     }
   };
+  //   const handleLogin = async (event) => {
+  //     event.preventDefault();
+  //     console.log("logging in with", username, password);
+
+  //   try {
+  //     const user = await loginService.login({
+  //       username,
+  //       password,
+  //     });
+
+  //     window.localStorage.setItem("loggedKinologyUser", JSON.stringify(user));
+  //     userService.setToken(user.token);
+
+  //     dispatch({
+  //       type: "SHOW",
+  //       payload: {
+  //         message: `Successfully logged in`,
+  //         type: "success",
+  //       },
+  //     });
+  //     setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+
+  //     setUser(user);
+  //     setUsername("");
+  //     setPassword("");
+  //   } catch (exception) {
+  //     console.log("wrong credentials");
+  //     dispatch({
+  //       type: "SHOW",
+  //       payload: {
+  //         message: `Something went wrong when logging in`,
+  //         type: "error",
+  //       },
+  //     });
+  //     setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+  //   }
+  //   };
 
   return (
     <>
@@ -152,11 +190,11 @@ function App() {
           path="/login"
           element={
             <LogIn
-              username={username}
-              password={password}
-              handleUsernameChange={({ target }) => setUsername(target.value)}
-              handlePasswordChange={({ target }) => setPassword(target.value)}
-              handleSubmit={handleLogin}
+              //   username={username}
+              //   password={password}
+              //   handleUsernameChange={({ target }) => setUsername(target.value)}
+              //   handlePasswordChange={({ target }) => setPassword(target.value)}
+              handleLogin={handleLogin}
               user={user}
             />
           }
