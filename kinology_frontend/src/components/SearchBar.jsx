@@ -56,8 +56,8 @@ const SearchBar = ({ setMovies }) => {
         genres,
         director,
         year,
-        ratingUpper,
-        ratingLower,
+        ratingUpper: Number(ratingUpper),
+        ratingLower: Number(ratingLower),
         actors: actorsQuery,
         country,
         page: pageValue,
@@ -141,8 +141,16 @@ const SearchBar = ({ setMovies }) => {
       </div>
       <div className="rating">
         <p>Rating range</p>
-        <input {...register("ratingLower")} placeholder={0} type="number" />
-        <input {...register("ratingUpper")} placeholder={10} type="number" />
+        <input
+          {...register("ratingLower")}
+          placeholder="Lower threshhold"
+          type="number"
+        />
+        <input
+          {...register("ratingUpper")}
+          placeholder="Upper threshold"
+          type="number"
+        />
       </div>
       <div className="actors">
         <Controller
@@ -168,7 +176,7 @@ const SearchBar = ({ setMovies }) => {
       </div>
       <div className="country">
         <p>country</p>
-        <input {...register("year")} />
+        <input {...register("country")} />
       </div>
       <button type="submit">
         <SearchIcon />

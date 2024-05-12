@@ -17,7 +17,7 @@ const headers = {
 };
 
 const searchQuerySchema = v.object({
-  genres: v.array(v.string()),
+  genres: v.array(v.string("Genre should be a string")),
   year: v.union([
     v.string([
       v.minValue("1874", "Movies can not be shot before 1874"),
@@ -28,18 +28,22 @@ const searchQuerySchema = v.object({
     ]),
     v.literal(""),
   ]),
-  ratingUpper: v.number([
+  ratingUpper: v.number("Rating should be a number", [
     v.minValue(0, "Rating can not be lower than 0"),
     v.maxValue(10, "Rating can not be higher than 10"),
   ]),
-  ratingLower: v.number([
+  ratingLower: v.number("Rating should be a number", [
     v.minValue(0, "Rating can not be lower than 0"),
     v.maxValue(10, "Rating can not be higher than 10"),
   ]),
-  country: v.string([v.maxLength(100, "Country name can not be this long")]),
-  page: v.number([v.maxValue(10, "Can not search for movies past page 10")]),
-  director: v.string(),
-  actors: v.array(v.string()),
+  country: v.string("Country should be a string", [
+    v.maxLength(100, "Country name can not be this long"),
+  ]),
+  page: v.number("Page should be a number", [
+    v.maxValue(10, "Can not search for movies past page 10"),
+  ]),
+  director: v.string("Director should be a string"),
+  actors: v.array(v.string("Actor should be a string")),
 });
 
 // TODO could refactor this into 2 functions - one for parsing and one for making the api request
