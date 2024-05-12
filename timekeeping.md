@@ -25,6 +25,9 @@
 | 10.5 | 1     | Notification reducer                                                     |
 | 11.5 | 1     | Implementing success/error notifications                                 |
 | 11.5 | 3     | Backend Validation                                                       |
+| 12.5 | 4     | Refactoring forms to use react-hook-form and front end validation        |
+| 12.5 | 1.5   | Refactoring adding movie route and bug fixes                             |
+| 12.5 | 1     | Implementing buttons with persisted state using local storage            |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -33,7 +36,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 36    |                                                                          |
+| tot  | 42.5  |                                                                          |
