@@ -1,7 +1,18 @@
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength } from "valibot";
+import {
+  object,
+  string,
+  minLength,
+  array,
+  literal,
+  union,
+  minValue,
+  maxValue,
+  number,
+  maxLength,
+} from "valibot";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import PaginationController from "./PaginationController";
@@ -19,6 +30,32 @@ const createOption = (label) => ({
   value: label,
 });
 
+const searchQuerySchema = object({
+  genresSelect: array(string("Genre should be a string")),
+  year: union([
+    string([
+      minValue("1874", "Movies can not be shot before 1874"),
+      maxValue(
+        `${new Date().getFullYear()}`,
+        "Can not search for movies shot after current year"
+      ),
+    ]),
+    literal(""),
+  ]),
+  ratingUpper: number("Rating should be a number", [
+    minValue(0, "Rating can not be lower than 0"),
+    maxValue(10, "Rating can not be higher than 10"),
+  ]),
+  ratingLower: number("Rating should be a number", [
+    minValue(0, "Rating can not be lower than 0"),
+    maxValue(10, "Rating can not be higher than 10"),
+  ]),
+  country: string("Country should be a string", [
+    maxLength(100, "Country name can not be this long"),
+  ]),
+  director: string("Director should be a string"),
+});
+
 const SearchBar = ({ setMovies }) => {
   const [actor, setActor] = useState("");
   const [actors, setActors] = useState([]);
@@ -31,14 +68,13 @@ const SearchBar = ({ setMovies }) => {
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm({
-    // resolver: valibotResolver(LoginSchema),
-    defaultValues: { genresSelect: {} },
+    resolver: valibotResolver(searchQuerySchema),
+    defaultValues: { ratingLower: 0, ratingUpper: 10, genresSelect: [] },
   });
 
-  const onSubmit = (data) => console.log(data, actors);
-
+  console.log(errors);
   const searchForMovies = async (data, pageValue) => {
     console.log(data);
 
@@ -46,7 +82,9 @@ const SearchBar = ({ setMovies }) => {
     const actorsQuery = actors.map((actor) => actor.value);
     const { genresSelect, director, year, ratingUpper, ratingLower, country } =
       data;
-    const genres = genresSelect.map((genreOption) => `${genreOption.value}`);
+    const genres = genresSelect
+      ? genresSelect?.map((genreOption) => `${genreOption.value}`)
+      : [];
     setFirstSearchData(data);
     const { movieToFrontObjectArray: movies, totalPages: totalPageNumber } =
       await moviesService.search({
@@ -112,31 +150,38 @@ const SearchBar = ({ setMovies }) => {
             )}
           />
         </div>
+        {errors.genresSelect?.message ?? <p>{errors.genresSelect?.message}</p>}
         <div className="director">
           <p>director</p>
           <input {...register("director")} type="text" className="bar-input" />
         </div>
+        {errors.director?.message ?? <p>{errors.director?.message}</p>}
         <div className="year">
           <p>year</p>
           <input {...register("year")} className="bar-input" />
         </div>
+        {errors.year?.message ?? <p>{errors.year?.message}</p>}
         <div className="rating">
           <p>Rating range</p>
           <input
             {...register("ratingLower")}
             placeholder="Lower threshhold"
             type="number"
+            min="0"
+            max="10"
             className="bar-input"
-            defaultValue={1}
           />
           <input
             {...register("ratingUpper")}
             placeholder="Upper threshold"
             type="number"
+            min="0"
+            max="10"
             className="bar-input"
-            defaultValue={10}
           />
         </div>
+        {errors.ratingLower?.message ?? <p>{errors.ratingLower?.message}</p>}
+        {errors.ratingUpper?.message ?? <p>{errors.ratingUpper?.message}</p>}
         <div className="actors">
           <Controller
             name="actorsSelect"
@@ -168,10 +213,11 @@ const SearchBar = ({ setMovies }) => {
         <div className="country">
           <p>country</p>
           <input {...register("country")} className="bar-input" />
-          <button type="submit">
+          <button type="submit" disabled={isSubmitting}>
             <SearchIcon />
           </button>
         </div>
+        {errors.country?.message ?? <p>{errors.country?.message}</p>}
       </form>
       <PaginationController
         pages={totalPages}

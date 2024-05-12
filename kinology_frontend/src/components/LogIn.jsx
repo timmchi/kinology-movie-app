@@ -35,12 +35,16 @@ const LogIn = ({ handleLogin }) => {
       <div>
         username
         <input {...register("username")} />
-        <p style={{ color: "red" }}>{errors.username?.message}</p>
+        {errors.username ?? (
+          <p style={{ color: "red" }}>{errors.username?.message}</p>
+        )}
       </div>
       <div>
         password
         <input type="password" {...register("password")} />
-        <p style={{ color: "red" }}>{errors.password?.message}</p>
+        {errors.password ?? (
+          <p style={{ color: "red" }}>{errors.password?.message}</p>
+        )}
       </div>
       <button disabled={isSubmitting} type="submit">
         {isSubmitting ? "Logging in..." : "Log In"}
