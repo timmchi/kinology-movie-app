@@ -101,13 +101,29 @@ usersRouter.get("/:id", async (request, response) => {
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
 const MovieActionSchema = v.object({
-  id: v.string([v.minValue("2")]),
+  id: v.string([v.minValue(2)]),
   title: v.string(),
   poster: v.string([v.includes("/"), v.endsWith(".jpg")]),
   button: v.picklist(["watched", "favorite", "later"]),
 });
 
-// there is a problem in this route - a new object is created, should first check if there is already such a movie present and it should then append the user id to the watched/favorited list
+const handleWatchedAction = async (movie, user) => {
+  if (!movie.watchedBy.includes(user._id)) {
+    movie.watchedBy = movie.watchedBy.concat(user._id);
+  }
+  if (!user.watchedMovies.includes(movie._id)) {
+    user.watchedMovies = user.watchedMovies.concat(movie._id);
+  }
+};
+
+const handleFavoriteAction = async (movie, user) => {
+  if (!movie.favoritedBy.includes(user._id)) {
+    movie.favoritedBy = movie.favoritedBy.concat(user._id);
+  }
+  if (!user.favoriteMovies.includes(movie._id)) {
+    user.favoriteMovies = user.favoriteMovies.concat(movie._id);
+  }
+};
 
 usersRouter.post(
   "/:id/movies",
@@ -115,7 +131,6 @@ usersRouter.post(
   middleware.userExtractor,
   async (request, response) => {
     const { movie, button } = request.body;
-
     const parsedMovieAction = v.parse(MovieActionSchema, {
       id: movie.id,
       title: movie.title,
@@ -125,76 +140,29 @@ usersRouter.post(
 
     console.log(parsedMovieAction);
 
-    const existingMovie = Movie.find({ tmdbId: parsedMovieAction.id });
-
     const user = request.user;
+    let existingMovie = await Movie.findOne({ tmdbId: parsedMovieAction.id });
 
-    let updatedSavedMovie;
-
-    if (parsedMovieAction.button === "watched") {
-      if (!existingMovie) {
-        const movieMongo = new Movie({
-          tmdbId: parsedMovieAction.id,
-          title: parsedMovieAction.title,
-          poster: parsedMovieAction.poster,
-          watchedBy: [user._id],
-        });
-        const savedMovie = await movieMongo.save();
-        user.watchedMovies = user.watchedMovies.concat(savedMovie._id);
-
-        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
-          "watchedBy",
-          {
-            username: 1,
-            name: 1,
-          }
-        );
-      }
-
-      existingMovie.watchedBy = existingMovie.watchedBy.concat(user._id);
-      user.watchedMovies = user.watchedMovies.concat(existingMovie._id);
-
-      updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
-        "watchedBy",
-        {
-          username: 1,
-          name: 1,
-        }
-      );
-    }
-    if (parsedMovieAction.button === "favorite") {
-      if (!existingMovie) {
-        const movieMongo = new Movie({
-          tmdbId: parsedMovieAction.id,
-          title: parsedMovieAction.title,
-          poster: parsedMovieAction.poster,
-          favoritedBy: [user._id],
-        });
-        const savedMovie = await movieMongo.save();
-        user.favoriteMovies = user.favoriteMovies.concat(savedMovie._id);
-
-        updatedSavedMovie = await Movie.findById(savedMovie.id).populate(
-          "favoritedBy",
-          {
-            username: 1,
-            name: 1,
-          }
-        );
-      }
-
-      existingMovie.favoritedBy = existingMovie.favoritedBy.concat(user._id);
-      user.favoriteMovies = user.favoriteMovies.concat(existingMovie._id);
-
-      updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
-        "favoritedBy",
-        {
-          username: 1,
-          name: 1,
-        }
-      );
+    if (!existingMovie) {
+      existingMovie = new Movie({
+        tmdbId: parsedMovieAction.id,
+        title: parsedMovieAction.title,
+        poster: parsedMovieAction.poster,
+      });
     }
 
-    await user.save();
+    if (parsedMovieAction.button === "watched")
+      await handleWatchedAction(existingMovie, user);
+    if (parsedMovieAction.button === "favorite")
+      await handleFavoriteAction(existingMovie, user);
+
+    await Promise.all([user.save(), existingMovie.save()]);
+
+    const updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
+      parsedMovieAction.button === "watched" ? "watchedBy" : "favoritedBy",
+      { username: 1, name: 1 }
+    );
+
     response.status(201).json(updatedSavedMovie);
   }
 );
