@@ -118,70 +118,92 @@ const SearchBar = ({ setMovies }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit((data) => searchForMovies(data, 1))}>
-      <Controller
-        name="genresSelect"
-        control={control}
-        render={({ field }) => (
-          <Select
-            {...field}
-            options={genreOptions}
-            isMulti
-            placeholder="Select genres"
+    <div>
+      <form
+        onSubmit={handleSubmit((data) => searchForMovies(data, 1))}
+        className="searchBar"
+      >
+        <div className="genres">
+          <Controller
+            name="genresSelect"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    borderWidth: 0,
+                    borderRadius: 10,
+                  }),
+                }}
+                options={genreOptions}
+                isMulti
+                placeholder="Select genres"
+              />
+            )}
           />
-        )}
-      />
-      <div className="director">
-        <p>director</p>
-        <input {...register("director")} />
-      </div>
-      <div className="year">
-        <p>year</p>
-        <input {...register("year")} />
-      </div>
-      <div className="rating">
-        <p>Rating range</p>
-        <input
-          {...register("ratingLower")}
-          placeholder="Lower threshhold"
-          type="number"
-        />
-        <input
-          {...register("ratingUpper")}
-          placeholder="Upper threshold"
-          type="number"
-        />
-      </div>
-      <div className="actors">
-        <Controller
-          name="actorsSelect"
-          control={control}
-          render={({ field }) => (
-            <CreatableSelect
-              {...field}
-              components={components}
-              options={genreOptions}
-              inputValue={actor}
-              isMulti
-              isClearable
-              menuIsOpen={false}
-              placeholder="Type in actor and press enter"
-              onChange={(newActor) => setActors(newActor)}
-              onInputChange={(newActor) => setActor(newActor)}
-              onKeyDown={handleKeyDown}
-              value={actors}
-            />
-          )}
-        />
-      </div>
-      <div className="country">
-        <p>country</p>
-        <input {...register("country")} />
-      </div>
-      <button type="submit">
-        <SearchIcon />
-      </button>
-    </form>
+        </div>
+        <div className="director">
+          <p>director</p>
+          <input {...register("director")} type="text" className="bar-input" />
+        </div>
+        <div className="year">
+          <p>year</p>
+          <input {...register("year")} className="bar-input" />
+        </div>
+        <div className="rating">
+          <p>Rating range</p>
+          <input
+            {...register("ratingLower")}
+            placeholder="Lower threshhold"
+            type="number"
+            className="bar-input"
+          />
+          <input
+            {...register("ratingUpper")}
+            placeholder="Upper threshold"
+            type="number"
+            className="bar-input"
+          />
+        </div>
+        <div className="actors">
+          <Controller
+            name="actorsSelect"
+            control={control}
+            render={({ field }) => (
+              <CreatableSelect
+                {...field}
+                components={components}
+                options={genreOptions}
+                inputValue={actor}
+                isMulti
+                isClearable
+                menuIsOpen={false}
+                placeholder="Type in actor and press enter"
+                onChange={(newActor) => setActors(newActor)}
+                onInputChange={(newActor) => setActor(newActor)}
+                onKeyDown={handleKeyDown}
+                value={actors}
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    borderWidth: 0,
+                  }),
+                }}
+              />
+            )}
+          />
+        </div>
+        <div className="country">
+          <p>country</p>
+          <input {...register("country")} className="bar-input" />
+          <button type="submit">
+            <SearchIcon />
+          </button>
+        </div>
+      </form>
+    </div>
   );
 
   //   return (
