@@ -1,6 +1,6 @@
 import MovieCard from "./MovieCard";
 
-const MovieList = ({ movies, onButtonPress }) => {
+const MovieList = ({ movies, onButtonPress, user }) => {
   if (!movies) return <>no movies yet</>;
   console.log("movies in MovieList", movies);
 
@@ -16,6 +16,7 @@ const MovieList = ({ movies, onButtonPress }) => {
             movie={movie}
             key={movie.id}
             onButtonPress={onButtonPress}
+            user={user}
           />
         ))}
       </div>

@@ -162,11 +162,15 @@ const Movie = ({ onButtonPress, user }) => {
                 unpressedText={"Favorite"}
                 pressedText={"Unfavorite"}
                 onButtonPress={(e) => buttonPress(e, "favorite")}
+                movieId={id}
+                user={user}
               />
               <MovieButton
                 unpressedText={"Seen"}
                 pressedText={"Remove from seen"}
                 onButtonPress={(e) => buttonPress(e, "watched")}
+                movieId={id}
+                user={user}
               />
             </>
           ) : (

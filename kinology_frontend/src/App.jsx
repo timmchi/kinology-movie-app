@@ -31,6 +31,8 @@ function App() {
     }
   }, []);
 
+  console.log(user);
+
   useEffect(() => {
     const fetchUsers = async () => {
       const fetchedUsers = await userService.getUsers();
@@ -139,7 +141,9 @@ function App() {
         />
         <Route
           path="/"
-          element={<LandingPage onButtonPress={handleMovieButton} />}
+          element={
+            <LandingPage onButtonPress={handleMovieButton} user={user} />
+          }
         />
         <Route
           path="/movies/:id"

@@ -10,7 +10,7 @@ import { CardActionArea } from "@mui/material";
 
 import MovieButton from "./MovieButton";
 
-const MovieCard = ({ movie, onButtonPress }) => {
+const MovieCard = ({ movie, onButtonPress, user }) => {
   const buttonPress = (event, functionWord) => {
     onButtonPress(event, functionWord, {
       id: movie.id,
@@ -47,18 +47,25 @@ const MovieCard = ({ movie, onButtonPress }) => {
       </CardActionArea>
       <CardActions>
         {/* TODO need to implement functionality to add to watch later */}
-        <Button size="small" variant="outlined">
-          Watch later
-        </Button>
+        <MovieButton
+          unpressedText={"Watch"}
+          pressedText={"Unwatch"}
+          movieId={movie.id}
+          user={user}
+        />
         <MovieButton
           unpressedText={"Favorite"}
           pressedText={"Unfavorite"}
           onButtonPress={(e) => buttonPress(e, "favorite")}
+          movieId={movie.id}
+          user={user}
         />
         <MovieButton
           unpressedText={"Seen"}
           pressedText={"Remove from seen"}
           onButtonPress={(e) => buttonPress(e, "watched")}
+          movieId={movie.id}
+          user={user}
         />
       </CardActions>
     </Card>
