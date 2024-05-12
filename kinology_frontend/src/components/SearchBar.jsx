@@ -28,6 +28,7 @@ const SearchBar = ({ setMovies }) => {
   const [actor, setActor] = useState("");
   const [actors, setActors] = useState([]);
   const [country, setCountry] = useState("");
+  const [firstSearchData, setFirstSearchData] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(-1);
   //   const [newSearch, setNewSearch] = useState(false);
@@ -47,10 +48,13 @@ const SearchBar = ({ setMovies }) => {
 
   const searchForMovies = async (data, pageValue) => {
     console.log(data);
+
+    // TODO - refactor this: create a function that parses the data into suitable shape
     const actorsQuery = actors.map((actor) => actor.value);
     const { genresSelect, director, year, ratingUpper, ratingLower, country } =
       data;
     const genres = genresSelect.map((genreOption) => `${genreOption.value}`);
+    setFirstSearchData(data);
     const { movieToFrontObjectArray: movies, totalPages: totalPageNumber } =
       await moviesService.search({
         genres,
@@ -203,6 +207,12 @@ const SearchBar = ({ setMovies }) => {
           </button>
         </div>
       </form>
+      <PaginationController
+        pages={totalPages}
+        page={page}
+        setPage={setPage}
+        pageChange={(event, value) => searchForMovies(firstSearchData, value)}
+      />
     </div>
   );
 
@@ -312,12 +322,12 @@ const SearchBar = ({ setMovies }) => {
 
   //         {/* </div> */}
   //       </form>
-  //       <PaginationController
-  //         pages={totalPages}
-  //         page={page}
-  //         setPage={setPage}
-  //         pageChange={(event, value) => searchForMovies(event, value)}
-  //       />
+  // <PaginationController
+  //   pages={totalPages}
+  //   page={page}
+  //   setPage={setPage}
+  //   pageChange={(event, value) => searchForMovies(event, value)}
+  // />
   //     </div>
   //   );
 };
