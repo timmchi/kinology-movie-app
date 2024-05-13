@@ -59,6 +59,32 @@ const handleDifferentProfileComment = async (comment, user, receiver) => {
   }
 };
 
+const handleSameProfileCommentDeletion = async (comment, user) => {
+  if (user.authoredComments.includes(comment._id)) {
+    user.authoredComments = user.authoredComments.filter(
+      (c) => c._id.toString() !== comment._id.toString()
+    );
+    user.profileComments = user.profileComments.filter(
+      (c) => c._id.toString() !== comment._id.toString()
+    );
+  }
+};
+
+const handleDifferentProfileCommentDeletion = async (
+  comment,
+  user,
+  receiver
+) => {
+  if (user.authoredComments.includes(comment._id)) {
+    user.authoredComments = user.authoredComments.filter(
+      (c) => c._id.toString() !== comment._id.toString()
+    );
+    receiver.profileComments = receiver.profileComments.filter(
+      (c) => c._id.toString() !== comment._id.toString()
+    );
+  }
+};
+
 commentsRouter.post(
   "/profile/:id",
   middleware.tokenExtractor,
@@ -138,7 +164,7 @@ commentsRouter.delete(
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
-    const { commentId } = request.params;
+    const { id, commentId } = request.params;
     const { authorId } = request.body;
     const user = request.user;
 
@@ -153,6 +179,25 @@ commentsRouter.delete(
     const commentToDelete = await UserComment.findByIdAndDelete(
       parsedParams.commentId
     );
+
+    const author = await User.findById(user._id);
+    const receiver = await User.findById(id);
+
+    // console.log(author, receiver);
+
+    if (author._id.toString() === receiver._id.toString()) {
+      await handleSameProfileCommentDeletion(commentToDelete, author);
+      await author.save();
+    }
+
+    if (author._id.toString() !== receiver._id.toString()) {
+      await handleDifferentProfileCommentDeletion(
+        commentToDelete,
+        author,
+        receiver
+      );
+      await Promise.all([author.save(), receiver.save()]);
+    }
 
     response.status(200).end();
   }
