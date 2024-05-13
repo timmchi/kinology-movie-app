@@ -28,9 +28,9 @@
 | 12.5 | 4     | Refactoring forms to use react-hook-form and front end validation        |
 | 12.5 | 1.5   | Refactoring adding movie route and bug fixes                             |
 | 12.5 | 1     | Implementing buttons with persisted state using local storage            |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
+| 13.5 | 1.5   | Implemented unfavorite/unsee/unwatch movie functionality                 |
+| 13.5 | 2     | Fixing population on user/movie/comment models, fixing bugs              |
+| 13.5 | 0.5   | Backend validation for new functionality                                 |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
