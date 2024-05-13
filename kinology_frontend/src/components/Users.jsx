@@ -7,6 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 
+// TODO - fix the state so that on profile update user information in user list changes
 const Users = ({ users }) => {
   console.log(users);
   return (

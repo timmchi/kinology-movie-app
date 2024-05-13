@@ -104,8 +104,8 @@ usersRouter.get("/:id", async (request, response) => {
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
 const MovieActionSchema = v.object({
   id: v.union([v.string([v.minValue(2)]), v.number([v.minValue(2)])]),
-  title: v.string(),
-  poster: v.string([v.includes("/"), v.endsWith(".jpg")]),
+  title: v.optional(v.string()),
+  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
   button: v.picklist(["watched", "favorite", "later"]),
 });
 
@@ -171,10 +171,6 @@ usersRouter.post(
 
     await Promise.all([user.save(), existingMovie.save()]);
 
-    // const updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
-    //   parsedMovieAction.button === "watched" ? "watchedBy" : "favoritedBy",
-    //   { username: 1, name: 1 }
-    // );
     const updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
       parsedMovieAction.button === "watched"
         ? "watchedBy"
@@ -206,35 +202,27 @@ const handleUnwatchAction = async (movie, user) => {
 const handleUnseeAction = async (movie, user) => {
   console.log(movie, user);
   if (movie.watchedBy.includes(user._id)) {
-    // console.log("movie.watchedBy before filter", movie.watchedBy);
     movie.watchedBy = movie.watchedBy.filter(
       (userId) => userId.toString() !== user._id.toString()
     );
-    // console.log("movie.watchedBy after filter", movie.watchedBy);
   }
   if (user.watchedMovies.includes(movie._id)) {
-    // console.log("user.watchedMovies before filter", user.watchedMovies);
     user.watchedMovies = user.watchedMovies.filter(
       (movieId) => movieId.toString() !== movie._id.toString()
     );
-    // console.log("user.watchedMovies after filter", user.watchedMovies);
   }
 };
 
 const handleUnfavoriteAction = async (movie, user) => {
   if (movie.favoritedBy.includes(user._id)) {
-    // console.log("movie.favoritedBy before filter", movie.favoritedBy);
     movie.favoritedBy = movie.favoritedBy.filter(
       (userId) => userId.toString() !== user._id.toString()
     );
-    // console.log("movie.favoritedBy after filter", movie.favoritedBy);
   }
   if (user.favoriteMovies.includes(movie._id)) {
-    // console.log("user.favoriteMovies before filter", user.favoriteMovies);
     user.favoriteMovies = user.favoriteMovies.filter(
       (movieId) => movieId.toString() !== movie._id.toString()
     );
-    // console.log("user.favoriteMovies after filter", user.favoriteMovies);
   }
 };
 
@@ -247,18 +235,25 @@ usersRouter.delete(
     const { movieId } = request.params;
     const user = request.user;
 
-    console.log(movieId, button);
+    const parsedMovieAction = v.parse(MovieActionSchema, {
+      id: movieId,
+      button,
+    });
 
-    const existingMovie = await Movie.findOne({ tmdbId: movieId });
+    // console.log(movieId, button);
 
-    console.log(existingMovie);
+    const existingMovie = await Movie.findOne({ tmdbId: parsedMovieAction.id });
+
+    // console.log(existingMovie);
 
     if (!existingMovie) return response.status(200);
 
-    if (button === "watched") await handleUnseeAction(existingMovie, user);
-    if (button === "favorite")
+    if (parsedMovieAction.button === "watched")
+      await handleUnseeAction(existingMovie, user);
+    if (parsedMovieAction.button === "favorite")
       await handleUnfavoriteAction(existingMovie, user);
-    if (button === "later") await handleUnwatchAction(existingMovie, user);
+    if (parsedMovieAction.button === "later")
+      await handleUnwatchAction(existingMovie, user);
 
     await Promise.all([user.save(), existingMovie.save()]);
 
