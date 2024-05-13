@@ -221,7 +221,6 @@ commentsRouter.get("/movie/:id", async (request, response) => {
   response.status(200).send(comments);
 });
 
-// TODO when a movie isnt added to db through the buttons but through creating a comment, title and poster are not added to db and then if u added a movie to profile through buttons it is undefined
 commentsRouter.post(
   "/movie/:id",
   middleware.tokenExtractor,
@@ -229,7 +228,8 @@ commentsRouter.post(
   async (request, response) => {
     const { id } = request.params;
     const user = request.user;
-    const { content } = request.body;
+    // validation needed
+    const { content, movieTitle, moviePoster } = request.body;
 
     console.log("movie comment post id before validation", id, typeof id);
     const parsedParams = v.parse(paramsIdSchema, { movieId: id });
@@ -243,15 +243,11 @@ commentsRouter.post(
 
     console.log("searching if a movie exists", movie);
 
-    // const parsedComment = v.parse(CommentSchema, {
-    //   content,
-    //   author: user._id.toString(),
-    //   receiver: movie._id.toString(),
-    // });
-
     if (!movie) {
       movie = new Movie({
         tmdbId: parsedParams.movieId,
+        title: movieTitle,
+        poster: moviePoster,
       });
       await movie.save();
     }

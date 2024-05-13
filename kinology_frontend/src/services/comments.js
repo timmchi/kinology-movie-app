@@ -65,14 +65,20 @@ const getMovieComments = async (movieId) => {
   return response.data;
 };
 
-const createMovieComment = async (movieId, comment, currentUser) => {
+const createMovieComment = async (
+  movieId,
+  comment,
+  currentUser,
+  movieTitle,
+  moviePoster
+) => {
   const config = {
     headers: { Authorization: `Bearer ${currentUser.token}` },
   };
 
   const response = await axios.post(
     `${baseUrl}/movie/${movieId}`,
-    { content: comment },
+    { content: comment, movieTitle, moviePoster },
     config
   );
   return response.data;

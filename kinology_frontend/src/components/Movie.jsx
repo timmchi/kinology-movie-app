@@ -42,7 +42,9 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
       const createdComment = await commentsService.createMovieComment(
         id,
         content,
-        user
+        user,
+        movie.title,
+        movie.image
       );
       setComments(comments.concat(createdComment));
       dispatch({
