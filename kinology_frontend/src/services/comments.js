@@ -64,7 +64,6 @@ const getMovieComments = async (movieId) => {
   const response = await axios.get(`${baseUrl}/movie/${movieId}`);
   return response.data;
 };
-
 const createMovieComment = async (
   movieId,
   comment,

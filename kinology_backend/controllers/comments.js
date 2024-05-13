@@ -221,6 +221,11 @@ commentsRouter.get("/movie/:id", async (request, response) => {
   response.status(200).send(comments);
 });
 
+const MovieSchema = v.object({
+  title: v.optional(v.string()),
+  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
+});
+
 commentsRouter.post(
   "/movie/:id",
   middleware.tokenExtractor,
@@ -231,13 +236,12 @@ commentsRouter.post(
     // validation needed
     const { content, movieTitle, moviePoster } = request.body;
 
-    console.log("movie comment post id before validation", id, typeof id);
+    const parsedMovie = v.parse(MovieSchema, {
+      title: movieTitle,
+      poster: moviePoster,
+    });
+
     const parsedParams = v.parse(paramsIdSchema, { movieId: id });
-    console.log(
-      "movie comment post id before validation",
-      parsedParams.movieId,
-      typeof parsedParams.movieId
-    );
 
     let movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
 
@@ -246,8 +250,8 @@ commentsRouter.post(
     if (!movie) {
       movie = new Movie({
         tmdbId: parsedParams.movieId,
-        title: movieTitle,
-        poster: moviePoster,
+        title: parsedMovie.title,
+        poster: parsedMovie.poster,
       });
       await movie.save();
     }
