@@ -180,7 +180,7 @@ usersRouter.post(
         ? "favoritedBy"
         : parsedMovieAction.button === "later"
         ? "watchLaterBy"
-        : null, // Handle case for unknown button
+        : null,
       { username: 1, name: 1 }
     );
 
@@ -191,12 +191,12 @@ usersRouter.post(
 const handleUnwatchAction = async (movie, user) => {
   if (movie.watchLaterBy.includes(user._id)) {
     movie.watchLaterBy = movie.watchLaterBy.filter(
-      (userId) => userId !== user._id
+      (userId) => userId.toString() !== user._id.toString()
     );
   }
   if (user.watchLaterMovies.includes(movie._id)) {
     user.watchLaterMovies = user.watchLaterMovies.filter(
-      (movieId) => movieId !== movie._id
+      (movieId) => movieId.toString() !== movie._id.toString()
     );
   }
 };
@@ -204,35 +204,35 @@ const handleUnwatchAction = async (movie, user) => {
 const handleUnseeAction = async (movie, user) => {
   console.log(movie, user);
   if (movie.watchedBy.includes(user._id)) {
-    console.log("movie.watchedBy before filter", movie.watchedBy);
+    // console.log("movie.watchedBy before filter", movie.watchedBy);
     movie.watchedBy = movie.watchedBy.filter(
       (userId) => userId.toString() !== user._id.toString()
     );
-    console.log("movie.watchedBy after filter", movie.watchedBy);
+    // console.log("movie.watchedBy after filter", movie.watchedBy);
   }
   if (user.watchedMovies.includes(movie._id)) {
-    console.log("user.watchedMovies before filter", user.watchedMovies);
+    // console.log("user.watchedMovies before filter", user.watchedMovies);
     user.watchedMovies = user.watchedMovies.filter(
       (movieId) => movieId.toString() !== movie._id.toString()
     );
-    console.log("user.watchedMovies after filter", user.watchedMovies);
+    // console.log("user.watchedMovies after filter", user.watchedMovies);
   }
 };
 
 const handleUnfavoriteAction = async (movie, user) => {
   if (movie.favoritedBy.includes(user._id)) {
-    console.log("movie.favoritedBy before filter", movie.favoritedBy);
+    // console.log("movie.favoritedBy before filter", movie.favoritedBy);
     movie.favoritedBy = movie.favoritedBy.filter(
       (userId) => userId.toString() !== user._id.toString()
     );
-    console.log("movie.favoritedBy after filter", movie.favoritedBy);
+    // console.log("movie.favoritedBy after filter", movie.favoritedBy);
   }
   if (user.favoriteMovies.includes(movie._id)) {
-    console.log("user.favoriteMovies before filter", user.favoriteMovies);
+    // console.log("user.favoriteMovies before filter", user.favoriteMovies);
     user.favoriteMovies = user.favoriteMovies.filter(
       (movieId) => movieId.toString() !== movie._id.toString()
     );
-    console.log("user.favoriteMovies after filter", user.favoriteMovies);
+    // console.log("user.favoriteMovies after filter", user.favoriteMovies);
   }
 };
 
@@ -256,6 +256,7 @@ usersRouter.delete(
     if (button === "watched") await handleUnseeAction(existingMovie, user);
     if (button === "favorite")
       await handleUnfavoriteAction(existingMovie, user);
+    if (button === "later") await handleUnwatchAction(existingMovie, user);
 
     await Promise.all([user.save(), existingMovie.save()]);
 

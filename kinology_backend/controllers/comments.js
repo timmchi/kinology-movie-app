@@ -126,6 +126,8 @@ commentsRouter.delete(
   }
 );
 
+// TODO movie and user population needs to be added, currently movies' comments fields are empty
+
 commentsRouter.get("/movie/:id", async (request, response) => {
   const { id } = request.params;
 

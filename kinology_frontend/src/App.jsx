@@ -103,7 +103,7 @@ function App() {
       dispatch({
         type: "SHOW",
         payload: {
-          message: `Successfully removed ${movie.title} from ${button}`,
+          message: `Successfully removed movie from your profile`,
           type: "success",
         },
       });
@@ -112,7 +112,7 @@ function App() {
       dispatch({
         type: "SHOW",
         payload: {
-          message: `Something went wrong when adding a movie to your profile`,
+          message: `Something went wrong when removing a movie from your profile`,
           type: "error",
         },
       });

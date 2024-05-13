@@ -165,6 +165,14 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
           {user ? (
             <>
               <MovieButton
+                unpressedText={"Watch"}
+                pressedText={"Unwatch"}
+                onButtonPress={(e) => buttonPress(e, "later")}
+                onButtonUnpress={(e) => buttonUnpress(e, "later")}
+                movieId={id}
+                user={user}
+              />
+              <MovieButton
                 unpressedText={"Favorite"}
                 pressedText={"Unfavorite"}
                 onButtonPress={(e) => buttonPress(e, "favorite")}
@@ -174,7 +182,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
               />
               <MovieButton
                 unpressedText={"Seen"}
-                pressedText={"Remove from seen"}
+                pressedText={"Unsee"}
                 onButtonPress={(e) => buttonPress(e, "watched")}
                 onButtonUnpress={(e) => buttonUnpress(e, "watched")}
                 movieId={id}

@@ -32,6 +32,12 @@ const userSchema = new mongoose.Schema({
       ref: "Movie",
     },
   ],
+  watchLaterMovies: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Movie",
+    },
+  ],
   authoredComments: [
     {
       type: mongoose.Schema.Types.ObjectId,
