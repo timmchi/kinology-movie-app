@@ -26,6 +26,8 @@ const paramsIdSchema = v.object({
   movieId: v.optional(v.string(v.minValue("2"))),
 });
 
+// TODO - movies and users are currently not get populated with comments
+
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params;
 

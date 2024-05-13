@@ -167,6 +167,50 @@ usersRouter.post(
   }
 );
 
+const handleUnwatchAction = async (movie, user) => {
+  if (!movie.watchedBy.includes(user._id)) {
+    movie.watchedBy = movie.watchedBy.concat(user._id);
+  }
+  if (!user.watchedMovies.includes(movie._id)) {
+    user.watchedMovies = user.watchedMovies.concat(movie._id);
+  }
+};
+
+const handleUnseeAction = async (movie, user) => {
+  if (movie.watchedBy.includes(user._id)) {
+    movie.watchedBy = movie.watchedBy.filter((userId) => userId !== user._id);
+  }
+  if (user.watchedMovies.includes(movie._id)) {
+    user.watchedMovies = user.watchedMovies.filter(
+      (movieId) => movieId !== movie._id
+    );
+  }
+};
+
+const handleUnfavoriteAction = async (movie, user) => {
+  if (movie.favoritedBy.includes(user._id)) {
+    movie.favoritedBy = movie.favoritedBy.filter(
+      (userId) => userId !== user._id
+    );
+  }
+  if (user.favoriteMovies.includes(movie._id)) {
+    user.favoriteMovies = user.favoriteMovies.filter(
+      (movieId) => movieId !== movie._id
+    );
+  }
+};
+
+usersRouter.delete(
+  "/:id/movies/:movieId",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {
+    const { button } = request.body;
+    const { id, movieId } = request.params;
+    const user = request.user;
+  }
+);
+
 const UserUpdateSchema = v.object({
   biography: v.string("About me should be a string", [
     v.minLength(1, "Please enter something about yourself."),
@@ -177,7 +221,6 @@ const UserUpdateSchema = v.object({
   ]),
 });
 
-// there is a bug right now when updating a user - movies added to profile become undefined, has to do with user's name?
 usersRouter.put(
   "/:id",
   middleware.tokenExtractor,
