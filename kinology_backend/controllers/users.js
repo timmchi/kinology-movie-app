@@ -101,11 +101,20 @@ usersRouter.get("/:id", async (request, response) => {
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
 const MovieActionSchema = v.object({
-  id: v.string([v.minValue(2)]),
+  id: v.union([v.string([v.minValue(2)]), v.number([v.minValue(2)])]),
   title: v.string(),
   poster: v.string([v.includes("/"), v.endsWith(".jpg")]),
   button: v.picklist(["watched", "favorite", "later"]),
 });
+
+const handleWatchLaterAction = async (movie, user) => {
+  if (!movie.watchLaterBy.includes(user._id)) {
+    movie.watchLaterBy = movie.watchLaterBy.concat(user._id);
+  }
+  if (!user.watchLaterMovies.includes(movie._id)) {
+    user.watchLaterMovies = user.watchLaterMovies.concat(movie._id);
+  }
+};
 
 const handleWatchedAction = async (movie, user) => {
   if (!movie.watchedBy.includes(user._id)) {
@@ -155,11 +164,23 @@ usersRouter.post(
       await handleWatchedAction(existingMovie, user);
     if (parsedMovieAction.button === "favorite")
       await handleFavoriteAction(existingMovie, user);
+    if (parsedMovieAction.button === "later")
+      await handleWatchLaterAction(existingMovie, user);
 
     await Promise.all([user.save(), existingMovie.save()]);
 
+    // const updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
+    //   parsedMovieAction.button === "watched" ? "watchedBy" : "favoritedBy",
+    //   { username: 1, name: 1 }
+    // );
     const updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
-      parsedMovieAction.button === "watched" ? "watchedBy" : "favoritedBy",
+      parsedMovieAction.button === "watched"
+        ? "watchedBy"
+        : parsedMovieAction.button === "favorite"
+        ? "favoritedBy"
+        : parsedMovieAction.button === "later"
+        ? "watchLaterBy"
+        : null, // Handle case for unknown button
       { username: 1, name: 1 }
     );
 
@@ -168,12 +189,12 @@ usersRouter.post(
 );
 
 const handleUnwatchAction = async (movie, user) => {
-  if (movie.watchedBy.includes(user._id)) {
+  if (movie.watchLaterBy.includes(user._id)) {
     movie.watchLaterBy = movie.watchLaterBy.filter(
       (userId) => userId !== user._id
     );
   }
-  if (user.watchedMovies.includes(movie._id)) {
+  if (user.watchLaterMovies.includes(movie._id)) {
     user.watchLaterMovies = user.watchLaterMovies.filter(
       (movieId) => movieId !== movie._id
     );
