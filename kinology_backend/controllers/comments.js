@@ -38,7 +38,7 @@ commentsRouter.get("/profile/:id", async (request, response) => {
     .populate("author", { name: 1, avatar: 1, username: 1 })
     .populate("receiver");
 
-  await User.findById(id)
+  await User.findById(parsedParams.receiver)
     .populate("authoredComments")
     .populate("profileComments");
 
@@ -113,7 +113,7 @@ commentsRouter.post(
       .populate("receiver");
 
     const author = await User.findById(user._id);
-    const receiver = await User.findById(id);
+    const receiver = await User.findById(parsedComment.receiver);
 
     if (author._id.toString() === receiver._id.toString()) {
       await handleSameProfileComment(addedComment, author);
@@ -216,9 +216,6 @@ commentsRouter.get("/movie/:id", async (request, response) => {
     movieReceiver: movie?._id,
   }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
 
-  movie.comments = movie.comments.concat(comments);
-  await movie.save();
-
   movie.populate("comments");
 
   response.status(200).send(comments);
@@ -314,7 +311,7 @@ commentsRouter.delete(
     const user = request.user;
     const { authorId } = request.body;
 
-    const parsedParams = v.parse(paramsIdSchema, { commentId });
+    const parsedParams = v.parse(paramsIdSchema, { commentId, movieId: id });
     const parsedComment = v.parse(CommentSchema, { author: authorId });
 
     if (!user || user._id.toString() !== parsedComment.author)
@@ -324,7 +321,7 @@ commentsRouter.delete(
       parsedParams.commentId
     );
 
-    const movie = await Movie.findOne({ tmdbId: id });
+    const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
     console.log(movie);
     const author = await User.findById(user._id);
     movie.comments = movie.comments.filter(
