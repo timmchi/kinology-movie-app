@@ -19,6 +19,7 @@ const User = ({ currentUser, removeUser }) => {
   const [comments, setComments] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [watchedMovies, setWatchedMovies] = useState([]);
+  const [watchLaterMovies, setWatchLaterMovies] = useState([]);
   const updateFormRef = useRef();
   const commentFormRef = useRef();
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const User = ({ currentUser, removeUser }) => {
       setUser(fetchedUser);
       setFavoriteMovies(fetchedUser.favoriteMovies);
       setWatchedMovies(fetchedUser.watchedMovies);
+      setWatchLaterMovies(fetchedUser.watchLaterMovies);
     };
     fetchUser();
   }, [id]);
@@ -213,6 +215,7 @@ const User = ({ currentUser, removeUser }) => {
     }
   };
 
+  console.log("user watch list", user?.watchLaterMovies);
   console.log("user favorite movies", user?.favoriteMovies);
   console.log("user watched movies", user?.favoriteMovies);
   console.log(user);
@@ -240,6 +243,16 @@ const User = ({ currentUser, removeUser }) => {
       <div>
         <h2>About me</h2>
         <p>{user.biography}</p>
+      </div>
+      <div className="movieList">
+        <h3>Watch List</h3>
+        <div className="profileMovieContainer">
+          {watchLaterMovies?.map((movie) => (
+            <div key={`${movie.id} later`} className="movieSmallCard">
+              <MovieSmallCard movie={movie} />
+            </div>
+          ))}
+        </div>
       </div>
       <div className="movieList">
         <h3>favorite movies</h3>

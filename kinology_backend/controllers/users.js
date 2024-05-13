@@ -78,7 +78,8 @@ usersRouter.get("/", async (request, response) => {
     .populate("watchedMovies")
     .populate("favoriteMovies")
     .populate("authoredComments")
-    .populate("profileComments");
+    .populate("profileComments")
+    .populate("watchLaterMovies");
   response.json(users);
 });
 
@@ -89,7 +90,8 @@ usersRouter.get("/:id", async (request, response) => {
     .populate("watchedMovies")
     .populate("favoriteMovies")
     .populate("authoredComments")
-    .populate("profileComments");
+    .populate("profileComments")
+    .populate("watchLaterMovies");
 
   if (!user)
     response.status(404).json({
