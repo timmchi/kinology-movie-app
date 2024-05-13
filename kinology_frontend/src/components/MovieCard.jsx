@@ -10,12 +10,18 @@ import { CardActionArea } from "@mui/material";
 
 import MovieButton from "./MovieButton";
 
-const MovieCard = ({ movie, onButtonPress, user }) => {
+const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
   const buttonPress = (event, functionWord) => {
     onButtonPress(event, functionWord, {
       id: movie.id,
       title: movie.title,
       poster: movie.image,
+    });
+  };
+
+  const buttonUnpress = (event, functionWord) => {
+    onButtonUnpress(event, functionWord, {
+      id: movie.id,
     });
   };
 
@@ -57,6 +63,7 @@ const MovieCard = ({ movie, onButtonPress, user }) => {
           unpressedText={"Favorite"}
           pressedText={"Unfavorite"}
           onButtonPress={(e) => buttonPress(e, "favorite")}
+          onButtonUnpress={(e) => buttonUnpress(e, "favorite")}
           movieId={movie.id}
           user={user}
         />
@@ -64,6 +71,7 @@ const MovieCard = ({ movie, onButtonPress, user }) => {
           unpressedText={"Seen"}
           pressedText={"Remove from seen"}
           onButtonPress={(e) => buttonPress(e, "watched")}
+          onButtonUnpress={(e) => buttonUnpress(e, "watched")}
           movieId={movie.id}
           user={user}
         />

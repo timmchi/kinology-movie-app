@@ -30,13 +30,22 @@ const MovieButton = ({
 
   const pressButton = (event) => {
     console.log("i am being pressed");
-    setPressed(!pressed);
-    // onButtonPress(event);
+    try {
+      setPressed(!pressed);
+      onButtonPress(event);
+    } catch (exception) {
+      console.log(exception);
+    }
   };
 
   const unpressButton = (event) => {
     console.log("i am being unpressed");
-    setPressed(!pressed);
+    try {
+      setPressed(!pressed);
+      onButtonUnpress(event);
+    } catch (exception) {
+      console.log(exception);
+    }
   };
 
   return (

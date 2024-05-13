@@ -8,7 +8,7 @@ import moviesService from "../services/movies";
 import commentsService from "../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
-const Movie = ({ onButtonPress, user }) => {
+const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
   let { id } = useParams();
   const [movie, setMovie] = useState("");
   const [comments, setComments] = useState([]);
@@ -132,6 +132,12 @@ const Movie = ({ onButtonPress, user }) => {
     });
   };
 
+  const buttonUnpress = (event, functionWord) => {
+    onButtonUnpress(event, functionWord, {
+      id,
+    });
+  };
+
   return (
     <div>
       <div className="singleMovieContainer">
@@ -162,6 +168,7 @@ const Movie = ({ onButtonPress, user }) => {
                 unpressedText={"Favorite"}
                 pressedText={"Unfavorite"}
                 onButtonPress={(e) => buttonPress(e, "favorite")}
+                onButtonUnpress={(e) => buttonUnpress(e, "favorite")}
                 movieId={id}
                 user={user}
               />
@@ -169,6 +176,7 @@ const Movie = ({ onButtonPress, user }) => {
                 unpressedText={"Seen"}
                 pressedText={"Remove from seen"}
                 onButtonPress={(e) => buttonPress(e, "watched")}
+                onButtonUnpress={(e) => buttonUnpress(e, "watched")}
                 movieId={id}
                 user={user}
               />

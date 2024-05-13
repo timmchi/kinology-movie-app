@@ -22,11 +22,27 @@ const addMovieToProfile = async (movie, button, userId) => {
     headers: { Authorization: token },
   };
 
-  console.log("movie in service", movie);
+  //   console.log("movie in service", movie);
 
   const response = await axios.post(
     `${baseUrl}/${userId}/movies`,
     { movie, button },
+    config
+  );
+  return response.data;
+};
+
+const removeMovieFromProfile = async (movie, button, userId) => {
+  const config = {
+    headers: { Authorization: token },
+    data: {
+      button,
+    },
+  };
+
+  console.log("movie and button in remove movie from ..", movie, button);
+  const response = await axios.delete(
+    `${baseUrl}/${userId}/movies/${movie.id}`,
     config
   );
   return response.data;
@@ -61,4 +77,5 @@ export default {
   addMovieToProfile,
   updateUser,
   deleteUser,
+  removeMovieFromProfile,
 };

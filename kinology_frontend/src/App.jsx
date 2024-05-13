@@ -68,6 +68,7 @@ function App() {
 
   // movie buttons continues here
   const handleMovieButton = async (event, button, movie) => {
+    // do i even need event here? check again after everything else works
     event.preventDefault();
     try {
       const currentUserId = users.find((u) => u.username === user.username)?.id;
@@ -77,6 +78,32 @@ function App() {
         type: "SHOW",
         payload: {
           message: `Successfully added ${movie.title} to ${button}`,
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Something went wrong when adding a movie to your profile`,
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
+  };
+
+  const handleMovieButtonUnpress = async (event, button, movie) => {
+    // do i even need event here? check again after everything else works
+    event.preventDefault();
+    try {
+      const currentUserId = users.find((u) => u.username === user.username)?.id;
+      await userService.removeMovieFromProfile(movie, button, currentUserId);
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: `Successfully removed ${movie.title} from ${button}`,
           type: "success",
         },
       });
@@ -142,12 +169,22 @@ function App() {
         <Route
           path="/"
           element={
-            <LandingPage onButtonPress={handleMovieButton} user={user} />
+            <LandingPage
+              onButtonPress={handleMovieButton}
+              onButtonUnpress={handleMovieButtonUnpress}
+              user={user}
+            />
           }
         />
         <Route
           path="/movies/:id"
-          element={<Movie onButtonPress={handleMovieButton} user={user} />}
+          element={
+            <Movie
+              onButtonPress={handleMovieButton}
+              onButtonUnpress={handleMovieButtonUnpress}
+              user={user}
+            />
+          }
         />
         <Route
           path="/signup"
