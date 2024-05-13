@@ -216,6 +216,11 @@ commentsRouter.get("/movie/:id", async (request, response) => {
     movieReceiver: movie?._id,
   }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
 
+  movie.comments = movie.comments.concat(comments);
+  await movie.save();
+
+  movie.populate("comments");
+
   response.status(200).send(comments);
 });
 
@@ -259,6 +264,12 @@ commentsRouter.post(
       avatar: 1,
     });
 
+    const author = await User.findById(user._id);
+    // console.log(author.authoredComments);
+    author.authoredComments = author.authoredComments.concat(savedComment._id);
+    movie.comments = movie.comments.concat(savedComment._id);
+    await Promise.all([author.save(), movie.save()]);
+
     response.status(201).send(savedComment);
   }
 );
@@ -299,7 +310,7 @@ commentsRouter.delete(
   middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
-    const { commentId } = request.params;
+    const { id, commentId } = request.params;
     const user = request.user;
     const { authorId } = request.body;
 
@@ -312,6 +323,18 @@ commentsRouter.delete(
     const commentToDelete = await UserComment.findByIdAndDelete(
       parsedParams.commentId
     );
+
+    const movie = await Movie.findOne({ tmdbId: id });
+    console.log(movie);
+    const author = await User.findById(user._id);
+    movie.comments = movie.comments.filter(
+      (c) => c._id.toString() !== parsedParams.commentId.toString()
+    );
+    author.authoredComments = author.authoredComments.filter(
+      (c) => c._id.toString() !== parsedParams.commentId.toString()
+    );
+
+    await Promise.all([author.save(), movie.save()]);
 
     response.status(200).end();
   }
