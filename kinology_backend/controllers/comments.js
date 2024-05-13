@@ -27,6 +27,7 @@ const paramsIdSchema = v.object({
 });
 
 // TODO - movies and users are currently not get populated with comments
+// TODO movie and user population needs to be added, currently movies' comments fields are empty same with users
 
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params;
@@ -37,8 +38,26 @@ commentsRouter.get("/profile/:id", async (request, response) => {
     .populate("author", { name: 1, avatar: 1, username: 1 })
     .populate("receiver");
 
+  await User.findById(id)
+    .populate("authoredComments")
+    .populate("profileComments");
+
   response.status(200).send(comments);
 });
+
+const handleSameProfileComment = async (comment, user) => {
+  if (!user.authoredComments.includes(comment._id)) {
+    user.authoredComments = user.authoredComments.concat(comment._id);
+    user.profileComments = user.profileComments.concat(comment._id);
+  }
+};
+
+const handleDifferentProfileComment = async (comment, user, receiver) => {
+  if (!user.authoredComments.includes(comment._id)) {
+    user.authoredComments = user.authoredComments.concat(comment._id);
+    receiver.profileComments = receiver.profileComments.concat(comment._id);
+  }
+};
 
 commentsRouter.post(
   "/profile/:id",
@@ -66,6 +85,19 @@ commentsRouter.post(
     const addedComment = await UserComment.findById(savedComment._id)
       .populate("author", { name: 1, avatar: 1, username: 1 })
       .populate("receiver");
+
+    const author = await User.findById(user._id);
+    const receiver = await User.findById(id);
+
+    if (author._id.toString() === receiver._id.toString()) {
+      await handleSameProfileComment(addedComment, author);
+      await author.save();
+    }
+
+    if (author._id.toString() !== receiver._id.toString()) {
+      await handleDifferentProfileComment(addedComment, author, receiver);
+      await Promise.all([author.save(), receiver.save()]);
+    }
 
     response.status(201).send(addedComment);
   }
@@ -125,8 +157,6 @@ commentsRouter.delete(
     response.status(200).end();
   }
 );
-
-// TODO movie and user population needs to be added, currently movies' comments fields are empty
 
 commentsRouter.get("/movie/:id", async (request, response) => {
   const { id } = request.params;
