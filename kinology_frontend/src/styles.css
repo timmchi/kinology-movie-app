@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -9,6 +13,16 @@ body {
   font-family: sans-serif;
 }
 
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .nav {
   background-color: #549a71;
   color: #f7e382;
@@ -17,6 +31,8 @@ body {
   align-items: stretch;
   gap: 2rem;
   padding: 0 1rem;
+  position: fixed;
+  width: 100%;
 }
 
 .nav ul {
@@ -178,7 +194,7 @@ listContainer, cardsContainer, movieCard */
   background-size: 160vh;
   background-repeat: no-repeat;
   /* background-position: top 100% left 100%; */
-  background-position: top 110% center;
+  background-position: top 100% center;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -213,4 +229,9 @@ listContainer, cardsContainer, movieCard */
 .searchButton {
   padding-top: 1em;
   margin-left: 5em;
+}
+
+#search-function {
+  height: 95vh;
+  width: 100%;
 }

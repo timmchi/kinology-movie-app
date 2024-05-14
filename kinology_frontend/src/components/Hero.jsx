@@ -1,6 +1,8 @@
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <div className="hero">
       <div className="intro">
@@ -15,7 +17,7 @@ const Hero = () => {
         </div>
         <div className="searchButton">
           <Button className="CTA-search" variant="contained">
-            search
+            <a href="#search-function">search</a>
           </Button>
         </div>
       </div>
@@ -25,7 +27,11 @@ const Hero = () => {
           <br /> Create an account to save movies for later!
         </div>
         <div className="registerButton">
-          <Button className="CTA-register" variant="contained">
+          <Button
+            className="CTA-register"
+            variant="contained"
+            onClick={() => navigate("/signup")}
+          >
             Register
           </Button>
         </div>

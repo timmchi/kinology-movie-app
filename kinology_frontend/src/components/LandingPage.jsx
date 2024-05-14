@@ -10,13 +10,15 @@ const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
   return (
     <>
       <Hero />
-      <SearchBar setMovies={setMovies} />
-      <MovieList
-        movies={movies}
-        onButtonPress={onButtonPress}
-        onButtonUnpress={onButtonUnpress}
-        user={user}
-      />
+      <div id="search-function">
+        <SearchBar setMovies={setMovies} />
+        <MovieList
+          movies={movies}
+          onButtonPress={onButtonPress}
+          onButtonUnpress={onButtonUnpress}
+          user={user}
+        />
+      </div>
     </>
   );
 };
