@@ -244,3 +244,38 @@ a:hover {
   padding-top: 1em;
   margin-left: 5em;
 }
+
+.aboutContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.box {
+  border-bottom: solid 0.3em;
+  flex: 1;
+  transition: 1s;
+  overflow: hidden;
+  padding: 6em;
+}
+
+.box:hover {
+  flex-grow: 4;
+}
+
+.box .content {
+  display: none;
+  transition: all 1s ease;
+}
+
+.box:hover .content {
+  display: block;
+}
+
+.box:hover .content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.about {
+  justify-content: center;
+}

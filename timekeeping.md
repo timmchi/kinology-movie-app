@@ -33,7 +33,7 @@
 | 13.5 | 0.5   | Backend validation for new functionality                                 |
 | 14.5 | 1.5   | Adding functionality of uploading avatars, adding avatars to components  |
 | 14.5 | 3.5   | About section, hero section, styling                                     |
+| 14.5 | 0.5   | About section better styling                                             |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 51.5  |                                                                          |
+| tot  | 52    |                                                                          |
