@@ -1,5 +1,7 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import MovieSmallCard from "./MovieSmallCard";
+import myFavoriteMovies from "../data/myFavoriteMovies";
 
 const About = () => {
   return (
@@ -48,8 +50,15 @@ const About = () => {
           portfolio <OpenInNewIcon />
         </li>
         <li>contact me</li>
-        <li>my favorite movies</li>
       </ul>
+      <h3>my favorite movies</h3>
+      <div className="profileMovieContainer">
+        {myFavoriteMovies.map((movie) => (
+          <div key={movie.tmdbId} className="movieSmallCard">
+            <MovieSmallCard movie={movie} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

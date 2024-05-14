@@ -221,10 +221,10 @@ const User = ({ currentUser, removeUser }) => {
     }
   };
 
-  console.log("user watch list", user?.watchLaterMovies);
-  console.log("user favorite movies", user?.favoriteMovies);
-  console.log("user watched movies", user?.favoriteMovies);
-  console.log(user);
+  //   console.log("user watch list", user?.watchLaterMovies);
+  //   console.log("user favorite movies", user?.favoriteMovies);
+  //   console.log("user watched movies", user?.favoriteMovies);
+  //   console.log(user);
 
   return (
     <div className="userPage">
