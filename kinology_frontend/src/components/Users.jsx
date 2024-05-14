@@ -4,8 +4,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 
 // TODO - fix the state so that on profile update user information in user list changes
 const Users = ({ users }) => {
@@ -33,9 +31,6 @@ const Users = ({ users }) => {
               component={Link}
               to={`/users/${user.id}`}
             >
-              <ListItemAvatar>
-                <Avatar alt={user.name} src={user.avatar}></Avatar>
-              </ListItemAvatar>
               <ListItemText
                 primary={user.name}
                 secondary="Favorite movie: Godfather II"

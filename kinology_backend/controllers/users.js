@@ -86,6 +86,7 @@ usersRouter.get("/", async (request, response) => {
     .populate("authoredComments")
     .populate("profileComments")
     .populate("watchLaterMovies");
+
   response.json(users);
 });
 
@@ -114,7 +115,7 @@ usersRouter.get("/:id", async (request, response) => {
     { expiresIn: 60 * 60 }
   );
 
-  response.json({ user, avatarUrl });
+  response.json(user);
 });
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
