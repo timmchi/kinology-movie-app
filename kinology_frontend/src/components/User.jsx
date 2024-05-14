@@ -16,6 +16,7 @@ const basePosterUrl = "https://image.tmdb.org/t/p/original";
 const User = ({ currentUser, removeUser }) => {
   let { id } = useParams();
   const [user, setUser] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [comments, setComments] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [watchedMovies, setWatchedMovies] = useState([]);
@@ -27,7 +28,8 @@ const User = ({ currentUser, removeUser }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const fetchedUser = await usersService.getUser(id);
+      const { user: fetchedUser, avatarUrl } = await usersService.getUser(id);
+      setAvatar(avatarUrl);
       setUser(fetchedUser);
       setFavoriteMovies(fetchedUser.favoriteMovies);
       setWatchedMovies(fetchedUser.watchedMovies);
@@ -239,7 +241,7 @@ const User = ({ currentUser, removeUser }) => {
       <p>
         <strong>{user.name}</strong>
       </p>
-      <img src={user.avatar} alt="user avatar" />
+      <img src={avatar} alt="user avatar" />
       <div>
         <h2>About me</h2>
         <p>{user.biography}</p>

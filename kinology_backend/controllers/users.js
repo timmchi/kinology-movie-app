@@ -7,7 +7,8 @@ const UserComment = require("../models/userComment");
 const User = require("../models/user");
 const multer = require("multer");
 const sharp = require("sharp");
-const { PutObjectCommand } = require("@aws-sdk/client-s3");
+const { PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const bucketName = config.BUCKET_NAME;
 const { s3Client } = require("../utils/awsConfig");
 
@@ -103,7 +104,16 @@ usersRouter.get("/:id", async (request, response) => {
       error: "no user with such id exists",
     });
 
-  response.json(user);
+  const avatarUrl = await getSignedUrl(
+    s3Client,
+    new GetObjectCommand({
+      Bucket: bucketName,
+      Key: `${user.username}-avatar`,
+    }),
+    { expiresIn: 60 * 60 }
+  );
+
+  response.json({ user, avatarUrl });
 });
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
@@ -296,6 +306,7 @@ usersRouter.put(
 
     // console.log("request.file", request.file);
 
+    // uploading avatar to s3 bucket
     const avatarBuffer = await sharp(file.buffer).toBuffer();
 
     const avatarUploadParams = {
@@ -333,27 +344,6 @@ usersRouter.delete(
       return response.status(401).json({ error: "token invalid" });
 
     await profileOwner.deleteOne();
-
-    response.status(200).end();
-  }
-);
-
-usersRouter.post(
-  "/test",
-  upload.single("picture"),
-  async (request, response) => {
-    const file = request.file;
-
-    const fileBuffer = await sharp(file.buffer).toBuffer();
-
-    const uploadParams = {
-      Bucket: bucketName,
-      Body: fileBuffer,
-      Key: file.originalname, // "username-avatar"
-      ContentType: file.mimetype,
-    };
-
-    await s3Client.send(new PutObjectCommand(uploadParams));
 
     response.status(200).end();
   }
