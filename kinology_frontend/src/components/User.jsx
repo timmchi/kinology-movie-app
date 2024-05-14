@@ -49,7 +49,10 @@ const User = ({ currentUser, removeUser }) => {
   const updateUser = async (formData) => {
     try {
       updateFormRef.current.toggleVisibility();
-      const updatedUser = await usersService.updateUser(id, formData);
+      const { user: updatedUser, avatarUrl } = await usersService.updateUser(
+        id,
+        formData
+      );
       dispatch({
         type: "SHOW",
         payload: {
@@ -61,6 +64,7 @@ const User = ({ currentUser, removeUser }) => {
       });
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
       setUser(updatedUser);
+      setAvatar(avatarUrl);
     } catch (exception) {
       dispatch({
         type: "SHOW",

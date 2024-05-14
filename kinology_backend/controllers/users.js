@@ -329,7 +329,17 @@ usersRouter.put(
     console.log("user after updating", user);
     await user.save();
 
-    response.json(user);
+    // generating signed url so that avatar changes on update
+    const avatarUrl = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand({
+        Bucket: bucketName,
+        Key: `${user.username}-avatar`,
+      }),
+      { expiresIn: 60 * 60 }
+    );
+
+    response.json({ user, avatarUrl });
   }
 );
 
