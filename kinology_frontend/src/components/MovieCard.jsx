@@ -4,7 +4,6 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 
@@ -32,7 +31,7 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
         borderRadius: 5,
         marginBottom: 3,
         textAlign: "center",
-        backgroundColor: "#F7E382",
+        backgroundColor: "#BDAC4E",
       }}
       className="movieCard"
     >

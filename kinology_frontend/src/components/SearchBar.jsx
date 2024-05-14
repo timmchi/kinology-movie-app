@@ -20,6 +20,7 @@ import PaginationController from "./PaginationController";
 import genreOptions from "../data/genres";
 
 import SearchIcon from "@mui/icons-material/Search";
+import Button from "@mui/material/Button";
 import moviesService from "../services/movies";
 
 const components = {
@@ -141,7 +142,6 @@ const SearchBar = ({ setMovies }) => {
 
   return (
     <div>
-      <button onClick={handleNewSearch}>new search</button>
       <form
         onSubmit={handleSubmit((data) => searchForMovies(data, 1))}
         className="searchBar"
@@ -240,6 +240,18 @@ const SearchBar = ({ setMovies }) => {
         </div>
         {errors.country?.message ?? <p>{errors.country?.message}</p>}
       </form>
+      <Button
+        onClick={handleNewSearch}
+        variant="contained"
+        sx={{
+          margin: 2,
+          backgroundColor: "#F7E382",
+          color: "#00532f",
+          "&:hover": { backgroundColor: "#BDAC4E" },
+        }}
+      >
+        new search
+      </Button>
       <PaginationController
         pages={totalPages}
         page={page}

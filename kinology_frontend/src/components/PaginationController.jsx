@@ -13,7 +13,7 @@ const PaginationController = ({ pages, page, setPage, pageChange }) => {
 
   return (
     <Stack spacing={2}>
-      <Typography>Page: {page}</Typography>
+      {/* <Typography>Page: {page}</Typography> */}
       <Pagination
         count={pages > 10 ? 10 : pages}
         page={page}

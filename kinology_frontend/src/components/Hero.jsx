@@ -16,7 +16,14 @@ const Hero = () => {
           Pick actors, directors or genres <br /> then <strong>explore</strong>
         </div>
         <div className="searchButton">
-          <Button className="CTA-search" variant="contained">
+          <Button
+            className="CTA-search"
+            variant="contained"
+            sx={{
+              backgroundColor: "#C08B5C",
+              "&:hover": { backgroundColor: "#795458" },
+            }}
+          >
             <a href="#search-function">search</a>
           </Button>
         </div>
@@ -30,6 +37,10 @@ const Hero = () => {
           <Button
             className="CTA-register"
             variant="contained"
+            sx={{
+              backgroundColor: "#D9CE88",
+              "&:hover": { backgroundColor: "#8F916B" },
+            }}
             onClick={() => navigate("/signup")}
           >
             Register

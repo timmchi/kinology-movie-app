@@ -12,7 +12,7 @@ const Navigation = ({ user }) => {
     <div>
       <nav className="nav">
         <Link style={padding} to="/" className="site-title">
-          Home
+          Kinology
         </Link>
         <ul>
           <li>
