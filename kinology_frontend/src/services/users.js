@@ -48,17 +48,25 @@ const removeMovieFromProfile = async (movie, button, userId) => {
   return response.data;
 };
 
-const updateUser = async (id, updatedInformation) => {
+const updateUser = async (id, formData) => {
   const config = {
-    headers: { Authorization: token },
+    headers: { Authorization: token, "Content-Type": "multipart/form-data" },
   };
-  const response = await axios.put(
-    `${baseUrl}/${id}`,
-    updatedInformation,
-    config
-  );
+  const response = await axios.put(`${baseUrl}/${id}`, formData, config);
   return response.data;
 };
+
+// const updateUser = async (id, updatedInformation) => {
+//   const config = {
+//     headers: { Authorization: token },
+//   };
+//   const response = await axios.put(
+//     `${baseUrl}/${id}`,
+//     updatedInformation,
+//     config
+//   );
+//   return response.data;
+// };
 
 const deleteUser = async (id) => {
   const config = {

@@ -1,23 +1,32 @@
 import { useState } from "react";
 
 const UserUpdateForm = ({ updateUser }) => {
-  const [bio, setBio] = useState("");
+  const [bio, setBio] = useState();
   const [name, setName] = useState("");
 
   // TODO - learn how to process images! Add to back-end? Use AWS? Implement Drag N Drop?
-  const [avatar, setAvatar] = useState("");
+  const [avatar, setAvatar] = useState(null);
 
   const updatingUser = (event) => {
     event.preventDefault();
-    updateUser({
-      biography: bio,
-      name: name,
-      avatar: avatar,
-    });
+    console.log(avatar);
+
+    const formData = new FormData();
+    formData.append("avatar", avatar);
+    formData.append("bio", bio);
+    formData.append("name", name);
+
+    console.log(formData.get("avatar"));
+    // updateUser({
+    //   biography: bio,
+    //   name: name,
+    //   avatar: avatar,
+    // });
+    updateUser(formData);
 
     setBio("");
     setName("");
-    setAvatar("");
+    setAvatar(null);
   };
 
   return (
@@ -33,9 +42,9 @@ const UserUpdateForm = ({ updateUser }) => {
       <div>
         Avatar
         <input
-          placeholder="Link to your avatar"
-          onChange={({ target }) => setAvatar(target.value)}
-          value={avatar}
+          onChange={(e) => setAvatar(e.target.files[0])}
+          type="file"
+          accept="image/*"
         />
       </div>
       <div>

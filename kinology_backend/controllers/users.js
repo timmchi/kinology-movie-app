@@ -1,10 +1,15 @@
 const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const middleware = require("../utils/middleware");
+const config = require("../utils/config");
 const Movie = require("../models/movie");
 const UserComment = require("../models/userComment");
 const User = require("../models/user");
-const movie = require("../models/movie");
+const multer = require("multer");
+const sharp = require("sharp");
+const { PutObjectCommand } = require("@aws-sdk/client-s3");
+const bucketName = config.BUCKET_NAME;
+const { s3Client } = require("../utils/awsConfig");
 
 // TODO - maybe add validation for ids - uuid?
 const v = require("valibot");
@@ -271,10 +276,14 @@ const UserUpdateSchema = v.object({
   ]),
 });
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 usersRouter.put(
   "/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  upload.single("avatar"),
   async (request, response) => {
     const user = request.user;
     const profileOwner = await User.findById(request.params.id);
@@ -282,13 +291,27 @@ usersRouter.put(
     if (!profileOwner || user._id?.toString() !== profileOwner?._id?.toString())
       return response.status(401).json({ error: "token invalid" });
 
-    const { biography, name } = request.body;
+    const { bio, name } = request.body;
+    const file = request.file;
 
-    const parsedUserInfo = v.parse(UserUpdateSchema, { biography, name });
+    // console.log("request.file", request.file);
+
+    const avatarBuffer = await sharp(file.buffer).toBuffer();
+
+    const avatarUploadParams = {
+      Bucket: bucketName,
+      Body: avatarBuffer,
+      Key: `${user.username}-avatar`,
+      ContentType: file.mimetype,
+    };
+
+    await s3Client.send(new PutObjectCommand(avatarUploadParams));
+
+    const parsedUserInfo = v.parse(UserUpdateSchema, { biography: bio, name });
 
     console.log(parsedUserInfo);
     user.biography = parsedUserInfo.biography;
-    // user.avatar = avatar;
+    user.avatar = `${user.username}-avatar`;
     user.name = parsedUserInfo.name;
 
     console.log("user after updating", user);
@@ -310,6 +333,27 @@ usersRouter.delete(
       return response.status(401).json({ error: "token invalid" });
 
     await profileOwner.deleteOne();
+
+    response.status(200).end();
+  }
+);
+
+usersRouter.post(
+  "/test",
+  upload.single("picture"),
+  async (request, response) => {
+    const file = request.file;
+
+    const fileBuffer = await sharp(file.buffer).toBuffer();
+
+    const uploadParams = {
+      Bucket: bucketName,
+      Body: fileBuffer,
+      Key: file.originalname, // "username-avatar"
+      ContentType: file.mimetype,
+    };
+
+    await s3Client.send(new PutObjectCommand(uploadParams));
 
     response.status(200).end();
   }

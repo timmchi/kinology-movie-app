@@ -44,10 +44,10 @@ const User = ({ currentUser, removeUser }) => {
     fetchComments();
   }, [id]);
 
-  const updateUser = async (updatedInformation) => {
+  const updateUser = async (formData) => {
     try {
       updateFormRef.current.toggleVisibility();
-      const updatedUser = await usersService.updateUser(id, updatedInformation);
+      const updatedUser = await usersService.updateUser(id, formData);
       dispatch({
         type: "SHOW",
         payload: {
