@@ -82,6 +82,7 @@ a:hover {
   background: none;
   border: none;
   padding: 0.2rem 0.3rem;
+  text-align: center;
 }
 
 .bar-input:focus {
@@ -94,6 +95,8 @@ a:hover {
 
 .searchBar > div {
   position: relative;
+  text-align: center;
+  padding-left: 6em;
 }
 
 .searchBar > div::before {
@@ -105,12 +108,6 @@ a:hover {
   width: 1px;
   height: 55%;
   background: hsl(0 0% 90%);
-}
-
-#search-function {
-  height: 100vh;
-  padding-top: 4em;
-  width: 100%;
 }
 
 .country {
@@ -127,6 +124,12 @@ a:hover {
   border-width: 0;
   background: #549a71;
   color: white;
+}
+
+#search-function {
+  height: 100vh;
+  padding-top: 4em;
+  width: 100%;
 }
 
 .resetSearch {

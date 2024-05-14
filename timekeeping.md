@@ -31,9 +31,9 @@
 | 13.5 | 1.5   | Implemented unfavorite/unsee/unwatch movie functionality                 |
 | 13.5 | 2     | Fixing population on user/movie/comment models, fixing bugs              |
 | 13.5 | 0.5   | Backend validation for new functionality                                 |
+| 14.5 | 1.5   | Adding functionality of uploading avatars, adding avatars to components  |
+| 14.5 | 3.5   | About section, hero section, styling                                     |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 46.5  |                                                                          |
+| tot  | 51.5  |                                                                          |

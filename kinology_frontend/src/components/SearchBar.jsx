@@ -232,8 +232,8 @@ const SearchBar = ({ setMovies }) => {
           />
         </div>
         <div className="country">
-          <p>country</p>
-          <input {...register("country")} className="bar-input" />
+          {/* <p>country</p>
+          <input {...register("country")} className="bar-input" /> */}
           <button type="submit" disabled={isSubmitting}>
             <SearchIcon />
           </button>
