@@ -115,7 +115,29 @@ usersRouter.get("/:id", async (request, response) => {
     { expiresIn: 60 * 60 }
   );
 
-  response.json(user);
+  response.json({ user, avatarUrl });
+});
+
+usersRouter.get("/:id/avatar", async (request, response) => {
+  const { id } = request.params;
+
+  const user = await User.findById(id);
+
+  if (!user)
+    response.status(404).json({
+      error: "no user with such id exists",
+    });
+
+  const avatarUrl = await getSignedUrl(
+    s3Client,
+    new GetObjectCommand({
+      Bucket: bucketName,
+      Key: `${user.username}-avatar`,
+    }),
+    { expiresIn: 60 * 60 }
+  );
+
+  response.json(avatarUrl);
 });
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile

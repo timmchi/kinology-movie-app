@@ -1,14 +1,9 @@
-import { Link } from "react-router-dom";
 import { useRef } from "react";
 import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
+import CommentView from "./CommentView";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 
 const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
   console.log(comments);
@@ -38,48 +33,12 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
     <List sx={{ width: "100%", maxWidth: 600, bgcolor: "background.paper" }}>
       {comments?.map((comment) => (
         <div key={comment.id}>
-          <ListItem
-            alignItems="flex-start"
-            component={Link}
-            to={comment.author ? `/users/${comment.author?.id}` : "/users"}
-          >
-            <ListItemAvatar>
-              <Avatar alt={comment.author?.name} src={comment.author?.avatar} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={comment.author?.name ?? "Deleted user"}
-              secondary={comment.content}
-            />
-          </ListItem>
-          {currentUser && (
-            <>
-              {currentUser.username === comment.author?.username && (
-                <>
-                  {editForm(comment.id, comment.author?.id)}
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => onDelete(comment.id, comment.author?.id)}
-                    color="error"
-                  >
-                    Delete comment
-                  </Button>
-                </>
-              )}
-              {currentUser.username === comment.receiver?.username &&
-                currentUser.username !== comment.author?.username && (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => onDelete(comment.id, comment.author?.id)}
-                    color="error"
-                  >
-                    Delete comment
-                  </Button>
-                )}
-            </>
-          )}
-
+          <CommentView
+            comment={comment}
+            currentUser={currentUser}
+            editForm={editForm}
+            onDelete={onDelete}
+          />
           <Divider variant="inset" component="li" />
         </div>
       ))}

@@ -17,12 +17,15 @@ const getUser = async (id) => {
   return response.data;
 };
 
+const getUserAvatar = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}/avatar`);
+  return response.data;
+};
+
 const addMovieToProfile = async (movie, button, userId) => {
   const config = {
     headers: { Authorization: token },
   };
-
-  //   console.log("movie in service", movie);
 
   const response = await axios.post(
     `${baseUrl}/${userId}/movies`,
@@ -56,18 +59,6 @@ const updateUser = async (id, formData) => {
   return response.data;
 };
 
-// const updateUser = async (id, updatedInformation) => {
-//   const config = {
-//     headers: { Authorization: token },
-//   };
-//   const response = await axios.put(
-//     `${baseUrl}/${id}`,
-//     updatedInformation,
-//     config
-//   );
-//   return response.data;
-// };
-
 const deleteUser = async (id) => {
   const config = {
     headers: { Authorization: token },
@@ -86,4 +77,5 @@ export default {
   updateUser,
   deleteUser,
   removeMovieFromProfile,
+  getUserAvatar,
 };
