@@ -13,7 +13,6 @@ import NotificationAlert from "./components/Notification";
 import loginService from "./services/login";
 import userService from "./services/users";
 import { useNotificationDispatch } from "./contexts/NotificationContext";
-import TestImageForm from "./components/TestImageForm";
 
 function App() {
   //   const [username, setUsername] = useState("");
@@ -197,7 +196,6 @@ function App() {
           path="/users"
           element={<Users users={users} removeUser={removeUser} />}
         />
-        <Route path="/testimage" element={<TestImageForm />} />
       </Routes>
     </>
   );

@@ -104,6 +104,7 @@ usersRouter.get("/:id", async (request, response) => {
       error: "no user with such id exists",
     });
 
+  // generating signed url
   const avatarUrl = await getSignedUrl(
     s3Client,
     new GetObjectCommand({

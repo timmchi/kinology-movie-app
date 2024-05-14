@@ -17,11 +17,6 @@ const UserUpdateForm = ({ updateUser }) => {
     formData.append("name", name);
 
     console.log(formData.get("avatar"));
-    // updateUser({
-    //   biography: bio,
-    //   name: name,
-    //   avatar: avatar,
-    // });
     updateUser(formData);
 
     setBio("");
