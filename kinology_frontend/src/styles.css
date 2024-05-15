@@ -353,6 +353,13 @@ a:hover {
   padding-bottom: 1.2em;
 }
 
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* width: 30%; */
+}
+
 .commentButtons {
   display: flex;
   padding-left: 1em;
