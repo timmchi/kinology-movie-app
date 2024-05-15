@@ -221,81 +221,88 @@ const User = ({ currentUser, removeUser }) => {
     }
   };
 
-  //   console.log("user watch list", user?.watchLaterMovies);
-  //   console.log("user favorite movies", user?.favoriteMovies);
-  //   console.log("user watched movies", user?.favoriteMovies);
-  //   console.log(user);
-
   return (
-    <div className="userPage">
-      <div className="userProfileContainer">
-        <div className="userAvatar">
-          <img src={avatar} width="300" height="300" alt="user avatar" />
-          {currentUser && currentUser?.username === user.username && (
-            <>
-              {updateForm()}
-              <Button
-                color="error"
-                variant="contained"
-                size="small"
-                onClick={deleteUser}
-              >
-                Delete user
-              </Button>
-            </>
-          )}
-        </div>
-        <div className="userInformation">
-          <h1>
-            <strong>{user.name}</strong>
-          </h1>
-          <div>
-            <h2>About me</h2>
-            <p>{user.biography}</p>
+    <div className="outerContainer">
+      {/* <p></p> */}
+      <div className="userPage">
+        <div className="userProfileContainer">
+          <div className="userAvatar">
+            <img src={avatar} width="300" height="300" alt="user avatar" />
+            {currentUser && currentUser?.username === user.username && (
+              <>
+                {updateForm()}
+                <Button
+                  color="error"
+                  variant="contained"
+                  size="small"
+                  onClick={deleteUser}
+                >
+                  Delete user
+                </Button>
+              </>
+            )}
           </div>
-          <div className="movieList">
-            <h3>Watch List</h3>
-            <div className="profileMovieContainer">
-              {watchLaterMovies?.map((movie) => (
-                <div key={`${movie.id} later`} className="movieSmallCard">
-                  <MovieSmallCard movie={movie} />
-                </div>
-              ))}
+          <div className="userInformation">
+            <h1>
+              <strong>{user.name}</strong>
+            </h1>
+            <div>
+              <h2>About me</h2>
+              <p>{user.biography}</p>
             </div>
-          </div>
-          <div className="movieList">
-            <h3>favorite movies</h3>
-            {/* 
+            <div
+              className="movieList"
+              style={{ display: watchLaterMovies.length === 0 ? "none" : "" }}
+            >
+              <h3>Watch List</h3>
+              <div className="profileMovieContainer">
+                {watchLaterMovies?.map((movie) => (
+                  <div key={`${movie.id} later`} className="movieSmallCard">
+                    <MovieSmallCard movie={movie} />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div
+              className="movieList"
+              style={{ display: favoriteMovies.length === 0 ? "none" : "" }}
+            >
+              <h3>favorite movies</h3>
+              {/* 
         good candidate for refactoring, along with MovieList and big movie card */}
-            <div className="profileMovieContainer">
-              {favoriteMovies?.map((movie) => (
-                <div key={`${movie?.id} favorite`} className="movieSmallCard">
-                  <MovieSmallCard movie={movie} />
-                </div>
-              ))}
+              <div className="profileMovieContainer">
+                {favoriteMovies?.map((movie) => (
+                  <div key={`${movie?.id} favorite`} className="movieSmallCard">
+                    <MovieSmallCard movie={movie} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="movieList">
-            <h3>watched movies</h3>
-            <div className="profileMovieContainer">
-              {watchedMovies?.map((movie) => (
-                <div key={`${movie.id} watched`} className="movieSmallCard">
-                  <MovieSmallCard movie={movie} />
-                </div>
-              ))}
+            <div
+              className="movieList"
+              style={{ display: watchedMovies.length === 0 ? "none" : "" }}
+            >
+              <h3>watched movies</h3>
+              <div className="profileMovieContainer">
+                {watchedMovies?.map((movie) => (
+                  <div key={`${movie.id} watched`} className="movieSmallCard">
+                    <MovieSmallCard movie={movie} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="userProfileComments">
-        <h2>comments</h2>
-        {currentUser && commentCreateForm()}
-        <CommentList
-          comments={comments}
-          onDelete={deleteComment}
-          onEdit={updateComment}
-          currentUser={currentUser}
-        />
+        <div className="userProfileComments">
+          <h2>comments</h2>
+          {currentUser && commentCreateForm()}
+          <CommentList
+            comments={comments}
+            onDelete={deleteComment}
+            onEdit={updateComment}
+            currentUser={currentUser}
+          />
+        </div>
       </div>
     </div>
   );

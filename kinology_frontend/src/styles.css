@@ -293,28 +293,18 @@ a:hover {
   z-index: 2;
 }
 
-/* .singleMovieContainer {
-    display: flex;
-  }
-  
-  .singleMovieImage {
-    padding: 3em;
-  }
-  
-  .singleMovieDescription {
-    padding: 1.3em;
-  }
-  
-  .singleMovieComments {
-    padding-left: 3em;
-  }  */
+.outerContainer {
+  padding-top: 4em;
+  padding-bottom: 1em;
+}
 
 .userPage {
-  background-color: #438761;
+  background-color: #397453;
 }
 
 .userProfileContainer {
   display: flex;
+
   /* margin-top: 3em; */
   padding-top: 3em;
 }
@@ -327,4 +317,5 @@ a:hover {
 .userInformation {
   padding-left: 5em;
   padding-top: 1.3em;
+  text-shadow: 1px 1px 2px rgba(13, 4, 2, 1);
 }
