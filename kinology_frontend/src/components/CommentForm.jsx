@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { object, string, minLength } from "valibot";
 import Button from "@mui/material/Button";
+import { TextFieldElement } from "react-hook-form-mui";
 
 const CommentSchema = object({
   content: string("Comment must be a string", [
@@ -16,6 +17,7 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm({
     resolver: valibotResolver(CommentSchema),
@@ -37,11 +39,17 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
 
   return (
     <form onSubmit={handleSubmit(submitComment)}>
-      <div>
+      {/* <div>
         Your comment
         <input {...register("content")} />
         <p style={{ color: "red" }}>{errors.content?.message}</p>
-      </div>
+      </div> */}
+      <TextFieldElement
+        name={"content"}
+        label={"Your comment"}
+        size={"small"}
+        control={control}
+      />
       <Button
         disabled={isSubmitting}
         variant="contained"
