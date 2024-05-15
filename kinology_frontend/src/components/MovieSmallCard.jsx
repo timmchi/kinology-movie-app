@@ -18,11 +18,6 @@ const MovieSmallCard = ({ movie }) => {
           alt={`${movie.title} poster`}
           src={`${basePosterUrl}/${movie.poster}`}
         />
-        <CardContent sx={{ padding: 0 }}>
-          <Typography gutterBottom component="div">
-            {movie.title}
-          </Typography>
-        </CardContent>
       </CardActionArea>
     </Card>
   );
