@@ -98,36 +98,38 @@ const SignUp = ({ user, setUsers, users }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleSignUp)}>
-      <div>
-        username
-        <input {...register("username")} />
-        <p style={{ color: "red" }}>{errors.username?.message}</p>
-      </div>
-      <div>
-        email
-        <input {...register("email")} />
-        <p style={{ color: "red" }}>{errors.email?.message}</p>
-      </div>
-      <div>
-        Name
-        <input {...register("name")} />
-        <p style={{ color: "red" }}>{errors.name?.message}</p>
-      </div>
-      <div>
-        password
-        <input type="password" {...register("password")} />
-        <p style={{ color: "red" }}>{errors.password?.message}</p>
-      </div>
-      <div>
-        Confirm password
-        <input type="password" {...register("passwordConfirm")} />
-        <p style={{ color: "red" }}>{errors.passwordConfirm?.message}</p>
-      </div>
-      <button disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Signing up..." : "Sign Up"}
-      </button>
-    </form>
+    <div className="credentialsForm">
+      <form onSubmit={handleSubmit(handleSignUp)}>
+        <div>
+          username
+          <input {...register("username")} />
+          <p style={{ color: "red" }}>{errors.username?.message}</p>
+        </div>
+        <div>
+          email
+          <input {...register("email")} />
+          <p style={{ color: "red" }}>{errors.email?.message}</p>
+        </div>
+        <div>
+          Name
+          <input {...register("name")} />
+          <p style={{ color: "red" }}>{errors.name?.message}</p>
+        </div>
+        <div>
+          password
+          <input type="password" {...register("password")} />
+          <p style={{ color: "red" }}>{errors.password?.message}</p>
+        </div>
+        <div>
+          Confirm password
+          <input type="password" {...register("passwordConfirm")} />
+          <p style={{ color: "red" }}>{errors.passwordConfirm?.message}</p>
+        </div>
+        <button disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Signing up..." : "Sign Up"}
+        </button>
+      </form>
+    </div>
   );
 };
 

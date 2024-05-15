@@ -310,6 +310,17 @@ const UserUpdateSchema = v.object({
   ]),
 });
 
+const AvatarSchema = v.object({
+  fieldname: v.string("Field name is required"),
+  originalname: v.string("Original name is required"),
+  encoding: v.string("Encoding is required"),
+  mimetype: v.picklist(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
+  size: v.number([
+    v.maxValue(1024 * 1024 * 2, "The size must not exceed 2 MB"),
+  ]),
+  buffer: v.instance(Buffer),
+});
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -328,23 +339,35 @@ usersRouter.put(
     const { bio, name } = request.body;
     const file = request.file;
 
-    // console.log("request.file", request.file);
+    const parsedUserInfo = v.parse(UserUpdateSchema, {
+      biography: bio,
+      name,
+    });
+
+    const parsedAvatar = v.parse(AvatarSchema, {
+      fieldname: file.fieldname,
+      originalname: file.originalname,
+      encoding: file.encoding,
+      mimetype: file.mimetype,
+      size: file.size,
+      buffer: file.buffer,
+    });
+
+    console.log(parsedUserInfo);
+    console.log(parsedAvatar);
 
     // uploading avatar to s3 bucket
-    const avatarBuffer = await sharp(file.buffer).toBuffer();
+    const avatarBuffer = await sharp(parsedAvatar.buffer).toBuffer();
 
     const avatarUploadParams = {
       Bucket: bucketName,
       Body: avatarBuffer,
       Key: `${user.username}-avatar`,
-      ContentType: file.mimetype,
+      ContentType: parsedAvatar.mimetype,
     };
 
     await s3Client.send(new PutObjectCommand(avatarUploadParams));
 
-    const parsedUserInfo = v.parse(UserUpdateSchema, { biography: bio, name });
-
-    console.log(parsedUserInfo);
     user.biography = parsedUserInfo.biography;
     user.avatar = `${user.username}-avatar`;
     user.name = parsedUserInfo.name;

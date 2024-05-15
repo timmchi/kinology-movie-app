@@ -6,7 +6,11 @@ const NotificationAlert = () => {
   const { message, type } = useNotificationValue();
   if (!message) return null;
 
-  return <Alert severity={type}>{message}</Alert>;
+  return (
+    <div className="notification">
+      <Alert severity={type}>{message}</Alert>
+    </div>
+  );
 };
 
 export default NotificationAlert;

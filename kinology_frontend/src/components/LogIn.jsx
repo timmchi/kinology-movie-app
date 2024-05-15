@@ -31,25 +31,27 @@ const LogIn = ({ handleLogin }) => {
   }, [isSubmitSuccessful, reset]);
 
   return (
-    <form onSubmit={handleSubmit(handleLogin)}>
-      <div>
-        username
-        <input {...register("username")} />
-        {errors.username ?? (
-          <p style={{ color: "red" }}>{errors.username?.message}</p>
-        )}
-      </div>
-      <div>
-        password
-        <input type="password" {...register("password")} />
-        {errors.password ?? (
-          <p style={{ color: "red" }}>{errors.password?.message}</p>
-        )}
-      </div>
-      <button disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Logging in..." : "Log In"}
-      </button>
-    </form>
+    <div className="credentialsForm">
+      <form onSubmit={handleSubmit(handleLogin)}>
+        <div>
+          username
+          <input {...register("username")} />
+          {errors.username ?? (
+            <p style={{ color: "red" }}>{errors.username?.message}</p>
+          )}
+        </div>
+        <div>
+          password
+          <input type="password" {...register("password")} />
+          {errors.password ?? (
+            <p style={{ color: "red" }}>{errors.password?.message}</p>
+          )}
+        </div>
+        <button disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Logging in..." : "Log In"}
+        </button>
+      </form>
+    </div>
   );
 };
 

@@ -6,7 +6,6 @@ import myFavoriteMovies from "../data/myFavoriteMovies";
 const About = () => {
   return (
     <div>
-      <h1>About Kinology</h1>
       <div className="aboutContainer">
         <div className="box">
           <h2>About me</h2>
