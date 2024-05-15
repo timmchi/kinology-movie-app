@@ -292,3 +292,7 @@ a:hover {
   opacity: 85%;
   z-index: 2;
 }
+
+.formError {
+  color: red;
+}

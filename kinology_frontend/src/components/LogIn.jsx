@@ -36,14 +36,14 @@ const LogIn = ({ handleLogin }) => {
         <div>
           username
           <input {...register("username")} />
-          {errors.username ?? (
+          {errors?.username?.message ?? (
             <p style={{ color: "red" }}>{errors.username?.message}</p>
           )}
         </div>
         <div>
           password
           <input type="password" {...register("password")} />
-          {errors.password ?? (
+          {errors?.password?.message ?? (
             <p style={{ color: "red" }}>{errors.password?.message}</p>
           )}
         </div>
