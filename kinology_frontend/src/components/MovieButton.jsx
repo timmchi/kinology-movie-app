@@ -53,6 +53,14 @@ const MovieButton = ({
       variant={pressed ? "contained" : "outlined"}
       size="small"
       color={pressed ? "success" : "primary"}
+      sx={{
+        borderColor: "#BDAC4E",
+        "&:hover": { borderColor: "#BDAC4E" },
+        borderWidth: 2,
+        color: "white",
+        marginRight: 1.5,
+        boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+      }}
       onClick={!pressed ? pressButton : unpressButton}
     >
       {!pressed ? unpressedText : pressedText}

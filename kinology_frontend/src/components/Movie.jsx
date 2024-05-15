@@ -157,7 +157,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
             <p>
               <i>{movie.slogan}</i>
             </p>
-            <p>{movie.overview}</p>
+            <p style={{ maxWidth: "800px" }}>{movie.overview}</p>
             <ul>
               {movie?.genres?.map((genre) => (
                 <li key={genre.id}>{genre.name}</li>
