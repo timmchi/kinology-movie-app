@@ -46,7 +46,6 @@ const UserUpdateForm = ({ updateUser }) => {
 
   const updatingUser = (data) => {
     const parsedAvatar = parse(FileSchema, data.avatar[0]);
-    // console.log(parsedAvatar);
 
     const formData = new FormData();
     formData.append("avatar", parsedAvatar);

@@ -228,61 +228,66 @@ const User = ({ currentUser, removeUser }) => {
 
   return (
     <div className="userPage">
-      <h1>User</h1>
-      {currentUser && currentUser?.username === user.username && (
-        <>
-          {updateForm()}
-          <Button
-            color="error"
-            variant="contained"
-            size="small"
-            onClick={deleteUser}
-          >
-            Delete user
-          </Button>
-        </>
-      )}
-      <p>
-        <strong>{user.name}</strong>
-      </p>
-      <img src={avatar} width="300" height="300" alt="user avatar" />
-      <div>
-        <h2>About me</h2>
-        <p>{user.biography}</p>
-      </div>
-      <div className="movieList">
-        <h3>Watch List</h3>
-        <div className="profileMovieContainer">
-          {watchLaterMovies?.map((movie) => (
-            <div key={`${movie.id} later`} className="movieSmallCard">
-              <MovieSmallCard movie={movie} />
-            </div>
-          ))}
+      <div className="userProfileContainer">
+        <div className="userAvatar">
+          <img src={avatar} width="300" height="300" alt="user avatar" />
+          {currentUser && currentUser?.username === user.username && (
+            <>
+              {updateForm()}
+              <Button
+                color="error"
+                variant="contained"
+                size="small"
+                onClick={deleteUser}
+              >
+                Delete user
+              </Button>
+            </>
+          )}
         </div>
-      </div>
-      <div className="movieList">
-        <h3>favorite movies</h3>
-        {/* 
+        <div className="userInformation">
+          <h1>
+            <strong>{user.name}</strong>
+          </h1>
+          <div>
+            <h2>About me</h2>
+            <p>{user.biography}</p>
+          </div>
+          <div className="movieList">
+            <h3>Watch List</h3>
+            <div className="profileMovieContainer">
+              {watchLaterMovies?.map((movie) => (
+                <div key={`${movie.id} later`} className="movieSmallCard">
+                  <MovieSmallCard movie={movie} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="movieList">
+            <h3>favorite movies</h3>
+            {/* 
         good candidate for refactoring, along with MovieList and big movie card */}
-        <div className="profileMovieContainer">
-          {favoriteMovies?.map((movie) => (
-            <div key={`${movie?.id} favorite`} className="movieSmallCard">
-              <MovieSmallCard movie={movie} />
+            <div className="profileMovieContainer">
+              {favoriteMovies?.map((movie) => (
+                <div key={`${movie?.id} favorite`} className="movieSmallCard">
+                  <MovieSmallCard movie={movie} />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div className="movieList">
+            <h3>watched movies</h3>
+            <div className="profileMovieContainer">
+              {watchedMovies?.map((movie) => (
+                <div key={`${movie.id} watched`} className="movieSmallCard">
+                  <MovieSmallCard movie={movie} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="movieList">
-        <h3>watched movies</h3>
-        <div className="profileMovieContainer">
-          {watchedMovies?.map((movie) => (
-            <div key={`${movie.id} watched`} className="movieSmallCard">
-              <MovieSmallCard movie={movie} />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
+      <div className="userProfileComments">
         <h2>comments</h2>
         {currentUser && commentCreateForm()}
         <CommentList

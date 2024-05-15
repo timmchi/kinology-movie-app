@@ -293,6 +293,38 @@ a:hover {
   z-index: 2;
 }
 
-.formError {
-  color: red;
+/* .singleMovieContainer {
+    display: flex;
+  }
+  
+  .singleMovieImage {
+    padding: 3em;
+  }
+  
+  .singleMovieDescription {
+    padding: 1.3em;
+  }
+  
+  .singleMovieComments {
+    padding-left: 3em;
+  }  */
+
+.userPage {
+  background-color: #438761;
+}
+
+.userProfileContainer {
+  display: flex;
+  /* margin-top: 3em; */
+  padding-top: 3em;
+}
+
+.userAvatar {
+  padding-top: 3em;
+  padding-left: 3em;
+}
+
+.userInformation {
+  padding-left: 5em;
+  padding-top: 1.3em;
 }
