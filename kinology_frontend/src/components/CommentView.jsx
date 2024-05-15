@@ -21,6 +21,7 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
     fetchAvatar();
   }, [comment.author?.id]);
 
+  console.log(comment.author.name);
   return (
     <div>
       <ListItem
@@ -32,8 +33,9 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
           <Avatar alt={comment.author?.name} src={avatar} />
         </ListItemAvatar>
         <ListItemText
-          primary={comment.author?.name ?? "Deleted user"}
+          primary={comment.author.name ?? "Deleted user"}
           secondary={comment.content}
+          sx={{ color: "black" }}
         />
       </ListItem>
       {currentUser && (

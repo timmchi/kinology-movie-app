@@ -1,56 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
 
 const UserUpdateForm = ({ updateUser }) => {
-  const [bio, setBio] = useState();
-  const [name, setName] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+    reset,
+  } = useForm();
 
-  // TODO - learn how to process images! Add to back-end? Use AWS? Implement Drag N Drop?
-  const [avatar, setAvatar] = useState(null);
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({ bio: "", name: "", avatar: null });
+    }
+  }, [isSubmitSuccessful, reset]);
 
-  const updatingUser = (event) => {
-    event.preventDefault();
-    console.log(avatar);
-
+  const updatingUser = (data) => {
     const formData = new FormData();
-    formData.append("avatar", avatar);
-    formData.append("bio", bio);
-    formData.append("name", name);
+    formData.append("avatar", data.avatar[0]);
+    formData.append("bio", data.bio);
+    formData.append("name", data.name);
 
     console.log(formData.get("avatar"));
     updateUser(formData);
-
-    setBio("");
-    setName("");
-    setAvatar(null);
   };
 
   return (
-    <form onSubmit={updatingUser}>
+    <form onSubmit={handleSubmit(updatingUser)}>
       <div>
         About you
         <input
+          {...register("bio")}
           placeholder="Write something about yourself"
-          onChange={({ target }) => setBio(target.value)}
-          value={bio}
         />
       </div>
       <div>
         Avatar
-        <input
-          onChange={(e) => setAvatar(e.target.files[0])}
-          type="file"
-          accept="image/*"
-        />
+        <input {...register("avatar")} type="file" accept="image/*" />
       </div>
       <div>
         Name
-        <input
-          placeholder="Set your name"
-          onChange={({ target }) => setName(target.value)}
-          value={name}
-        />
+        <input {...register("name")} placeholder="Change your name" />
       </div>
-      <button type="submit">Change your profile</button>
+      <button disabled={isSubmitting} type="submit">
+        {isSubmitting ? "Updating..." : "Update your profile"}
+      </button>
     </form>
   );
 };

@@ -245,7 +245,7 @@ const User = ({ currentUser, removeUser }) => {
       <p>
         <strong>{user.name}</strong>
       </p>
-      <img src={avatar} alt="user avatar" />
+      <img src={avatar} width="300" height="300" alt="user avatar" />
       <div>
         <h2>About me</h2>
         <p>{user.biography}</p>
