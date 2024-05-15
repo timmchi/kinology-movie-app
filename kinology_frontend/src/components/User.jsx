@@ -223,11 +223,16 @@ const User = ({ currentUser, removeUser }) => {
 
   return (
     <div className="outerContainer">
-      {/* <p></p> */}
       <div className="userPage">
         <div className="userProfileContainer">
           <div className="userAvatar">
-            <img src={avatar} width="300" height="300" alt="user avatar" />
+            <img
+              src={avatar}
+              width="300"
+              height="300"
+              alt="user avatar"
+              className="avatar"
+            />
             <div className="profileButtons">
               {currentUser && currentUser?.username === user.username && (
                 <>

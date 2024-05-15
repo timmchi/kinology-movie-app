@@ -141,70 +141,73 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
   };
 
   return (
-    <div>
-      <div className="singleMovieContainer">
-        <div className="singleMovieImage">
-          <img
-            src={`${basePosterUrl}${movie?.image}`}
-            alt="movie poster"
-            width="400"
-          ></img>
+    <div className="outerMovieContainer">
+      <div className="moviePage">
+        <div className="singleMovieContainer">
+          <div className="singleMovieImage">
+            <img
+              src={`${basePosterUrl}${movie?.image}`}
+              alt="movie poster"
+              width="400"
+              className="movieImageElement"
+            ></img>
+          </div>
+          <div className="singleMovieDescription">
+            <h1>{movie.title}</h1>
+            <p>
+              <i>{movie.slogan}</i>
+            </p>
+            <p>{movie.overview}</p>
+            <ul>
+              {movie?.genres?.map((genre) => (
+                <li key={genre.id}>{genre.name}</li>
+              ))}
+            </ul>
+            <p>{movie.rating} rating</p>
+            <p> released {movie.release}</p>
+            <p>{movie.runtime} minutes</p>
+            {user ? (
+              <>
+                <MovieButton
+                  unpressedText={"Watch"}
+                  pressedText={"Unwatch"}
+                  onButtonPress={(e) => buttonPress(e, "later")}
+                  onButtonUnpress={(e) => buttonUnpress(e, "later")}
+                  movieId={id}
+                  user={user}
+                />
+                <MovieButton
+                  unpressedText={"Favorite"}
+                  pressedText={"Unfavorite"}
+                  onButtonPress={(e) => buttonPress(e, "favorite")}
+                  onButtonUnpress={(e) => buttonUnpress(e, "favorite")}
+                  movieId={id}
+                  user={user}
+                />
+                <MovieButton
+                  unpressedText={"Seen"}
+                  pressedText={"Unsee"}
+                  onButtonPress={(e) => buttonPress(e, "watched")}
+                  onButtonUnpress={(e) => buttonUnpress(e, "watched")}
+                  movieId={id}
+                  user={user}
+                />
+              </>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
-        <div className="singleMovieDescription">
-          <h1>{movie.title}</h1>
-          <p>
-            <i>{movie.slogan}</i>
-          </p>
-          <p>{movie.overview}</p>
-          <ul>
-            {movie?.genres?.map((genre) => (
-              <li key={genre.id}>{genre.name}</li>
-            ))}
-          </ul>
-          <p>{movie.rating} rating</p>
-          <p> released {movie.release}</p>
-          <p>{movie.runtime} minutes</p>
-          {user ? (
-            <>
-              <MovieButton
-                unpressedText={"Watch"}
-                pressedText={"Unwatch"}
-                onButtonPress={(e) => buttonPress(e, "later")}
-                onButtonUnpress={(e) => buttonUnpress(e, "later")}
-                movieId={id}
-                user={user}
-              />
-              <MovieButton
-                unpressedText={"Favorite"}
-                pressedText={"Unfavorite"}
-                onButtonPress={(e) => buttonPress(e, "favorite")}
-                onButtonUnpress={(e) => buttonUnpress(e, "favorite")}
-                movieId={id}
-                user={user}
-              />
-              <MovieButton
-                unpressedText={"Seen"}
-                pressedText={"Unsee"}
-                onButtonPress={(e) => buttonPress(e, "watched")}
-                onButtonUnpress={(e) => buttonUnpress(e, "watched")}
-                movieId={id}
-                user={user}
-              />
-            </>
-          ) : (
-            ""
-          )}
+        <div className="singleMovieComments">
+          <h2>Comments</h2>
+          <CommentForm commentAction={createComment} />
+          <CommentList
+            comments={comments}
+            currentUser={user}
+            onDelete={deleteComment}
+            onEdit={updateComment}
+          />
         </div>
-      </div>
-      <div className="singleMovieComments">
-        <h2>Comments</h2>
-        <CommentForm commentAction={createComment} />
-        <CommentList
-          comments={comments}
-          currentUser={user}
-          onDelete={deleteComment}
-          onEdit={updateComment}
-        />
       </div>
     </div>
   );

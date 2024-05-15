@@ -35,7 +35,8 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
         <ListItemText
           primary={comment.author.name ?? "Deleted user"}
           secondary={comment.content}
-          sx={{ color: "black", fontWeight: "bold" }}
+          sx={{ color: "#F7E382" }}
+          secondaryTypographyProps={{ color: "white" }}
         />
       </ListItem>
       <div className="commentButtons">
