@@ -320,7 +320,15 @@ a:hover {
   text-shadow: 1px 1px 2px rgba(13, 4, 2, 1);
 }
 
+.userProfileComments {
+  padding-left: 3em;
+}
+
 .profileButtons {
   display: flex;
   justify-content: space-between;
+}
+
+.profileCommentTogglable {
+  padding-bottom: 1.8em;
 }

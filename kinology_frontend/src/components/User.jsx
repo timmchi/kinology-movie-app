@@ -299,8 +299,10 @@ const User = ({ currentUser, removeUser }) => {
           </div>
         </div>
         <div className="userProfileComments">
-          <h2>comments</h2>
-          {currentUser && commentCreateForm()}
+          <h2>Comments</h2>
+          <div className="profileCommentTogglable">
+            {currentUser && commentCreateForm()}
+          </div>
           <CommentList
             comments={comments}
             onDelete={deleteComment}
