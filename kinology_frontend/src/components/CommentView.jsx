@@ -23,7 +23,7 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
 
   console.log(comment.author.name);
   return (
-    <div>
+    <div className="singleComment">
       <ListItem
         alignItems="flex-start"
         component={Link}
@@ -35,7 +35,7 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
         <ListItemText
           primary={comment.author.name ?? "Deleted user"}
           secondary={comment.content}
-          sx={{ color: "black" }}
+          sx={{ color: "black", fontWeight: "bold" }}
         />
       </ListItem>
       <div className="commentButtons">

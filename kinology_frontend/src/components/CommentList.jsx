@@ -30,7 +30,7 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
 
   if (comments.length === 0) return "no comments yet...";
   return (
-    <List sx={{ width: "100%", maxWidth: 600, bgcolor: "background.paper" }}>
+    <List sx={{ width: "100%", maxWidth: 600, backgroundColor: "#397453" }}>
       {comments?.map((comment) => (
         <div key={comment.id}>
           <CommentView
@@ -39,7 +39,6 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
             editForm={editForm}
             onDelete={onDelete}
           />
-          <Divider variant="inset" component="li" />
         </div>
       ))}
     </List>
