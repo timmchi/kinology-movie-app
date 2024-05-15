@@ -47,7 +47,10 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
                 variant="contained"
                 size="small"
                 onClick={() => onDelete(comment.id, comment.author?.id)}
-                color="error"
+                sx={{
+                  backgroundColor: "#9b000a",
+                  "&:hover": { backgroundColor: "#730000" },
+                }}
               >
                 Delete comment
               </Button>
@@ -59,7 +62,10 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
                 variant="contained"
                 size="small"
                 onClick={() => onDelete(comment.id, comment.author?.id)}
-                color="error"
+                sx={{
+                  backgroundColor: "#9b000a",
+                  "&:hover": { backgroundColor: "#730000" },
+                }}
               >
                 Delete comment
               </Button>

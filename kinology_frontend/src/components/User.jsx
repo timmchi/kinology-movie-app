@@ -228,19 +228,24 @@ const User = ({ currentUser, removeUser }) => {
         <div className="userProfileContainer">
           <div className="userAvatar">
             <img src={avatar} width="300" height="300" alt="user avatar" />
-            {currentUser && currentUser?.username === user.username && (
-              <>
-                {updateForm()}
-                <Button
-                  color="error"
-                  variant="contained"
-                  size="small"
-                  onClick={deleteUser}
-                >
-                  Delete user
-                </Button>
-              </>
-            )}
+            <div className="profileButtons">
+              {currentUser && currentUser?.username === user.username && (
+                <>
+                  {updateForm()}
+                  <Button
+                    sx={{
+                      backgroundColor: "#9b000a",
+                      "&:hover": { backgroundColor: "#730000" },
+                    }}
+                    variant="contained"
+                    size="small"
+                    onClick={deleteUser}
+                  >
+                    Delete user
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
           <div className="userInformation">
             <h1>
@@ -267,7 +272,7 @@ const User = ({ currentUser, removeUser }) => {
               className="movieList"
               style={{ display: favoriteMovies.length === 0 ? "none" : "" }}
             >
-              <h3>favorite movies</h3>
+              <h3>Favorite movies</h3>
               {/* 
         good candidate for refactoring, along with MovieList and big movie card */}
               <div className="profileMovieContainer">
@@ -282,7 +287,7 @@ const User = ({ currentUser, removeUser }) => {
               className="movieList"
               style={{ display: watchedMovies.length === 0 ? "none" : "" }}
             >
-              <h3>watched movies</h3>
+              <h3>Already seen</h3>
               <div className="profileMovieContainer">
                 {watchedMovies?.map((movie) => (
                   <div key={`${movie.id} watched`} className="movieSmallCard">
