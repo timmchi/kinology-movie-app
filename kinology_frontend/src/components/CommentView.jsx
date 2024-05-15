@@ -52,6 +52,7 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
                     backgroundColor: "#9b000a",
                     "&:hover": { backgroundColor: "#730000" },
                     marginLeft: 2,
+                    alignSelf: "start",
                   }}
                 >
                   Delete comment

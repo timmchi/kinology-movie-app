@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { object, string, minLength } from "valibot";
+import Button from "@mui/material/Button";
 
 const CommentSchema = object({
   content: string("Comment must be a string", [
@@ -41,9 +42,19 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
         <input {...register("content")} />
         <p style={{ color: "red" }}>{errors.content?.message}</p>
       </div>
-      <button disabled={isSubmitting} type="submit">
+      <Button
+        disabled={isSubmitting}
+        variant="contained"
+        size="small"
+        sx={{
+          backgroundColor: "#79C094",
+          "&:hover": { backgroundColor: "#00532f" },
+          marginBottom: 1,
+        }}
+        type="submit"
+      >
         {isSubmitting ? "Commenting..." : "Submit comment"}
-      </button>
+      </Button>
     </form>
   );
 };

@@ -236,6 +236,7 @@ const User = ({ currentUser, removeUser }) => {
                     sx={{
                       backgroundColor: "#9b000a",
                       "&:hover": { backgroundColor: "#730000" },
+                      alignSelf: "start",
                     }}
                     variant="contained"
                     size="small"
