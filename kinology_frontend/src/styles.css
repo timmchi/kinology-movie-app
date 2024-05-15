@@ -332,3 +332,9 @@ a:hover {
 .profileCommentTogglable {
   padding-bottom: 1.8em;
 }
+
+.commentButtons {
+  display: flex;
+  padding-left: 1em;
+  margin-bottom: 0.5em;
+}

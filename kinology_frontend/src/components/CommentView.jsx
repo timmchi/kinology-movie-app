@@ -38,40 +38,43 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
           sx={{ color: "black" }}
         />
       </ListItem>
-      {currentUser && (
-        <>
-          {currentUser.username === comment.author?.username && (
-            <>
-              {editForm(comment.id, comment.author?.id)}
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => onDelete(comment.id, comment.author?.id)}
-                sx={{
-                  backgroundColor: "#9b000a",
-                  "&:hover": { backgroundColor: "#730000" },
-                }}
-              >
-                Delete comment
-              </Button>
-            </>
-          )}
-          {currentUser.username === comment.receiver?.username &&
-            currentUser.username !== comment.author?.username && (
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => onDelete(comment.id, comment.author?.id)}
-                sx={{
-                  backgroundColor: "#9b000a",
-                  "&:hover": { backgroundColor: "#730000" },
-                }}
-              >
-                Delete comment
-              </Button>
+      <div className="commentButtons">
+        {currentUser && (
+          <>
+            {currentUser.username === comment.author?.username && (
+              <>
+                {editForm(comment.id, comment.author?.id)}
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => onDelete(comment.id, comment.author?.id)}
+                  sx={{
+                    backgroundColor: "#9b000a",
+                    "&:hover": { backgroundColor: "#730000" },
+                    marginLeft: 2,
+                  }}
+                >
+                  Delete comment
+                </Button>
+              </>
             )}
-        </>
-      )}
+            {currentUser.username === comment.receiver?.username &&
+              currentUser.username !== comment.author?.username && (
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => onDelete(comment.id, comment.author?.id)}
+                  sx={{
+                    backgroundColor: "#9b000a",
+                    "&:hover": { backgroundColor: "#730000" },
+                  }}
+                >
+                  Delete comment
+                </Button>
+              )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
