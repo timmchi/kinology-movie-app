@@ -96,6 +96,8 @@ commentsRouter.post(
     const user = request.user;
     const { content } = request.body;
 
+    if (!user) return response.status(401).send({ error: "not authorized" });
+
     const parsedComment = v.parse(CommentSchema, {
       content,
       author: user._id.toString(),

@@ -68,7 +68,7 @@ test("there is a comment about a great movie", async () => {
   assert(contents.includes("This is a great movie"));
 });
 
-test("a valid comment can be added to a user profile", async () => {
+test("a valid comment can be added to a user profile by a logged in user", async () => {
   const newComment = {
     content: "I am a comment created by a test user",
   };
@@ -87,6 +87,25 @@ test("a valid comment can be added to a user profile", async () => {
   assert.strictEqual(commentsAtEnd.length, helper.initialComments.length + 1);
 
   assert(contents.includes("I am a comment created by a test user"));
+});
+
+test("a comment by a not logged in user will not be added", async () => {
+  const newComment = {
+    content: "I will not be added",
+  };
+
+  await api
+    .post(`/api/comments/profile/${receiverId}`)
+    .send(newComment)
+    .expect(401);
+
+  const commentsAtEnd = await helper.commentsInDb();
+
+  const contents = commentsAtEnd.map((c) => c.content);
+
+  assert.strictEqual(commentsAtEnd.length, helper.initialComments.length);
+
+  assert(!contents.includes(newComment.content));
 });
 
 test("empty comment is not added to a user profile", async () => {
