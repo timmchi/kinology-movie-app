@@ -143,7 +143,28 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, 0);
     });
 
-    test("a valid comment can be added to a movie by a logged in user", async () => {});
+    test("a valid comment can be added to a movie by a logged in user", async () => {
+      const newComment = {
+        content: "I love Scarface",
+      };
+
+      const commentReceivingMovieId = helper.initialMovie.tmdbId;
+
+      await api
+        .post(`/api/comments/movie/${commentReceivingMovieId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(newComment)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const commentsAtEnd = await helper.commentsInDb();
+
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert.strictEqual(commentsAtEnd.length, 1);
+
+      assert(contents.includes("I love Scarface"));
+    });
   });
 
   describe("comment deletion", async () => {

@@ -254,7 +254,7 @@ commentsRouter.post(
 
     let movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
 
-    console.log("searching if a movie exists", movie);
+    // console.log("searching if a movie exists", movie);
 
     if (!movie) {
       movie = new Movie({

@@ -1,4 +1,5 @@
 const UserComment = require("../models/userComment");
+const Movie = require("../models/movie");
 
 const initialComments = [
   { content: "This is a great movie" },
@@ -28,10 +29,16 @@ const commentsInDb = async () => {
   return comments.map((comment) => comment.toJSON());
 };
 
+const moviesInDb = async () => {
+  const movies = await Movie.find({});
+  return movies.map((movie) => movie.toJSON());
+};
+
 module.exports = {
   initialComments,
   initialUser,
   commentsInDb,
+  moviesInDb,
   secondUser,
   initialMovie,
 };
