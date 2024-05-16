@@ -306,9 +306,70 @@ describe("a user already exists and no comments in db", async () => {
   });
 
   describe("editing a comment", async () => {
-    test("a profile comment can be edited by its author", async () => {});
+    test("a profile comment can be edited by its author", async () => {
+      const newComment = {
+        content: "I will be edited by my author",
+      };
 
-    test("a profile comment can not be edited by someone other than its author", async () => {});
+      await api
+        .post(`/api/comments/profile/${receiverId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(newComment)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const commentsAtStart = await helper.commentsInDb();
+
+      const commentToEdit = commentsAtStart[0];
+
+      await api
+        .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          content: "I have been edited",
+          authorId: commentToEdit.author.toString(),
+        })
+        .expect(200)
+        .expect("Content-Type", /application\/json/);
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(!contents.includes(commentToEdit.content));
+      assert(contents.includes("I have been edited"));
+    });
+
+    test("a profile comment can not be edited by someone other than its author", async () => {
+      const newComment = {
+        content: "Users other than my author can not edit me",
+      };
+
+      await api
+        .post(`/api/comments/profile/${receiverId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(newComment)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const commentsAtStart = await helper.commentsInDb();
+
+      const commentToEdit = commentsAtStart[0];
+
+      await api
+        .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
+        .set("Authorization", `Bearer ${secondUserToken}`)
+        .send({
+          content: "These efforts are futile",
+          authorId: commentToEdit.author.toString(),
+        })
+        .expect(401);
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(contents.includes(commentToEdit.content));
+      assert(!contents.includes("These efforts are futile"));
+    });
   });
 });
 
