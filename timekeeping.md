@@ -36,8 +36,8 @@
 | 14.5 | 0.5   | About section better styling                                             |
 | 15.5 | 1.5   | File validation added to backend and frontend                            |
 | 15.5 | 3     | Styling pages                                                            |
-|      |       |                                                                          |
-|      |       |                                                                          |
+| 16.5 | 1     | Setting up tests                                                         |
+| 16.5 | 4     | Tests for comment router, fixing bugs, refactoring                       |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
