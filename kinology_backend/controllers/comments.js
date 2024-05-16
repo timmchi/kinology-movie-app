@@ -26,8 +26,10 @@ const paramsIdSchema = v.object({
   movieId: v.optional(v.string(v.minValue("2"))),
 });
 
-// TODO - movies and users are currently not get populated with comments
-// TODO movie and user population needs to be added, currently movies' comments fields are empty same with users
+commentsRouter.get("/", async (request, response) => {
+  const comments = await UserComment.find({});
+  response.status(200).send(comments);
+});
 
 commentsRouter.get("/profile/:id", async (request, response) => {
   const { id } = request.params;

@@ -3,6 +3,7 @@ const moviesRouter = require("express").Router();
 const config = require("../utils/config");
 const movieUtils = require("../utils/movieUtils");
 const v = require("valibot");
+const Movie = require("../models/movie");
 
 const baseMovieUrl = config.BASE_MOVIES_URL;
 const baseSingleMovieUrl = config.BASE_SINGLE_MOVIE_URL;
@@ -46,6 +47,10 @@ const searchQuerySchema = v.object({
   actors: v.array(v.string("Actor should be a string")),
 });
 
+moviesRouter.get("/", async (request, response) => {
+  const movies = await Movie.find({});
+  response.status(200).send(movies);
+});
 // for some reason searching for Coppola didnt work?
 // TODO could refactor this into 2 functions - one for parsing and one for making the api request
 moviesRouter.post("/", async (request, response) => {
