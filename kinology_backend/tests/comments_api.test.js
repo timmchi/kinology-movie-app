@@ -16,11 +16,14 @@ const getHash = async (pw) => {
   return testPasswordHash;
 };
 
+// TODO FOR TMRW - test for when there is already a movie in db, also test for when commenting creates a movie in db. Different describes
+
 // tokens are used for authentication
 let token;
 let secondUserToken;
 // receiverId is the profile to which the comments will be sent
 let receiverId;
+const commentReceivingMovieId = helper.initialMovie.tmdbId;
 
 describe("when there are comments in the db", () => {
   beforeEach(async () => {
@@ -148,8 +151,6 @@ describe("a user already exists and no comments in db", async () => {
         content: "I love Scarface",
       };
 
-      const commentReceivingMovieId = helper.initialMovie.tmdbId;
-
       await api
         .post(`/api/comments/movie/${commentReceivingMovieId}`)
         .set("Authorization", `Bearer ${token}`)
@@ -165,10 +166,43 @@ describe("a user already exists and no comments in db", async () => {
 
       assert(contents.includes("I love Scarface"));
     });
+
+    test("a comment will not be added to a movie if the user is not logged in", async () => {
+      const newComment = {
+        content: "I am not logged in but I love this movie",
+      };
+
+      await api
+        .post(`/api/comments/movie/${commentReceivingMovieId}`)
+        .send(newComment)
+        .expect(401);
+
+      const commentsAtEnd = await helper.commentsInDb();
+
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert.strictEqual(commentsAtEnd.length, 0);
+
+      assert(!contents.includes("I am not logged in but I love this movie"));
+    });
+
+    test("empty comment is not added to a movie", async () => {
+      const newComment = {};
+
+      await api
+        .post(`/api/comments/movie/${commentReceivingMovieId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(newComment)
+        .expect(400);
+
+      const commentsAtEnd = await helper.commentsInDb();
+
+      assert.strictEqual(commentsAtEnd.length, 0);
+    });
   });
 
   describe("comment deletion", async () => {
-    test("a comment can be deleted by its author", async () => {
+    test("a profile comment can be deleted by its author", async () => {
       const newComment = {
         content: "I am not long for this world",
       };
@@ -200,7 +234,7 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
     });
 
-    test("a comment can not be deleted when not logged in", async () => {
+    test("a profile comment can not be deleted when not logged in", async () => {
       const newComment = {
         content: "I will not be deleted",
       };
@@ -218,6 +252,70 @@ describe("a user already exists and no comments in db", async () => {
 
       await api
         .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+        .send({ authorId: commentToDelete.author.toString() })
+        .expect(401);
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(contents.includes(commentToDelete.content));
+
+      assert.strictEqual(commentsAtEnd.length, 1);
+    });
+
+    test("a movie comment can be deleted by its author", async () => {
+      const newComment = {
+        content: "I am the author and I will delete this comment",
+      };
+
+      await api
+        .post(`/api/comments/movie/${commentReceivingMovieId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(newComment)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const commentsAtStart = await helper.commentsInDb();
+
+      const commentToDelete = commentsAtStart.find(
+        (comment) =>
+          comment.content === "I am the author and I will delete this comment"
+      );
+
+      await api
+        .delete(
+          `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
+        )
+        .set("Authorization", `Bearer ${token}`)
+        .send({ authorId: commentToDelete.author.toString() })
+        .expect(204);
+
+      const commentsAtEnd = await helper.commentsInDb();
+
+      const contents = commentsAtEnd.map((c) => c.content);
+      assert(!contents.includes(commentToDelete.content));
+
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+    });
+
+    test("a movie comment can not be deleted when not logged in", async () => {
+      const newComment = {
+        content: "I am a movie comment and I will not be deleted",
+      };
+
+      await api
+        .post(`/api/comments/movie/${commentReceivingMovieId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(newComment)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const commentsAtStart = await helper.commentsInDb();
+
+      const commentToDelete = commentsAtStart[0];
+
+      await api
+        .post(`/api/comments/movie/${commentReceivingMovieId}`)
         .send({ authorId: commentToDelete.author.toString() })
         .expect(401);
 
