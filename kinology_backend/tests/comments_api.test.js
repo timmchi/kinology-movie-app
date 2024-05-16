@@ -224,7 +224,7 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, 1);
     });
 
-    describe("there is another user in db", async () => {
+    describe("there is another user in db when deleting", async () => {
       beforeEach(async () => {
         // creation of a second user
         const passwordHash = await getHash("654321");
@@ -339,7 +339,7 @@ describe("a user already exists and no comments in db", async () => {
       assert(contents.includes("I have been edited"));
     });
 
-    test("a profile comment can not be edited by someone other than its author", async () => {
+    test("a profile comment can not be edited without logging in", async () => {
       const newComment = {
         content: "Users other than my author can not edit me",
       };
@@ -357,7 +357,6 @@ describe("a user already exists and no comments in db", async () => {
 
       await api
         .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
-        .set("Authorization", `Bearer ${secondUserToken}`)
         .send({
           content: "These efforts are futile",
           authorId: commentToEdit.author.toString(),
@@ -369,6 +368,92 @@ describe("a user already exists and no comments in db", async () => {
 
       assert(contents.includes(commentToEdit.content));
       assert(!contents.includes("These efforts are futile"));
+    });
+
+    describe("there is another user in db when editing", async () => {
+      beforeEach(async () => {
+        // creation of a second user
+        const passwordHash = await getHash("654321");
+        const user = new User({
+          username: helper.secondUser.username,
+          email: helper.secondUser.email,
+          passwordHash,
+        });
+        await user.save();
+
+        // logging in with second user's credentials
+        const result = await api
+          .post("/api/login")
+          .send({ username: helper.secondUser.username, password: "654321" });
+
+        secondUserToken = result.body.token;
+      });
+
+      test("only the comment author can edit the comment, author = receiver", async () => {
+        const newComment = {
+          content:
+            "In this case author of the comment and the receiver of the comment are the same",
+        };
+
+        await api
+          .post(`/api/comments/profile/${receiverId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
+
+        const commentsAtStart = await helper.commentsInDb();
+
+        const commentToEdit = commentsAtStart[0];
+
+        await api
+          .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
+          .set("Authorization", `Bearer ${secondUserToken}`)
+          .send({
+            content: "These efforts are futile",
+            authorId: commentToEdit.author.toString(),
+          })
+          .expect(401);
+
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(contents.includes(commentToEdit.content));
+        assert(!contents.includes("These efforts are futile"));
+      });
+
+      test("only the comment author can edit the comment, author != receiver", async () => {
+        const newComment = {
+          content:
+            "In this case author of the comment and the receiver of the comment are different",
+        };
+
+        await api
+          .post(`/api/comments/profile/${receiverId}`)
+          .set("Authorization", `Bearer ${secondUserToken}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
+
+        const commentsAtStart = await helper.commentsInDb();
+
+        const commentToEdit = commentsAtStart[0];
+
+        await api
+          .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            content: "These efforts are futile",
+            authorId: commentToEdit.author.toString(),
+          })
+          .expect(401);
+
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(contents.includes(commentToEdit.content));
+        assert(!contents.includes("These efforts are futile"));
+      });
     });
   });
 });
