@@ -163,6 +163,7 @@ commentsRouter.put(
   }
 );
 
+// TODO parse the profile id here
 commentsRouter.delete(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
@@ -177,7 +178,11 @@ commentsRouter.delete(
 
     console.log(parsedComment, parsedParams);
 
-    if (!user || user._id.toString() !== parsedComment.author)
+    if (
+      !user ||
+      (user._id.toString() !== parsedComment.author.toString() &&
+        user._id.toString() !== id.toString())
+    )
       return response.status(401).json({ error: "not authorized" });
 
     const commentToDelete = await UserComment.findByIdAndDelete(

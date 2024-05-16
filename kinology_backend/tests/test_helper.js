@@ -12,6 +12,11 @@ const initialUser = {
   email: "commentstester@example.com",
 };
 
+const secondUser = {
+  username: "seconduser",
+  email: "seconduser@example.com",
+};
+
 const commentsInDb = async () => {
   const comments = await UserComment.find({});
   return comments.map((comment) => comment.toJSON());
@@ -21,4 +26,5 @@ module.exports = {
   initialComments,
   initialUser,
   commentsInDb,
+  secondUser,
 };

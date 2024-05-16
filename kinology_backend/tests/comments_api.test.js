@@ -15,7 +15,9 @@ const getHash = async (pw) => {
   return testPasswordHash;
 };
 
+// tokens are used for authentication
 let token;
+let secondUserToken;
 let receiverId;
 beforeEach(async () => {
   await UserComment.deleteMany({});
@@ -193,9 +195,114 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
     });
 
-    test("a comment can not be deleted by another user it this user is not the profile owner", async () => {});
+    test("a comment can not be deleted when not logged in", async () => {
+      const newComment = {
+        content: "I will not be deleted",
+      };
 
-    test("a user can delete a comment on his profile even if he is not the author", async () => {});
+      await api
+        .post(`/api/comments/profile/${receiverId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(newComment)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const commentsAtStart = await helper.commentsInDb();
+
+      const commentToDelete = commentsAtStart[0];
+
+      await api
+        .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+        .send({ authorId: commentToDelete.author.toString() })
+        .expect(401);
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(contents.includes(commentToDelete.content));
+
+      assert.strictEqual(commentsAtEnd.length, 1);
+    });
+
+    describe("there is another user in db", async () => {
+      beforeEach(async () => {
+        // creation of a second user
+        const passwordHash = await getHash("654321");
+        const user = new User({
+          username: helper.secondUser.username,
+          email: helper.secondUser.email,
+          passwordHash,
+        });
+        await user.save();
+
+        // logging in with second user's credentials
+        const result = await api
+          .post("/api/login")
+          .send({ username: helper.secondUser.username, password: "654321" });
+
+        secondUserToken = result.body.token;
+      });
+
+      test("a comment can not be deleted by another user if this user is not the profile owner", async () => {
+        const newComment = {
+          content: "I can only be deleted by my author",
+        };
+
+        await api
+          .post(`/api/comments/profile/${receiverId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
+
+        const commentsAtStart = await helper.commentsInDb();
+
+        const commentToDelete = commentsAtStart[0];
+
+        await api
+          .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+          .set("Authorization", `Bearer ${secondUserToken}`)
+          .send({ authorId: commentToDelete.author.toString() })
+          .expect(401);
+
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(contents.includes(commentToDelete.content));
+
+        assert.strictEqual(commentsAtEnd.length, 1);
+      });
+
+      test("a user can delete a comment on his profile even if he is not the author", async () => {
+        const newComment = {
+          content: "I can be deleted by my author or the profile owner",
+        };
+
+        await api
+          .post(`/api/comments/profile/${receiverId}`)
+          .set("Authorization", `Bearer ${secondUserToken}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
+
+        const commentsAtStart = await helper.commentsInDb();
+
+        const commentToDelete = commentsAtStart[0];
+
+        await api
+          .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ authorId: commentToDelete.author.toString() })
+          .expect(204);
+
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(!contents.includes(commentToDelete.content));
+
+        assert.strictEqual(commentsAtEnd.length, 0);
+      });
+    });
   });
 
   describe("editing a comment", async () => {
