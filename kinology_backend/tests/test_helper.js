@@ -17,6 +17,12 @@ const secondUser = {
   email: "seconduser@example.com",
 };
 
+const initialMovie = {
+  title: "Scarface",
+  poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
+  tmdbId: "111",
+};
+
 const commentsInDb = async () => {
   const comments = await UserComment.find({});
   return comments.map((comment) => comment.toJSON());
@@ -27,4 +33,5 @@ module.exports = {
   initialUser,
   commentsInDb,
   secondUser,
+  initialMovie,
 };

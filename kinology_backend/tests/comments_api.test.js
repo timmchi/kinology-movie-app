@@ -2,6 +2,7 @@ const { test, after, beforeEach, describe } = require("node:test");
 const assert = require("node:assert/strict");
 const UserComment = require("../models/userComment");
 const User = require("../models/user");
+const Movie = require("../models/movie");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const bcrypt = require("bcrypt");
@@ -18,38 +19,8 @@ const getHash = async (pw) => {
 // tokens are used for authentication
 let token;
 let secondUserToken;
+// receiverId is the profile to which the comments will be sent
 let receiverId;
-beforeEach(async () => {
-  await UserComment.deleteMany({});
-
-  const commentObjects = helper.initialComments.map(
-    (comment) => new UserComment(comment)
-  );
-  const promiseArray = commentObjects.map((comment) => comment.save());
-  await Promise.all(promiseArray);
-
-  // creating a user
-  await User.deleteMany({});
-  const passwordHash = await getHash("123456");
-  const user = new User({
-    username: helper.initialUser.username,
-    email: helper.initialUser.email,
-    passwordHash,
-  });
-  await user.save();
-  receiverId = user._id.toString();
-
-  // logging in and getting a token
-  const result = await api
-    .post("/api/login")
-    .send({ username: "commentstester", password: "123456" });
-
-  token = result.body.token;
-});
-
-// npm test -- tests/note_api.test.js
-// npm test -- --test-name-pattern="the first note is about HTTP methods"
-// npm run test -- --test-name-pattern="notes"
 
 describe("when there are comments in the db", () => {
   beforeEach(async () => {
@@ -104,6 +75,17 @@ describe("a user already exists and no comments in db", async () => {
       .send({ username: "commentstester", password: "123456" });
 
     token = result.body.token;
+
+    // creating a movie
+    await Movie.deleteMany({});
+
+    const movie = new Movie({
+      tmdbId: helper.initialMovie.tmdbId,
+      title: helper.initialMovie.title,
+      poster: helper.initialMovie.poster,
+    });
+
+    await movie.save();
   });
 
   describe("comment creation", async () => {
@@ -128,7 +110,7 @@ describe("a user already exists and no comments in db", async () => {
       assert(contents.includes("I am a comment created by a test user"));
     });
 
-    test("a comment by a not logged in user will not be added", async () => {
+    test("a profile comment by a not logged in user will not be added", async () => {
       const newComment = {
         content: "I will not be added",
       };
@@ -160,6 +142,8 @@ describe("a user already exists and no comments in db", async () => {
 
       assert.strictEqual(commentsAtEnd.length, 0);
     });
+
+    test("a valid comment can be added to a movie by a logged in user", async () => {});
   });
 
   describe("comment deletion", async () => {
