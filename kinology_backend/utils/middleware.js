@@ -39,7 +39,9 @@ const errorHandler = (error, request, response, next) => {
 
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get("authorization");
+
   if (!authorization) return res.status(401).json({ error: "token required" });
+
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     try {
       req.decodedToken = jwt.verify(authorization.substring(7), config.SECRET);

@@ -203,7 +203,7 @@ commentsRouter.delete(
       await Promise.all([author.save(), receiver.save()]);
     }
 
-    response.status(200).end();
+    response.status(204).end();
   }
 );
 
@@ -352,7 +352,7 @@ commentsRouter.delete(
 
     await Promise.all([author.save(), movie.save()]);
 
-    response.status(200).end();
+    response.status(204).end();
   }
 );
 

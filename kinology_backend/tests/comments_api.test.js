@@ -122,6 +122,38 @@ test("empty comment is not added to a user profile", async () => {
   assert.strictEqual(commentsAtEnd.length, helper.initialComments.length);
 });
 
+test("a comment can be deleted by its author", async () => {
+  const newComment = {
+    content: "I am not long for this world",
+  };
+
+  await api
+    .post(`/api/comments/profile/${receiverId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send(newComment)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const commentsAtStart = await helper.commentsInDb();
+
+  const commentToDelete = commentsAtStart.find(
+    (comment) => comment.content === "I am not long for this world"
+  );
+
+  await api
+    .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ authorId: commentToDelete.author.toString() })
+    .expect(204);
+
+  const commentsAtEnd = await helper.commentsInDb();
+
+  const contents = commentsAtEnd.map((c) => c.content);
+  assert(!contents.includes(commentToDelete.content));
+
+  assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
