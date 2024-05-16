@@ -6,24 +6,13 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const bcrypt = require("bcrypt");
 const app = require("../app");
+const helper = require("./test_helper");
 
 const api = supertest(app);
-
-const initialComments = [
-  { content: "This is a great movie" },
-  { content: "This is a bad movie" },
-  { content: "This user is my friend" },
-  { content: "This user is my enemy" },
-];
 
 const getHash = async () => {
   const testPasswordHash = await bcrypt.hash("123456", 10);
   return testPasswordHash;
-};
-
-const initialUser = {
-  username: "commentstester",
-  email: "commentstester@example.com",
 };
 
 let token;
@@ -31,7 +20,7 @@ let receiverId;
 beforeEach(async () => {
   await UserComment.deleteMany({});
   let commentObject;
-  initialComments.forEach(async (comment) => {
+  helper.initialComments.forEach(async (comment) => {
     commentObject = new UserComment(comment);
     await commentObject.save();
   });
@@ -40,8 +29,8 @@ beforeEach(async () => {
   await User.deleteMany({});
   const passwordHash = await getHash();
   const user = new User({
-    username: initialUser.username,
-    email: initialUser.email,
+    username: helper.initialUser.username,
+    email: helper.initialUser.email,
     passwordHash,
   });
   await user.save();
@@ -67,15 +56,15 @@ test("comments are returned as json", async () => {
 });
 
 test("there is a correct amount of comments", async () => {
-  const response = await api.get("/api/comments");
+  const commentsAtEnd = await helper.commentsInDb();
 
-  assert.strictEqual(response.body.length, initialComments.length);
+  assert.strictEqual(commentsAtEnd.length, helper.initialComments.length);
 });
 
 test("there is a comment about a great movie", async () => {
-  const response = await api.get("/api/comments");
+  const commentsAtEnd = await helper.commentsInDb();
 
-  const contents = response.body.map((c) => c.content);
+  const contents = commentsAtEnd.map((c) => c.content);
   assert(contents.includes("This is a great movie"));
 });
 
@@ -91,13 +80,27 @@ test("a valid comment can be added to a user profile", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/comments");
+  const commentsAtEnd = await helper.commentsInDb();
 
-  const contents = response.body.map((c) => c.content);
+  const contents = commentsAtEnd.map((c) => c.content);
 
-  assert.strictEqual(response.body.length, initialComments.length + 1);
+  assert.strictEqual(commentsAtEnd.length, helper.initialComments.length + 1);
 
   assert(contents.includes("I am a comment created by a test user"));
+});
+
+test("empty comment is not added to a user profile", async () => {
+  const newComment = {};
+
+  await api
+    .post(`/api/comments/profile/${receiverId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send(newComment)
+    .expect(400);
+
+  const commentsAtEnd = await helper.commentsInDb();
+
+  assert.strictEqual(commentsAtEnd.length, helper.initialComments.length);
 });
 
 after(async () => {
