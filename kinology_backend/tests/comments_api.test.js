@@ -81,6 +81,7 @@ describe("a user already exists and no comments in db", async () => {
     token = result.body.token;
   });
 
+  // CREATION TESTS
   describe("comment creation", async () => {
     test("a valid comment can be added to a user profile by a logged in user", async () => {
       const newComment = { content: "I am a comment created by a test user" };
@@ -280,6 +281,7 @@ describe("a user already exists and no comments in db", async () => {
     });
   });
 
+  // DELETION TESTS
   describe("comment deletion", async () => {
     test("a profile comment can be deleted by its author", async () => {
       const newComment = { content: "I am not long for this world" };
@@ -305,6 +307,40 @@ describe("a user already exists and no comments in db", async () => {
 
       assert(!contents.includes(commentToDelete.content));
       assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+    });
+
+    test("deleting a non existing profile comment fails with 404", async () => {
+      // create a valid comment
+      const newComment = { content: "I will not exist soon" };
+
+      await helper.postComment(api, token, "profile", receiverId, newComment);
+
+      // delete a valid comment
+      const commentsAtStart = await helper.commentsInDb();
+      const commentToDelete = commentsAtStart[0];
+
+      await helper.deleteComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        commentToDelete.id,
+        commentToDelete.author.toString()
+      );
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(!contents.includes(commentToDelete.content));
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+
+      // attempt to delete it again
+
+      await api
+        .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ authorId: commentToDelete.author.toString() })
+        .expect(404);
     });
 
     test("a profile comment cannot be deleted when not logged in", async () => {
@@ -458,6 +494,48 @@ describe("a user already exists and no comments in db", async () => {
         assert(!contents.includes(commentToDelete.content));
 
         assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+      });
+
+      test("deleting a non existing movie comment fails with 404", async () => {
+        // create a valid comment
+        const newComment = { content: "I will not exist soon" };
+
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
+
+        // delete a valid comment
+        const commentsAtStart = await helper.commentsInDb();
+        const commentToDelete = commentsAtStart[0];
+
+        await helper.deleteComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          commentToDelete.id,
+          commentToDelete.author.toString()
+        );
+
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(!contents.includes(commentToDelete.content));
+        assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+
+        // attempt to delete it again
+
+        await api
+          .delete(
+            `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
+          )
+          .set("Authorization", `Bearer ${token}`)
+          .send({ authorId: commentToDelete.author.toString() })
+          .expect(404);
       });
 
       test("a movie comment can not be deleted when not logged in", async () => {

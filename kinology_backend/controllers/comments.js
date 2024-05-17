@@ -157,7 +157,7 @@ commentsRouter.put(
       .populate("receiver");
 
     if (!updatedComment)
-      return response.status(404).json({ error: "no note found" });
+      return response.status(404).json({ error: "no comment found" });
 
     response.status(200).send(updatedComment);
   }
@@ -188,6 +188,9 @@ commentsRouter.delete(
     const commentToDelete = await UserComment.findByIdAndDelete(
       parsedParams.commentId
     );
+
+    if (!commentToDelete)
+      return response.status(404).json({ error: "no comment found" });
 
     const author = await User.findById(user._id);
     const receiver = await User.findById(id);
@@ -320,7 +323,7 @@ commentsRouter.put(
       .populate("movieReceiver");
 
     if (!updatedComment)
-      return response.status(404).json({ error: "no note found" });
+      return response.status(404).json({ error: "no comment found" });
 
     response.status(200).send(updatedComment);
   }
@@ -344,6 +347,9 @@ commentsRouter.delete(
     const commentToDelete = await UserComment.findByIdAndDelete(
       parsedParams.commentId
     );
+
+    if (!commentToDelete)
+      return response.status(404).json({ error: "no comment found" });
 
     const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
     console.log(movie);
