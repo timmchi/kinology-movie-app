@@ -489,22 +489,20 @@ describe("a user already exists and no comments in db", async () => {
           content: "I can only be deleted by my author",
         };
 
-        await api
-          .post(`/api/comments/profile/${receiverId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(api, token, "profile", receiverId, newComment);
 
         const commentsAtStart = await helper.commentsInDb();
 
         const commentToDelete = commentsAtStart[0];
 
-        await api
-          .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
-          .set("Authorization", `Bearer ${secondUserToken}`)
-          .send({ authorId: commentToDelete.author.toString() })
-          .expect(401);
+        await helper.failedDeleteComment(
+          api,
+          secondUserToken,
+          "profile",
+          receiverId,
+          commentToDelete.id,
+          commentToDelete.author.toString()
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -519,22 +517,26 @@ describe("a user already exists and no comments in db", async () => {
           content: "I can be deleted by my author or the profile owner",
         };
 
-        await api
-          .post(`/api/comments/profile/${receiverId}`)
-          .set("Authorization", `Bearer ${secondUserToken}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          secondUserToken,
+          "profile",
+          receiverId,
+          newComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
         const commentToDelete = commentsAtStart[0];
 
-        await api
-          .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send({ authorId: commentToDelete.author.toString() })
-          .expect(204);
+        await helper.deleteComment(
+          api,
+          token,
+          "profile",
+          receiverId,
+          commentToDelete.id,
+          commentToDelete.author.toString()
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -640,12 +642,7 @@ describe("a user already exists and no comments in db", async () => {
         content: "I will be edited by my author",
       };
 
-      await api
-        .post(`/api/comments/profile/${receiverId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+      await helper.postComment(api, token, "profile", receiverId, newComment);
 
       const commentsAtStart = await helper.commentsInDb();
 
@@ -673,12 +670,7 @@ describe("a user already exists and no comments in db", async () => {
         content: "Users other than my author can not edit me",
       };
 
-      await api
-        .post(`/api/comments/profile/${receiverId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+      await helper.postComment(api, token, "profile", receiverId, newComment);
 
       const commentsAtStart = await helper.commentsInDb();
 
@@ -885,12 +877,7 @@ describe("a user already exists and no comments in db", async () => {
             "In this case author of the comment and the receiver of the comment are the same",
         };
 
-        await api
-          .post(`/api/comments/profile/${receiverId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(api, token, "profile", receiverId, newComment);
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -918,12 +905,13 @@ describe("a user already exists and no comments in db", async () => {
             "In this case author of the comment and the receiver of the comment are different",
         };
 
-        await api
-          .post(`/api/comments/profile/${receiverId}`)
-          .set("Authorization", `Bearer ${secondUserToken}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          secondUserToken,
+          "profile",
+          receiverId,
+          newComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 

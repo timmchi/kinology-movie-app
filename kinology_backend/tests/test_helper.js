@@ -52,6 +52,21 @@ const deleteComment = async (api, token, type, id, commentId, authorId) => {
     .expect(204);
 };
 
+const failedDeleteComment = async (
+  api,
+  token,
+  type,
+  id,
+  commentId,
+  authorId
+) => {
+  await api
+    .delete(`/api/comments/${type}/${id}/${commentId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ authorId })
+    .expect(401);
+};
+
 module.exports = {
   initialComments,
   initialUser,
@@ -59,6 +74,7 @@ module.exports = {
   moviesInDb,
   postComment,
   deleteComment,
+  failedDeleteComment,
   secondUser,
   initialMovie,
 };
