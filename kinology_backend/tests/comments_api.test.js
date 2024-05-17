@@ -274,52 +274,50 @@ describe("a user already exists and no comments in db", async () => {
   });
 
   describe("comment deletion", async () => {
-    test("a profile comment can be deleted by its author", async () => {
-      const newComment = {
-        content: "I am not long for this world",
-      };
+    test("a profile comment can be deleted by its author helper", async () => {
+      const newCommentContent = "I am not long for this world";
 
-      await api
-        .post(`/api/comments/profile/${receiverId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
-
-      const commentsAtStart = await helper.commentsInDb();
-
-      const commentToDelete = commentsAtStart.find(
-        (comment) => comment.content === "I am not long for this world"
+      const newComment = await helper.postComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        newCommentContent
       );
 
-      await api
-        .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({ authorId: commentToDelete.author.toString() })
-        .expect(204);
+      const commentsAtStart = await helper.commentsInDb();
+      const commentToDelete = commentsAtStart.find(
+        (comment) => comment.content === newCommentContent
+      );
+
+      await helper.deleteComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        commentToDelete.id,
+        commentToDelete.author.toString()
+      );
 
       const commentsAtEnd = await helper.commentsInDb();
-
       const contents = commentsAtEnd.map((c) => c.content);
-      assert(!contents.includes(commentToDelete.content));
 
+      assert(!contents.includes(commentToDelete.content));
       assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
     });
 
-    test("a profile comment can not be deleted when not logged in", async () => {
-      const newComment = {
-        content: "I will not be deleted",
-      };
+    test("a profile comment cannot be deleted when not logged in helper", async () => {
+      const newCommentContent = "I will not be deleted";
 
-      await api
-        .post(`/api/comments/profile/${receiverId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+      await helper.postComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        newCommentContent
+      );
 
       const commentsAtStart = await helper.commentsInDb();
-
       const commentToDelete = commentsAtStart[0];
 
       await api
@@ -331,8 +329,7 @@ describe("a user already exists and no comments in db", async () => {
       const contents = commentsAtEnd.map((c) => c.content);
 
       assert(contents.includes(commentToDelete.content));
-
-      assert.strictEqual(commentsAtEnd.length, 1);
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length);
     });
 
     describe("and there are no movies in db", async () => {

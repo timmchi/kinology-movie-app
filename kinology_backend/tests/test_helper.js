@@ -34,11 +34,32 @@ const moviesInDb = async () => {
   return movies.map((movie) => movie.toJSON());
 };
 
+const postComment = async (api, token, type, id, content) => {
+  const newComment = { content };
+  const response = await api
+    .post(`/api/comments/${type}/${id}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send(newComment)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+  return response.body;
+};
+
+const deleteComment = async (api, token, type, id, commentId, authorId) => {
+  await api
+    .delete(`/api/comments/${type}/${id}/${commentId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ authorId })
+    .expect(204);
+};
+
 module.exports = {
   initialComments,
   initialUser,
   commentsInDb,
   moviesInDb,
+  postComment,
+  deleteComment,
   secondUser,
   initialMovie,
 };
