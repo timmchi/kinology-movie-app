@@ -1,5 +1,6 @@
 const UserComment = require("../models/userComment");
 const Movie = require("../models/movie");
+const User = require("../models/user");
 
 const initialComments = [
   { content: "This is a great movie" },
@@ -18,6 +19,21 @@ const secondUser = {
   email: "seconduser@example.com",
 };
 
+const users = [
+  {
+    username: "loginstester",
+    email: "loginstester@example.com",
+  },
+  {
+    username: "seconduser",
+    email: "seconduser@example.com",
+  },
+  {
+    username: "thirduser",
+    email: "thirduser@example.com",
+  },
+];
+
 const initialMovie = {
   title: "Scarface",
   poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
@@ -32,6 +48,11 @@ const commentsInDb = async () => {
 const moviesInDb = async () => {
   const movies = await Movie.find({});
   return movies.map((movie) => movie.toJSON());
+};
+
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map((user) => user.toJSON());
 };
 
 const postComment = async (api, token, type, id, newComment) => {
@@ -160,9 +181,11 @@ module.exports = {
   initialComments,
   initialUser,
   secondUser,
+  users,
   initialMovie,
   commentsInDb,
   moviesInDb,
+  usersInDb,
   postComment,
   deleteComment,
   failedDeleteComment,
