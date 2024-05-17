@@ -101,10 +101,12 @@ describe("a user already exists and no comments in db", async () => {
         content: "I will not be added",
       };
 
-      await api
-        .post(`/api/comments/profile/${receiverId}`)
-        .send(newComment)
-        .expect(401);
+      await helper.unauthorizedPostComment(
+        api,
+        "profile",
+        receiverId,
+        newComment
+      );
 
       const commentsAtEnd = await helper.commentsInDb();
 
@@ -118,11 +120,13 @@ describe("a user already exists and no comments in db", async () => {
     test("empty comment is not added to a user profile", async () => {
       const newComment = {};
 
-      await api
-        .post(`/api/comments/profile/${receiverId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(400);
+      await helper.invalidPostComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        newComment
+      );
 
       const commentsAtEnd = await helper.commentsInDb();
 
@@ -165,10 +169,12 @@ describe("a user already exists and no comments in db", async () => {
           moviePoster: helper.initialMovie.poster,
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .send(newMovieComment)
-          .expect(401);
+        await helper.unauthorizedPostComment(
+          api,
+          "movie",
+          commentReceivingMovieId,
+          newMovieComment
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -176,7 +182,7 @@ describe("a user already exists and no comments in db", async () => {
 
         assert.strictEqual(commentsAtEnd.length, 0);
 
-        assert(!contents.includes("I am not logged in but I love this movie"));
+        assert(!contents.includes("I love Scarface"));
       });
 
       test("empty comment is not added to a movie", async () => {
@@ -185,11 +191,13 @@ describe("a user already exists and no comments in db", async () => {
           moviePoster: helper.initialMovie.poster,
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newMovieComment)
-          .expect(400);
+        await helper.invalidPostComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newMovieComment
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -238,10 +246,12 @@ describe("a user already exists and no comments in db", async () => {
           content: "I am not logged in but I love this movie",
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .send(newComment)
-          .expect(401);
+        await helper.unauthorizedPostComment(
+          api,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -255,11 +265,13 @@ describe("a user already exists and no comments in db", async () => {
       test("empty comment is not added to a movie", async () => {
         const newComment = {};
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(400);
+        await helper.invalidPostComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -303,10 +315,13 @@ describe("a user already exists and no comments in db", async () => {
       const commentsAtStart = await helper.commentsInDb();
       const commentToDelete = commentsAtStart[0];
 
-      await api
-        .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
-        .send({ authorId: commentToDelete.author.toString() })
-        .expect(401);
+      helper.unauthorizedNoTokenDeleteComment(
+        api,
+        "profile",
+        receiverId,
+        commentToDelete.id,
+        commentToDelete.author.toString()
+      );
 
       const commentsAtEnd = await helper.commentsInDb();
       const contents = commentsAtEnd.map((c) => c.content);
@@ -378,10 +393,13 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToDelete = commentsAtStart[0];
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .send({ authorId: commentToDelete.author.toString() })
-          .expect(401);
+        await helper.unauthorizedNoTokenDeleteComment(
+          api,
+          "movie",
+          commentReceivingMovieId,
+          commentToDelete.id,
+          commentToDelete.author.toString()
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -459,10 +477,13 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToDelete = commentsAtStart[0];
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .send({ authorId: commentToDelete.author.toString() })
-          .expect(401);
+        await helper.unauthorizedNoTokenDeleteComment(
+          api,
+          "movie",
+          commentReceivingMovieId,
+          commentToDelete.id,
+          commentToDelete.author.toString()
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);

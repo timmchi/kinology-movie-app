@@ -41,6 +41,26 @@ const postComment = async (api, token, type, id, newComment) => {
     .send(newComment)
     .expect(201)
     .expect("Content-Type", /application\/json/);
+
+  return response.body;
+};
+
+const unauthorizedPostComment = async (api, type, id, newComment) => {
+  const response = await api
+    .post(`/api/comments/${type}/${id}`)
+    .send(newComment)
+    .expect(401);
+
+  return response.body;
+};
+
+const invalidPostComment = async (api, token, type, id, newComment) => {
+  const response = await api
+    .post(`/api/comments/${type}/${id}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send(newComment)
+    .expect(400);
+
   return response.body;
 };
 
@@ -67,6 +87,19 @@ const failedDeleteComment = async (
     .expect(401);
 };
 
+const unauthorizedNoTokenDeleteComment = async (
+  api,
+  type,
+  id,
+  commentId,
+  authorId
+) => {
+  await api
+    .delete(`/api/comments/${type}/${id}/${commentId}`)
+    .send({ authorId })
+    .expect(401);
+};
+
 module.exports = {
   initialComments,
   initialUser,
@@ -75,6 +108,9 @@ module.exports = {
   postComment,
   deleteComment,
   failedDeleteComment,
+  unauthorizedPostComment,
+  invalidPostComment,
+  unauthorizedNoTokenDeleteComment,
   secondUser,
   initialMovie,
 };
