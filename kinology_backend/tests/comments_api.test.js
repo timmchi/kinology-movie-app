@@ -681,15 +681,15 @@ describe("a user already exists and no comments in db", async () => {
 
       const commentToEdit = commentsAtStart[0];
 
-      await api
-        .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({
-          content: "I have been edited",
-          authorId: commentToEdit.author.toString(),
-        })
-        .expect(200)
-        .expect("Content-Type", /application\/json/);
+      await helper.editComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        commentToEdit.id,
+        commentToEdit.author.toString(),
+        "I have been edited"
+      );
 
       const commentsAtEnd = await helper.commentsInDb();
       const contents = commentsAtEnd.map((c) => c.content);
@@ -709,13 +709,14 @@ describe("a user already exists and no comments in db", async () => {
 
       const commentToEdit = commentsAtStart[0];
 
-      await api
-        .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
-        .send({
-          content: "These efforts are futile",
-          authorId: commentToEdit.author.toString(),
-        })
-        .expect(401);
+      await helper.unauthorizedNoTokenEditComment(
+        api,
+        "profile",
+        receiverId,
+        commentToEdit.id,
+        commentToEdit.author.toString(),
+        "These efforts are futile"
+      );
 
       const commentsAtEnd = await helper.commentsInDb();
       const contents = commentsAtEnd.map((c) => c.content);
@@ -748,17 +749,15 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToEdit = commentsAtStart[0];
 
-        await api
-          .put(
-            `/api/comments/profile/${commentReceivingMovieId}/${commentToEdit.id}`
-          )
-          .set("Authorization", `Bearer ${token}`)
-          .send({
-            content: "I have been edited",
-            authorId: commentToEdit.author.toString(),
-          })
-          .expect(200)
-          .expect("Content-Type", /application\/json/);
+        await helper.editComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          commentToEdit.id,
+          commentToEdit.author.toString(),
+          "I have been edited"
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -786,15 +785,14 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToEdit = commentsAtStart[0];
 
-        await api
-          .put(
-            `/api/comments/movie/${commentReceivingMovieId}/${commentToEdit.id}`
-          )
-          .send({
-            content: "These efforts are futile",
-            authorId: commentToEdit.author.toString(),
-          })
-          .expect(401);
+        await helper.unauthorizedNoTokenEditComment(
+          api,
+          "movie",
+          commentReceivingMovieId,
+          commentToEdit.id,
+          commentToEdit.author.toString(),
+          "These efforts are futile"
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -835,17 +833,15 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToEdit = commentsAtStart[0];
 
-        await api
-          .put(
-            `/api/comments/profile/${commentReceivingMovieId}/${commentToEdit.id}`
-          )
-          .set("Authorization", `Bearer ${token}`)
-          .send({
-            content: "I have been edited",
-            authorId: commentToEdit.author.toString(),
-          })
-          .expect(200)
-          .expect("Content-Type", /application\/json/);
+        await helper.editComment(
+          api,
+          token,
+          "profile",
+          commentReceivingMovieId,
+          commentToEdit.id,
+          commentToEdit.author.toString(),
+          "I have been edited"
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -871,15 +867,14 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToEdit = commentsAtStart[0];
 
-        await api
-          .put(
-            `/api/comments/movie/${commentReceivingMovieId}/${commentToEdit.id}`
-          )
-          .send({
-            content: "These efforts are futile",
-            authorId: commentToEdit.author.toString(),
-          })
-          .expect(401);
+        await helper.unauthorizedNoTokenEditComment(
+          api,
+          "movie",
+          commentReceivingMovieId,
+          commentToEdit.id,
+          commentToEdit.author.toString(),
+          "These efforts are futile"
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -920,14 +915,15 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToEdit = commentsAtStart[0];
 
-        await api
-          .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
-          .set("Authorization", `Bearer ${secondUserToken}`)
-          .send({
-            content: "These efforts are futile",
-            authorId: commentToEdit.author.toString(),
-          })
-          .expect(401);
+        await helper.unauthorizedEditComment(
+          api,
+          secondUserToken,
+          "profile",
+          receiverId,
+          commentToEdit.id,
+          commentToEdit.author.toString(),
+          "These efforts are futile"
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -954,14 +950,15 @@ describe("a user already exists and no comments in db", async () => {
 
         const commentToEdit = commentsAtStart[0];
 
-        await api
-          .put(`/api/comments/profile/${receiverId}/${commentToEdit.id}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send({
-            content: "These efforts are futile",
-            authorId: commentToEdit.author.toString(),
-          })
-          .expect(401);
+        await helper.unauthorizedEditComment(
+          api,
+          token,
+          "profile",
+          receiverId,
+          commentToEdit.id,
+          commentToEdit.author.toString(),
+          "These efforts are futile"
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
         const contents = commentsAtEnd.map((c) => c.content);
@@ -994,16 +991,15 @@ describe("a user already exists and no comments in db", async () => {
 
           const commentToEdit = commentsAtStart[0];
 
-          await api
-            .put(
-              `/api/comments/movie/${commentReceivingMovieId}/${commentToEdit.id}`
-            )
-            .set("Authorization", `Bearer ${secondUserToken}`)
-            .send({
-              content: "These efforts are futile",
-              authorId: commentToEdit.author.toString(),
-            })
-            .expect(401);
+          await helper.unauthorizedEditComment(
+            api,
+            secondUserToken,
+            "movie",
+            commentReceivingMovieId,
+            commentToEdit.id,
+            commentToEdit.author.toString(),
+            "These efforts are futile"
+          );
 
           const commentsAtEnd = await helper.commentsInDb();
           const contents = commentsAtEnd.map((c) => c.content);
@@ -1044,16 +1040,15 @@ describe("a user already exists and no comments in db", async () => {
 
           const commentToEdit = commentsAtStart[0];
 
-          await api
-            .put(
-              `/api/comments/movie/${commentReceivingMovieId}/${commentToEdit.id}`
-            )
-            .set("Authorization", `Bearer ${secondUserToken}`)
-            .send({
-              content: "These efforts are futile",
-              authorId: commentToEdit.author.toString(),
-            })
-            .expect(401);
+          await helper.unauthorizedEditComment(
+            api,
+            secondUserToken,
+            "movie",
+            commentReceivingMovieId,
+            commentToEdit.id,
+            commentToEdit.author.toString(),
+            "These efforts are futile"
+          );
 
           const commentsAtEnd = await helper.commentsInDb();
           const contents = commentsAtEnd.map((c) => c.content);

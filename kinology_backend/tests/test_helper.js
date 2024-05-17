@@ -100,9 +100,67 @@ const unauthorizedNoTokenDeleteComment = async (
     .expect(401);
 };
 
+const editComment = async (
+  api,
+  token,
+  type,
+  id,
+  commentId,
+  authorId,
+  content
+) => {
+  await api
+    .put(`/api/comments/${type}/${id}/${commentId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({
+      content,
+      authorId,
+    })
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+};
+
+const unauthorizedNoTokenEditComment = async (
+  api,
+  type,
+  id,
+  commentId,
+  authorId,
+  content
+) => {
+  await api
+    .put(`/api/comments/${type}/${id}/${commentId}`)
+    .send({
+      content,
+      authorId,
+    })
+    .expect(401);
+};
+
+const unauthorizedEditComment = async (
+  api,
+  token,
+  type,
+  id,
+  commentId,
+  authorId,
+  content
+) => {
+  await api
+    .put(`/api/comments/${type}/${id}/${commentId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({
+      content,
+      authorId,
+    })
+    .expect(401);
+};
+
 module.exports = {
   initialComments,
   initialUser,
+  secondUser,
+  initialMovie,
   commentsInDb,
   moviesInDb,
   postComment,
@@ -111,6 +169,7 @@ module.exports = {
   unauthorizedPostComment,
   invalidPostComment,
   unauthorizedNoTokenDeleteComment,
-  secondUser,
-  initialMovie,
+  editComment,
+  unauthorizedNoTokenEditComment,
+  unauthorizedEditComment,
 };
