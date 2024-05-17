@@ -34,8 +34,7 @@ const moviesInDb = async () => {
   return movies.map((movie) => movie.toJSON());
 };
 
-const postComment = async (api, token, type, id, content) => {
-  const newComment = { content };
+const postComment = async (api, token, type, id, newComment) => {
   const response = await api
     .post(`/api/comments/${type}/${id}`)
     .set("Authorization", `Bearer ${token}`)

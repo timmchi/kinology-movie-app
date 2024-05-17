@@ -83,16 +83,9 @@ describe("a user already exists and no comments in db", async () => {
 
   describe("comment creation", async () => {
     test("a valid comment can be added to a user profile by a logged in user", async () => {
-      const newComment = {
-        content: "I am a comment created by a test user",
-      };
+      const newComment = { content: "I am a comment created by a test user" };
 
-      await api
-        .post(`/api/comments/profile/${receiverId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+      await helper.postComment(api, token, "profile", receiverId, newComment);
 
       const commentsAtEnd = await helper.commentsInDb();
 
@@ -275,19 +268,13 @@ describe("a user already exists and no comments in db", async () => {
 
   describe("comment deletion", async () => {
     test("a profile comment can be deleted by its author helper", async () => {
-      const newCommentContent = "I am not long for this world";
+      const newComment = { content: "I am not long for this world" };
 
-      const newComment = await helper.postComment(
-        api,
-        token,
-        "profile",
-        receiverId,
-        newCommentContent
-      );
+      await helper.postComment(api, token, "profile", receiverId, newComment);
 
       const commentsAtStart = await helper.commentsInDb();
       const commentToDelete = commentsAtStart.find(
-        (comment) => comment.content === newCommentContent
+        (comment) => comment.content === newComment.content
       );
 
       await helper.deleteComment(
@@ -307,15 +294,9 @@ describe("a user already exists and no comments in db", async () => {
     });
 
     test("a profile comment cannot be deleted when not logged in helper", async () => {
-      const newCommentContent = "I will not be deleted";
+      const newComment = { content: "I will not be deleted" };
 
-      await helper.postComment(
-        api,
-        token,
-        "profile",
-        receiverId,
-        newCommentContent
-      );
+      await helper.postComment(api, token, "profile", receiverId, newComment);
 
       const commentsAtStart = await helper.commentsInDb();
       const commentToDelete = commentsAtStart[0];
