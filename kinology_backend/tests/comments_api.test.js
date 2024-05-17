@@ -309,40 +309,6 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
     });
 
-    test("deleting a non existing profile comment fails with 404", async () => {
-      // create a valid comment
-      const newComment = { content: "I will not exist soon" };
-
-      await helper.postComment(api, token, "profile", receiverId, newComment);
-
-      // delete a valid comment
-      const commentsAtStart = await helper.commentsInDb();
-      const commentToDelete = commentsAtStart[0];
-
-      await helper.deleteComment(
-        api,
-        token,
-        "profile",
-        receiverId,
-        commentToDelete.id,
-        commentToDelete.author.toString()
-      );
-
-      const commentsAtEnd = await helper.commentsInDb();
-      const contents = commentsAtEnd.map((c) => c.content);
-
-      assert(!contents.includes(commentToDelete.content));
-      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
-
-      // attempt to delete it again
-
-      await api
-        .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({ authorId: commentToDelete.author.toString() })
-        .expect(404);
-    });
-
     test("a profile comment cannot be deleted when not logged in", async () => {
       const newComment = { content: "I will not be deleted" };
 
@@ -494,48 +460,6 @@ describe("a user already exists and no comments in db", async () => {
         assert(!contents.includes(commentToDelete.content));
 
         assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
-      });
-
-      test("deleting a non existing movie comment fails with 404", async () => {
-        // create a valid comment
-        const newComment = { content: "I will not exist soon" };
-
-        await helper.postComment(
-          api,
-          token,
-          "movie",
-          commentReceivingMovieId,
-          newComment
-        );
-
-        // delete a valid comment
-        const commentsAtStart = await helper.commentsInDb();
-        const commentToDelete = commentsAtStart[0];
-
-        await helper.deleteComment(
-          api,
-          token,
-          "movie",
-          commentReceivingMovieId,
-          commentToDelete.id,
-          commentToDelete.author.toString()
-        );
-
-        const commentsAtEnd = await helper.commentsInDb();
-        const contents = commentsAtEnd.map((c) => c.content);
-
-        assert(!contents.includes(commentToDelete.content));
-        assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
-
-        // attempt to delete it again
-
-        await api
-          .delete(
-            `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
-          )
-          .set("Authorization", `Bearer ${token}`)
-          .send({ authorId: commentToDelete.author.toString() })
-          .expect(404);
       });
 
       test("a movie comment can not be deleted when not logged in", async () => {
@@ -1135,6 +1059,179 @@ describe("a user already exists and no comments in db", async () => {
           assert(!contents.includes("These efforts are futile"));
         });
       });
+    });
+  });
+  describe("working with a comment with a valid id that has been already deleted", async () => {
+    const newComment = { content: "I will not exist soon" };
+    beforeEach(async () => {
+      // creating a movie
+      await Movie.deleteMany({});
+
+      const movie = new Movie({
+        tmdbId: helper.initialMovie.tmdbId,
+        title: helper.initialMovie.title,
+        poster: helper.initialMovie.poster,
+      });
+
+      await movie.save();
+    });
+
+    test("deleting a non existing profile comment fails with 404", async () => {
+      // create a valid comment
+
+      await helper.postComment(api, token, "profile", receiverId, newComment);
+
+      // delete a valid comment
+      const commentsAtStart = await helper.commentsInDb();
+      const commentToDelete = commentsAtStart[0];
+
+      await helper.deleteComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        commentToDelete.id,
+        commentToDelete.author.toString()
+      );
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(!contents.includes(commentToDelete.content));
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+
+      // attempt to delete it again
+
+      await api
+        .delete(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ authorId: commentToDelete.author.toString() })
+        .expect(404);
+    });
+
+    test("deleting a non existing movie comment fails with 404", async () => {
+      // create a valid comment
+      await helper.postComment(
+        api,
+        token,
+        "movie",
+        commentReceivingMovieId,
+        newComment
+      );
+
+      // delete a valid comment
+      const commentsAtStart = await helper.commentsInDb();
+      const commentToDelete = commentsAtStart[0];
+
+      await helper.deleteComment(
+        api,
+        token,
+        "movie",
+        commentReceivingMovieId,
+        commentToDelete.id,
+        commentToDelete.author.toString()
+      );
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(!contents.includes(commentToDelete.content));
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+
+      // attempt to delete it again
+
+      await api
+        .delete(
+          `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
+        )
+        .set("Authorization", `Bearer ${token}`)
+        .send({ authorId: commentToDelete.author.toString() })
+        .expect(404);
+    });
+
+    test("editing a non existing profile comment fails with 404", async () => {
+      // create a valid comment
+
+      await helper.postComment(api, token, "profile", receiverId, newComment);
+
+      // delete a valid comment
+      const commentsAtStart = await helper.commentsInDb();
+      const commentToDelete = commentsAtStart[0];
+
+      await helper.deleteComment(
+        api,
+        token,
+        "profile",
+        receiverId,
+        commentToDelete.id,
+        commentToDelete.author.toString()
+      );
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(!contents.includes(commentToDelete.content));
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+
+      // attempt to delete it again
+
+      await api
+        .put(`/api/comments/profile/${receiverId}/${commentToDelete.id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          authorId: commentToDelete.author.toString(),
+          content: "I am a ghost",
+        })
+        .expect(404);
+
+      assert(!contents.includes("I am a ghost"));
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+    });
+
+    test("deleting a non existing movie comment fails with 404", async () => {
+      // create a valid comment
+      await helper.postComment(
+        api,
+        token,
+        "movie",
+        commentReceivingMovieId,
+        newComment
+      );
+
+      // delete a valid comment
+      const commentsAtStart = await helper.commentsInDb();
+      const commentToDelete = commentsAtStart[0];
+
+      await helper.deleteComment(
+        api,
+        token,
+        "movie",
+        commentReceivingMovieId,
+        commentToDelete.id,
+        commentToDelete.author.toString()
+      );
+
+      const commentsAtEnd = await helper.commentsInDb();
+      const contents = commentsAtEnd.map((c) => c.content);
+
+      assert(!contents.includes(commentToDelete.content));
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+
+      // attempt to delete it again
+
+      await api
+        .put(
+          `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
+        )
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          authorId: commentToDelete.author.toString(),
+          content: "I am a ghost",
+        })
+        .expect(404);
+
+      assert(!contents.includes("I am a ghost"));
+      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
     });
   });
 });
