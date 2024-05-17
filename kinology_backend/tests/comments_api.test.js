@@ -141,12 +141,13 @@ describe("a user already exists and no comments in db", async () => {
           moviePoster: helper.initialMovie.poster,
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newMovieComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newMovieComment
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -215,12 +216,13 @@ describe("a user already exists and no comments in db", async () => {
           content: "I love Scarface",
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -267,7 +269,7 @@ describe("a user already exists and no comments in db", async () => {
   });
 
   describe("comment deletion", async () => {
-    test("a profile comment can be deleted by its author helper", async () => {
+    test("a profile comment can be deleted by its author", async () => {
       const newComment = { content: "I am not long for this world" };
 
       await helper.postComment(api, token, "profile", receiverId, newComment);
@@ -293,7 +295,7 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
     });
 
-    test("a profile comment cannot be deleted when not logged in helper", async () => {
+    test("a profile comment cannot be deleted when not logged in", async () => {
       const newComment = { content: "I will not be deleted" };
 
       await helper.postComment(api, token, "profile", receiverId, newComment);
@@ -325,12 +327,13 @@ describe("a user already exists and no comments in db", async () => {
           moviePoster: helper.initialMovie.poster,
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newMovieComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newMovieComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -339,13 +342,14 @@ describe("a user already exists and no comments in db", async () => {
             comment.content === "I am the author and I will delete this comment"
         );
 
-        await api
-          .delete(
-            `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
-          )
-          .set("Authorization", `Bearer ${token}`)
-          .send({ authorId: commentToDelete.author.toString() })
-          .expect(204);
+        await helper.deleteComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          commentToDelete.id,
+          commentToDelete.author.toString()
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -362,12 +366,13 @@ describe("a user already exists and no comments in db", async () => {
           moviePoster: helper.initialMovie.poster,
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newMovieComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newMovieComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -405,12 +410,13 @@ describe("a user already exists and no comments in db", async () => {
           content: "I am the author and I will delete this comment",
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -419,13 +425,14 @@ describe("a user already exists and no comments in db", async () => {
             comment.content === "I am the author and I will delete this comment"
         );
 
-        await api
-          .delete(
-            `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
-          )
-          .set("Authorization", `Bearer ${token}`)
-          .send({ authorId: commentToDelete.author.toString() })
-          .expect(204);
+        await helper.deleteComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          commentToDelete.id,
+          commentToDelete.author.toString()
+        );
 
         const commentsAtEnd = await helper.commentsInDb();
 
@@ -440,12 +447,13 @@ describe("a user already exists and no comments in db", async () => {
           content: "I am a movie comment and I will not be deleted",
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -559,24 +567,26 @@ describe("a user already exists and no comments in db", async () => {
             moviePoster: helper.initialMovie.poster,
           };
 
-          await api
-            .post(`/api/comments/movie/${commentReceivingMovieId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .send(newMovieComment)
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.postComment(
+            api,
+            token,
+            "movie",
+            commentReceivingMovieId,
+            newMovieComment
+          );
 
           const commentsAtStart = await helper.commentsInDb();
 
           const commentToDelete = commentsAtStart[0];
 
-          await api
-            .delete(
-              `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
-            )
-            .set("Authorization", `Bearer ${secondUserToken}`)
-            .send({ authorId: commentToDelete.author.toString() })
-            .expect(401);
+          await helper.failedDeleteComment(
+            api,
+            secondUserToken,
+            "movie",
+            commentReceivingMovieId,
+            commentToDelete.id,
+            commentToDelete.author.toString()
+          );
 
           const commentsAtEnd = await helper.commentsInDb();
           const contents = commentsAtEnd.map((c) => c.content);
@@ -606,24 +616,26 @@ describe("a user already exists and no comments in db", async () => {
             content: "I can only be deleted by my author",
           };
 
-          await api
-            .post(`/api/comments/movie/${commentReceivingMovieId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .send(newComment)
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.postComment(
+            api,
+            token,
+            "movie",
+            commentReceivingMovieId,
+            newComment
+          );
 
           const commentsAtStart = await helper.commentsInDb();
 
           const commentToDelete = commentsAtStart[0];
 
-          await api
-            .delete(
-              `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
-            )
-            .set("Authorization", `Bearer ${secondUserToken}`)
-            .send({ authorId: commentToDelete.author.toString() })
-            .expect(401);
+          await helper.failedDeleteComment(
+            api,
+            secondUserToken,
+            "movie",
+            commentReceivingMovieId,
+            commentToDelete.id,
+            commentToDelete.author.toString()
+          );
 
           const commentsAtEnd = await helper.commentsInDb();
           const contents = commentsAtEnd.map((c) => c.content);
@@ -703,12 +715,13 @@ describe("a user already exists and no comments in db", async () => {
           moviePoster: helper.initialMovie.poster,
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newMovieComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newMovieComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -740,12 +753,13 @@ describe("a user already exists and no comments in db", async () => {
           moviePoster: helper.initialMovie.poster,
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newMovieComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newMovieComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -788,12 +802,13 @@ describe("a user already exists and no comments in db", async () => {
           content: "I will be edited by my author",
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -823,12 +838,13 @@ describe("a user already exists and no comments in db", async () => {
           content: "Users other than my author can not edit me",
         };
 
-        await api
-          .post(`/api/comments/movie/${commentReceivingMovieId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(newComment)
-          .expect(201)
-          .expect("Content-Type", /application\/json/);
+        await helper.postComment(
+          api,
+          token,
+          "movie",
+          commentReceivingMovieId,
+          newComment
+        );
 
         const commentsAtStart = await helper.commentsInDb();
 
@@ -945,12 +961,13 @@ describe("a user already exists and no comments in db", async () => {
             moviePoster: helper.initialMovie.poster,
           };
 
-          await api
-            .post(`/api/comments/movie/${commentReceivingMovieId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .send(newMovieComment)
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.postComment(
+            api,
+            token,
+            "movie",
+            commentReceivingMovieId,
+            newMovieComment
+          );
 
           const commentsAtStart = await helper.commentsInDb();
 
@@ -994,12 +1011,13 @@ describe("a user already exists and no comments in db", async () => {
             content: "Other users can not edit my comment",
           };
 
-          await api
-            .post(`/api/comments/movie/${commentReceivingMovieId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .send(newComment)
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.postComment(
+            api,
+            token,
+            "movie",
+            commentReceivingMovieId,
+            newComment
+          );
 
           const commentsAtStart = await helper.commentsInDb();
 
