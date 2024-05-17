@@ -17,6 +17,7 @@ const getHash = async (pw) => {
 };
 
 // TODO FOR TMRW - test for when there is already a movie in db, also test for when commenting creates a movie in db. Different describes
+// also do tests for invalid ids
 
 // tokens are used for authentication
 let token;
@@ -78,17 +79,6 @@ describe("a user already exists and no comments in db", async () => {
       .send({ username: "commentstester", password: "123456" });
 
     token = result.body.token;
-
-    // creating a movie
-    await Movie.deleteMany({});
-
-    const movie = new Movie({
-      tmdbId: helper.initialMovie.tmdbId,
-      title: helper.initialMovie.title,
-      poster: helper.initialMovie.poster,
-    });
-
-    await movie.save();
   });
 
   describe("comment creation", async () => {
@@ -146,58 +136,73 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, 0);
     });
 
-    test("a valid comment can be added to a movie by a logged in user", async () => {
-      const newComment = {
-        content: "I love Scarface",
-      };
+    describe("and a movie already exists in a db", async () => {
+      beforeEach(async () => {
+        // creating a movie
+        await Movie.deleteMany({});
 
-      await api
-        .post(`/api/comments/movie/${commentReceivingMovieId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+        const movie = new Movie({
+          tmdbId: helper.initialMovie.tmdbId,
+          title: helper.initialMovie.title,
+          poster: helper.initialMovie.poster,
+        });
 
-      const commentsAtEnd = await helper.commentsInDb();
+        await movie.save();
+      });
 
-      const contents = commentsAtEnd.map((c) => c.content);
+      test("a valid comment can be added to a movie by a logged in user", async () => {
+        const newComment = {
+          content: "I love Scarface",
+        };
 
-      assert.strictEqual(commentsAtEnd.length, 1);
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
 
-      assert(contents.includes("I love Scarface"));
-    });
+        const commentsAtEnd = await helper.commentsInDb();
 
-    test("a comment will not be added to a movie if the user is not logged in", async () => {
-      const newComment = {
-        content: "I am not logged in but I love this movie",
-      };
+        const contents = commentsAtEnd.map((c) => c.content);
 
-      await api
-        .post(`/api/comments/movie/${commentReceivingMovieId}`)
-        .send(newComment)
-        .expect(401);
+        assert.strictEqual(commentsAtEnd.length, 1);
 
-      const commentsAtEnd = await helper.commentsInDb();
+        assert(contents.includes("I love Scarface"));
+      });
 
-      const contents = commentsAtEnd.map((c) => c.content);
+      test("a comment will not be added to a movie if the user is not logged in", async () => {
+        const newComment = {
+          content: "I am not logged in but I love this movie",
+        };
 
-      assert.strictEqual(commentsAtEnd.length, 0);
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .send(newComment)
+          .expect(401);
 
-      assert(!contents.includes("I am not logged in but I love this movie"));
-    });
+        const commentsAtEnd = await helper.commentsInDb();
 
-    test("empty comment is not added to a movie", async () => {
-      const newComment = {};
+        const contents = commentsAtEnd.map((c) => c.content);
 
-      await api
-        .post(`/api/comments/movie/${commentReceivingMovieId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(400);
+        assert.strictEqual(commentsAtEnd.length, 0);
 
-      const commentsAtEnd = await helper.commentsInDb();
+        assert(!contents.includes("I am not logged in but I love this movie"));
+      });
 
-      assert.strictEqual(commentsAtEnd.length, 0);
+      test("empty comment is not added to a movie", async () => {
+        const newComment = {};
+
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(400);
+
+        const commentsAtEnd = await helper.commentsInDb();
+
+        assert.strictEqual(commentsAtEnd.length, 0);
+      });
     });
   });
 
@@ -263,68 +268,82 @@ describe("a user already exists and no comments in db", async () => {
       assert.strictEqual(commentsAtEnd.length, 1);
     });
 
-    test("a movie comment can be deleted by its author", async () => {
-      const newComment = {
-        content: "I am the author and I will delete this comment",
-      };
+    describe("and a movie already exists in a db", async () => {
+      beforeEach(async () => {
+        // creating a movie
+        await Movie.deleteMany({});
 
-      await api
-        .post(`/api/comments/movie/${commentReceivingMovieId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+        const movie = new Movie({
+          tmdbId: helper.initialMovie.tmdbId,
+          title: helper.initialMovie.title,
+          poster: helper.initialMovie.poster,
+        });
 
-      const commentsAtStart = await helper.commentsInDb();
+        await movie.save();
+      });
+      test("a movie comment can be deleted by its author", async () => {
+        const newComment = {
+          content: "I am the author and I will delete this comment",
+        };
 
-      const commentToDelete = commentsAtStart.find(
-        (comment) =>
-          comment.content === "I am the author and I will delete this comment"
-      );
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
 
-      await api
-        .delete(
-          `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
-        )
-        .set("Authorization", `Bearer ${token}`)
-        .send({ authorId: commentToDelete.author.toString() })
-        .expect(204);
+        const commentsAtStart = await helper.commentsInDb();
 
-      const commentsAtEnd = await helper.commentsInDb();
+        const commentToDelete = commentsAtStart.find(
+          (comment) =>
+            comment.content === "I am the author and I will delete this comment"
+        );
 
-      const contents = commentsAtEnd.map((c) => c.content);
-      assert(!contents.includes(commentToDelete.content));
+        await api
+          .delete(
+            `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
+          )
+          .set("Authorization", `Bearer ${token}`)
+          .send({ authorId: commentToDelete.author.toString() })
+          .expect(204);
 
-      assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
-    });
+        const commentsAtEnd = await helper.commentsInDb();
 
-    test("a movie comment can not be deleted when not logged in", async () => {
-      const newComment = {
-        content: "I am a movie comment and I will not be deleted",
-      };
+        const contents = commentsAtEnd.map((c) => c.content);
+        assert(!contents.includes(commentToDelete.content));
 
-      await api
-        .post(`/api/comments/movie/${commentReceivingMovieId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send(newComment)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+        assert.strictEqual(commentsAtEnd.length, commentsAtStart.length - 1);
+      });
 
-      const commentsAtStart = await helper.commentsInDb();
+      test("a movie comment can not be deleted when not logged in", async () => {
+        const newComment = {
+          content: "I am a movie comment and I will not be deleted",
+        };
 
-      const commentToDelete = commentsAtStart[0];
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
 
-      await api
-        .post(`/api/comments/movie/${commentReceivingMovieId}`)
-        .send({ authorId: commentToDelete.author.toString() })
-        .expect(401);
+        const commentsAtStart = await helper.commentsInDb();
 
-      const commentsAtEnd = await helper.commentsInDb();
-      const contents = commentsAtEnd.map((c) => c.content);
+        const commentToDelete = commentsAtStart[0];
 
-      assert(contents.includes(commentToDelete.content));
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .send({ authorId: commentToDelete.author.toString() })
+          .expect(401);
 
-      assert.strictEqual(commentsAtEnd.length, 1);
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(contents.includes(commentToDelete.content));
+
+        assert.strictEqual(commentsAtEnd.length, 1);
+      });
     });
 
     describe("there is another user in db when deleting", async () => {
@@ -405,6 +424,53 @@ describe("a user already exists and no comments in db", async () => {
 
         assert.strictEqual(commentsAtEnd.length, 0);
       });
+
+      describe("and a movie already exists in a db", async () => {
+        beforeEach(async () => {
+          // creating a movie
+          await Movie.deleteMany({});
+
+          const movie = new Movie({
+            tmdbId: helper.initialMovie.tmdbId,
+            title: helper.initialMovie.title,
+            poster: helper.initialMovie.poster,
+          });
+
+          await movie.save();
+        });
+
+        test("a movie comment can not be deleted by another user", async () => {
+          const newComment = {
+            content: "I can only be deleted by my author",
+          };
+
+          await api
+            .post(`/api/comments/movie/${commentReceivingMovieId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send(newComment)
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const commentsAtStart = await helper.commentsInDb();
+
+          const commentToDelete = commentsAtStart[0];
+
+          await api
+            .delete(
+              `/api/comments/movie/${commentReceivingMovieId}/${commentToDelete.id}`
+            )
+            .set("Authorization", `Bearer ${secondUserToken}`)
+            .send({ authorId: commentToDelete.author.toString() })
+            .expect(401);
+
+          const commentsAtEnd = await helper.commentsInDb();
+          const contents = commentsAtEnd.map((c) => c.content);
+
+          assert(contents.includes(commentToDelete.content));
+
+          assert.strictEqual(commentsAtEnd.length, 1);
+        });
+      });
     });
   });
 
@@ -471,6 +537,89 @@ describe("a user already exists and no comments in db", async () => {
 
       assert(contents.includes(commentToEdit.content));
       assert(!contents.includes("These efforts are futile"));
+    });
+
+    describe("and a movie already exists in a db", async () => {
+      beforeEach(async () => {
+        // creating a movie
+        await Movie.deleteMany({});
+
+        const movie = new Movie({
+          tmdbId: helper.initialMovie.tmdbId,
+          title: helper.initialMovie.title,
+          poster: helper.initialMovie.poster,
+        });
+
+        await movie.save();
+      });
+
+      test("a movie comment author can edit their comment", async () => {
+        const newComment = {
+          content: "I will be edited by my author",
+        };
+
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
+
+        const commentsAtStart = await helper.commentsInDb();
+
+        const commentToEdit = commentsAtStart[0];
+
+        await api
+          .put(
+            `/api/comments/profile/${commentReceivingMovieId}/${commentToEdit.id}`
+          )
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            content: "I have been edited",
+            authorId: commentToEdit.author.toString(),
+          })
+          .expect(200)
+          .expect("Content-Type", /application\/json/);
+
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(!contents.includes(commentToEdit.content));
+        assert(contents.includes("I have been edited"));
+      });
+
+      test("a movie comment can not be edited when not logged in", async () => {
+        const newComment = {
+          content: "Users other than my author can not edit me",
+        };
+
+        await api
+          .post(`/api/comments/movie/${commentReceivingMovieId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(newComment)
+          .expect(201)
+          .expect("Content-Type", /application\/json/);
+
+        const commentsAtStart = await helper.commentsInDb();
+
+        const commentToEdit = commentsAtStart[0];
+
+        await api
+          .put(
+            `/api/comments/movie/${commentReceivingMovieId}/${commentToEdit.id}`
+          )
+          .send({
+            content: "These efforts are futile",
+            authorId: commentToEdit.author.toString(),
+          })
+          .expect(401);
+
+        const commentsAtEnd = await helper.commentsInDb();
+        const contents = commentsAtEnd.map((c) => c.content);
+
+        assert(contents.includes(commentToEdit.content));
+        assert(!contents.includes("These efforts are futile"));
+      });
     });
 
     describe("there is another user in db when editing", async () => {
@@ -556,6 +705,55 @@ describe("a user already exists and no comments in db", async () => {
 
         assert(contents.includes(commentToEdit.content));
         assert(!contents.includes("These efforts are futile"));
+      });
+
+      describe("and a movie already exists in a db", async () => {
+        beforeEach(async () => {
+          // creating a movie
+          await Movie.deleteMany({});
+
+          const movie = new Movie({
+            tmdbId: helper.initialMovie.tmdbId,
+            title: helper.initialMovie.title,
+            poster: helper.initialMovie.poster,
+          });
+
+          await movie.save();
+        });
+
+        test("another user can not edit a movie comment", async () => {
+          const newComment = {
+            content: "Other users can not edit my comment",
+          };
+
+          await api
+            .post(`/api/comments/movie/${commentReceivingMovieId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send(newComment)
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const commentsAtStart = await helper.commentsInDb();
+
+          const commentToEdit = commentsAtStart[0];
+
+          await api
+            .put(
+              `/api/comments/movie/${commentReceivingMovieId}/${commentToEdit.id}`
+            )
+            .set("Authorization", `Bearer ${secondUserToken}`)
+            .send({
+              content: "These efforts are futile",
+              authorId: commentToEdit.author.toString(),
+            })
+            .expect(401);
+
+          const commentsAtEnd = await helper.commentsInDb();
+          const contents = commentsAtEnd.map((c) => c.content);
+
+          assert(contents.includes(commentToEdit.content));
+          assert(!contents.includes("These efforts are futile"));
+        });
       });
     });
   });
