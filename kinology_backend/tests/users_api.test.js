@@ -27,7 +27,15 @@ const userCredentials = {
   passwordConfirm: userPassword,
 };
 
+const secondUserCredentials = {
+  ...helper.users[1],
+  name: "Second User",
+  password: userPassword,
+  passwordConfirm: userPassword,
+};
+
 let token;
+let secondUserToken;
 
 const commentReceivingMovieId = helper.initialMovie.tmdbId;
 
@@ -368,6 +376,57 @@ describe("when there are no users in the db", async () => {
 
           const usersAtEnd = await helper.usersInDb();
           assert.strictEqual(0, usersAtEnd[0].watchedMovies.length);
+        });
+      });
+
+      describe("and another user exists in a db", async () => {
+        beforeEach(async () => {
+          // creating a second user
+          await api
+            .post("/api/users")
+            .send(userCredentials)
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          // logging in
+          const result = await api.post("/api/login").send({
+            username: userCredentials.username,
+            password: userPassword,
+          });
+
+          secondUserToken = result.body.token;
+        });
+
+        test("a user can not delete profile of another user", async () => {});
+
+        test("a user can not edit profile of another user", async () => {});
+
+        describe("and a movie exists in a db", async () => {
+          beforeEach(async () => {
+            await Movie.deleteMany({});
+
+            const movie = new Movie({
+              tmdbId: helper.initialMovie.tmdbId,
+              title: helper.initialMovie.title,
+              poster: helper.initialMovie.poster,
+            });
+
+            await movie.save();
+          });
+
+          test("a user can not add a movie to another user favorites", async () => {});
+
+          test("a user can not add a movie to another user watch list", async () => {});
+
+          test("a user can not add a movie to another user seen", async () => {});
+
+          describe("and a user has a movie in his favorites, watch list and seen", async () => {
+            test("a user can not remove a movie from another user favorites", async () => {});
+
+            test("a user can not remove a movie from another user watch list", async () => {});
+
+            test("a user can not remove a movie from another user seen", async () => {});
+          });
         });
       });
     });
