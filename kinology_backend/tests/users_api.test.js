@@ -2,6 +2,7 @@ const { test, after, beforeEach, describe } = require("node:test");
 const path = require("path");
 const assert = require("node:assert/strict");
 const User = require("../models/user");
+const Movie = require("../models/movie");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const bcrypt = require("bcrypt");
@@ -16,6 +17,19 @@ const getHash = async (pw) => {
 };
 
 const userPassword = "123123";
+
+let createdUserId;
+
+const userCredentials = {
+  ...helper.users[0],
+  name: "User Tester",
+  password: userPassword,
+  passwordConfirm: userPassword,
+};
+
+let token;
+
+const commentReceivingMovieId = helper.initialMovie.tmdbId;
 
 describe("when there are users in the db usersRouter", () => {
   beforeEach(async () => {
@@ -61,17 +75,6 @@ describe("when there are users in the db usersRouter", () => {
       .expect("Content-Type", /application\/json/);
   });
 });
-
-let createdUserId;
-
-const userCredentials = {
-  ...helper.users[0],
-  name: "User Tester",
-  password: userPassword,
-  passwordConfirm: userPassword,
-};
-
-let token;
 
 describe("when there are no users in the db", async () => {
   beforeEach(async () => {
@@ -190,6 +193,182 @@ describe("when there are no users in the db", async () => {
           usersAtEnd[0].avatar,
           `${usersAtEnd[0].username}-avatar`
         );
+      });
+
+      describe("and a movie exists in a db", async () => {
+        beforeEach(async () => {
+          await Movie.deleteMany({});
+
+          const movie = new Movie({
+            tmdbId: helper.initialMovie.tmdbId,
+            title: helper.initialMovie.title,
+            poster: helper.initialMovie.poster,
+          });
+
+          await movie.save();
+        });
+
+        test("a user can add a movie to his watch later", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "later";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const usersAtEnd = await helper.usersInDb();
+          assert.strictEqual(
+            movieData.id.toString(),
+            usersAtEnd[0].watchLaterMovies[0].toString()
+          );
+        });
+
+        test("a user can remove a movie from his watch later", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "later";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          // adding a movie
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          // then removing it
+          await api
+            .delete(`/api/users/${createdUserId}/movies/${movieData.tmdbId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const usersAtEnd = await helper.usersInDb();
+          assert.strictEqual(0, usersAtEnd[0].watchLaterMovies.length);
+        });
+
+        test("a user can add a movie to his favorites", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "favorite";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const usersAtEnd = await helper.usersInDb();
+          assert.strictEqual(
+            movieData.id.toString(),
+            usersAtEnd[0].favoriteMovies[0].toString()
+          );
+        });
+
+        test("a user can remove a movie from his favorites", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "favorite";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          // adding a movie
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          // then removing it
+          await api
+            .delete(`/api/users/${createdUserId}/movies/${movieData.tmdbId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const usersAtEnd = await helper.usersInDb();
+          assert.strictEqual(0, usersAtEnd[0].favoriteMovies.length);
+        });
+
+        test("a user can add a movie to his seen", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "watched";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const usersAtEnd = await helper.usersInDb();
+          assert.strictEqual(
+            movieData.id.toString(),
+            usersAtEnd[0].watchedMovies[0].toString()
+          );
+        });
+
+        test("a user can remove a movie from his seen", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "watched";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          // adding a movie
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          // then removing it
+          await api
+            .delete(`/api/users/${createdUserId}/movies/${movieData.tmdbId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ button })
+            .expect(201)
+            .expect("Content-Type", /application\/json/);
+
+          const usersAtEnd = await helper.usersInDb();
+          assert.strictEqual(0, usersAtEnd[0].watchedMovies.length);
+        });
       });
     });
   });

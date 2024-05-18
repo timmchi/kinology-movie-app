@@ -181,6 +181,7 @@ usersRouter.post(
   middleware.userExtractor,
   async (request, response) => {
     const { movie, button } = request.body;
+    const { id } = request.params;
     const parsedMovieAction = v.parse(MovieActionSchema, {
       id: movie.id,
       title: movie.title,
@@ -191,6 +192,9 @@ usersRouter.post(
     console.log(parsedMovieAction);
 
     const user = request.user;
+
+    if (user._id.toString() !== id.toString()) return response.status(401);
+
     let existingMovie = await Movie.findOne({ tmdbId: parsedMovieAction.id });
 
     if (!existingMovie) {
@@ -272,7 +276,7 @@ usersRouter.delete(
   middleware.userExtractor,
   async (request, response) => {
     const { button } = request.body;
-    const { movieId } = request.params;
+    const { movieId, id } = request.params;
     const user = request.user;
 
     const parsedMovieAction = v.parse(MovieActionSchema, {
@@ -280,13 +284,15 @@ usersRouter.delete(
       button,
     });
 
+    if (user._id.toString() !== id.toString()) return response.status(401);
+
     // console.log(movieId, button);
 
     const existingMovie = await Movie.findOne({ tmdbId: parsedMovieAction.id });
 
     // console.log(existingMovie);
 
-    if (!existingMovie) return response.status(200);
+    if (!existingMovie) return response.status(404);
 
     if (parsedMovieAction.button === "watched")
       await handleUnseeAction(existingMovie, user);
