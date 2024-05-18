@@ -21,8 +21,8 @@ const secondUser = {
 
 const users = [
   {
-    username: "loginstester",
-    email: "loginstester@example.com",
+    username: "userstester",
+    email: "userstester@example.com",
   },
   {
     username: "seconduser",
