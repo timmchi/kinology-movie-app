@@ -189,7 +189,9 @@ usersRouter.post(
       button,
     });
 
-    // console.log(parsedMovieAction);
+    const existingUser = await User.findById(id);
+    if (!existingUser)
+      return response.status(404).json({ error: "user does not exist" });
 
     const user = request.user;
 
@@ -339,6 +341,9 @@ usersRouter.put(
   async (request, response) => {
     const user = request.user;
     const profileOwner = await User.findById(request.params.id);
+
+    if (!profileOwner)
+      return response.status(404).json({ error: "user does not exist" });
 
     if (!profileOwner || user._id?.toString() !== profileOwner?._id?.toString())
       return response.status(401).json({ error: "token invalid" });

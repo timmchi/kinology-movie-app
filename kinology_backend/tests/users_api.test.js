@@ -182,26 +182,26 @@ describe("when there are no users in the db", async () => {
         assert.strictEqual(usersAtEnd.length, usersAtStart.length - 1);
       });
 
-      //   test("a user can update their profile", async () => {
-      //     const avatar = path.resolve(__dirname, "testImage.png");
+      test("a user can update their profile", async () => {
+        const avatar = path.resolve(__dirname, "testImage.png");
 
-      //     await api
-      //       .put(`/api/users/${createdUserId}`)
-      //       .set("Authorization", `Bearer ${token}`)
-      //       .field("name", "New User Name")
-      //       .field("bio", "I am testing")
-      //       .attach("avatar", avatar)
-      //       .expect(200);
+        await api
+          .put(`/api/users/${createdUserId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .field("name", "New User Name")
+          .field("bio", "I am testing")
+          .attach("avatar", avatar)
+          .expect(200);
 
-      //     const usersAtEnd = await helper.usersInDb();
+        const usersAtEnd = await helper.usersInDb();
 
-      //     assert.strictEqual(usersAtEnd[0].name, "New User Name");
-      //     assert.strictEqual(usersAtEnd[0].biography, "I am testing");
-      //     assert.strictEqual(
-      //       usersAtEnd[0].avatar,
-      //       `${usersAtEnd[0].username}-avatar`
-      //     );
-      //   });
+        assert.strictEqual(usersAtEnd[0].name, "New User Name");
+        assert.strictEqual(usersAtEnd[0].biography, "I am testing");
+        assert.strictEqual(
+          usersAtEnd[0].avatar,
+          `${usersAtEnd[0].username}-avatar`
+        );
+      });
 
       describe("and a movie exists in a db", async () => {
         beforeEach(async () => {
@@ -578,12 +578,130 @@ describe("when there are no users in the db", async () => {
               assert.strictEqual(1, movieCreator.watchedMovies.length);
             });
 
-            test("a non logged in user can not remove a movie from another user favorites", async () => {});
+            test("a non logged in user can not remove a movie from another user favorites", async () => {
+              const button = "favorite";
 
-            test("a non logged in user can not remove a movie from another user watch list", async () => {});
+              await api
+                .delete(`/api/users/${createdUserId}/movies/111`)
+                .send({ button })
+                .expect(401);
 
-            test("a non logged in user can not remove a movie from another user seen", async () => {});
+              const movieCreator = await User.findOne({
+                username: "userstester",
+              });
+
+              assert.strictEqual(1, movieCreator.favoriteMovies.length);
+            });
+
+            test("a non logged in user can not remove a movie from another user watch list", async () => {
+              const button = "later";
+
+              await api
+                .delete(`/api/users/${createdUserId}/movies/111`)
+                .send({ button })
+                .expect(401);
+
+              const movieCreator = await User.findOne({
+                username: "userstester",
+              });
+
+              assert.strictEqual(1, movieCreator.watchLaterMovies.length);
+            });
+
+            test("a non logged in user can not remove a movie from another user seen", async () => {
+              const button = "watched";
+
+              await api
+                .delete(`/api/users/${createdUserId}/movies/111`)
+                .send({ button })
+                .expect(401);
+
+              const movieCreator = await User.findOne({
+                username: "userstester",
+              });
+
+              assert.strictEqual(1, movieCreator.watchedMovies.length);
+            });
           });
+        });
+      });
+
+      describe("dealing with non-existingbut valid ids", async () => {
+        beforeEach(async () => {
+          await api
+            .delete(`/api/users/${createdUserId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .expect(204);
+        });
+
+        test("trying to edit a deleted user returns a 404", async () => {
+          const avatar = path.resolve(__dirname, "testImage.png");
+
+          await api
+            .put(`/api/users/${createdUserId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .field("name", "New User Name")
+            .field("bio", "I am testing")
+            .attach("avatar", avatar)
+            .expect(404);
+        });
+
+        test("trying to delete a deleted user returns a 404", async () => {
+          await api
+            .delete(`/api/users/${createdUserId}`)
+            .set("Authorization", `Bearer ${token}`)
+            .expect(404);
+        });
+
+        test("trying to add a movie to a deleted user favorites returns a 404", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "favorite";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(404);
+        });
+
+        test("trying to add a movie to a deleted user watch list returns a 404", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "later";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(404);
+        });
+
+        test("trying to add a movie to a deleted user seen returns a 404", async () => {
+          const movies = await helper.moviesInDb();
+          const movieData = movies[0];
+          const button = "watched";
+          const movie = {
+            id: movieData.tmdbId,
+            title: movieData.title,
+            poster: movieData.poster,
+          };
+
+          await api
+            .post(`/api/users/${createdUserId}/movies`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ movie, button })
+            .expect(404);
         });
       });
     });
