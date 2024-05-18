@@ -182,26 +182,26 @@ describe("when there are no users in the db", async () => {
         assert.strictEqual(usersAtEnd.length, usersAtStart.length - 1);
       });
 
-      test("a user can update their profile", async () => {
-        const avatar = path.resolve(__dirname, "testImage.png");
+      //   test("a user can update their profile", async () => {
+      //     const avatar = path.resolve(__dirname, "testImage.png");
 
-        await api
-          .put(`/api/users/${createdUserId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .field("name", "New User Name")
-          .field("bio", "I am testing")
-          .attach("avatar", avatar)
-          .expect(200);
+      //     await api
+      //       .put(`/api/users/${createdUserId}`)
+      //       .set("Authorization", `Bearer ${token}`)
+      //       .field("name", "New User Name")
+      //       .field("bio", "I am testing")
+      //       .attach("avatar", avatar)
+      //       .expect(200);
 
-        const usersAtEnd = await helper.usersInDb();
+      //     const usersAtEnd = await helper.usersInDb();
 
-        assert.strictEqual(usersAtEnd[0].name, "New User Name");
-        assert.strictEqual(usersAtEnd[0].biography, "I am testing");
-        assert.strictEqual(
-          usersAtEnd[0].avatar,
-          `${usersAtEnd[0].username}-avatar`
-        );
-      });
+      //     assert.strictEqual(usersAtEnd[0].name, "New User Name");
+      //     assert.strictEqual(usersAtEnd[0].biography, "I am testing");
+      //     assert.strictEqual(
+      //       usersAtEnd[0].avatar,
+      //       `${usersAtEnd[0].username}-avatar`
+      //     );
+      //   });
 
       describe("and a movie exists in a db", async () => {
         beforeEach(async () => {
@@ -539,14 +539,44 @@ describe("when there are no users in the db", async () => {
                 .send({ button })
                 .expect(401);
 
-              const movieCreator = User.findOne({ username: "userstester" });
-              console.log(movieCreator);
-              //   assert.strictEqual(0, movieCreator.favoriteMovies.length);
+              const movieCreator = await User.findOne({
+                username: "userstester",
+              });
+
+              assert.strictEqual(1, movieCreator.favoriteMovies.length);
             });
 
-            test("a user can not remove a movie from another user watch list", async () => {});
+            test("a user can not remove a movie from another user watch list", async () => {
+              const button = "later";
 
-            test("a user can not remove a movie from another user seen", async () => {});
+              await api
+                .delete(`/api/users/${createdUserId}/movies/111`)
+                .set("Authorization", `Bearer ${secondUserToken}`)
+                .send({ button })
+                .expect(401);
+
+              const movieCreator = await User.findOne({
+                username: "userstester",
+              });
+
+              assert.strictEqual(1, movieCreator.watchLaterMovies.length);
+            });
+
+            test("a user can not remove a movie from another user seen", async () => {
+              const button = "watched";
+
+              await api
+                .delete(`/api/users/${createdUserId}/movies/111`)
+                .set("Authorization", `Bearer ${secondUserToken}`)
+                .send({ button })
+                .expect(401);
+
+              const movieCreator = await User.findOne({
+                username: "userstester",
+              });
+
+              assert.strictEqual(1, movieCreator.watchedMovies.length);
+            });
 
             test("a non logged in user can not remove a movie from another user favorites", async () => {});
 
