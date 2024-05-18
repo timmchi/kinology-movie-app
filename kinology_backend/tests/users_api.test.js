@@ -1,4 +1,5 @@
 const { test, after, beforeEach, describe } = require("node:test");
+const path = require("path");
 const assert = require("node:assert/strict");
 const User = require("../models/user");
 const mongoose = require("mongoose");
@@ -70,6 +71,8 @@ const userCredentials = {
   passwordConfirm: userPassword,
 };
 
+let token;
+
 describe("when there are no users in the db", async () => {
   beforeEach(async () => {
     await User.deleteMany({});
@@ -109,6 +112,55 @@ describe("when there are no users in the db", async () => {
         .get(`/api/users/${createdUserId}`)
         .expect(200)
         .expect("Content-Type", /application\/json/);
+    });
+
+    describe("and a user has logged in", async () => {
+      beforeEach(async () => {
+        const result = await api
+          .post("/api/login")
+          .send({ username: userCredentials.username, password: userPassword });
+
+        token = result.body.token;
+      });
+
+      test("a user can delete their profile", async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        await api
+          .delete(`/api/users/${createdUserId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .expect(204);
+
+        const usersAtEnd = await helper.usersInDb();
+
+        const usernames = usersAtEnd.map((c) => c.username);
+
+        assert(!usernames.includes(userCredentials.username));
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length - 1);
+      });
+
+      test("a user can update their profile", async () => {
+        const avatar = path.resolve(__dirname, "testImage.png");
+
+        const usersAtStart = await helper.usersInDb();
+
+        await api
+          .put(`/api/users/${createdUserId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .field("name", "New User Name")
+          .field("bio", "I am testing")
+          .attach("avatar", avatar)
+          .expect(200);
+
+        const usersAtEnd = await helper.usersInDb();
+
+        assert.strictEqual(usersAtEnd[0].name, "New User Name");
+        assert.strictEqual(usersAtEnd[0].biography, "I am testing");
+        assert.strictEqual(
+          usersAtEnd[0].avatar,
+          `${usersAtEnd[0].username}-avatar`
+        );
+      });
     });
   });
 });

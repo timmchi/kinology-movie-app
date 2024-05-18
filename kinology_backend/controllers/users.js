@@ -265,6 +265,7 @@ const handleUnfavoriteAction = async (movie, user) => {
   }
 };
 
+// deleting a movie from user profile
 usersRouter.delete(
   "/:id/movies/:movieId",
   middleware.tokenExtractor,
@@ -385,10 +386,11 @@ usersRouter.put(
       { expiresIn: 60 * 60 }
     );
 
-    response.json({ user, avatarUrl });
+    response.status(200).json({ user, avatarUrl });
   }
 );
 
+// deleting a user
 usersRouter.delete(
   "/:id",
   middleware.tokenExtractor,
@@ -397,12 +399,15 @@ usersRouter.delete(
     const user = request.user;
     const profileOwner = await User.findById(request.params.id);
 
-    if (!profileOwner || user._id?.toString() !== profileOwner?._id?.toString())
+    if (!profileOwner)
+      return response.status(404).json({ error: "user does not exist" });
+
+    if (user._id?.toString() !== profileOwner?._id?.toString())
       return response.status(401).json({ error: "token invalid" });
 
     await profileOwner.deleteOne();
 
-    response.status(200).end();
+    response.status(204).end();
   }
 );
 
