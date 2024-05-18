@@ -384,22 +384,57 @@ describe("when there are no users in the db", async () => {
           // creating a second user
           await api
             .post("/api/users")
-            .send(userCredentials)
+            .send(secondUserCredentials)
             .expect(201)
             .expect("Content-Type", /application\/json/);
 
           // logging in
           const result = await api.post("/api/login").send({
-            username: userCredentials.username,
+            username: secondUserCredentials.username,
             password: userPassword,
           });
 
           secondUserToken = result.body.token;
         });
 
-        test("a user can not delete profile of another user", async () => {});
+        test("a user can not delete profile of another user", async () => {
+          const usersAtStart = await helper.usersInDb();
 
-        test("a user can not edit profile of another user", async () => {});
+          await api
+            .delete(`/api/users/${createdUserId}`)
+            .set("Authorization", `Bearer ${secondUserToken}`)
+            .expect(401);
+
+          const usersAtEnd = await helper.usersInDb();
+
+          const usernames = usersAtEnd.map((c) => c.username);
+
+          assert(usernames.includes(userCredentials.username));
+          assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+        });
+
+        test("a user can not edit profile of another user", async () => {
+          const usersAtStart = await helper.usersInDb();
+
+          const avatar = path.resolve(__dirname, "testImage.png");
+
+          await api
+            .put(`/api/users/${createdUserId}`)
+            .set("Authorization", `Bearer ${secondUserToken}`)
+            .field("name", "Unsuccessful user")
+            .field("bio", "I will not be updated")
+            .attach("avatar", avatar)
+            .expect(401);
+
+          const usersAtEnd = await helper.usersInDb();
+
+          assert.strictEqual(usersAtEnd[0].name, usersAtStart[0].name);
+          assert.strictEqual(
+            usersAtEnd[0].biography,
+            usersAtStart[0].biography
+          );
+          assert.strictEqual(usersAtEnd[0].avatar, usersAtStart[0].avatar);
+        });
 
         describe("and a movie exists in a db", async () => {
           beforeEach(async () => {
@@ -414,18 +449,110 @@ describe("when there are no users in the db", async () => {
             await movie.save();
           });
 
-          test("a user can not add a movie to another user favorites", async () => {});
+          test("a user can not add a movie to another user favorites", async () => {
+            const movies = await helper.moviesInDb();
+            const movieData = movies[0];
+            const button = "favorite";
+            const movie = {
+              id: movieData.tmdbId,
+              title: movieData.title,
+              poster: movieData.poster,
+            };
 
-          test("a user can not add a movie to another user watch list", async () => {});
+            await api
+              .post(`/api/users/${createdUserId}/movies`)
+              .set("Authorization", `Bearer ${secondUserToken}`)
+              .send({ movie, button })
+              .expect(401);
 
-          test("a user can not add a movie to another user seen", async () => {});
+            const usersAtEnd = await helper.usersInDb();
+            assert.strictEqual(0, usersAtEnd[0].favoriteMovies.length);
+          });
+
+          test("a user can not add a movie to another user watch list", async () => {
+            const movies = await helper.moviesInDb();
+            const movieData = movies[0];
+            const button = "later";
+            const movie = {
+              id: movieData.tmdbId,
+              title: movieData.title,
+              poster: movieData.poster,
+            };
+
+            await api
+              .post(`/api/users/${createdUserId}/movies`)
+              .set("Authorization", `Bearer ${secondUserToken}`)
+              .send({ movie, button })
+              .expect(401);
+
+            const usersAtEnd = await helper.usersInDb();
+            assert.strictEqual(0, usersAtEnd[0].watchLaterMovies.length);
+          });
+
+          test("a user can not add a movie to another user seen", async () => {
+            const movies = await helper.moviesInDb();
+            const movieData = movies[0];
+            const button = "watched";
+            const movie = {
+              id: movieData.tmdbId,
+              title: movieData.title,
+              poster: movieData.poster,
+            };
+
+            await api
+              .post(`/api/users/${createdUserId}/movies`)
+              .set("Authorization", `Bearer ${secondUserToken}`)
+              .send({ movie, button })
+              .expect(401);
+
+            const usersAtEnd = await helper.usersInDb();
+            assert.strictEqual(0, usersAtEnd[0].watchedMovies.length);
+          });
 
           describe("and a user has a movie in his favorites, watch list and seen", async () => {
-            test("a user can not remove a movie from another user favorites", async () => {});
+            beforeEach(async () => {
+              const movies = await helper.moviesInDb();
+              const movieData = movies[0];
+              const buttons = ["watched", "later", "favorite"];
+              const movie = {
+                id: movieData.tmdbId,
+                title: movieData.title,
+                poster: movieData.poster,
+              };
+
+              for (const button of buttons) {
+                await api
+                  .post(`/api/users/${createdUserId}/movies`)
+                  .set("Authorization", `Bearer ${token}`)
+                  .send({ movie, button })
+                  .expect(201)
+                  .expect("Content-Type", /application\/json/);
+              }
+            });
+
+            test("a user can not remove a movie from another user favorites", async () => {
+              const button = "favorite";
+
+              await api
+                .delete(`/api/users/${createdUserId}/movies/111`)
+                .set("Authorization", `Bearer ${secondUserToken}`)
+                .send({ button })
+                .expect(401);
+
+              const movieCreator = User.findOne({ username: "userstester" });
+              console.log(movieCreator);
+              //   assert.strictEqual(0, movieCreator.favoriteMovies.length);
+            });
 
             test("a user can not remove a movie from another user watch list", async () => {});
 
             test("a user can not remove a movie from another user seen", async () => {});
+
+            test("a non logged in user can not remove a movie from another user favorites", async () => {});
+
+            test("a non logged in user can not remove a movie from another user watch list", async () => {});
+
+            test("a non logged in user can not remove a movie from another user seen", async () => {});
           });
         });
       });

@@ -189,11 +189,11 @@ usersRouter.post(
       button,
     });
 
-    console.log(parsedMovieAction);
+    // console.log(parsedMovieAction);
 
     const user = request.user;
 
-    if (user._id.toString() !== id.toString()) return response.status(401);
+    if (user._id.toString() !== id) return response.status(401).end();
 
     let existingMovie = await Movie.findOne({ tmdbId: parsedMovieAction.id });
 
@@ -284,7 +284,7 @@ usersRouter.delete(
       button,
     });
 
-    if (user._id.toString() !== id.toString()) return response.status(401);
+    if (user._id.toString() !== id) return response.status(401).end();
 
     // console.log(movieId, button);
 
