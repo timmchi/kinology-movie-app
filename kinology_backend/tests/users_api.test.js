@@ -114,6 +114,38 @@ describe("when there are no users in the db", async () => {
         .expect("Content-Type", /application\/json/);
     });
 
+    test("a non logged-in user can not delete a profile", async () => {
+      const usersAtStart = await helper.usersInDb();
+
+      await api.delete(`/api/users/${createdUserId}`).expect(401);
+
+      const usersAtEnd = await helper.usersInDb();
+
+      const usernames = usersAtEnd.map((c) => c.username);
+
+      assert(usernames.includes(userCredentials.username));
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+    });
+
+    test("a non logged-in user can not update a profile", async () => {
+      const usersAtStart = await helper.usersInDb();
+
+      const avatar = path.resolve(__dirname, "testImage.png");
+
+      await api
+        .put(`/api/users/${createdUserId}`)
+        .field("name", "Unsuccessful user")
+        .field("bio", "I will not be updated")
+        .attach("avatar", avatar)
+        .expect(401);
+
+      const usersAtEnd = await helper.usersInDb();
+
+      assert.strictEqual(usersAtEnd[0].name, usersAtStart[0].name);
+      assert.strictEqual(usersAtEnd[0].biography, usersAtStart[0].biography);
+      assert.strictEqual(usersAtEnd[0].avatar, usersAtStart[0].avatar);
+    });
+
     describe("and a user has logged in", async () => {
       beforeEach(async () => {
         const result = await api
@@ -141,8 +173,6 @@ describe("when there are no users in the db", async () => {
 
       test("a user can update their profile", async () => {
         const avatar = path.resolve(__dirname, "testImage.png");
-
-        const usersAtStart = await helper.usersInDb();
 
         await api
           .put(`/api/users/${createdUserId}`)
