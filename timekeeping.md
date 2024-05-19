@@ -40,6 +40,7 @@
 | 16.5 | 4     | Tests for comment router, fixing bugs, refactoring                       |
 | 17.5 | 4     | Tests, refactoring tests                                                 |
 | 18.5 | 4.5   | Tests for users route, fixing backend                                    |
+| 19.5 | 2     | Backend tests, frontend test set up, some tests                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -55,5 +56,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 70    |                                                                          |
+| tot  | 72    |                                                                          |

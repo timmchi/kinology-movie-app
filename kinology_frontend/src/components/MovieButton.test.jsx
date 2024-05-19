@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import MovieButton from "./MovieButton";
-import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 
 test("movie button renders with correct text", () => {
