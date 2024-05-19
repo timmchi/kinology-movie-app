@@ -25,6 +25,7 @@ loginRouter.post("/", async (request, response) => {
   //   console.log(parsedCredentials);
 
   const user = await User.findOne({ username: parsedCredentials.username });
+
   const passwordCorrect =
     user === null
       ? false

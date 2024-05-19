@@ -34,6 +34,16 @@ const users = [
   },
 ];
 
+const loginUser = {
+  username: "logintester",
+  email: "logintester@example.com",
+};
+
+const secondLoginUser = {
+  username: "logintester2",
+  email: "logintester2@example.com",
+};
+
 const initialMovie = {
   title: "Scarface",
   poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
@@ -183,6 +193,8 @@ module.exports = {
   secondUser,
   users,
   initialMovie,
+  loginUser,
+  secondLoginUser,
   commentsInDb,
   moviesInDb,
   usersInDb,
