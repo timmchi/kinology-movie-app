@@ -8,6 +8,7 @@ const nock = require("nock");
 const bcrypt = require("bcrypt");
 const app = require("../app");
 const helper = require("./test_helper");
+const config = require("../utils/config");
 
 const api = supertest(app);
 
@@ -47,6 +48,15 @@ describe("there are already movies in the db", async () => {
     assert(titles.includes("Easy Rider"));
   });
 });
+
+const mockResponse = {
+  results: helper.mockMovies.map((movie) => ({
+    id: movie.tmdbId,
+    title: movie.title,
+    poster_path: movie.poster,
+  })),
+  total_pages: 1,
+};
 
 after(async () => {
   await mongoose.connection.close();
