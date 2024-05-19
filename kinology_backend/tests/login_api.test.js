@@ -6,7 +6,6 @@ const supertest = require("supertest");
 const bcrypt = require("bcrypt");
 const app = require("../app");
 const helper = require("./test_helper");
-const { create } = require("node:domain");
 
 const api = supertest(app);
 

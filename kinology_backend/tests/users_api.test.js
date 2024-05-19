@@ -53,14 +53,14 @@ describe("when there are users in the db usersRouter", () => {
     await Promise.all(promiseArray);
   });
 
-  test("users are returned as json usersRouter", async () => {
+  test("users are returned as json", async () => {
     await api
       .get("/api/users")
       .expect(200)
       .expect("Content-Type", /application\/json/);
   });
 
-  test("there is a correct amount of users usersRouter", async () => {
+  test("there is a correct amount of users", async () => {
     const users = await helper.usersInDb();
 
     assert.strictEqual(users.length, helper.users.length);

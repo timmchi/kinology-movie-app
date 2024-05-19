@@ -50,6 +50,20 @@ const initialMovie = {
   tmdbId: "111",
 };
 
+const mockMovies = [
+  { title: "Casino", poster: "/4TS5O1IP42bY2BvgMxL156EENy.jpg", tmdbId: "524" },
+  {
+    title: "GoodFellas",
+    poster: "/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
+    tmdbId: "769",
+  },
+  {
+    title: "Easy Rider",
+    poster: "/mmGEB6ly9OG8SYVfvAoa6QqHNvN.jpg",
+    tmdbId: "624",
+  },
+];
+
 const commentsInDb = async () => {
   const comments = await UserComment.find({});
   return comments.map((comment) => comment.toJSON());
@@ -193,6 +207,7 @@ module.exports = {
   secondUser,
   users,
   initialMovie,
+  mockMovies,
   loginUser,
   secondLoginUser,
   commentsInDb,
