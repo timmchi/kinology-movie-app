@@ -4,7 +4,7 @@ import MovieCard from "./MovieCard";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 
-test("renders a movie card", () => {
+test("renders a movie card with all buttons", () => {
   const movie = {
     title: "Scarface",
     poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
@@ -28,7 +28,7 @@ test("renders a movie card", () => {
   expect(seenButton).toBeDefined();
 });
 
-test("calls onButtonPress with correct argumens when Watch button is pressed", async () => {
+test("calls onButtonPress with correct argumens when Watch button is pressed, then unpressed", async () => {
   const movie = {
     title: "Scarface",
     poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
@@ -59,7 +59,7 @@ test("calls onButtonPress with correct argumens when Watch button is pressed", a
   expect(mockUnpressHandler.mock.calls).toHaveLength(1);
 });
 
-test("calls onButtonPress with correct argumens when Favorite button is pressed", async () => {
+test("calls onButtonPress with correct argumens when Favorite button is pressed, then unpressed", async () => {
   const movie = {
     title: "Scarface",
     poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
@@ -90,7 +90,7 @@ test("calls onButtonPress with correct argumens when Favorite button is pressed"
   expect(mockUnpressHandler.mock.calls).toHaveLength(1);
 });
 
-test("calls onButtonPress with correct argumens when Seen button is pressed", async () => {
+test("calls onButtonPress with correct argumens when Seen button is pressed, then unpressed", async () => {
   const movie = {
     title: "Scarface",
     poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
