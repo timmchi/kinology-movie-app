@@ -15,7 +15,7 @@ const MovieButton = ({
     return (
       JSON.parse(
         localStorage.getItem(
-          `pressed ${unpressedText} ${movieId} ${user.username}`
+          `pressed ${unpressedText} ${movieId} ${user?.username}`
         )
       ) ?? false
     );
@@ -23,10 +23,10 @@ const MovieButton = ({
 
   useEffect(() => {
     localStorage.setItem(
-      `pressed ${unpressedText} ${movieId} ${user.username}`,
+      `pressed ${unpressedText} ${movieId} ${user?.username}`,
       JSON.stringify(pressed)
     );
-  }, [movieId, user.username, pressed, unpressedText]);
+  }, [movieId, user?.username, pressed, unpressedText]);
 
   const pressButton = (event) => {
     console.log("i am being pressed");
