@@ -8,6 +8,12 @@ const Navigation = ({ user }) => {
     padding: 5,
   };
 
+  const handleLogout = (event) => {
+    console.log("logging out...");
+    window.localStorage.removeItem("loggedKinologyUser");
+    window.location.reload();
+  };
+
   return (
     <div>
       <nav className="nav">
@@ -28,7 +34,7 @@ const Navigation = ({ user }) => {
                 </NavLink>
               </li>
               <li>
-                <LogOut />
+                <LogOut handleLogout={handleLogout} />
               </li>
             </>
           ) : (
