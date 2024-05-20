@@ -41,6 +41,7 @@
 | 17.5 | 4     | Tests, refactoring tests                                                 |
 | 18.5 | 4.5   | Tests for users route, fixing backend                                    |
 | 19.5 | 2     | Backend tests, frontend test set up, some tests                          |
+| 20.5 | 4     | Frontend unit tests, frontend refactoring                                |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -55,5 +56,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 72    |                                                                          |
+| tot  | 76    |                                                                          |
