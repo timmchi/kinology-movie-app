@@ -6,7 +6,6 @@ import Hero from "./Hero";
 const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
   const [movies, setMovies] = useState([]);
 
-  console.log("movies state in landing page", movies);
   return (
     <>
       <Hero />
