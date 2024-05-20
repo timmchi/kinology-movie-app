@@ -1,8 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import LogIn from "./LogIn";
 import { testSetup } from "../utils/testUtils";
-import { beforeEach, describe, expect, test } from "vitest";
+import { expect, test } from "vitest";
 
 test("Log in form is rendered correctly", () => {
   const { container } = render(<LogIn />);
