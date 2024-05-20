@@ -21,7 +21,6 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
     fetchAvatar();
   }, [comment.author?.id]);
 
-  console.log(comment.author.name);
   return (
     <div className="singleComment">
       <ListItem

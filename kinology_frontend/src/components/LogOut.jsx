@@ -1,9 +1,5 @@
 const LogOut = ({ handleLogout }) => {
-  return (
-    <form onSubmit={handleLogout}>
-      <button type="submit">log out</button>
-    </form>
-  );
+  return <button onClick={handleLogout}>log out</button>;
 };
 
 export default LogOut;

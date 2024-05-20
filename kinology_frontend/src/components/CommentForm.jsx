@@ -40,7 +40,7 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
     <form onSubmit={handleSubmit(submitComment)}>
       <div>
         Your comment
-        <input {...register("content")} />
+        <input {...register("content")} placeholder="comment" />
         <p style={{ color: "red" }}>{errors.content?.message}</p>
       </div>
       <Button
@@ -53,6 +53,7 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
           marginBottom: 1,
         }}
         type="submit"
+        id="comment-button"
       >
         {isSubmitting ? "Commenting..." : "Submit comment"}
       </Button>
