@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LogIn from "./LogIn";
+import { testSetup } from "../utils/testUtils";
 import { beforeEach, describe, expect, test } from "vitest";
 
 test("Log in form is rendered correctly", () => {
@@ -18,9 +19,8 @@ test("Log in form is rendered correctly", () => {
 
 test("Log In form updates parent state and calls handleLogin", async () => {
   const handleLogin = vi.fn();
-  const user = userEvent.setup();
 
-  render(<LogIn handleLogin={handleLogin} />);
+  const { user } = testSetup(<LogIn handleLogin={handleLogin} />);
 
   const username = screen.getByPlaceholderText("username...");
   const password = screen.getByPlaceholderText("password...");
@@ -33,4 +33,30 @@ test("Log In form updates parent state and calls handleLogin", async () => {
   expect(handleLogin.mock.calls).toHaveLength(1);
   expect(handleLogin.mock.calls[0][0].username).toBe("tester");
   expect(handleLogin.mock.calls[0][0].password).toBe("password");
+});
+
+test("form fields are validated", async () => {
+  const handleLogin = vi.fn();
+
+  const { user } = testSetup(<LogIn handleLogin={handleLogin} />);
+
+  const username = screen.getByPlaceholderText("username...");
+  const password = screen.getByPlaceholderText("password...");
+  const loginButton = screen.getByText("Log In");
+
+  await user.type(username, "t");
+  await user.type(password, "p");
+  await user.click(loginButton);
+
+  expect(handleLogin.mock.calls).toHaveLength(0);
+
+  const usernameError = screen.getByText(
+    /Username needs to be at least 3 characters long./i
+  );
+  const passwordError = screen.getByText(
+    /Your password must have 6 characters or more./i
+  );
+
+  expect(usernameError).toBeInTheDocument();
+  expect(passwordError).toBeInTheDocument();
 });
