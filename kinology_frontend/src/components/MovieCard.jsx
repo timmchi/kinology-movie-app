@@ -39,7 +39,7 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
         <CardMedia
           component="img"
           loading="lazy"
-          alt="movie poster"
+          alt={`${movie.title} poster`}
           height="280"
           image={`${basePosterUrl}${movie.image}`}
           sx={{ objectFit: "contain", marginTop: 3 }}

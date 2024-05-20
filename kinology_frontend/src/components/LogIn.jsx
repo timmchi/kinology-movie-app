@@ -35,19 +35,23 @@ const LogIn = ({ handleLogin }) => {
       <form onSubmit={handleSubmit(handleLogin)}>
         <div>
           username
-          <input {...register("username")} />
+          <input {...register("username")} placeholder="username..." />
           {errors?.username?.message ?? (
             <p style={{ color: "red" }}>{errors.username?.message}</p>
           )}
         </div>
         <div>
           password
-          <input type="password" {...register("password")} />
+          <input
+            type="password"
+            {...register("password")}
+            placeholder="password..."
+          />
           {errors?.password?.message ?? (
             <p style={{ color: "red" }}>{errors.password?.message}</p>
           )}
         </div>
-        <button disabled={isSubmitting} type="submit">
+        <button disabled={isSubmitting} type="submit" id="login-button">
           {isSubmitting ? "Logging in..." : "Log In"}
         </button>
       </form>

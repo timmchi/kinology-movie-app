@@ -29,7 +29,7 @@ const MovieButton = ({
   }, [movieId, user?.username, pressed, unpressedText]);
 
   const pressButton = (event) => {
-    console.log("i am being pressed");
+    // console.log("i am being pressed");
     try {
       setPressed(!pressed);
       onButtonPress(event);
@@ -39,7 +39,7 @@ const MovieButton = ({
   };
 
   const unpressButton = (event) => {
-    console.log("i am being unpressed");
+    // console.log("i am being unpressed");
     try {
       setPressed(!pressed);
       onButtonUnpress(event);

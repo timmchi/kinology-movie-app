@@ -120,3 +120,37 @@ test("calls onButtonPress with correct argumens when Seen button is pressed, the
   expect(mockPressHandler.mock.calls).toHaveLength(1);
   expect(mockUnpressHandler.mock.calls).toHaveLength(1);
 });
+
+test("movie card has an image with correct alt text", () => {
+  const movie = {
+    title: "Scarface",
+    poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
+    tmdbId: "111",
+  };
+
+  render(
+    <MemoryRouter>
+      <MovieCard movie={movie} />
+    </MemoryRouter>
+  );
+
+  const smallCard = screen.getByAltText(`${movie.title} poster`);
+  expect(smallCard).toBeDefined();
+});
+
+test("movie card has an image with correct alt text when poster path is incorrect", () => {
+  const movie = {
+    title: "Scarface",
+    poster: "/incorrect.jpg",
+    tmdbId: "111",
+  };
+
+  render(
+    <MemoryRouter>
+      <MovieCard movie={movie} />
+    </MemoryRouter>
+  );
+
+  const smallCard = screen.getByAltText(`${movie.title} poster`);
+  expect(smallCard).toBeDefined();
+});
