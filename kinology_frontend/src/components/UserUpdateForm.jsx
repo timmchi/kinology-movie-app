@@ -70,7 +70,12 @@ const UserUpdateForm = ({ updateUser }) => {
       </div>
       <div>
         Avatar
-        <input {...register("avatar")} type="file" accept="image/*" />
+        <input
+          {...register("avatar")}
+          type="file"
+          accept="image/*"
+          placeholder="avatar"
+        />
       </div>
       <div>
         Name
@@ -79,7 +84,7 @@ const UserUpdateForm = ({ updateUser }) => {
           {errors.name?.message ?? <p>{errors.name?.message}</p>}
         </div>
       </div>
-      <button disabled={isSubmitting} type="submit">
+      <button disabled={isSubmitting} type="submit" id="update-button">
         {isSubmitting ? "Updating..." : "Update your profile"}
       </button>
     </form>
