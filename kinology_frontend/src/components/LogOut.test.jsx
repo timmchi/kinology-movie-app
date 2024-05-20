@@ -10,3 +10,15 @@ test("Element renders correctly", () => {
 
   expect(logoutButton).toBeDefined();
 });
+
+test("LogOut correctly calls handleLogout", async () => {
+  const handleLogout = vi.fn();
+
+  const { user } = testSetup(<LogOut handleLogout={handleLogout} />);
+
+  const logoutButton = screen.getByText("log out");
+
+  await user.click(logoutButton);
+
+  expect(handleLogout.mock.calls).toHaveLength(1);
+});
