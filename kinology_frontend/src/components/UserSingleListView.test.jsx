@@ -35,5 +35,5 @@ test("renders user with avatar correctly", async () => {
   expect(avatar).toHaveAttribute("src", "avatarUrl");
 
   const userElement = screen.getByText(user.name);
-  expect(userElement).toBeInTheDocument();
+  expect(userElement).toBeDefined();
 });

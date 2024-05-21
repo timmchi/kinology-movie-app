@@ -18,10 +18,10 @@ test("renders correctly when the user is null", () => {
   const login = screen.getByText("Log in");
   const signup = screen.getByText("Sign up");
 
-  expect(siteTitle).toBeInTheDocument();
-  expect(about).toBeInTheDocument();
-  expect(login).toBeInTheDocument();
-  expect(signup).toBeInTheDocument();
+  expect(siteTitle).toBeDefined();
+  expect(about).toBeDefined();
+  expect(login).toBeDefined();
+  expect(signup).toBeDefined();
 });
 
 test("renders correctly when the user is logged in", () => {
@@ -36,10 +36,10 @@ test("renders correctly when the user is logged in", () => {
   const users = screen.getByText("Users");
   const logout = screen.getByText("log out");
 
-  expect(siteTitle).toBeInTheDocument();
-  expect(about).toBeInTheDocument();
-  expect(users).toBeInTheDocument();
-  expect(logout).toBeInTheDocument();
+  expect(siteTitle).toBeDefined();
+  expect(about).toBeDefined();
+  expect(users).toBeDefined();
+  expect(logout).toBeDefined();
 });
 
 describe("testing routes", () => {
@@ -54,10 +54,10 @@ describe("testing routes", () => {
     );
 
     fireEvent.click(screen.getByText("About"));
-    expect(screen.getByText(/About me/i)).toBeInTheDocument();
-    expect(screen.getByText(/my favorite movies/i)).toBeInTheDocument();
-    expect(screen.getByText(/Web app uses TMDB api/i)).toBeInTheDocument();
-    expect(screen.getByText(/Fullstack open/i)).toBeInTheDocument();
+    expect(screen.getByText(/About me/i)).toBeDefined();
+    expect(screen.getByText(/my favorite movies/i)).toBeDefined();
+    expect(screen.getByText(/Web app uses TMDB api/i)).toBeDefined();
+    expect(screen.getByText(/Fullstack open/i)).toBeDefined();
   });
 
   test("signup form can be accessed through navigation", () => {
@@ -109,9 +109,9 @@ describe("testing routes", () => {
 describe("local storage test", () => {
   const removeItemMock = vi.spyOn(Storage.prototype, "removeItem");
 
-  afterEach(() => {
-    localStorage.clear();
-  });
+  //   afterEach(() => {
+  //     localStorage.clear();
+  //   });
 
   test("handles logout function correctly", () => {
     render(

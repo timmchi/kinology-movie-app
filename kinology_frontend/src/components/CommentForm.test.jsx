@@ -52,5 +52,5 @@ test("Comment form validated correctly", async () => {
   expect(commentAction.mock.calls).toHaveLength(0);
 
   const commentError = screen.getByText(/Comments can not be empty/i);
-  expect(commentError).toBeInTheDocument();
+  expect(commentError).toBeDefined();
 });

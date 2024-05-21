@@ -87,19 +87,19 @@ const SearchBar = ({ setMovies }) => {
 
   console.log(errors);
   const searchForMovies = async (data, pageValue) => {
-    console.log(data);
+    // console.log(data);
 
     // TODO - refactor this: create a function that parses the data into suitable shape
     const actorsQuery = actors.map((actor) => actor.value);
     const { genresSelect, director, year, ratingUpper, ratingLower, country } =
       data;
-    console.log(genresSelect);
-    console.log(
-      ratingUpper,
-      ratingLower,
-      typeof ratingUpper,
-      typeof ratingLower
-    );
+    // console.log(genresSelect);
+    // console.log(
+    //   ratingUpper,
+    //   ratingLower,
+    //   typeof ratingUpper,
+    //   typeof ratingLower
+    // );
     const genres = genresSelect
       ? genresSelect?.map((genreOption) => `${genreOption.value}`)
       : [];
@@ -115,8 +115,8 @@ const SearchBar = ({ setMovies }) => {
         country,
         page: pageValue,
       });
-    console.log(movies);
-    console.log("page number in searchbar", totalPageNumber);
+    // console.log(movies);
+    // console.log("page number in searchbar", totalPageNumber);
     setTotalPages(totalPageNumber);
     setMovies(movies);
   };
@@ -172,19 +172,28 @@ const SearchBar = ({ setMovies }) => {
         )}
         <div className="director">
           <p>director</p>
-          <input {...register("director")} type="text" className="bar-input" />
+          <input
+            {...register("director")}
+            type="text"
+            className="bar-input"
+            placeholder="director"
+          />
         </div>
         {errors.director?.message ?? <p>{errors.director?.message}</p>}
         <div className="year">
           <p>year</p>
-          <input {...register("year")} className="bar-input" />
+          <input
+            {...register("year")}
+            className="bar-input"
+            placeholder="year"
+          />
         </div>
         {errors.year?.message ?? <p>{errors.year?.message}</p>}
         <div className="rating">
           <p>Rating range</p>
           <input
             {...register("ratingLower")}
-            placeholder="Lower threshhold"
+            placeholder="Lower threshold"
             type="number"
             min={0}
             max={10}
@@ -203,7 +212,7 @@ const SearchBar = ({ setMovies }) => {
         </div>
         {errors.ratingLower?.message ?? <p>{errors.ratingLower?.message}</p>}
         {errors.ratingUpper?.message ?? <p>{errors.ratingUpper?.message}</p>}
-        <div className="actors">
+        <div className="actors" data-testid="actor-input">
           <Controller
             name="actorsSelect"
             control={control}
@@ -233,8 +242,16 @@ const SearchBar = ({ setMovies }) => {
         </div>
         <div className="country">
           <p>country</p>
-          <input {...register("country")} className="bar-input" />
-          <button type="submit" disabled={isSubmitting}>
+          <input
+            {...register("country")}
+            className="bar-input"
+            placeholder="country"
+          />
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            aria-label="Search for movies"
+          >
             <SearchIcon />
           </button>
         </div>

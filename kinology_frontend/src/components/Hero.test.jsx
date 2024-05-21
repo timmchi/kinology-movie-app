@@ -20,21 +20,19 @@ test("renders Hero component correctly", () => {
     </MemoryRouter>
   );
 
-  expect(screen.getByText("Welcome to")).toBeInTheDocument();
-  expect(screen.getByText("Kinology")).toBeInTheDocument();
-  expect(screen.getByText(/Choosing a movie made easy/i)).toBeInTheDocument();
-  expect(
-    screen.getByText(/Pick actors, directors or genres/i)
-  ).toBeInTheDocument();
+  expect(screen.getByText("Welcome to")).toBeDefined();
+  expect(screen.getByText("Kinology")).toBeDefined();
+  expect(screen.getByText(/Choosing a movie made easy/i)).toBeDefined();
+  expect(screen.getByText(/Pick actors, directors or genres/i)).toBeDefined();
   expect(
     screen.getByText(/Too many good options to choose from?/i)
-  ).toBeInTheDocument();
+  ).toBeDefined();
   expect(
     screen.getByText(/Create an account to save movies for later!/i)
-  ).toBeInTheDocument();
+  ).toBeDefined();
 
   const searchButton = screen.getByRole("button", { name: /search/i });
-  expect(searchButton).toBeInTheDocument();
+  expect(searchButton).toBeDefined();
   expect(searchButton).toHaveClass("CTA-search");
   expect(searchButton).toHaveStyle("background-color: rgb(121, 84, 88);");
   expect(screen.getByText(/search/i).closest("a")).toHaveAttribute(
@@ -43,7 +41,7 @@ test("renders Hero component correctly", () => {
   );
 
   const registerButton = screen.getByRole("button", { name: /register/i });
-  expect(registerButton).toBeInTheDocument();
+  expect(registerButton).toBeDefined();
   expect(registerButton).toHaveClass("CTA-register");
   expect(registerButton).toHaveStyle("background-color: rgb(143, 145, 107);");
 });

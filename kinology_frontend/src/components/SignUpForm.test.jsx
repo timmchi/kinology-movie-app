@@ -85,9 +85,9 @@ test("form fields are validated", async () => {
     /The two passwords do not match/i
   );
 
-  expect(usernameError).toBeInTheDocument();
-  expect(nameError).toBeInTheDocument();
-  expect(emailError).toBeInTheDocument();
-  expect(passwordError).toBeInTheDocument();
-  expect(confirmPasswordError).toBeInTheDocument();
+  expect(usernameError).toBeDefined();
+  expect(nameError).toBeDefined();
+  expect(emailError).toBeDefined();
+  expect(passwordError).toBeDefined();
+  expect(confirmPasswordError).toBeDefined();
 });

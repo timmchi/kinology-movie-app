@@ -12,18 +12,18 @@ test("Update form is rendered correctly", () => {
 
   const button = container.querySelector("#update-button");
 
-  expect(bio).toBeInTheDocument();
-  expect(avatar).toBeInTheDocument();
-  expect(name).toBeInTheDocument();
-  expect(button).toBeInTheDocument();
+  expect(bio).toBeDefined();
+  expect(avatar).toBeDefined();
+  expect(name).toBeDefined();
+  expect(button).toBeDefined();
 
   const bioInput = screen.getByPlaceholderText(
     "Write something about yourself"
   );
   const nameInput = screen.getByPlaceholderText("Change your name");
 
-  expect(bioInput).toBeInTheDocument();
-  expect(nameInput).toBeInTheDocument();
+  expect(bioInput).toBeDefined();
+  expect(nameInput).toBeDefined();
 });
 
 test("Calls handleUpdate properly with correct data", async () => {

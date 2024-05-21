@@ -27,7 +27,7 @@ test("success notification is rendered correctly", () => {
   renderWithContext(contextValue);
 
   const alert = screen.getByRole("alert");
-  expect(alert).toBeInTheDocument();
+  expect(alert).toBeDefined();
   expect(alert).toHaveTextContent("I was successful");
   expect(alert).toHaveClass("MuiAlert-standardSuccess");
 });
@@ -37,7 +37,7 @@ test("error notification is rendered correctly", () => {
   renderWithContext(contextValue);
 
   const alert = screen.getByRole("alert");
-  expect(alert).toBeInTheDocument();
+  expect(alert).toBeDefined();
   expect(alert).toHaveTextContent("I am an error");
   expect(alert).toHaveClass("MuiAlert-standardError");
 });

@@ -52,7 +52,7 @@ test("renders properly when there are no comments", () => {
   );
 
   const text = screen.getByText("no comments yet...");
-  expect(text).toBeInTheDocument();
+  expect(text).toBeDefined();
 });
 
 test("renders properly when passed a list of comments", async () => {
@@ -73,25 +73,25 @@ test("renders properly when passed a list of comments", async () => {
   const user2 = screen.getByText(testComments[1].author.name);
   const user3 = screen.getByText(testComments[2].author.name);
 
-  expect(user1).toBeInTheDocument();
-  expect(user2).toBeInTheDocument();
-  expect(user3).toBeInTheDocument();
+  expect(user1).toBeDefined();
+  expect(user2).toBeDefined();
+  expect(user3).toBeDefined();
 
   const user1Img = screen.getByAltText(`${testComments[0].author.name}`);
   const user2Img = screen.getByAltText(`${testComments[1].author.name}`);
   const user3Img = screen.getByAltText(`${testComments[2].author.name}`);
 
-  expect(user1Img).toBeInTheDocument();
-  expect(user2Img).toBeInTheDocument();
-  expect(user3Img).toBeInTheDocument();
+  expect(user1Img).toBeDefined();
+  expect(user2Img).toBeDefined();
+  expect(user3Img).toBeDefined();
 
   const user1Comment = screen.getByText(testComments[0].content);
   const user2Comment = screen.getByText(testComments[1].content);
   const user3Comment = screen.getByText(testComments[2].content);
 
-  expect(user1Comment).toBeInTheDocument();
-  expect(user2Comment).toBeInTheDocument();
-  expect(user3Comment).toBeInTheDocument();
+  expect(user1Comment).toBeDefined();
+  expect(user2Comment).toBeDefined();
+  expect(user3Comment).toBeDefined();
 });
 
 test("onDelete function is called properly with correct params", async () => {

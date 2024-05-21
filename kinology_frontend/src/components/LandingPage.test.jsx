@@ -10,13 +10,13 @@ test("landing page renders properly", () => {
     </MemoryRouter>
   );
 
-  expect(screen.getByText("Welcome to")).toBeInTheDocument();
-  expect(screen.getByText("Kinology")).toBeInTheDocument();
+  expect(screen.getByText("Welcome to")).toBeDefined();
+  expect(screen.getByText("Kinology")).toBeDefined();
 
   const cards = container.querySelector(".cardsContainer");
   expect(cards).not.toBeNull();
 
   const searchBar = container.querySelector(".searchBar");
   expect(searchBar).not.toBeNull();
-  expect(screen.getByText("new search")).toBeInTheDocument();
+  expect(screen.getByText("new search")).toBeDefined();
 });

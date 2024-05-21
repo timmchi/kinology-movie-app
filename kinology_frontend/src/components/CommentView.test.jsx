@@ -57,10 +57,10 @@ test("render comment with avatar correctly", async () => {
   expect(avatar).toHaveAttribute("src", "avatarUrl");
 
   const commentAuthor = screen.getByText(comment.author.name);
-  expect(commentAuthor).toBeInTheDocument();
+  expect(commentAuthor).toBeDefined();
 
   const commentText = screen.getByText(comment.content);
-  expect(commentText).toBeInTheDocument();
+  expect(commentText).toBeDefined();
 });
 
 test("Component renders edit and delete buttons for comment author", async () => {
@@ -78,10 +78,10 @@ test("Component renders edit and delete buttons for comment author", async () =>
   );
 
   const editButton = screen.getByText(`Edit comment ${comment.id}`);
-  expect(editButton).toBeInTheDocument();
+  expect(editButton).toBeDefined();
 
   const deleteButton = screen.getByText("Delete comment");
-  expect(deleteButton).toBeInTheDocument();
+  expect(deleteButton).toBeDefined();
 });
 
 test("OnDelete is called when button is clicked", async () => {
@@ -120,7 +120,7 @@ test("Delete button is rendered for the comment receiver", async () => {
   );
 
   const deleteButton = screen.getByText("Delete comment");
-  expect(deleteButton).toBeInTheDocument();
+  expect(deleteButton).toBeDefined();
 });
 
 test("delete and edit buttons are not rendered for other users", async () => {

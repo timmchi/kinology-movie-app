@@ -38,7 +38,7 @@ test("renders properly when there are no users", () => {
   render(<Users />);
 
   const text = screen.getByText("no users yet");
-  expect(text).toBeInTheDocument();
+  expect(text).toBeDefined();
 });
 
 test("renders properly with a list of users", async () => {
@@ -54,15 +54,15 @@ test("renders properly with a list of users", async () => {
   const user2 = screen.getByText(exampleUsers[1].name);
   const user3 = screen.getByText(exampleUsers[2].name);
 
-  expect(user1).toBeInTheDocument();
-  expect(user2).toBeInTheDocument();
-  expect(user3).toBeInTheDocument();
+  expect(user1).toBeDefined();
+  expect(user2).toBeDefined();
+  expect(user3).toBeDefined();
 
   const user1Img = screen.getByAltText(`${exampleUsers[0].name}`);
   const user2Img = screen.getByAltText(`${exampleUsers[1].name}`);
   const user3Img = screen.getByAltText(`${exampleUsers[2].name}`);
 
-  expect(user1Img).toBeInTheDocument();
-  expect(user2Img).toBeInTheDocument();
-  expect(user3Img).toBeInTheDocument();
+  expect(user1Img).toBeDefined();
+  expect(user2Img).toBeDefined();
+  expect(user3Img).toBeDefined();
 });

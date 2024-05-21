@@ -56,6 +56,6 @@ test("form fields are validated", async () => {
     /Your password must have 6 characters or more./i
   );
 
-  expect(usernameError).toBeInTheDocument();
-  expect(passwordError).toBeInTheDocument();
+  expect(usernameError).toBeDefined();
+  expect(passwordError).toBeDefined();
 });

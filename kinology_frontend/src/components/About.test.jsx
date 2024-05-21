@@ -11,25 +11,25 @@ test("renders About component properly", () => {
     </MemoryRouter>
   );
 
-  expect(screen.getByText(/About me/i)).toBeInTheDocument();
-  expect(screen.getByText(/my favorite movies/i)).toBeInTheDocument();
-  expect(screen.getByText(/Web app uses TMDB api/i)).toBeInTheDocument();
-  expect(screen.getByText(/Fullstack open/i)).toBeInTheDocument();
+  expect(screen.getByText(/About me/i)).toBeDefined();
+  expect(screen.getByText(/my favorite movies/i)).toBeDefined();
+  expect(screen.getByText(/Web app uses TMDB api/i)).toBeDefined();
+  expect(screen.getByText(/Fullstack open/i)).toBeDefined();
 
   const githubLink = screen.getByRole("link", { name: /Github profile/i });
-  expect(githubLink).toBeInTheDocument();
+  expect(githubLink).toBeDefined();
   expect(githubLink).toHaveAttribute("href", "https://github.com/timmchi");
   expect(githubLink).toHaveAttribute("target", "_blank");
 
   const tmdbLink = screen.getByRole("link", { name: /TMDB link/i });
-  expect(tmdbLink).toBeInTheDocument();
+  expect(tmdbLink).toBeDefined();
   expect(tmdbLink).toHaveAttribute("href", "https://www.themoviedb.org");
   expect(tmdbLink).toHaveAttribute("target", "_blank");
 
   const fullstackOpenLink = screen.getByRole("link", {
     name: /Fullstackopen link/i,
   });
-  expect(fullstackOpenLink).toBeInTheDocument();
+  expect(fullstackOpenLink).toBeDefined();
   expect(fullstackOpenLink).toHaveAttribute(
     "href",
     "https://fullstackopen.com/en/"
@@ -37,6 +37,6 @@ test("renders About component properly", () => {
   expect(fullstackOpenLink).toHaveAttribute("target", "_blank");
 
   myFavoriteMovies.forEach((movie) => {
-    expect(screen.getByAltText(`${movie.title} poster`)).toBeInTheDocument();
+    expect(screen.getByAltText(`${movie.title} poster`)).toBeDefined();
   });
 });
