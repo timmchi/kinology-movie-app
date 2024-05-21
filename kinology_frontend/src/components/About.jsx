@@ -12,7 +12,11 @@ const About = () => {
           <div className="content">
             <ul>
               <li>
-                <a href="https://github.com/timmchi" target="_blank">
+                <a
+                  href="https://github.com/timmchi"
+                  target="_blank"
+                  aria-label="Github profile"
+                >
                   <GitHubIcon />
                 </a>
               </li>
@@ -46,7 +50,11 @@ const About = () => {
             </p>
             <p>
               Link to TMDB{" "}
-              <a href="https://www.themoviedb.org" target="_blank">
+              <a
+                href="https://www.themoviedb.org"
+                target="_blank"
+                aria-label="TMDB link"
+              >
                 <OpenInNewIcon />
               </a>
             </p>
@@ -66,7 +74,11 @@ const About = () => {
               at modern web development.
             </p>
             Link to the course{" "}
-            <a href="https://fullstackopen.com/en/" target="_blank">
+            <a
+              href="https://fullstackopen.com/en/"
+              target="_blank"
+              aria-label="Fullstackopen link"
+            >
               <OpenInNewIcon />
             </a>
           </div>
