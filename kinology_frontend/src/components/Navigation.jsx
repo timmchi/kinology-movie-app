@@ -1,5 +1,3 @@
-// links to implement = /movie/:id, /user/:id
-
 import { Link, NavLink } from "react-router-dom";
 import LogOut from "./LogOut";
 
@@ -8,9 +6,14 @@ const Navigation = ({ user }) => {
     padding: 5,
   };
 
-  const handleLogout = (event) => {
+  //   const reload = () => {
+  //     window.location.reload();
+  //   };
+
+  const handleLogout = () => {
     console.log("logging out...");
     window.localStorage.removeItem("loggedKinologyUser");
+    // reload();
     window.location.reload();
   };
 
