@@ -1,9 +1,5 @@
-import { Link } from "react-router-dom";
-
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
 import UserSingleListView from "./UserSingleListView";
 
 // TODO - fix the state so that on profile update user information in user list changes
