@@ -14,8 +14,8 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
   const [comments, setComments] = useState([]);
   const dispatch = useNotificationDispatch();
 
-  console.log("id in movie", id);
-  console.log(comments);
+  //   console.log("id in movie", id);
+  //   console.log(comments);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -26,7 +26,6 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
     fetchMovie();
   }, [id]);
 
-  // movie.id or id better?
   useEffect(() => {
     const fetchComments = async () => {
       const fetchedComments = await commentsService.getMovieComments(id);
@@ -36,7 +35,6 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
     fetchComments();
   }, [id]);
 
-  // movie.id or id better?
   const createComment = async (content) => {
     try {
       const createdComment = await commentsService.createMovieComment(
@@ -147,7 +145,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
           <div className="singleMovieImage">
             <img
               src={`${basePosterUrl}${movie?.image}`}
-              alt="movie poster"
+              alt={`${movie.title} poster`}
               width="400"
               className="movieImageElement"
             ></img>
