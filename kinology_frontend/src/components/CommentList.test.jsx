@@ -140,7 +140,6 @@ test("onEdit function is called properly with correct params", async () => {
   await user.click(submitCommentButton);
 
   expect(onEdit.mock.calls).toHaveLength(1);
-  console.log(onEdit.mock.calls[0]);
   expect(onEdit.mock.calls[0]).toStrictEqual([
     testComments[0].id,
     "hello",
