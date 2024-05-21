@@ -5,6 +5,8 @@ import UserSingleListView from "./UserSingleListView";
 // TODO - fix the state so that on profile update user information in user list changes
 const Users = ({ users }) => {
   console.log(users);
+  if (!users) return <>no users yet</>;
+
   return (
     <div>
       <h1>users</h1>

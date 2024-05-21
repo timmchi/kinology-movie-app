@@ -3,10 +3,10 @@ import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import CommentView from "./CommentView";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 
-const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
+const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
   console.log(comments);
+  if (!comments || comments.length === 0) return "no comments yet...";
 
   const editCommentRef = useRef();
 
@@ -28,7 +28,6 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser, authorId }) => {
     );
   };
 
-  if (comments.length === 0) return "no comments yet...";
   return (
     <List sx={{ width: "100%", maxWidth: 600, backgroundColor: "#397453" }}>
       {comments?.map((comment) => (
