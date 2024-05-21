@@ -1,5 +1,4 @@
 import { expect, test } from "vitest";
-import { testSetup } from "../utils/testUtils";
 import CommentList from "./CommentList";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
