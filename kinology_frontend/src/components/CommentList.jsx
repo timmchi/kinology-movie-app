@@ -11,7 +11,7 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
   const editCommentRef = useRef();
 
   const editComment = (content, commentId, authorId) => {
-    console.log("authorId in editComment in CommentList");
+    // console.log("authorId in editComment in CommentList");
     editCommentRef.current.toggleVisibility();
     onEdit(commentId, content, authorId);
   };
