@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, BrowserRouter } from "react-router-dom";
 import Hero from "./Hero";
-import { expect, test, vi } from "vitest";
+import { expect, test } from "vitest";
 
 const mockNavigate = vi.fn();
 
