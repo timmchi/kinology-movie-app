@@ -44,6 +44,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
         movie.title,
         movie.image
       );
+      //   console.log(createComment);
       setComments(comments.concat(createdComment));
       dispatch({
         type: "SHOW",

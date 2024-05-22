@@ -55,7 +55,7 @@ vi.mock("../services/comments", async (importOriginal) => {
       createMovieComment: vi.fn().mockResolvedValue({
         id: "1",
         content: "Great movie!",
-        user: { username: "testUser" },
+        user: { username: "testUser", name: "Tester", id: 1 },
         movieId: "111",
       }),
       deleteMovieComment: vi.fn().mockResolvedValue({}),
@@ -141,4 +141,71 @@ test("onButtonPress is called correct number of times and with correct parameter
     title: movieExample.title,
     poster: movieExample.image,
   });
+});
+
+test("onButtonUnpress is called correct number of times and with correct parameters", async () => {
+  await act(async () =>
+    render(
+      <MemoryRouter initialEntries={[`/movies/111`]}>
+        <NotificationContextProvider>
+          <Routes>
+            <Route
+              path="/movies/:id"
+              element={
+                <Movie
+                  user={{ username: "testUser" }}
+                  onButtonPress={onButtonPress}
+                  onButtonUnpress={onButtonUnpress}
+                />
+              }
+            />
+          </Routes>
+        </NotificationContextProvider>
+      </MemoryRouter>
+    )
+  );
+
+  const user = userEvent.setup();
+
+  const watchButton = screen.queryByText("Watch");
+  await user.click(watchButton);
+
+  const unwatchButton = screen.getByText("Unwatch");
+  await user.click(unwatchButton);
+
+  expect(onButtonUnpress.mock.calls).toHaveLength(1);
+  expect(onButtonUnpress.mock.calls[0][1]).toBe("later");
+  expect(onButtonUnpress.mock.calls[0][2]).toStrictEqual({
+    id: movieExample.id,
+  });
+});
+
+test("movie buttons are not rendered when there is not user", async () => {
+  await act(async () =>
+    render(
+      <MemoryRouter initialEntries={[`/movies/111`]}>
+        <NotificationContextProvider>
+          <Routes>
+            <Route
+              path="/movies/:id"
+              element={
+                <Movie
+                  onButtonPress={onButtonPress}
+                  onButtonUnpress={onButtonUnpress}
+                />
+              }
+            />
+          </Routes>
+        </NotificationContextProvider>
+      </MemoryRouter>
+    )
+  );
+
+  const watchButton = screen.queryByText("Watch");
+  const favoriteButton = screen.queryByText("Favorite");
+  const seenButton = screen.queryByText("Seen");
+
+  expect(watchButton).toBeNull();
+  expect(favoriteButton).toBeNull();
+  expect(seenButton).toBeNull();
 });

@@ -32,7 +32,7 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
           <Avatar alt={comment.author?.name} src={avatar} />
         </ListItemAvatar>
         <ListItemText
-          primary={comment.author.name ?? "Deleted user"}
+          primary={comment.author?.name ?? "Deleted user"}
           secondary={comment.content}
           sx={{ color: "#F7E382" }}
           secondaryTypographyProps={{ color: "white" }}
