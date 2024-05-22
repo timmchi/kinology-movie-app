@@ -35,7 +35,11 @@ const LogIn = ({ handleLogin }) => {
       <form onSubmit={handleSubmit(handleLogin)}>
         <div>
           username
-          <input {...register("username")} placeholder="username..." />
+          <input
+            {...register("username")}
+            placeholder="username..."
+            data-testid="username"
+          />
           {errors?.username?.message ?? (
             <p style={{ color: "red" }}>{errors.username?.message}</p>
           )}
@@ -46,6 +50,7 @@ const LogIn = ({ handleLogin }) => {
             type="password"
             {...register("password")}
             placeholder="password..."
+            data-testid="password"
           />
           {errors?.password?.message ?? (
             <p style={{ color: "red" }}>{errors.password?.message}</p>

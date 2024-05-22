@@ -78,7 +78,59 @@ describe("Kinology", () => {
     const signupButton = page.getByRole("button", { name: "Sign Up" });
     await signupButton.click();
 
+    await expect(
+      page.getByText("Sign up was successful, please log in")
+    ).toBeVisible();
     const loginButton = page.getByRole("button", { name: "Log In" });
     await expect(loginButton).toBeVisible();
+  });
+
+  test("login form can be opened through navbar", async ({ page }) => {
+    const loginLink = page.getByRole("link", { name: "Log In" });
+    await loginLink.click();
+
+    const loginButton = page.getByRole("button", { name: "Log In" });
+    await expect(loginButton).toBeVisible();
+  });
+
+  describe("when registered", () => {
+    beforeEach(async ({ page }) => {
+      const registrationButton = page.getByRole("button", { name: "Register" });
+      await registrationButton.click();
+
+      const usernameField = await page.getByTestId("username").fill("tester");
+      const emailField = await page
+        .getByTestId("email")
+        .fill("tester@example.com");
+      const nameField = await page.getByTestId("name").fill("Mr Tester");
+      const password = await page.getByTestId("password").fill("secret");
+      const passwordConfirm = await page
+        .getByTestId("password-confirm")
+        .fill("secret");
+
+      const signupButton = page.getByRole("button", { name: "Sign Up" });
+      await signupButton.click();
+    });
+
+    test("login form can be filled and submitted", async ({ page }) => {
+      const loginLink = page.getByRole("link", { name: "Log In" });
+      await loginLink.click();
+
+      const usernameField = await page.getByTestId("username").fill("tester");
+      const passwordField = await page.getByTestId("password").fill("secret");
+
+      const loginButton = page.getByRole("button", { name: "Log In" });
+      await loginButton.click();
+
+      await expect(page.getByText("Successfully logged in")).toBeVisible();
+
+      const welcomeHeader = page.getByRole("heading", {
+        name: "Welcome to Kinology",
+      });
+      const welcomeMessage = page.getByText("Choosing a movie made");
+
+      await expect(welcomeMessage).toBeVisible();
+      await expect(welcomeHeader).toBeVisible();
+    });
   });
 });
