@@ -1,5 +1,4 @@
-const { beforeEach } = require("node:test");
-const { test, describe, expect } = require("playwright/test");
+const { test, describe, expect, beforeEach } = require("playwright/test");
 
 describe("Kinology", () => {
   beforeEach(async ({ page }) => {
@@ -76,5 +75,8 @@ describe("Kinology", () => {
 
     const signupButton = page.getByRole("button", { name: "Sign Up" });
     await signupButton.click();
+
+    // const loginButton = page.getByRole("button", { name: "Log In" });
+    // await expect(loginButton).toBeVisible();
   });
 });
