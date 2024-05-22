@@ -1,7 +1,9 @@
 const { test, describe, expect, beforeEach } = require("playwright/test");
 
 describe("Kinology", () => {
-  beforeEach(async ({ page }) => {
+  beforeEach(async ({ page, request }) => {
+    await request.post("http:localhost:3001/api/testing/reset");
+
     await page.goto("http://localhost:5173");
   });
 
@@ -76,7 +78,7 @@ describe("Kinology", () => {
     const signupButton = page.getByRole("button", { name: "Sign Up" });
     await signupButton.click();
 
-    // const loginButton = page.getByRole("button", { name: "Log In" });
-    // await expect(loginButton).toBeVisible();
+    const loginButton = page.getByRole("button", { name: "Log In" });
+    await expect(loginButton).toBeVisible();
   });
 });
