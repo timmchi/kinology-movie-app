@@ -85,7 +85,33 @@ describe("Kinology", () => {
     await expect(loginButton).toBeVisible();
   });
 
-  test("validation in registration form", async ({ page }) => {});
+  test("validation in registration form", async ({ page }) => {
+    const registrationButton = page.getByRole("button", { name: "Register" });
+    await registrationButton.click();
+
+    const signupButton = page.getByRole("button", { name: "Sign Up" });
+    await signupButton.click();
+
+    const usernameError = page.getByText("Please enter your username.");
+    await expect(usernameError).toBeVisible();
+    await expect(usernameError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const emailError = page.getByText("Please enter your email.");
+    await expect(emailError).toBeVisible();
+    await expect(emailError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const nameError = page.getByText("Please enter your name or nickname.");
+    await expect(nameError).toBeVisible();
+    await expect(nameError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const passwordError = page.getByText("Please enter your password.");
+    await expect(passwordError).toBeVisible();
+    await expect(passwordError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const passwordConfirmError = page.getByText("Please confirm password");
+    await expect(passwordConfirmError).toBeVisible();
+    await expect(passwordConfirmError).toHaveCSS("color", "rgb(255, 0, 0)");
+  });
 
   test("login form can be opened through navbar", async ({ page }) => {
     const loginLink = page.getByRole("link", { name: "Log In" });
