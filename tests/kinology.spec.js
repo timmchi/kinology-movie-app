@@ -85,6 +85,8 @@ describe("Kinology", () => {
     await expect(loginButton).toBeVisible();
   });
 
+  test("validation in registration form", async ({ page }) => {});
+
   test("login form can be opened through navbar", async ({ page }) => {
     const loginLink = page.getByRole("link", { name: "Log In" });
     await loginLink.click();
@@ -112,6 +114,26 @@ describe("Kinology", () => {
       await signupButton.click();
     });
 
+    test("failed registration in attempt", async ({ page }) => {
+      await expect(
+        page.getByText("Sign up was successful, please log in")
+      ).toBeVisible();
+
+      await page.getByRole("link", { name: "Sign Up" }).click();
+      await page.getByTestId("username").fill("tester");
+      await page.getByTestId("email").fill("tester@example.com");
+      await page.getByTestId("name").fill("Mr Tester");
+      await page.getByTestId("password").fill("secret");
+      await page.getByTestId("password-confirm").fill("secret");
+
+      const signupButton = page.getByRole("button", { name: "Sign Up" });
+      await signupButton.click();
+
+      await expect(
+        page.getByText("Something went wrong when signing up")
+      ).toBeVisible();
+    });
+
     test("login form can be filled and submitted", async ({ page }) => {
       const loginLink = page.getByRole("link", { name: "Log In" });
       await loginLink.click();
@@ -131,6 +153,23 @@ describe("Kinology", () => {
 
       await expect(welcomeMessage).toBeVisible();
       await expect(welcomeHeader).toBeVisible();
+    });
+
+    test("failed log in attempt", async ({ page }) => {});
+
+    test("validation in log in form", async ({ page }) => {});
+
+    describe("when logged in", () => {
+      beforeEach(async ({ page }) => {
+        const loginLink = page.getByRole("link", { name: "Log In" });
+        await loginLink.click();
+
+        const usernameField = await page.getByTestId("username").fill("tester");
+        const passwordField = await page.getByTestId("password").fill("secret");
+
+        const loginButton = page.getByRole("button", { name: "Log In" });
+        await loginButton.click();
+      });
     });
   });
 });
