@@ -61,17 +61,25 @@ const SignUpForm = ({ handleSignUp }) => {
       <form onSubmit={handleSubmit(handleSignUp)}>
         <div>
           username
-          <input {...register("username")} placeholder="username" />
+          <input
+            {...register("username")}
+            placeholder="username"
+            data-testid="username"
+          />
           <p style={{ color: "red" }}>{errors.username?.message}</p>
         </div>
         <div>
           email
-          <input {...register("email")} placeholder="email" />
+          <input
+            {...register("email")}
+            placeholder="email"
+            data-testid="email"
+          />
           <p style={{ color: "red" }}>{errors.email?.message}</p>
         </div>
         <div>
           name
-          <input {...register("name")} placeholder="name" />
+          <input {...register("name")} placeholder="name" data-testid="name" />
           <p style={{ color: "red" }}>{errors.name?.message}</p>
         </div>
         <div>
@@ -80,6 +88,7 @@ const SignUpForm = ({ handleSignUp }) => {
             type="password"
             {...register("password")}
             placeholder="password"
+            data-testid="password"
           />
           <p style={{ color: "red" }}>{errors.password?.message}</p>
         </div>
@@ -89,6 +98,7 @@ const SignUpForm = ({ handleSignUp }) => {
             type="password"
             {...register("passwordConfirm")}
             placeholder="confirm password"
+            data-testid="password-confirm"
           />
           <p style={{ color: "red" }}>{errors.passwordConfirm?.message}</p>
         </div>
