@@ -181,7 +181,22 @@ describe("Kinology", () => {
       await expect(welcomeHeader).toBeVisible();
     });
 
-    test("failed log in attempt", async ({ page }) => {});
+    test("failed log in attempt", async ({ page }) => {
+      const loginLink = page.getByRole("link", { name: "Log In" });
+      await loginLink.click();
+
+      const usernameField = await page.getByTestId("username").fill("tester");
+      const passwordField = await page.getByTestId("password").fill("toster");
+
+      const loginButton = page.getByRole("button", { name: "Log In" });
+      await loginButton.click();
+
+      await expect(
+        page.getByText("Something went wrong when logging in")
+      ).toBeVisible();
+      await expect(loginLink).toBeVisible();
+      await expect(page.getByRole("link", { name: "Sign Up" })).toBeVisible();
+    });
 
     test("validation in log in form", async ({ page }) => {});
 
