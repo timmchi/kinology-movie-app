@@ -43,6 +43,8 @@
 | 19.5 | 2     | Backend tests, frontend test set up, some tests                          |
 | 20.5 | 4     | Frontend unit tests, frontend refactoring                                |
 | 21.5 | 5     | Frontend unit tests                                                      |
+| 22.5 | 0.5   | Frontend unit tests                                                      |
+| 22.5 | 3     | e2e tests                                                                |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -54,6 +56,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 81    |                                                                          |
+| tot  | 84.5  |                                                                          |
