@@ -45,7 +45,7 @@
 | 21.5 | 5     | Frontend unit tests                                                      |
 | 22.5 | 0.5   | Frontend unit tests                                                      |
 | 22.5 | 3     | e2e tests                                                                |
-| 22.5 | 5     | e2e tests, small bug fixes uncovered during tests                        |
+| 23.5 | 5     | e2e tests, small bug fixes uncovered during tests                        |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
