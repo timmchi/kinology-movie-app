@@ -849,6 +849,7 @@ describe("Kinology", () => {
 
         describe("a second user created a comment in their own profile and another user profile, logged in with another user", () => {
           beforeEach(async ({ page }) => {
+            // comment on first user profile
             const usersLink = page.getByRole("link", { name: "Users" });
             await usersLink.click();
 
@@ -877,10 +878,14 @@ describe("Kinology", () => {
               )
             ).toBeVisible();
 
+            // going to current users profile and leaving a comment there
             await usersLink.click();
 
-            const firstUserPage = page.getByRole("link", { name: "Ms Toster" });
+            const commentAuthorPage = page.getByRole("link", {
+              name: "Ms Toster",
+            });
             await expect(page.getByText("Ms Toster")).toBeVisible();
+            await commentAuthorPage.click();
 
             await openCommentButton.click();
             await commentInput.fill("This is my own profile");
@@ -892,7 +897,45 @@ describe("Kinology", () => {
                 "Comment 'This is my own profile' successfully created"
               )
             ).toBeVisible();
+
+            // logging out
+            const logoutButton = page.getByText("log out");
+            await logoutButton.click();
+
+            // logging in to another profile
+            const loginPage = page.getByRole("link", { name: "Log In" });
+            await loginPage.click();
+
+            const usernameField = await page
+              .getByTestId("username")
+              .fill("tester");
+            const passwordField = await page
+              .getByTestId("password")
+              .fill("secret");
+
+            const loginButton = page.getByRole("button", { name: "Log In" });
+            await loginButton.click();
+
+            await expect(
+              page.getByText("Successfully logged in")
+            ).toBeVisible();
           });
+
+          test("a user can not edit a comment on another user profile", async ({
+            page,
+          }) => {});
+
+          test("a user can not delete a comment on another user profile", async ({
+            page,
+          }) => {});
+
+          test("a user can not edit a comment on their profile if they are not the comments author", async ({
+            page,
+          }) => {});
+
+          test("a user can delete a comment on their profile even if they are not the author", async ({
+            page,
+          }) => {});
         });
       });
     });
