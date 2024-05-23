@@ -298,6 +298,67 @@ describe("Kinology", () => {
         await expect(seenButton).toBeVisible();
       });
 
+      describe("adding comments to a user page", () => {
+        beforeEach(async ({ page }) => {
+          const usersLink = page.getByRole("link", { name: "Users" });
+          await usersLink.click();
+
+          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+          await userPageLink.click();
+
+          await expect(page.getByText("Mr Tester")).toBeVisible();
+        });
+
+        test("comment form can be opened", async ({ page }) => {
+          const openCommentButton = page.getByRole("button", {
+            name: "leave a comment",
+          });
+          await openCommentButton.click();
+
+          const commentInput = page.getByPlaceholder("comment");
+          const commentInputText = page.getByText("Your comment");
+
+          await expect(commentInput).toBeVisible();
+          await expect(commentInputText).toBeVisible();
+
+          const submitCommentButton = page.getByRole("button", {
+            name: "Submit comment",
+          });
+          const closeCommentButton = page.getByRole("button", {
+            name: "cancel",
+          });
+
+          await expect(submitCommentButton).toBeVisible();
+          await expect(closeCommentButton).toBeVisible();
+        });
+
+        test("comment form can be closed", async ({ page }) => {
+          const openCommentButton = page.getByRole("button", {
+            name: "leave a comment",
+          });
+          await openCommentButton.click();
+
+          const commentInput = page.getByPlaceholder("comment");
+          const commentInputText = page.getByText("Your comment");
+
+          const submitCommentButton = page.getByRole("button", {
+            name: "Submit comment",
+          });
+          const closeCommentButton = page.getByRole("button", {
+            name: "cancel",
+          });
+
+          await closeCommentButton.click();
+
+          await expect(commentInput).not.toBeVisible();
+          await expect(commentInputText).not.toBeVisible();
+          await expect(submitCommentButton).not.toBeVisible();
+          await expect(closeCommentButton).not.toBeVisible();
+        });
+
+        test("user can leave a comment on his profile", async ({ page }) => {});
+      });
+
       describe("adding a movie to user page", () => {
         beforeEach(async ({ page }) => {
           await page.goto("http://localhost:5173/movies/111");
