@@ -736,6 +736,166 @@ describe("Kinology", () => {
         });
       });
     });
+
+    describe("and there is one more registered user", () => {
+      beforeEach(async ({ page }) => {
+        await expect(
+          page.getByText("Sign up was successful, please log in")
+        ).toBeVisible();
+
+        const signupLink = page.getByRole("link", { name: "Sign Up" });
+        await signupLink.click();
+
+        const usernameField = await page.getByTestId("username").fill("toster");
+        const emailField = await page
+          .getByTestId("email")
+          .fill("toster@example.com");
+        const nameField = await page.getByTestId("name").fill("Ms Toster");
+        const password = await page.getByTestId("password").fill("secret");
+        const passwordConfirm = await page
+          .getByTestId("password-confirm")
+          .fill("secret");
+
+        const signupButton = page.getByRole("button", { name: "Sign Up" });
+        await signupButton.click();
+      });
+
+      test("and another user can log in", async ({ page }) => {
+        const loginLink = page.getByRole("link", { name: "Log In" });
+        await loginLink.click();
+
+        const usernameField = await page.getByTestId("username").fill("toster");
+        const passwordField = await page.getByTestId("password").fill("secret");
+
+        const loginButton = page.getByRole("button", { name: "Log In" });
+        await loginButton.click();
+
+        await expect(page.getByText("Successfully logged in")).toBeVisible();
+      });
+
+      describe("and another user has logged in", () => {
+        beforeEach(async ({ page }) => {
+          const loginLink = page.getByRole("link", { name: "Log In" });
+          await loginLink.click();
+
+          const usernameField = await page
+            .getByTestId("username")
+            .fill("toster");
+          const passwordField = await page
+            .getByTestId("password")
+            .fill("secret");
+
+          const loginButton = page.getByRole("button", { name: "Log In" });
+          await loginButton.click();
+
+          await expect(page.getByText("Successfully logged in")).toBeVisible();
+        });
+
+        test("another user is visible in user list", async ({ page }) => {
+          const usersLink = page.getByRole("link", { name: "Users" });
+          await usersLink.click();
+
+          const userPageLink = page.getByRole("link", { name: "Ms Toster" });
+          await expect(userPageLink).toBeVisible();
+        });
+
+        test("a user can leave a comment on another user profile", async ({
+          page,
+        }) => {
+          const usersLink = page.getByRole("link", { name: "Users" });
+          await usersLink.click();
+
+          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+          await userPageLink.click();
+
+          await expect(page.getByText("Mr Tester")).toBeVisible();
+
+          const openCommentButton = page.getByRole("button", {
+            name: "leave a comment",
+          });
+          await openCommentButton.click();
+
+          const submitCommentButton = page.getByRole("button", {
+            name: "Submit comment",
+          });
+
+          const commentInput = page.getByPlaceholder("comment");
+          await commentInput.fill("Another user was here");
+
+          await submitCommentButton.click();
+
+          await expect(
+            page.getByText(
+              "Comment 'Another user was here' successfully created"
+            )
+          ).toBeVisible();
+
+          await expect(
+            page.getByRole("link", {
+              name: "Ms Toster Another user was here",
+            })
+          ).toBeVisible();
+
+          const editCommentButton = page.getByRole("button", {
+            name: "edit comment",
+          });
+          await expect(editCommentButton).toBeVisible();
+
+          const deleteCommentButton = page.getByRole("button", {
+            name: "Delete comment",
+          });
+          await expect(deleteCommentButton).toBeVisible();
+        });
+
+        describe("a second user created a comment in their own profile and another user profile, logged in with another user", () => {
+          beforeEach(async ({ page }) => {
+            const usersLink = page.getByRole("link", { name: "Users" });
+            await usersLink.click();
+
+            const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+            await userPageLink.click();
+
+            await expect(page.getByText("Mr Tester")).toBeVisible();
+
+            const openCommentButton = page.getByRole("button", {
+              name: "leave a comment",
+            });
+            await openCommentButton.click();
+
+            const submitCommentButton = page.getByRole("button", {
+              name: "Submit comment",
+            });
+
+            const commentInput = page.getByPlaceholder("comment");
+            await commentInput.fill("Another user was here");
+
+            await submitCommentButton.click();
+
+            await expect(
+              page.getByText(
+                "Comment 'Another user was here' successfully created"
+              )
+            ).toBeVisible();
+
+            await usersLink.click();
+
+            const firstUserPage = page.getByRole("link", { name: "Ms Toster" });
+            await expect(page.getByText("Ms Toster")).toBeVisible();
+
+            await openCommentButton.click();
+            await commentInput.fill("This is my own profile");
+
+            await submitCommentButton.click();
+
+            await expect(
+              page.getByText(
+                "Comment 'This is my own profile' successfully created"
+              )
+            ).toBeVisible();
+          });
+        });
+      });
+    });
   });
 
   describe("Searching for movies", () => {
