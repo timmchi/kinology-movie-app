@@ -288,14 +288,65 @@ describe("Kinology", () => {
         const title = page.getByText("Scarface");
         await expect(title).toBeVisible();
 
-        // const watchButton = page.getByRole("button", { name: "Watch" });
-        // expect(watchButton).toBeVisible();
+        const watchButton = page.getByRole("button", { name: "Watch" });
+        await expect(watchButton).toBeVisible();
 
-        // const favoriteButton = page.getByRole("button", { name: "Favorite" });
-        // expect(favoriteButton).toBeVisible();
+        const favoriteButton = page.getByRole("button", { name: "Favorite" });
+        await expect(favoriteButton).toBeVisible();
 
-        // const seenButton = page.getByRole("button", { name: "Seen" });
-        // expect(seenButton).toBeVisible();
+        const seenButton = page.getByRole("button", { name: "Seen" });
+        await expect(seenButton).toBeVisible();
+      });
+
+      describe("adding a movie to user page", () => {
+        beforeEach(async ({ page }) => {
+          await page.goto("http://localhost:5173/movies/111");
+
+          const title = page.getByText("Scarface");
+          await expect(title).toBeVisible();
+        });
+
+        test("movie can be added to watch list", async ({ page }) => {
+          const watchButton = page.getByRole("button", { name: "Watch" });
+          const unwatchButton = page.getByRole("button", { name: "Unwatch" });
+
+          await expect(unwatchButton).not.toBeVisible();
+
+          await watchButton.click();
+
+          await expect(unwatchButton).toBeVisible();
+
+          await expect(
+            page.getByText("Successfully added Scarface to later")
+          ).toBeVisible();
+
+          const usersLink = page.getByRole("link", { name: "Users" });
+          await usersLink.click();
+
+          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+          await userPageLink.click();
+
+          await expect(page.getByText("Watch List")).toBeVisible();
+          await expect(
+            page.getByRole("link", { name: "Scarface poster" })
+          ).toBeVisible();
+        });
+
+        test("movie can be removed from watch list", async ({ page }) => {});
+
+        test("movie can be added to favorite list", async ({ page }) => {});
+
+        test("movie can be removed from favorite list", async ({ page }) => {});
+
+        test("movie can be added to seen list", async ({ page }) => {});
+
+        test("movie can be removed from seen list", async ({ page }) => {});
+
+        test("movie can be added to multiple lists", async ({ page }) => {});
+
+        test("movie can be removed from multiple lists", async ({
+          page,
+        }) => {});
       });
     });
   });
