@@ -49,7 +49,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
       dispatch({
         type: "SHOW",
         payload: {
-          message: `Comment ${content} successfully added`,
+          message: `Comment '${content}' successfully added`,
           type: "success",
         },
       });

@@ -97,7 +97,7 @@ const User = ({ currentUser, removeUser }) => {
       dispatch({
         type: "SHOW",
         payload: {
-          message: `Comment ${comment} successfully created`,
+          message: `Comment '${comment}' successfully created`,
           type: "success",
         },
       });
@@ -171,7 +171,7 @@ const User = ({ currentUser, removeUser }) => {
       dispatch({
         type: "SHOW",
         payload: {
-          message: `Comment ${comment} successfully updated`,
+          message: `Comment successfully updated with '${comment}'`,
           type: "success",
         },
       });

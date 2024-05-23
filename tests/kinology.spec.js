@@ -356,7 +356,103 @@ describe("Kinology", () => {
           await expect(closeCommentButton).not.toBeVisible();
         });
 
-        test("user can leave a comment on his profile", async ({ page }) => {});
+        test("user can leave a comment on his profile", async ({ page }) => {
+          const openCommentButton = page.getByRole("button", {
+            name: "leave a comment",
+          });
+          await openCommentButton.click();
+
+          const submitCommentButton = page.getByRole("button", {
+            name: "Submit comment",
+          });
+
+          const commentInput = page.getByPlaceholder("comment");
+          await commentInput.fill("my comment");
+
+          await submitCommentButton.click();
+
+          await expect(
+            page.getByText("Comment 'my comment' successfully created")
+          ).toBeVisible();
+
+          await expect(
+            page.getByRole("link", { name: "Mr Tester my comment" })
+          ).toBeVisible();
+
+          const editCommentButton = page.getByRole("button", {
+            name: "edit comment",
+          });
+          await expect(editCommentButton).toBeVisible();
+
+          const deleteCommentButton = page.getByRole("button", {
+            name: "Delete comment",
+          });
+          await expect(deleteCommentButton).toBeVisible();
+        });
+
+        describe("and user profile has a comment left by profile owner", () => {
+          beforeEach(async ({ page }) => {
+            const openCommentButton = page.getByRole("button", {
+              name: "leave a comment",
+            });
+            await openCommentButton.click();
+
+            const submitCommentButton = page.getByRole("button", {
+              name: "Submit comment",
+            });
+
+            const commentInput = page.getByPlaceholder("comment");
+            await commentInput.fill("my comment");
+
+            await submitCommentButton.click();
+
+            await expect(
+              page.getByText("Comment 'my comment' successfully created")
+            ).toBeVisible();
+          });
+
+          test("a comment can be edited by its author", async ({ page }) => {
+            const editCommentButton = page.getByRole("button", {
+              name: "edit comment",
+            });
+            await editCommentButton.click();
+
+            const submitCommentButton = page.getByRole("button", {
+              name: "Submit comment",
+            });
+
+            const commentInput = page.getByRole("textbox", { name: "comment" });
+            await commentInput.fill("it has been edited");
+
+            await submitCommentButton.click();
+
+            await expect(
+              page.getByText(
+                "Comment successfully updated with 'it has been edited'"
+              )
+            ).toBeVisible();
+            await expect(
+              page.getByRole("link", { name: "Mr Tester it has been edited" })
+            ).toBeVisible();
+          });
+
+          test("a comment can be deleted by its author", async ({ page }) => {
+            page.on("dialog", (dialog) => dialog.accept());
+
+            const deleteCommentButton = page.getByRole("button", {
+              name: "Delete comment",
+            });
+            await deleteCommentButton.click();
+
+            await expect(
+              page.getByText("Comment successfully deleted")
+            ).toBeVisible();
+
+            await expect(
+              page.getByRole("link", { name: "Mr Tester my comment" })
+            ).not.toBeVisible();
+          });
+        });
       });
 
       describe("adding a movie to user page", () => {
