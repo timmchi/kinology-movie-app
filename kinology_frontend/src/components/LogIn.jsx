@@ -40,9 +40,9 @@ const LogIn = ({ handleLogin }) => {
             placeholder="username..."
             data-testid="username"
           />
-          {errors?.username?.message ?? (
+          {errors?.username?.message ? (
             <p style={{ color: "red" }}>{errors.username?.message}</p>
-          )}
+          ) : null}
         </div>
         <div>
           password
@@ -52,9 +52,9 @@ const LogIn = ({ handleLogin }) => {
             placeholder="password..."
             data-testid="password"
           />
-          {errors?.password?.message ?? (
+          {errors?.password?.message ? (
             <p style={{ color: "red" }}>{errors.password?.message}</p>
-          )}
+          ) : null}
         </div>
         <button disabled={isSubmitting} type="submit" id="login-button">
           {isSubmitting ? "Logging in..." : "Log In"}

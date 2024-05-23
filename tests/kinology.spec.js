@@ -198,7 +198,28 @@ describe("Kinology", () => {
       await expect(page.getByRole("link", { name: "Sign Up" })).toBeVisible();
     });
 
-    test("validation in log in form", async ({ page }) => {});
+    test("validation in log in form", async ({ page }) => {
+      const loginLink = page.getByRole("link", { name: "Log In" });
+      await loginLink.click();
+
+      const usernameField = await page.getByTestId("username").fill("t");
+      const passwordField = await page.getByTestId("password").fill("s");
+
+      const loginButton = page.getByRole("button", { name: "Log In" });
+      await loginButton.click();
+
+      const usernameError = page.getByText(
+        "Username needs to be at least 3 characters long."
+      );
+      await expect(usernameError).toBeVisible();
+      await expect(usernameError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+      const passwordError = page.getByText(
+        "Your password must have 6 characters or more."
+      );
+      await expect(passwordError).toBeVisible();
+      await expect(passwordError).toHaveCSS("color", "rgb(255, 0, 0)");
+    });
 
     describe("when logged in", () => {
       beforeEach(async ({ page }) => {
