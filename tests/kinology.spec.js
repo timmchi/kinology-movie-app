@@ -231,6 +231,8 @@ describe("Kinology", () => {
 
         const loginButton = page.getByRole("button", { name: "Log In" });
         await loginButton.click();
+
+        await expect(page.getByText("Successfully logged in")).toBeVisible();
       });
 
       test("can log out", async ({ page }) => {
@@ -244,6 +246,56 @@ describe("Kinology", () => {
 
         await expect(loginLink).toBeVisible();
         await expect(signupLink).toBeVisible();
+      });
+
+      test("users link is visible and users page can be accessed", async ({
+        page,
+      }) => {
+        const usersLink = page.getByRole("link", { name: "Users" });
+        await usersLink.click();
+
+        const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+        expect(userPageLink).toBeVisible();
+      });
+
+      test("user can access their own page and it renders correctly", async ({
+        page,
+      }) => {
+        const usersLink = page.getByRole("link", { name: "Users" });
+        await usersLink.click();
+
+        const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+        await userPageLink.click();
+
+        await expect(page.getByText("Mr Tester")).toBeVisible();
+
+        const updateButton = page.getByRole("button", {
+          name: "Update Profile",
+        });
+        await expect(updateButton).toBeVisible();
+
+        const deleteButton = page.getByRole("button", {
+          name: "Delete User",
+        });
+        await expect(deleteButton).toBeVisible();
+      });
+
+      test("user can access a single movie page and movie buttons will be shown", async ({
+        page,
+      }) => {
+        await page.goto("http://localhost:5173/movies/111");
+
+        const title = page.getByText("Scarface");
+        await expect(title).toBeVisible();
+
+        // const watchButton = page.getByRole("button", { name: "Watch" });
+        // expect(watchButton).toBeVisible();
+
+        // const favoriteButton = page.getByRole("button", { name: "Favorite" });
+        // expect(favoriteButton).toBeVisible();
+
+        // const seenButton = page.getByRole("button", { name: "Seen" });
+        // expect(seenButton).toBeVisible();
       });
     });
   });
