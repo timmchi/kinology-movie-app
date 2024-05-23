@@ -919,23 +919,92 @@ describe("Kinology", () => {
             await expect(
               page.getByText("Successfully logged in")
             ).toBeVisible();
+
+            await page.getByText("Users").click();
           });
 
           test("a user can not edit a comment on another user profile", async ({
             page,
-          }) => {});
+          }) => {
+            const commentAuthorPage = page.getByRole("link", {
+              name: "Ms Toster",
+            });
+            await expect(page.getByText("Ms Toster")).toBeVisible();
+            await commentAuthorPage.click();
+
+            await expect(
+              page.getByRole("link", { name: "Ms Toster This is my own" })
+            ).toBeVisible();
+
+            const editCommentButton = page.getByRole("button", {
+              name: "edit comment",
+            });
+            await expect(editCommentButton).not.toBeVisible();
+          });
 
           test("a user can not delete a comment on another user profile", async ({
             page,
-          }) => {});
+          }) => {
+            const commentAuthorPage = page.getByRole("link", {
+              name: "Ms Toster",
+            });
+            await expect(page.getByText("Ms Toster")).toBeVisible();
+            await commentAuthorPage.click();
+
+            await expect(
+              page.getByRole("link", { name: "Ms Toster This is my own" })
+            ).toBeVisible();
+
+            const deleteCommentButton = page.getByRole("button", {
+              name: "Delete comment",
+            });
+            await expect(deleteCommentButton).not.toBeVisible();
+          });
 
           test("a user can not edit a comment on their profile if they are not the comments author", async ({
             page,
-          }) => {});
+          }) => {
+            const ownPage = page.getByRole("link", {
+              name: "Mr Tester",
+            });
+            await expect(page.getByText("Mr Tester")).toBeVisible();
+            await ownPage.click();
+
+            await expect(page.getByText("Another user was here")).toBeVisible();
+
+            const editCommentButton = page.getByRole("button", {
+              name: "edit comment",
+            });
+            await expect(editCommentButton).not.toBeVisible();
+          });
 
           test("a user can delete a comment on their profile even if they are not the author", async ({
             page,
-          }) => {});
+          }) => {
+            page.on("dialog", (dialog) => dialog.accept());
+
+            const ownPage = page.getByRole("link", {
+              name: "Mr Tester",
+            });
+            await expect(page.getByText("Mr Tester")).toBeVisible();
+            await ownPage.click();
+
+            await expect(page.getByText("Another user was here")).toBeVisible();
+
+            const deleteCommentButton = page.getByRole("button", {
+              name: "Delete comment",
+            });
+            await expect(deleteCommentButton).toBeVisible();
+
+            await deleteCommentButton.click();
+
+            await expect(
+              page.getByText("Comment successfully deleted")
+            ).toBeVisible();
+            await expect(
+              page.getByText("Another user was here")
+            ).not.toBeVisible();
+          });
         });
       });
     });
