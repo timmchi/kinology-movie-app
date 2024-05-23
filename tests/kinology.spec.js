@@ -232,6 +232,19 @@ describe("Kinology", () => {
         const loginButton = page.getByRole("button", { name: "Log In" });
         await loginButton.click();
       });
+
+      test("can log out", async ({ page }) => {
+        await expect(page.getByText("Successfully logged in")).toBeVisible();
+
+        const logoutButton = page.getByRole("button", { name: "log out" });
+        await logoutButton.click();
+
+        const loginLink = page.getByRole("link", { name: "Log In" });
+        const signupLink = page.getByRole("link", { name: "Sign Up" });
+
+        await expect(loginLink).toBeVisible();
+        await expect(signupLink).toBeVisible();
+      });
     });
   });
 
@@ -287,7 +300,7 @@ describe("Kinology", () => {
         await searchCTAButton.click();
       });
 
-      test("empty search functions properly", async ({ page }) => {
+      test("empty search returns movie cards", async ({ page }) => {
         const searchMoviesButton = page.getByLabel("Search for movies");
         await searchMoviesButton.click();
 
@@ -301,6 +314,23 @@ describe("Kinology", () => {
 
         const lastMovieCard = page.getByTestId("search-movie-card").nth(19);
         await expect(lastMovieCard).toBeVisible();
+      });
+
+      describe("and an empty search was done", () => {
+        beforeEach(async ({ page }) => {
+          const searchMoviesButton = page.getByLabel("Search for movies");
+          await searchMoviesButton.click();
+        });
+
+        test("empty search returns 10 pages with pagination", async ({
+          page,
+        }) => {
+          const pageOne = page.getByLabel("page 1", { exact: true });
+          await expect(pageOne).toBeVisible();
+
+          const pageTen = page.getByLabel("Go to page 10");
+          await expect(pageTen).toBeVisible();
+        });
       });
     });
   });
