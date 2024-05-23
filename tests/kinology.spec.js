@@ -489,11 +489,94 @@ describe("Kinology", () => {
           const seenButton = page.getByRole("button", { name: "Seen" });
           const favoriteButton = page.getByRole("button", { name: "Favorite" });
           const watchButton = page.getByRole("button", { name: "Watch" });
+
+          await seenButton.click();
+          await expect(
+            page.getByText("Successfully added Scarface to watched")
+          ).toBeVisible();
+
+          await favoriteButton.click();
+          await expect(
+            page.getByText("Successfully added Scarface to favorite")
+          ).toBeVisible();
+
+          await watchButton.click();
+          await expect(
+            page.getByText("Successfully added Scarface to later")
+          ).toBeVisible();
+
+          const usersLink = page.getByRole("link", { name: "Users" });
+          await usersLink.click();
+
+          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+          await userPageLink.click();
+
+          await expect(page.getByText("Watch List")).toBeVisible();
+          await expect(page.getByText("Favorite Movies")).toBeVisible();
+          await expect(page.getByText("Already seen")).toBeVisible();
+
+          const movies = await page
+            .getByRole("link", { name: "Scarface poster" })
+            .all();
+          expect(movies).toHaveLength(3);
         });
 
-        test("movie can be removed from multiple lists", async ({
-          page,
-        }) => {});
+        test("movie can be removed from multiple lists", async ({ page }) => {
+          const seenButton = page.getByRole("button", { name: "Seen" });
+          const favoriteButton = page.getByRole("button", { name: "Favorite" });
+          const watchButton = page.getByRole("button", { name: "Watch" });
+
+          await seenButton.click();
+          await expect(
+            page.getByText("Successfully added Scarface to watched")
+          ).toBeVisible();
+
+          await favoriteButton.click();
+          await expect(
+            page.getByText("Successfully added Scarface to favorite")
+          ).toBeVisible();
+
+          await watchButton.click();
+          await expect(
+            page.getByText("Successfully added Scarface to later")
+          ).toBeVisible();
+
+          const unseeButton = page.getByRole("button", {
+            name: "Unsee",
+          });
+          const unfavoriteButton = page.getByRole("button", {
+            name: "Unfavorite",
+          });
+          const unwatchButton = page.getByRole("button", { name: "Unwatch" });
+
+          await expect(unwatchButton).toBeVisible();
+          await expect(unseeButton).toBeVisible();
+          await expect(unfavoriteButton).toBeVisible();
+
+          await unseeButton.click();
+
+          await unfavoriteButton.click();
+
+          await unwatchButton.click();
+          await expect(
+            page.getByText("Successfully removed movie from your profile")
+          ).toBeVisible();
+
+          const usersLink = page.getByRole("link", { name: "Users" });
+          await usersLink.click();
+
+          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
+          await userPageLink.click();
+
+          await expect(page.getByText("Watch List")).not.toBeVisible();
+          await expect(page.getByText("Favorite Movies")).not.toBeVisible();
+          await expect(page.getByText("Already seen")).not.toBeVisible();
+
+          const movies = await page
+            .getByRole("link", { name: "Scarface poster" })
+            .all();
+          expect(movies).toHaveLength(0);
+        });
       });
     });
   });
