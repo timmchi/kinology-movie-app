@@ -234,4 +234,74 @@ describe("Kinology", () => {
       });
     });
   });
+
+  describe("Searching for movies", () => {
+    test("search bar is not immediately in the viewport", async ({ page }) => {
+      const searchForm = page.getByText(
+        "Select genresdirectoryearRating rangeType in actor and press entercountry"
+      );
+      await expect(searchForm).not.toBeInViewport();
+
+      const searchCTAButton = page.getByRole("button", {
+        name: "search",
+        exact: true,
+      });
+
+      await searchCTAButton.click();
+
+      await expect(searchForm).toBeInViewport();
+
+      const newSearchButton = page.getByRole("button", { name: "new search" });
+
+      await expect(newSearchButton).toBeInViewport();
+    });
+
+    test("search bar is moved into viewport by pressing 'search' cta", async ({
+      page,
+    }) => {
+      const searchForm = page.getByText(
+        "Select genresdirectoryearRating rangeType in actor and press entercountry"
+      );
+
+      const searchCTAButton = page.getByRole("button", {
+        name: "search",
+        exact: true,
+      });
+
+      await searchCTAButton.click();
+
+      await expect(searchForm).toBeInViewport();
+
+      const newSearchButton = page.getByRole("button", { name: "new search" });
+
+      await expect(newSearchButton).toBeInViewport();
+    });
+
+    describe("search bar is in viewport", () => {
+      beforeEach(async ({ page }) => {
+        const searchCTAButton = page.getByRole("button", {
+          name: "search",
+          exact: true,
+        });
+
+        await searchCTAButton.click();
+      });
+
+      test("empty search functions properly", async ({ page }) => {
+        const searchMoviesButton = page.getByLabel("Search for movies");
+        await searchMoviesButton.click();
+
+        const ten = page.getByText("10");
+        await expect(ten).toBeVisible();
+
+        const cards = await page.getByTestId("search-movie-card").all();
+        expect(cards).toHaveLength(20);
+
+        await expect(cards[0]).toBeVisible();
+
+        const lastMovieCard = page.getByTestId("search-movie-card").nth(19);
+        await expect(lastMovieCard).toBeVisible();
+      });
+    });
+  });
 });

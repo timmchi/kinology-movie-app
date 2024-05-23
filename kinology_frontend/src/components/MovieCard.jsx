@@ -34,6 +34,7 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
         backgroundColor: "#BDAC4E",
       }}
       className="movieCard"
+      data-testid="search-movie-card"
     >
       <CardActionArea component={Link} to={`/movies/${movie.id}`}>
         <CardMedia
