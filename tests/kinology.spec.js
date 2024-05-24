@@ -1296,7 +1296,6 @@ describe("Kinology", () => {
 
           const crimeGenre = page.getByText("Crime");
           await crimeGenre.click();
-          // await expect(page.getByText("Crime")).toBeVisible();
 
           const directorInput = page.getByPlaceholder("director");
           await directorInput.fill("Scorsese");
@@ -1330,6 +1329,18 @@ describe("Kinology", () => {
           await expect(
             page.getByText("No one stays at the top forever.")
           ).toBeVisible();
+        });
+
+        test("new search button clears search results and resets the form", async ({
+          page,
+        }) => {
+          const newSearchButton = page.getByRole("button", {
+            name: "new search",
+          });
+          await newSearchButton.click();
+
+          await expect(page.getByText("Casino")).not.toBeVisible();
+          await expect(page.getByText("1")).not.toBeVisible();
         });
       });
     });
