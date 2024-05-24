@@ -42,7 +42,6 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
             component="img"
             loading="lazy"
             alt={`${movie.title} poster`}
-            height="375"
             image={`${basePosterUrl}${movie.image}`}
             sx={{ objectFit: "contain" }}
           />
@@ -68,32 +67,36 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
           </div>
         </div>
       </CardActionArea>
-      <CardActions>
-        <MovieButton
-          unpressedText={"Watch"}
-          pressedText={"Unwatch"}
-          movieId={movie.id}
-          user={user}
-          onButtonPress={(e) => buttonPress(e, "later")}
-          onButtonUnpress={(e) => buttonUnpress(e, "later")}
-        />
-        <MovieButton
-          unpressedText={"Favorite"}
-          pressedText={"Unfavorite"}
-          onButtonPress={(e) => buttonPress(e, "favorite")}
-          onButtonUnpress={(e) => buttonUnpress(e, "favorite")}
-          movieId={movie.id}
-          user={user}
-        />
-        <MovieButton
-          unpressedText={"Seen"}
-          pressedText={"Remove from seen"}
-          onButtonPress={(e) => buttonPress(e, "watched")}
-          onButtonUnpress={(e) => buttonUnpress(e, "watched")}
-          movieId={movie.id}
-          user={user}
-        />
-      </CardActions>
+      {user ? (
+        <CardActions>
+          <MovieButton
+            unpressedText={"Watch"}
+            pressedText={"Unwatch"}
+            movieId={movie.id}
+            user={user}
+            onButtonPress={(e) => buttonPress(e, "later")}
+            onButtonUnpress={(e) => buttonUnpress(e, "later")}
+          />
+          <MovieButton
+            unpressedText={"Favorite"}
+            pressedText={"Unfavorite"}
+            onButtonPress={(e) => buttonPress(e, "favorite")}
+            onButtonUnpress={(e) => buttonUnpress(e, "favorite")}
+            movieId={movie.id}
+            user={user}
+          />
+          <MovieButton
+            unpressedText={"Seen"}
+            pressedText={"Remove from seen"}
+            onButtonPress={(e) => buttonPress(e, "watched")}
+            onButtonUnpress={(e) => buttonUnpress(e, "watched")}
+            movieId={movie.id}
+            user={user}
+          />
+        </CardActions>
+      ) : (
+        ""
+      )}
     </Card>
   );
 };

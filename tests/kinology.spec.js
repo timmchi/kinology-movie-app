@@ -1253,7 +1253,16 @@ describe("Kinology", () => {
 
         test("a movie card can be clicked, which takes user to movie profile", async ({
           page,
-        }) => {});
+        }) => {
+          await page.getByText("Casino").click();
+
+          await expect(
+            page.getByRole("heading", { name: "Casino" })
+          ).toBeVisible();
+          await expect(
+            page.getByText("No one stays at the top forever.")
+          ).toBeVisible();
+        });
       });
     });
   });
