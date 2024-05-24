@@ -379,14 +379,7 @@ describe("Kinology", () => {
           });
           await openCommentButton.click();
 
-          const submitCommentButton = page.getByRole("button", {
-            name: "Submit comment",
-          });
-
-          const commentInput = page.getByPlaceholder("comment");
-          await commentInput.fill("my comment");
-
-          await submitCommentButton.click();
+          await postComment(page, "my comment");
 
           await expect(
             page.getByText("Comment 'my comment' successfully created")
@@ -414,14 +407,7 @@ describe("Kinology", () => {
             });
             await openCommentButton.click();
 
-            const submitCommentButton = page.getByRole("button", {
-              name: "Submit comment",
-            });
-
-            const commentInput = page.getByPlaceholder("comment");
-            await commentInput.fill("my comment");
-
-            await submitCommentButton.click();
+            await postComment(page, "my comment");
 
             await expect(
               page.getByText("Comment 'my comment' successfully created")
@@ -454,12 +440,7 @@ describe("Kinology", () => {
           });
 
           test("a comment can be deleted by its author", async ({ page }) => {
-            page.on("dialog", (dialog) => dialog.accept());
-
-            const deleteCommentButton = page.getByRole("button", {
-              name: "Delete comment",
-            });
-            await deleteCommentButton.click();
+            await deleteComment(page);
 
             await expect(
               page.getByText("Comment successfully deleted")
@@ -762,14 +743,9 @@ describe("Kinology", () => {
         });
 
         test("a user can add comments to a movie", async ({ page }) => {
-          const commentInput = page.getByPlaceholder("comment");
-          const submitCommentButton = page.getByRole("button", {
-            name: "Submit comment",
-          });
           await expect(page.getByText("no comments yet...")).toBeVisible();
 
-          await commentInput.fill("I love this movie");
-          await submitCommentButton.click();
+          await postComment(page, "I love this movie");
 
           await expect(
             page.getByText("Comment 'I love this movie' successfully added")
@@ -784,13 +760,7 @@ describe("Kinology", () => {
 
         describe("and a comment was added to a movie", () => {
           beforeEach(async ({ page }) => {
-            const commentInput = page.getByPlaceholder("comment");
-            const submitCommentButton = page.getByRole("button", {
-              name: "Submit comment",
-            });
-
-            await commentInput.fill("I love this movie");
-            await submitCommentButton.click();
+            await postComment(page, "I love this movie");
 
             await expect(
               page.getByText("Comment 'I love this movie' successfully added")
@@ -823,12 +793,7 @@ describe("Kinology", () => {
           });
 
           test("comment author can delete their comment", async ({ page }) => {
-            page.on("dialog", (dialog) => dialog.accept());
-
-            const deleteCommentButton = page.getByRole("button", {
-              name: "delete comment",
-            });
-            await deleteCommentButton.click();
+            await deleteComment(page);
 
             await expect(
               page.getByText("Comment successfully deleted")
@@ -893,14 +858,15 @@ describe("Kinology", () => {
           });
           await openCommentButton.click();
 
-          const submitCommentButton = page.getByRole("button", {
-            name: "Submit comment",
-          });
+          //   const submitCommentButton = page.getByRole("button", {
+          //     name: "Submit comment",
+          //   });
 
-          const commentInput = page.getByPlaceholder("comment");
-          await commentInput.fill("Another user was here");
+          //   const commentInput = page.getByPlaceholder("comment");
+          //   await commentInput.fill("Another user was here");
 
-          await submitCommentButton.click();
+          //   await submitCommentButton.click();
+          await postComment(page, "Another user was here");
 
           await expect(
             page.getByText(
@@ -941,14 +907,15 @@ describe("Kinology", () => {
             });
             await openCommentButton.click();
 
-            const submitCommentButton = page.getByRole("button", {
-              name: "Submit comment",
-            });
+            // const submitCommentButton = page.getByRole("button", {
+            //   name: "Submit comment",
+            // });
 
-            const commentInput = page.getByPlaceholder("comment");
-            await commentInput.fill("Another user was here");
+            // const commentInput = page.getByPlaceholder("comment");
+            // await commentInput.fill("Another user was here");
 
-            await submitCommentButton.click();
+            // await submitCommentButton.click();
+            await postComment(page, "Another user was here");
 
             await expect(
               page.getByText(
@@ -966,9 +933,10 @@ describe("Kinology", () => {
             await commentAuthorPage.click();
 
             await openCommentButton.click();
-            await commentInput.fill("This is my own profile");
+            // await commentInput.fill("This is my own profile");
 
-            await submitCommentButton.click();
+            // await submitCommentButton.click();
+            await postComment(page, "This is my own profile");
 
             await expect(
               page.getByText(
@@ -1048,8 +1016,6 @@ describe("Kinology", () => {
           test("a user can delete a comment on their profile even if they are not the author", async ({
             page,
           }) => {
-            page.on("dialog", (dialog) => dialog.accept());
-
             const ownPage = page.getByRole("link", {
               name: "Mr Tester",
             });
@@ -1058,12 +1024,7 @@ describe("Kinology", () => {
 
             await expect(page.getByText("Another user was here")).toBeVisible();
 
-            const deleteCommentButton = page.getByRole("button", {
-              name: "Delete comment",
-            });
-            await expect(deleteCommentButton).toBeVisible();
-
-            await deleteCommentButton.click();
+            await deleteComment(page);
 
             await expect(
               page.getByText("Comment successfully deleted")
