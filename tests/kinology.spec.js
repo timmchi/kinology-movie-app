@@ -298,7 +298,7 @@ describe("Kinology", () => {
         await expect(seenButton).toBeVisible();
       });
 
-      describe("adding comments to a user page", () => {
+      describe("dealing with comments to a user page", () => {
         beforeEach(async ({ page }) => {
           const usersLink = page.getByRole("link", { name: "Users" });
           await usersLink.click();
@@ -733,6 +733,79 @@ describe("Kinology", () => {
             .getByRole("link", { name: "Scarface poster" })
             .all();
           expect(movies).toHaveLength(0);
+        });
+      });
+
+      describe("dealing with comments to a movie page", () => {
+        beforeEach(async ({ page }) => {
+          await page.goto("http://localhost:5173/movies/111");
+
+          const title = page.getByText("Scarface");
+          await expect(title).toBeVisible();
+        });
+
+        test("a user can add comments to a movie", async ({ page }) => {
+          const commentInput = page.getByPlaceholder("comment");
+          const submitCommentButton = page.getByRole("button", {
+            name: "Submit comment",
+          });
+          await expect(page.getByText("no comments yet...")).toBeVisible();
+
+          await commentInput.fill("I love this movie");
+          await submitCommentButton.click();
+
+          await expect(
+            page.getByText("Comment 'I love this movie' successfully added")
+          ).toBeVisible();
+
+          await expect(
+            page.getByRole("link", { name: "Mr Tester I love this movie" })
+          ).toBeVisible();
+
+          await expect(page.getByText("no comments yet...")).not.toBeVisible();
+        });
+
+        describe("and a comment was added to a movie", () => {
+          beforeEach(async ({ page }) => {
+            const commentInput = page.getByPlaceholder("comment");
+            const submitCommentButton = page.getByRole("button", {
+              name: "Submit comment",
+            });
+
+            await commentInput.fill("I love this movie");
+            await submitCommentButton.click();
+
+            await expect(
+              page.getByText("Comment 'I love this movie' successfully added")
+            ).toBeVisible();
+          });
+
+          test("a comment author can edit their comment", async ({ page }) => {
+            const editCommentButton = page.getByRole("button", {
+              name: "edit comment",
+            });
+            await editCommentButton.click();
+
+            // await expect(page.getByText("cancel")).toBeVisible();
+
+            const editCommentInput = page
+              .locator("ul")
+              .filter({ hasText: "Mr TesterI love this" })
+              .getByPlaceholder("comment");
+
+            const submitEditButton = page
+              .locator("ul")
+              .filter({ hasText: "MMr TesterI love this" })
+              .locator("#comment-button");
+
+            await editCommentInput.fill("Al Pacino rocks");
+            await submitEditButton.click();
+
+            await expect(page.getByText("Al Pacino rocks")).toBeVisible();
+            await expect(
+              page.getByText("Comment successfully updated")
+            ).toBeVisible();
+          });
         });
       });
     });
