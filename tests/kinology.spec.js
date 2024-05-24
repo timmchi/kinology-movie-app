@@ -1,4 +1,11 @@
 const { test, describe, expect, beforeEach } = require("playwright/test");
+const {
+  loginWith,
+  registerWith,
+  postComment,
+  deleteComment,
+  editComment,
+} = require("./helper");
 
 describe("Kinology", () => {
   beforeEach(async ({ page, request }) => {
@@ -62,21 +69,14 @@ describe("Kinology", () => {
   });
 
   test("registration form can be filled and submitted", async ({ page }) => {
-    const registrationButton = page.getByRole("button", { name: "Register" });
-    await registrationButton.click();
-
-    const usernameField = await page.getByTestId("username").fill("tester");
-    const emailField = await page
-      .getByTestId("email")
-      .fill("tester@example.com");
-    const nameField = await page.getByTestId("name").fill("Mr Tester");
-    const password = await page.getByTestId("password").fill("secret");
-    const passwordConfirm = await page
-      .getByTestId("password-confirm")
-      .fill("secret");
-
-    const signupButton = page.getByRole("button", { name: "Sign Up" });
-    await signupButton.click();
+    await registerWith(
+      page,
+      "tester",
+      "Mr Tester",
+      "tester@example.com",
+      "secret",
+      "secret"
+    );
 
     await expect(
       page.getByText("Sign up was successful, please log in")
@@ -86,11 +86,7 @@ describe("Kinology", () => {
   });
 
   test("validation in registration form", async ({ page }) => {
-    const registrationButton = page.getByRole("button", { name: "Register" });
-    await registrationButton.click();
-
-    const signupButton = page.getByRole("button", { name: "Sign Up" });
-    await signupButton.click();
+    await registerWith(page, "", "", "", "", "");
 
     const usernameError = page.getByText("Please enter your username.");
     await expect(usernameError).toBeVisible();
@@ -123,37 +119,31 @@ describe("Kinology", () => {
 
   describe("when registered", () => {
     beforeEach(async ({ page }) => {
-      const registrationButton = page.getByRole("button", { name: "Register" });
-      await registrationButton.click();
-
-      const usernameField = await page.getByTestId("username").fill("tester");
-      const emailField = await page
-        .getByTestId("email")
-        .fill("tester@example.com");
-      const nameField = await page.getByTestId("name").fill("Mr Tester");
-      const password = await page.getByTestId("password").fill("secret");
-      const passwordConfirm = await page
-        .getByTestId("password-confirm")
-        .fill("secret");
-
-      const signupButton = page.getByRole("button", { name: "Sign Up" });
-      await signupButton.click();
+      await registerWith(
+        page,
+        "tester",
+        "Mr Tester",
+        "tester@example.com",
+        "secret",
+        "secret"
+      );
     });
 
-    test("failed registration in attempt", async ({ page }) => {
+    test("failed registration when using same credentials as already registered user", async ({
+      page,
+    }) => {
       await expect(
         page.getByText("Sign up was successful, please log in")
       ).toBeVisible();
 
-      await page.getByRole("link", { name: "Sign Up" }).click();
-      await page.getByTestId("username").fill("tester");
-      await page.getByTestId("email").fill("tester@example.com");
-      await page.getByTestId("name").fill("Mr Tester");
-      await page.getByTestId("password").fill("secret");
-      await page.getByTestId("password-confirm").fill("secret");
-
-      const signupButton = page.getByRole("button", { name: "Sign Up" });
-      await signupButton.click();
+      await registerWith(
+        page,
+        "tester",
+        "Mr Tester",
+        "tester@example.com",
+        "secret",
+        "secret"
+      );
 
       await expect(
         page.getByText("Something went wrong when signing up")
@@ -161,14 +151,7 @@ describe("Kinology", () => {
     });
 
     test("login form can be filled and submitted", async ({ page }) => {
-      const loginLink = page.getByRole("link", { name: "Log In" });
-      await loginLink.click();
-
-      const usernameField = await page.getByTestId("username").fill("tester");
-      const passwordField = await page.getByTestId("password").fill("secret");
-
-      const loginButton = page.getByRole("button", { name: "Log In" });
-      await loginButton.click();
+      await loginWith(page, "tester", "secret");
 
       await expect(page.getByText("Successfully logged in")).toBeVisible();
 
@@ -182,31 +165,17 @@ describe("Kinology", () => {
     });
 
     test("failed log in attempt", async ({ page }) => {
-      const loginLink = page.getByRole("link", { name: "Log In" });
-      await loginLink.click();
-
-      const usernameField = await page.getByTestId("username").fill("tester");
-      const passwordField = await page.getByTestId("password").fill("toster");
-
-      const loginButton = page.getByRole("button", { name: "Log In" });
-      await loginButton.click();
+      await loginWith(page, "tester", "toster");
 
       await expect(
         page.getByText("Something went wrong when logging in")
       ).toBeVisible();
-      await expect(loginLink).toBeVisible();
+      await expect(page.getByRole("link", { name: "Log In" })).toBeVisible();
       await expect(page.getByRole("link", { name: "Sign Up" })).toBeVisible();
     });
 
     test("validation in log in form", async ({ page }) => {
-      const loginLink = page.getByRole("link", { name: "Log In" });
-      await loginLink.click();
-
-      const usernameField = await page.getByTestId("username").fill("t");
-      const passwordField = await page.getByTestId("password").fill("s");
-
-      const loginButton = page.getByRole("button", { name: "Log In" });
-      await loginButton.click();
+      await loginWith(page, "t", "s");
 
       const usernameError = page.getByText(
         "Username needs to be at least 3 characters long."
@@ -223,14 +192,7 @@ describe("Kinology", () => {
 
     describe("when logged in", () => {
       beforeEach(async ({ page }) => {
-        const loginLink = page.getByRole("link", { name: "Log In" });
-        await loginLink.click();
-
-        const usernameField = await page.getByTestId("username").fill("tester");
-        const passwordField = await page.getByTestId("password").fill("secret");
-
-        const loginButton = page.getByRole("button", { name: "Log In" });
-        await loginButton.click();
+        await loginWith(page, "tester", "secret");
 
         await expect(page.getByText("Successfully logged in")).toBeVisible();
       });
@@ -884,50 +846,25 @@ describe("Kinology", () => {
           page.getByText("Sign up was successful, please log in")
         ).toBeVisible();
 
-        const signupLink = page.getByRole("link", { name: "Sign Up" });
-        await signupLink.click();
-
-        const usernameField = await page.getByTestId("username").fill("toster");
-        const emailField = await page
-          .getByTestId("email")
-          .fill("toster@example.com");
-        const nameField = await page.getByTestId("name").fill("Ms Toster");
-        const password = await page.getByTestId("password").fill("secret");
-        const passwordConfirm = await page
-          .getByTestId("password-confirm")
-          .fill("secret");
-
-        const signupButton = page.getByRole("button", { name: "Sign Up" });
-        await signupButton.click();
+        await registerWith(
+          page,
+          "toster",
+          "Ms Toster",
+          "toster@example.com",
+          "secret",
+          "secret"
+        );
       });
 
       test("and another user can log in", async ({ page }) => {
-        const loginLink = page.getByRole("link", { name: "Log In" });
-        await loginLink.click();
-
-        const usernameField = await page.getByTestId("username").fill("toster");
-        const passwordField = await page.getByTestId("password").fill("secret");
-
-        const loginButton = page.getByRole("button", { name: "Log In" });
-        await loginButton.click();
+        await loginWith(page, "toster", "secret");
 
         await expect(page.getByText("Successfully logged in")).toBeVisible();
       });
 
       describe("and another user has logged in", () => {
         beforeEach(async ({ page }) => {
-          const loginLink = page.getByRole("link", { name: "Log In" });
-          await loginLink.click();
-
-          const usernameField = await page
-            .getByTestId("username")
-            .fill("toster");
-          const passwordField = await page
-            .getByTestId("password")
-            .fill("secret");
-
-          const loginButton = page.getByRole("button", { name: "Log In" });
-          await loginButton.click();
+          await loginWith(page, "toster", "secret");
 
           await expect(page.getByText("Successfully logged in")).toBeVisible();
         });
@@ -1044,18 +981,7 @@ describe("Kinology", () => {
             await logoutButton.click();
 
             // logging in to another profile
-            const loginPage = page.getByRole("link", { name: "Log In" });
-            await loginPage.click();
-
-            const usernameField = await page
-              .getByTestId("username")
-              .fill("tester");
-            const passwordField = await page
-              .getByTestId("password")
-              .fill("secret");
-
-            const loginButton = page.getByRole("button", { name: "Log In" });
-            await loginButton.click();
+            await loginWith(page, "tester", "secret");
 
             await expect(
               page.getByText("Successfully logged in")
