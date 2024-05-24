@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardCover from "@mui/joy/CardCover";
-import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
@@ -43,10 +42,11 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
             component="img"
             loading="lazy"
             alt={`${movie.title} poster`}
-            height=""
+            height="375"
             image={`${basePosterUrl}${movie.image}`}
             sx={{ objectFit: "contain" }}
           />
+
           <CardCover
             sx={{
               background:
@@ -57,7 +57,6 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
             style={{
               position: "absolute",
               color: "white",
-              //   fontWeight: "bold",
               bottom: "25%",
               left: "50%",
               transform: "translateX(-50%)",

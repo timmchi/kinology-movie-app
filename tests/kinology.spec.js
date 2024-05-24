@@ -1180,6 +1180,81 @@ describe("Kinology", () => {
           await expect(pageTen).toBeVisible();
         });
       });
+
+      test("search fields can be filled and a search with them can be made", async ({
+        page,
+      }) => {
+        const genresSelector = page
+          .locator("div")
+          .filter({ hasText: /^Select genres$/ })
+          .nth(2);
+
+        await genresSelector.click();
+
+        const crimeGenre = page.getByText("Crime");
+        await crimeGenre.click();
+        // await expect(page.getByText("Crime")).toBeVisible();
+
+        const directorInput = page.getByPlaceholder("director");
+        await directorInput.fill("Scorsese");
+
+        const yearInput = page.getByPlaceholder("year");
+        await yearInput.fill("1995");
+
+        const lowerRatingInput = page.getByPlaceholder("Lower threshold");
+        await lowerRatingInput.fill("7");
+
+        const higherRatingInput = page.getByPlaceholder("Upper threshold");
+        await higherRatingInput.fill("9");
+
+        const countryInput = page.getByPlaceholder("country");
+        await countryInput.fill("United States of America");
+
+        const searchMoviesButton = page.getByLabel("Search for movies");
+        await searchMoviesButton.click();
+
+        await expect(page.getByText("Casino")).toBeVisible();
+        await expect(page.getByAltText("Casino poster")).toBeVisible();
+      });
+
+      describe("and a movie 'Casino' was found", () => {
+        beforeEach(async ({ page }) => {
+          const genresSelector = page
+            .locator("div")
+            .filter({ hasText: /^Select genres$/ })
+            .nth(2);
+
+          await genresSelector.click();
+
+          const crimeGenre = page.getByText("Crime");
+          await crimeGenre.click();
+          // await expect(page.getByText("Crime")).toBeVisible();
+
+          const directorInput = page.getByPlaceholder("director");
+          await directorInput.fill("Scorsese");
+
+          const yearInput = page.getByPlaceholder("year");
+          await yearInput.fill("1995");
+
+          const lowerRatingInput = page.getByPlaceholder("Lower threshold");
+          await lowerRatingInput.fill("7");
+
+          const higherRatingInput = page.getByPlaceholder("Upper threshold");
+          await higherRatingInput.fill("9");
+
+          const countryInput = page.getByPlaceholder("country");
+          await countryInput.fill("United States of America");
+
+          const searchMoviesButton = page.getByLabel("Search for movies");
+          await searchMoviesButton.click();
+
+          await expect(page.getByText("Casino")).toBeVisible();
+        });
+
+        test("a movie card can be clicked, which takes user to movie profile", async ({
+          page,
+        }) => {});
+      });
     });
   });
 });
