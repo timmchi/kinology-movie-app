@@ -298,6 +298,61 @@ describe("Kinology", () => {
         await expect(seenButton).toBeVisible();
       });
 
+      describe("and a search for movie Casino done", () => {
+        beforeEach(async ({ page }) => {
+          const searchCTAButton = page.getByRole("button", {
+            name: "search",
+            exact: true,
+          });
+
+          await searchCTAButton.click();
+
+          const genresSelector = page
+            .locator("div")
+            .filter({ hasText: /^Select genres$/ })
+            .nth(2);
+
+          await genresSelector.click();
+
+          const crimeGenre = page.getByText("Crime");
+          await crimeGenre.click();
+          // await expect(page.getByText("Crime")).toBeVisible();
+
+          const directorInput = page.getByPlaceholder("director");
+          await directorInput.fill("Scorsese");
+
+          const yearInput = page.getByPlaceholder("year");
+          await yearInput.fill("1995");
+
+          const lowerRatingInput = page.getByPlaceholder("Lower threshold");
+          await lowerRatingInput.fill("7");
+
+          const higherRatingInput = page.getByPlaceholder("Upper threshold");
+          await higherRatingInput.fill("9");
+
+          const countryInput = page.getByPlaceholder("country");
+          await countryInput.fill("United States of America");
+
+          const searchMoviesButton = page.getByLabel("Search for movies");
+          await searchMoviesButton.click();
+
+          await expect(page.getByText("Casino")).toBeVisible();
+        });
+
+        test("movie buttons on a movie card are visible to a logged in user", async ({
+          page,
+        }) => {
+          const watchButton = page.getByRole("button", { name: "Watch" });
+          await expect(watchButton).toBeVisible();
+
+          const favoriteButton = page.getByRole("button", { name: "Favorite" });
+          await expect(favoriteButton).toBeVisible();
+
+          const seenButton = page.getByRole("button", { name: "Seen" });
+          await expect(seenButton).toBeVisible();
+        });
+      });
+
       describe("dealing with comments to a user page", () => {
         beforeEach(async ({ page }) => {
           const usersLink = page.getByRole("link", { name: "Users" });
@@ -1178,6 +1233,19 @@ describe("Kinology", () => {
 
           const pageTen = page.getByLabel("Go to page 10");
           await expect(pageTen).toBeVisible();
+        });
+
+        test("movie cards do not have buttons when user is not logged in", async ({
+          page,
+        }) => {
+          const watchButton = page.getByRole("button", { name: "Watch" });
+          await expect(watchButton).not.toBeVisible();
+
+          const favoriteButton = page.getByRole("button", { name: "Favorite" });
+          await expect(favoriteButton).not.toBeVisible();
+
+          const seenButton = page.getByRole("button", { name: "Seen" });
+          await expect(seenButton).not.toBeVisible();
         });
       });
 
