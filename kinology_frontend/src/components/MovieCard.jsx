@@ -2,6 +2,7 @@ const basePosterUrl = "https://image.tmdb.org/t/p/original";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
+import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
@@ -31,28 +32,44 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
         borderRadius: 5,
         marginBottom: 3,
         textAlign: "center",
-        backgroundColor: "#BDAC4E",
+        backgroundColor: "#549a71",
       }}
       className="movieCard"
       data-testid="search-movie-card"
     >
       <CardActionArea component={Link} to={`/movies/${movie.id}`}>
-        <CardMedia
-          component="img"
-          loading="lazy"
-          alt={`${movie.title} poster`}
-          height="280"
-          image={`${basePosterUrl}${movie.image}`}
-          sx={{ objectFit: "contain", marginTop: 3 }}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {movie.title}
-          </Typography>
-        </CardContent>
+        <div style={{ position: "relative" }}>
+          <CardMedia
+            component="img"
+            loading="lazy"
+            alt={`${movie.title} poster`}
+            height=""
+            image={`${basePosterUrl}${movie.image}`}
+            sx={{ objectFit: "contain" }}
+          />
+          <CardCover
+            sx={{
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              color: "white",
+              //   fontWeight: "bold",
+              bottom: "25%",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <Typography gutterBottom variant="h5" component="div">
+              {movie.title}
+            </Typography>
+          </div>
+        </div>
       </CardActionArea>
       <CardActions>
-        {/* TODO need to implement functionality to add to watch later */}
         <MovieButton
           unpressedText={"Watch"}
           pressedText={"Unwatch"}
