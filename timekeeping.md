@@ -47,7 +47,7 @@
 | 22.5 | 3     | e2e tests                                                                |
 | 23.5 | 5     | e2e tests, small bug fixes uncovered during tests                        |
 | 24.5 | 3     | e2e tests, styling components, refactoring of e2e tests started          |
-|      |       |                                                                          |
+| 24.5 | 1     | e2e test refactoring                                                     |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
