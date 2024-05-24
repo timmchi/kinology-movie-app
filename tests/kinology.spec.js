@@ -780,13 +780,11 @@ describe("Kinology", () => {
             ).toBeVisible();
           });
 
-          test("a comment author can edit their comment", async ({ page }) => {
+          test("comment author can edit their comment", async ({ page }) => {
             const editCommentButton = page.getByRole("button", {
               name: "edit comment",
             });
             await editCommentButton.click();
-
-            // await expect(page.getByText("cancel")).toBeVisible();
 
             const editCommentInput = page
               .locator("ul")
@@ -805,6 +803,21 @@ describe("Kinology", () => {
             await expect(
               page.getByText("Comment successfully updated")
             ).toBeVisible();
+          });
+
+          test("comment author can delete their comment", async ({ page }) => {
+            page.on("dialog", (dialog) => dialog.accept());
+
+            const deleteCommentButton = page.getByRole("button", {
+              name: "delete comment",
+            });
+            await deleteCommentButton.click();
+
+            await expect(
+              page.getByText("Comment successfully deleted")
+            ).toBeVisible();
+            await expect(page.getByText("I love this movie")).not.toBeVisible();
+            await expect(page.getByText("no comments yet...")).toBeVisible();
           });
         });
       });
