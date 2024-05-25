@@ -418,8 +418,6 @@ describe("Kinology", () => {
 
             await submitCommentButton.click();
 
-            // await editComment(page);
-
             await expect(
               page.getByText(
                 "Comment successfully updated with 'it has been edited'"
@@ -466,11 +464,7 @@ describe("Kinology", () => {
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Watch List")).toBeVisible();
           await expect(
@@ -492,11 +486,7 @@ describe("Kinology", () => {
 
           await unwatchButton.click();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(
             page.getByText("Successfully removed movie from your profile")
@@ -525,11 +515,7 @@ describe("Kinology", () => {
             page.getByText("Successfully added Scarface to favorite")
           ).toBeVisible();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Favorite movies")).toBeVisible();
           await expect(
@@ -553,11 +539,7 @@ describe("Kinology", () => {
 
           await unfavoriteButton.click();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(
             page.getByText("Successfully removed movie from your profile")
@@ -586,11 +568,7 @@ describe("Kinology", () => {
             page.getByText("Successfully added Scarface to watched")
           ).toBeVisible();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Already seen")).toBeVisible();
           await expect(
@@ -614,11 +592,7 @@ describe("Kinology", () => {
 
           await unseeButton.click();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(
             page.getByText("Successfully removed movie from your profile")
@@ -651,11 +625,7 @@ describe("Kinology", () => {
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Watch List")).toBeVisible();
           await expect(page.getByText("Favorite Movies")).toBeVisible();
@@ -708,11 +678,7 @@ describe("Kinology", () => {
             page.getByText("Successfully removed movie from your profile")
           ).toBeVisible();
 
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Watch List")).not.toBeVisible();
           await expect(page.getByText("Favorite Movies")).not.toBeVisible();
@@ -836,11 +802,7 @@ describe("Kinology", () => {
         test("a user can leave a comment on another user profile", async ({
           page,
         }) => {
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Mr Tester")).toBeVisible();
 
@@ -849,14 +811,6 @@ describe("Kinology", () => {
           });
           await openCommentButton.click();
 
-          //   const submitCommentButton = page.getByRole("button", {
-          //     name: "Submit comment",
-          //   });
-
-          //   const commentInput = page.getByPlaceholder("comment");
-          //   await commentInput.fill("Another user was here");
-
-          //   await submitCommentButton.click();
           await postComment(page, "Another user was here");
 
           await expect(
