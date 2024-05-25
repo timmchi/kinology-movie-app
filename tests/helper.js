@@ -1,4 +1,4 @@
-const { test, describe, expect, beforeEach } = require("playwright/test");
+const { expect } = require("playwright/test");
 
 const loginWith = async (page, username, password) => {
   await page.getByRole("link", { name: "Log In" }).click();
@@ -114,6 +114,20 @@ const clickLink = async (page, linkName) => {
   await link.click();
 };
 
+const linkIsVisible = async (page, linkName, not) => {
+  const link = page.getByRole("link", { name: linkName });
+  not
+    ? await expect(link).not.toBeVisible()
+    : await expect(link).not.toBeVisible();
+};
+
+const buttonIsVisible = async (page, buttonName, not) => {
+  const button = page.getByRole("button", { name: buttonName });
+  not
+    ? await expect(button).not.toBeVisible()
+    : await expect(button).toBeVisible();
+};
+
 export {
   loginWith,
   registerWith,
@@ -127,4 +141,6 @@ export {
   openCommentForm,
   clickButton,
   clickLink,
+  linkIsVisible,
+  buttonIsVisible,
 };

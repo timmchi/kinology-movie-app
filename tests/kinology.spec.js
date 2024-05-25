@@ -12,6 +12,8 @@ const {
   openCommentForm,
   clickButton,
   clickLink,
+  linkIsVisible,
+  buttonIsVisible,
 } = require("./helper");
 
 describe("Kinology", () => {
@@ -26,17 +28,10 @@ describe("Kinology", () => {
   });
 
   test("nav bar is visible on the front page", async ({ page }) => {
-    const homeLink = page.getByRole("link", { name: "Kinology" });
-    await expect(homeLink).toBeVisible();
-
-    const aboutLink = page.getByRole("link", { name: "About" });
-    await expect(aboutLink).toBeVisible();
-
-    const loginLink = page.getByRole("link", { name: "Log In" });
-    await expect(loginLink).toBeVisible();
-
-    const signupLink = page.getByRole("link", { name: "Sign Up" });
-    await expect(signupLink).toBeVisible();
+    await linkIsVisible(page, "Kinology");
+    await linkIsVisible(page, "About");
+    await linkIsVisible(page, "Log In");
+    await linkIsVisible(page, "Sign Up");
   });
 
   test("registration form can be opened through CTA", async ({ page }) => {
@@ -45,10 +40,10 @@ describe("Kinology", () => {
     const registrationFormFields = page.getByText(
       "usernameemailnamepasswordconfirm passwordSign Up"
     );
-    const signupButton = page.getByRole("button", { name: "Sign Up" });
+
+    await buttonIsVisible(page, "Sign Up");
 
     await expect(registrationFormFields).toBeVisible();
-    await expect(signupButton).toBeVisible();
   });
 
   test("registration form can be opened through navbar", async ({ page }) => {
@@ -57,10 +52,9 @@ describe("Kinology", () => {
     const registrationFormFields = page.getByText(
       "usernameemailnamepasswordconfirm passwordSign Up"
     );
-    const signupButton = page.getByRole("button", { name: "Sign Up" });
 
+    await buttonIsVisible(page, "Sign Up");
     await expect(registrationFormFields).toBeVisible();
-    await expect(signupButton).toBeVisible();
   });
 
   test("registration form can be filled and submitted", async ({ page }) => {
@@ -76,8 +70,7 @@ describe("Kinology", () => {
     await expect(
       page.getByText("Sign up was successful, please log in")
     ).toBeVisible();
-    const loginButton = page.getByRole("button", { name: "Log In" });
-    await expect(loginButton).toBeVisible();
+    await buttonIsVisible(page, "Log In");
   });
 
   test("validation in registration form", async ({ page }) => {
@@ -107,8 +100,7 @@ describe("Kinology", () => {
   test("login form can be opened through navbar", async ({ page }) => {
     await clickLink(page, "Log In");
 
-    const loginButton = page.getByRole("button", { name: "Log In" });
-    await expect(loginButton).toBeVisible();
+    await buttonIsVisible(page, "Log In");
   });
 
   describe("when registered", () => {
@@ -158,8 +150,9 @@ describe("Kinology", () => {
       await expect(
         page.getByText("Something went wrong when logging in")
       ).toBeVisible();
-      await expect(page.getByRole("link", { name: "Log In" })).toBeVisible();
-      await expect(page.getByRole("link", { name: "Sign Up" })).toBeVisible();
+
+      await linkIsVisible(page, "Log In");
+      await linkIsVisible(page, "Sign Up");
     });
 
     test("validation in log in form", async ({ page }) => {
@@ -190,11 +183,8 @@ describe("Kinology", () => {
 
         await logOut(page);
 
-        const loginLink = page.getByRole("link", { name: "Log In" });
-        const signupLink = page.getByRole("link", { name: "Sign Up" });
-
-        await expect(loginLink).toBeVisible();
-        await expect(signupLink).toBeVisible();
+        await linkIsVisible(page, "Log In");
+        await linkIsVisible(page, "Sign Up");
       });
 
       test("users link is visible and users page can be accessed", async ({
@@ -202,8 +192,7 @@ describe("Kinology", () => {
       }) => {
         await clickLink(page, "Users");
 
-        const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-        expect(userPageLink).toBeVisible();
+        await linkIsVisible(page, "Mr Tester");
       });
 
       test("user can access their own page and it renders correctly", async ({
@@ -213,15 +202,9 @@ describe("Kinology", () => {
 
         await expect(page.getByText("Mr Tester")).toBeVisible();
 
-        const updateButton = page.getByRole("button", {
-          name: "Update Profile",
-        });
-        await expect(updateButton).toBeVisible();
+        await buttonIsVisible(page, "Update Profile");
 
-        const deleteButton = page.getByRole("button", {
-          name: "Delete User",
-        });
-        await expect(deleteButton).toBeVisible();
+        await buttonIsVisible(page, "Delete User");
       });
 
       test("user can access a single movie page and movie buttons will be shown", async ({
@@ -293,15 +276,8 @@ describe("Kinology", () => {
           await expect(commentInput).toBeVisible();
           await expect(commentInputText).toBeVisible();
 
-          const submitCommentButton = page.getByRole("button", {
-            name: "Submit comment",
-          });
-          const closeCommentButton = page.getByRole("button", {
-            name: "cancel",
-          });
-
-          await expect(submitCommentButton).toBeVisible();
-          await expect(closeCommentButton).toBeVisible();
+          await buttonIsVisible(page, "Submit comment");
+          await buttonIsVisible(page, "cancel");
         });
 
         test("comment form can be closed", async ({ page }) => {
@@ -310,20 +286,13 @@ describe("Kinology", () => {
           const commentInput = page.getByPlaceholder("comment");
           const commentInputText = page.getByText("Your comment");
 
-          const submitCommentButton = page.getByRole("button", {
-            name: "Submit comment",
-          });
+          await clickButton(page, "cancel");
 
-          const closeCommentButton = page.getByRole("button", {
-            name: "cancel",
-          });
-
-          await closeCommentButton.click();
+          await buttonIsVisible(page, "Submit comment", true);
+          await buttonIsVisible(page, "cancel", true);
 
           await expect(commentInput).not.toBeVisible();
           await expect(commentInputText).not.toBeVisible();
-          await expect(submitCommentButton).not.toBeVisible();
-          await expect(closeCommentButton).not.toBeVisible();
         });
 
         test("user can leave a comment on his profile", async ({ page }) => {
@@ -335,19 +304,10 @@ describe("Kinology", () => {
             page.getByText("Comment 'my comment' successfully created")
           ).toBeVisible();
 
-          await expect(
-            page.getByRole("link", { name: "Mr Tester my comment" })
-          ).toBeVisible();
+          await linkIsVisible(page, "Mr Tester my comment");
 
-          const editCommentButton = page.getByRole("button", {
-            name: "edit comment",
-          });
-          await expect(editCommentButton).toBeVisible();
-
-          const deleteCommentButton = page.getByRole("button", {
-            name: "Delete comment",
-          });
-          await expect(deleteCommentButton).toBeVisible();
+          await buttonIsVisible(page, "edit comment");
+          await buttonIsVisible(page, "Delete comment");
         });
 
         describe("and user profile has a comment left by profile owner", () => {
@@ -374,9 +334,8 @@ describe("Kinology", () => {
                 "Comment successfully updated with 'it has been edited'"
               )
             ).toBeVisible();
-            await expect(
-              page.getByRole("link", { name: "Mr Tester it has been edited" })
-            ).toBeVisible();
+
+            await linkIsVisible(page, "Mr Tester it has been edited");
           });
 
           test("a comment can be deleted by its author", async ({ page }) => {
@@ -386,9 +345,7 @@ describe("Kinology", () => {
               page.getByText("Comment successfully deleted")
             ).toBeVisible();
 
-            await expect(
-              page.getByRole("link", { name: "Mr Tester my comment" })
-            ).not.toBeVisible();
+            await linkIsVisible(page, "Mr tester my comment", true);
           });
         });
       });
@@ -402,14 +359,12 @@ describe("Kinology", () => {
         });
 
         test("movie can be added to watch list", async ({ page }) => {
-          const watchButton = page.getByRole("button", { name: "Watch" });
-          const unwatchButton = page.getByRole("button", { name: "Unwatch" });
+          // starts off not visible, not = true
+          await buttonIsVisible(page, "Unwatch", true);
 
-          await expect(unwatchButton).not.toBeVisible();
+          await clickButton(page, "Watch");
 
-          await watchButton.click();
-
-          await expect(unwatchButton).toBeVisible();
+          await buttonIsVisible(page, "Unwatch");
 
           await expect(
             page.getByText("Successfully added Scarface to later")
@@ -418,22 +373,20 @@ describe("Kinology", () => {
           await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Watch List")).toBeVisible();
-          await expect(
-            page.getByRole("link", { name: "Scarface poster" })
-          ).toBeVisible();
+
+          await linkIsVisible(page, "Scarface poster");
         });
 
         test("movie can be removed from watch list", async ({ page }) => {
           await clickButton(page, "Watch");
 
-          const unwatchButton = page.getByRole("button", { name: "Unwatch" });
-          await expect(unwatchButton).toBeVisible();
+          await buttonIsVisible(page, "Unwatch");
 
           await expect(
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible();
 
-          await unwatchButton.click();
+          await clickButton(page, "Unwatch");
 
           await visitUserPage(page, "Mr Tester");
 
@@ -443,22 +396,16 @@ describe("Kinology", () => {
 
           await expect(page.getByText("Mr Tester")).toBeVisible();
           await expect(page.getByText("Watch List")).not.toBeVisible();
-          await expect(
-            page.getByRole("link", { name: "Scarface poster" })
-          ).not.toBeVisible();
+
+          await linkIsVisible(page, "Scarface poster", true);
         });
 
         test("movie can be added to favorite list", async ({ page }) => {
-          const favoriteButton = page.getByRole("button", { name: "Favorite" });
-          const unfavoriteButton = page.getByRole("button", {
-            name: "Unfavorite",
-          });
+          await buttonIsVisible(page, "Unfavorite", true);
 
-          await expect(unfavoriteButton).not.toBeVisible();
+          await clickButton(page, "Favorite");
 
-          await favoriteButton.click();
-
-          await expect(unfavoriteButton).toBeVisible();
+          await buttonIsVisible(page, "Unfavorite");
 
           await expect(
             page.getByText("Successfully added Scarface to favorite")
@@ -467,24 +414,20 @@ describe("Kinology", () => {
           await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Favorite movies")).toBeVisible();
-          await expect(
-            page.getByRole("link", { name: "Scarface poster" })
-          ).toBeVisible();
+
+          await linkIsVisible(page, "Scarface poster");
         });
 
         test("movie can be removed from favorite list", async ({ page }) => {
           await clickButton(page, "Favorite");
 
-          const unfavoriteButton = page.getByRole("button", {
-            name: "Unfavorite",
-          });
-          await expect(unfavoriteButton).toBeVisible();
+          await buttonIsVisible(page, "Unfavorite");
 
           await expect(
             page.getByText("Successfully added Scarface to favorite")
           ).toBeVisible();
 
-          await unfavoriteButton.click();
+          await clickButton(page, "Unfavorite");
 
           await visitUserPage(page, "Mr Tester");
 
@@ -494,9 +437,8 @@ describe("Kinology", () => {
 
           await expect(page.getByText("Mr Tester")).toBeVisible();
           await expect(page.getByText("Favorite movies")).not.toBeVisible();
-          await expect(
-            page.getByRole("link", { name: "Scarface poster" })
-          ).not.toBeVisible();
+
+          await linkIsVisible(page, "Scarface poster", true);
         });
 
         test("movie can be added to seen list", async ({ page }) => {
