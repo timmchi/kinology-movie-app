@@ -80,6 +80,35 @@ const visitUserPage = async (page, userName) => {
   await userPageLink.click();
 };
 
+const heroPageVisible = async (page) => {
+  const welcomeHeader = page.getByRole("heading", {
+    name: "Welcome to Kinology",
+  });
+  const welcomeMessage = page.getByText("Choosing a movie made");
+
+  const registerMessage = page.getByText("Too many good options to");
+
+  await expect(registerMessage).toBeVisible();
+  await expect(welcomeMessage).toBeVisible();
+  await expect(welcomeHeader).toBeVisible();
+};
+
+const openCommentForm = async (page) => {
+  const openCommentButton = page.getByRole("button", {
+    name: "leave a comment",
+  });
+  await openCommentButton.click();
+};
+
+const clickButton = async (page, buttonName) => {
+  const button = page.getByRole("button", {
+    name: buttonName,
+    exact: true,
+  });
+
+  await button.click();
+};
+
 export {
   loginWith,
   registerWith,
@@ -89,4 +118,7 @@ export {
   movieButtonsNotVisible,
   logOut,
   visitUserPage,
+  heroPageVisible,
+  openCommentForm,
+  clickButton,
 };

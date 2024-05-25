@@ -8,6 +8,9 @@ const {
   movieButtonsNotVisible,
   logOut,
   visitUserPage,
+  heroPageVisible,
+  openCommentForm,
+  clickButton,
 } = require("./helper");
 
 describe("Kinology", () => {
@@ -18,17 +21,7 @@ describe("Kinology", () => {
   });
 
   test("front page can be opened", async ({ page }) => {
-    const welcomeHeader = page.getByRole("heading", {
-      name: "Welcome to Kinology",
-    });
-    const welcomeMessage = page.getByText("Choosing a movie made");
-
-    await expect(welcomeMessage).toBeVisible();
-    await expect(welcomeHeader).toBeVisible();
-
-    const registerMessage = page.getByText("Too many good options to");
-
-    await expect(registerMessage).toBeVisible();
+    await heroPageVisible(page);
   });
 
   test("nav bar is visible on the front page", async ({ page }) => {
@@ -158,13 +151,7 @@ describe("Kinology", () => {
 
       await expect(page.getByText("Successfully logged in")).toBeVisible();
 
-      const welcomeHeader = page.getByRole("heading", {
-        name: "Welcome to Kinology",
-      });
-      const welcomeMessage = page.getByText("Choosing a movie made");
-
-      await expect(welcomeMessage).toBeVisible();
-      await expect(welcomeHeader).toBeVisible();
+      await heroPageVisible(page);
     });
 
     test("failed log in attempt", async ({ page }) => {
@@ -203,8 +190,7 @@ describe("Kinology", () => {
       test("can log out", async ({ page }) => {
         await expect(page.getByText("Successfully logged in")).toBeVisible();
 
-        const logoutButton = page.getByRole("button", { name: "log out" });
-        await logoutButton.click();
+        await logOut(page);
 
         const loginLink = page.getByRole("link", { name: "Log In" });
         const signupLink = page.getByRole("link", { name: "Sign Up" });
@@ -226,11 +212,7 @@ describe("Kinology", () => {
       test("user can access their own page and it renders correctly", async ({
         page,
       }) => {
-        const usersLink = page.getByRole("link", { name: "Users" });
-        await usersLink.click();
-
-        const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-        await userPageLink.click();
+        await visitUserPage(page, "Mr Tester");
 
         await expect(page.getByText("Mr Tester")).toBeVisible();
 
@@ -274,7 +256,6 @@ describe("Kinology", () => {
 
           const crimeGenre = page.getByText("Crime");
           await crimeGenre.click();
-          // await expect(page.getByText("Crime")).toBeVisible();
 
           const directorInput = page.getByPlaceholder("director");
           await directorInput.fill("Scorsese");
@@ -306,20 +287,13 @@ describe("Kinology", () => {
 
       describe("dealing with comments to a user page", () => {
         beforeEach(async ({ page }) => {
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
-
-          const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-          await userPageLink.click();
+          await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Mr Tester")).toBeVisible();
         });
 
         test("comment form can be opened", async ({ page }) => {
-          const openCommentButton = page.getByRole("button", {
-            name: "leave a comment",
-          });
-          await openCommentButton.click();
+          await openCommentForm(page);
 
           const commentInput = page.getByPlaceholder("comment");
           const commentInputText = page.getByText("Your comment");
@@ -339,10 +313,7 @@ describe("Kinology", () => {
         });
 
         test("comment form can be closed", async ({ page }) => {
-          const openCommentButton = page.getByRole("button", {
-            name: "leave a comment",
-          });
-          await openCommentButton.click();
+          await openCommentForm(page);
 
           const commentInput = page.getByPlaceholder("comment");
           const commentInputText = page.getByText("Your comment");
@@ -363,10 +334,7 @@ describe("Kinology", () => {
         });
 
         test("user can leave a comment on his profile", async ({ page }) => {
-          const openCommentButton = page.getByRole("button", {
-            name: "leave a comment",
-          });
-          await openCommentButton.click();
+          await openCommentForm(page);
 
           await postComment(page, "my comment");
 
@@ -391,10 +359,7 @@ describe("Kinology", () => {
 
         describe("and user profile has a comment left by profile owner", () => {
           beforeEach(async ({ page }) => {
-            const openCommentButton = page.getByRole("button", {
-              name: "leave a comment",
-            });
-            await openCommentButton.click();
+            await openCommentForm(page);
 
             await postComment(page, "my comment");
 
@@ -806,10 +771,7 @@ describe("Kinology", () => {
 
           await expect(page.getByText("Mr Tester")).toBeVisible();
 
-          const openCommentButton = page.getByRole("button", {
-            name: "leave a comment",
-          });
-          await openCommentButton.click();
+          await openCommentForm(page);
 
           await postComment(page, "Another user was here");
 
@@ -843,10 +805,7 @@ describe("Kinology", () => {
 
             await expect(page.getByText("Mr Tester")).toBeVisible();
 
-            const openCommentButton = page.getByRole("button", {
-              name: "leave a comment",
-            });
-            await openCommentButton.click();
+            await openCommentForm(page);
 
             await postComment(page, "Another user was here");
 
@@ -859,7 +818,8 @@ describe("Kinology", () => {
             // going to current users profile and leaving a comment there
             await visitUserPage(page, "Ms Toster");
 
-            await openCommentButton.click();
+            // await openCommentButton.click();
+            await openCommentForm(page);
 
             await postComment(page, "This is my own profile");
 
@@ -885,11 +845,7 @@ describe("Kinology", () => {
           test("a user can not edit a comment on another user profile", async ({
             page,
           }) => {
-            const commentAuthorPage = page.getByRole("link", {
-              name: "Ms Toster",
-            });
-            await expect(page.getByText("Ms Toster")).toBeVisible();
-            await commentAuthorPage.click();
+            await visitUserPage(page, "Ms Toster");
 
             await expect(
               page.getByRole("link", { name: "Ms Toster This is my own" })
@@ -904,11 +860,7 @@ describe("Kinology", () => {
           test("a user can not delete a comment on another user profile", async ({
             page,
           }) => {
-            const commentAuthorPage = page.getByRole("link", {
-              name: "Ms Toster",
-            });
-            await expect(page.getByText("Ms Toster")).toBeVisible();
-            await commentAuthorPage.click();
+            await visitUserPage(page, "Ms Toster");
 
             await expect(
               page.getByRole("link", { name: "Ms Toster This is my own" })
@@ -923,11 +875,7 @@ describe("Kinology", () => {
           test("a user can not edit a comment on their profile if they are not the comments author", async ({
             page,
           }) => {
-            const ownPage = page.getByRole("link", {
-              name: "Mr Tester",
-            });
-            await expect(page.getByText("Mr Tester")).toBeVisible();
-            await ownPage.click();
+            await visitUserPage(page, "Mr Tester");
 
             await expect(page.getByText("Another user was here")).toBeVisible();
 
@@ -940,11 +888,7 @@ describe("Kinology", () => {
           test("a user can delete a comment on their profile even if they are not the author", async ({
             page,
           }) => {
-            const ownPage = page.getByRole("link", {
-              name: "Mr Tester",
-            });
-            await expect(page.getByText("Mr Tester")).toBeVisible();
-            await ownPage.click();
+            await visitUserPage(page, "Mr Tester");
 
             await expect(page.getByText("Another user was here")).toBeVisible();
 
@@ -969,12 +913,7 @@ describe("Kinology", () => {
       );
       await expect(searchForm).not.toBeInViewport();
 
-      const searchCTAButton = page.getByRole("button", {
-        name: "search",
-        exact: true,
-      });
-
-      await searchCTAButton.click();
+      await clickButton(page, "search");
 
       await expect(searchForm).toBeInViewport();
 
@@ -990,12 +929,7 @@ describe("Kinology", () => {
         "Select genresdirectoryearRating rangeType in actor and press entercountry"
       );
 
-      const searchCTAButton = page.getByRole("button", {
-        name: "search",
-        exact: true,
-      });
-
-      await searchCTAButton.click();
+      await clickButton(page, "search");
 
       await expect(searchForm).toBeInViewport();
 
@@ -1006,12 +940,7 @@ describe("Kinology", () => {
 
     describe("search bar is in viewport", () => {
       beforeEach(async ({ page }) => {
-        const searchCTAButton = page.getByRole("button", {
-          name: "search",
-          exact: true,
-        });
-
-        await searchCTAButton.click();
+        await clickButton(page, "search");
       });
 
       test("empty search returns movie cards", async ({ page }) => {
@@ -1138,10 +1067,7 @@ describe("Kinology", () => {
         test("new search button clears search results and resets the form", async ({
           page,
         }) => {
-          const newSearchButton = page.getByRole("button", {
-            name: "new search",
-          });
-          await newSearchButton.click();
+          await clickButton(page, "new search");
 
           await expect(page.getByText("Casino")).not.toBeVisible();
           await expect(page.getByText("1")).not.toBeVisible();
