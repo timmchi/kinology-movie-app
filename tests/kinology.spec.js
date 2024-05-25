@@ -442,16 +442,11 @@ describe("Kinology", () => {
         });
 
         test("movie can be added to seen list", async ({ page }) => {
-          const seenButton = page.getByRole("button", { name: "Seen" });
-          const unseeButton = page.getByRole("button", {
-            name: "Unsee",
-          });
+          await buttonIsVisible(page, "Unsee", true);
 
-          await expect(unseeButton).not.toBeVisible();
+          await clickButton(page, "Seen");
 
-          await seenButton.click();
-
-          await expect(unseeButton).toBeVisible();
+          await buttonIsVisible(page, "Unsee");
 
           await expect(
             page.getByText("Successfully added Scarface to watched")
@@ -460,24 +455,20 @@ describe("Kinology", () => {
           await visitUserPage(page, "Mr Tester");
 
           await expect(page.getByText("Already seen")).toBeVisible();
-          await expect(
-            page.getByRole("link", { name: "Scarface poster" })
-          ).toBeVisible();
+
+          await linkIsVisible(page, "Scarface poster");
         });
 
         test("movie can be removed from seen list", async ({ page }) => {
           await clickButton(page, "Seen");
 
-          const unseeButton = page.getByRole("button", {
-            name: "Unsee",
-          });
-          await expect(unseeButton).toBeVisible();
+          await buttonIsVisible(page, "Unsee");
 
           await expect(
             page.getByText("Successfully added Scarface to watched")
           ).toBeVisible();
 
-          await unseeButton.click();
+          await clickButton(page, "Unsee");
 
           await visitUserPage(page, "Mr Tester");
 
@@ -487,9 +478,8 @@ describe("Kinology", () => {
 
           await expect(page.getByText("Mr Tester")).toBeVisible();
           await expect(page.getByText("Already seen")).not.toBeVisible();
-          await expect(
-            page.getByRole("link", { name: "Scarface poster" })
-          ).not.toBeVisible();
+
+          await linkIsVisible(page, "Scarface poster", true);
         });
 
         test("movie can be added to multiple lists", async ({ page }) => {
@@ -536,23 +526,14 @@ describe("Kinology", () => {
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible();
 
-          const unseeButton = page.getByRole("button", {
-            name: "Unsee",
-          });
-          const unfavoriteButton = page.getByRole("button", {
-            name: "Unfavorite",
-          });
-          const unwatchButton = page.getByRole("button", { name: "Unwatch" });
+          await buttonIsVisible(page, "Unsee");
+          await buttonIsVisible(page, "Unwatch");
+          await buttonIsVisible(page, "Unfavorite");
 
-          await expect(unwatchButton).toBeVisible();
-          await expect(unseeButton).toBeVisible();
-          await expect(unfavoriteButton).toBeVisible();
+          await clickButton(page, "Unsee");
+          await clickButton(page, "Unwatch");
+          await clickButton(page, "Unfavorite");
 
-          await unseeButton.click();
-
-          await unfavoriteButton.click();
-
-          await unwatchButton.click();
           await expect(
             page.getByText("Successfully removed movie from your profile")
           ).toBeVisible();
@@ -587,9 +568,7 @@ describe("Kinology", () => {
             page.getByText("Comment 'I love this movie' successfully added")
           ).toBeVisible();
 
-          await expect(
-            page.getByRole("link", { name: "Mr Tester I love this movie" })
-          ).toBeVisible();
+          await linkIsVisible(page, "Mr Tester I love this movie");
 
           await expect(page.getByText("no comments yet...")).not.toBeVisible();
         });
@@ -670,8 +649,7 @@ describe("Kinology", () => {
         test("another user is visible in user list", async ({ page }) => {
           await clickLink(page, "Users");
 
-          const userPageLink = page.getByRole("link", { name: "Ms Toster" });
-          await expect(userPageLink).toBeVisible();
+          await linkIsVisible(page, "Ms Toster");
         });
 
         test("a user can leave a comment on another user profile", async ({
@@ -691,21 +669,11 @@ describe("Kinology", () => {
             )
           ).toBeVisible();
 
-          await expect(
-            page.getByRole("link", {
-              name: "Ms Toster Another user was here",
-            })
-          ).toBeVisible();
+          await linkIsVisible(page, "Ms Toster Another user was here");
 
-          const editCommentButton = page.getByRole("button", {
-            name: "edit comment",
-          });
-          await expect(editCommentButton).toBeVisible();
+          await buttonIsVisible(page, "edit comment");
 
-          const deleteCommentButton = page.getByRole("button", {
-            name: "Delete comment",
-          });
-          await expect(deleteCommentButton).toBeVisible();
+          await buttonIsVisible(page, "Delete comment");
         });
 
         describe("a second user created a comment in their own profile and another user profile, logged in with another user", () => {
@@ -748,8 +716,6 @@ describe("Kinology", () => {
             await expect(
               page.getByText("Successfully logged in")
             ).toBeVisible();
-
-            await page.getByText("Users").click();
           });
 
           test("a user can not edit a comment on another user profile", async ({
@@ -757,29 +723,19 @@ describe("Kinology", () => {
           }) => {
             await visitUserPage(page, "Ms Toster");
 
-            await expect(
-              page.getByRole("link", { name: "Ms Toster This is my own" })
-            ).toBeVisible();
+            await linkIsVisible(page, "Ms Toster This is my own");
 
-            const editCommentButton = page.getByRole("button", {
-              name: "edit comment",
-            });
-            await expect(editCommentButton).not.toBeVisible();
+            await buttonIsVisible(page, "edit comment", true);
           });
 
-          test("a user can not delete a comment on another user profile", async ({
+          test("a user can not delete a comment on another user profile if they are not the author", async ({
             page,
           }) => {
             await visitUserPage(page, "Ms Toster");
 
-            await expect(
-              page.getByRole("link", { name: "Ms Toster This is my own" })
-            ).toBeVisible();
+            await linkIsVisible(page, "Ms Toster This is my own");
 
-            const deleteCommentButton = page.getByRole("button", {
-              name: "Delete comment",
-            });
-            await expect(deleteCommentButton).not.toBeVisible();
+            await buttonIsVisible(page, "Delete comment", true);
           });
 
           test("a user can not edit a comment on their profile if they are not the comments author", async ({
@@ -789,10 +745,7 @@ describe("Kinology", () => {
 
             await expect(page.getByText("Another user was here")).toBeVisible();
 
-            const editCommentButton = page.getByRole("button", {
-              name: "edit comment",
-            });
-            await expect(editCommentButton).not.toBeVisible();
+            await buttonIsVisible(page, "edit comment", true);
           });
 
           test("a user can delete a comment on their profile even if they are not the author", async ({

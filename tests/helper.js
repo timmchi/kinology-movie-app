@@ -116,9 +116,7 @@ const clickLink = async (page, linkName) => {
 
 const linkIsVisible = async (page, linkName, not) => {
   const link = page.getByRole("link", { name: linkName });
-  not
-    ? await expect(link).not.toBeVisible()
-    : await expect(link).not.toBeVisible();
+  not ? await expect(link).not.toBeVisible() : await expect(link).toBeVisible();
 };
 
 const buttonIsVisible = async (page, buttonName, not) => {
