@@ -4,7 +4,10 @@ const {
   registerWith,
   postComment,
   deleteComment,
-  editComment,
+  movieButtonsVisible,
+  movieButtonsNotVisible,
+  logOut,
+  visitUserPage,
 } = require("./helper");
 
 describe("Kinology", () => {
@@ -250,14 +253,7 @@ describe("Kinology", () => {
         const title = page.getByText("Scarface");
         await expect(title).toBeVisible();
 
-        const watchButton = page.getByRole("button", { name: "Watch" });
-        await expect(watchButton).toBeVisible();
-
-        const favoriteButton = page.getByRole("button", { name: "Favorite" });
-        await expect(favoriteButton).toBeVisible();
-
-        const seenButton = page.getByRole("button", { name: "Seen" });
-        await expect(seenButton).toBeVisible();
+        await movieButtonsVisible(page);
       });
 
       describe("and a search for movie Casino done", () => {
@@ -304,14 +300,7 @@ describe("Kinology", () => {
         test("movie buttons on a movie card are visible to a logged in user", async ({
           page,
         }) => {
-          const watchButton = page.getByRole("button", { name: "Watch" });
-          await expect(watchButton).toBeVisible();
-
-          const favoriteButton = page.getByRole("button", { name: "Favorite" });
-          await expect(favoriteButton).toBeVisible();
-
-          const seenButton = page.getByRole("button", { name: "Seen" });
-          await expect(seenButton).toBeVisible();
+          await movieButtonsVisible(page);
         });
       });
 
@@ -428,6 +417,8 @@ describe("Kinology", () => {
             await commentInput.fill("it has been edited");
 
             await submitCommentButton.click();
+
+            // await editComment(page);
 
             await expect(
               page.getByText(
@@ -775,7 +766,7 @@ describe("Kinology", () => {
 
             const editCommentInput = page
               .locator("ul")
-              .filter({ hasText: "Mr TesterI love this" })
+              .filter({ hasText: "MMr TesterI love this" })
               .getByPlaceholder("comment");
 
             const submitEditButton = page
@@ -894,11 +885,7 @@ describe("Kinology", () => {
         describe("a second user created a comment in their own profile and another user profile, logged in with another user", () => {
           beforeEach(async ({ page }) => {
             // comment on first user profile
-            const usersLink = page.getByRole("link", { name: "Users" });
-            await usersLink.click();
-
-            const userPageLink = page.getByRole("link", { name: "Mr Tester" });
-            await userPageLink.click();
+            await visitUserPage(page, "Mr Tester");
 
             await expect(page.getByText("Mr Tester")).toBeVisible();
 
@@ -907,14 +894,6 @@ describe("Kinology", () => {
             });
             await openCommentButton.click();
 
-            // const submitCommentButton = page.getByRole("button", {
-            //   name: "Submit comment",
-            // });
-
-            // const commentInput = page.getByPlaceholder("comment");
-            // await commentInput.fill("Another user was here");
-
-            // await submitCommentButton.click();
             await postComment(page, "Another user was here");
 
             await expect(
@@ -924,18 +903,10 @@ describe("Kinology", () => {
             ).toBeVisible();
 
             // going to current users profile and leaving a comment there
-            await usersLink.click();
-
-            const commentAuthorPage = page.getByRole("link", {
-              name: "Ms Toster",
-            });
-            await expect(page.getByText("Ms Toster")).toBeVisible();
-            await commentAuthorPage.click();
+            await visitUserPage(page, "Ms Toster");
 
             await openCommentButton.click();
-            // await commentInput.fill("This is my own profile");
 
-            // await submitCommentButton.click();
             await postComment(page, "This is my own profile");
 
             await expect(
@@ -945,8 +916,7 @@ describe("Kinology", () => {
             ).toBeVisible();
 
             // logging out
-            const logoutButton = page.getByText("log out");
-            await logoutButton.click();
+            await logOut(page);
 
             // logging in to another profile
             await loginWith(page, "tester", "secret");
@@ -1125,14 +1095,7 @@ describe("Kinology", () => {
         test("movie cards do not have buttons when user is not logged in", async ({
           page,
         }) => {
-          const watchButton = page.getByRole("button", { name: "Watch" });
-          await expect(watchButton).not.toBeVisible();
-
-          const favoriteButton = page.getByRole("button", { name: "Favorite" });
-          await expect(favoriteButton).not.toBeVisible();
-
-          const seenButton = page.getByRole("button", { name: "Seen" });
-          await expect(seenButton).not.toBeVisible();
+          await movieButtonsNotVisible(page);
         });
       });
 
