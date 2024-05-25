@@ -11,6 +11,7 @@ const {
   heroPageVisible,
   openCommentForm,
   clickButton,
+  clickLink,
 } = require("./helper");
 
 describe("Kinology", () => {
@@ -39,8 +40,7 @@ describe("Kinology", () => {
   });
 
   test("registration form can be opened through CTA", async ({ page }) => {
-    const registrationButton = page.getByRole("button", { name: "Register" });
-    await registrationButton.click();
+    await clickButton(page, "Register");
 
     const registrationFormFields = page.getByText(
       "usernameemailnamepasswordconfirm passwordSign Up"
@@ -52,8 +52,7 @@ describe("Kinology", () => {
   });
 
   test("registration form can be opened through navbar", async ({ page }) => {
-    const signupLink = page.getByRole("link", { name: "Sign Up" });
-    await signupLink.click();
+    await clickLink(page, "Sign Up");
 
     const registrationFormFields = page.getByText(
       "usernameemailnamepasswordconfirm passwordSign Up"
@@ -106,8 +105,7 @@ describe("Kinology", () => {
   });
 
   test("login form can be opened through navbar", async ({ page }) => {
-    const loginLink = page.getByRole("link", { name: "Log In" });
-    await loginLink.click();
+    await clickLink(page, "Log In");
 
     const loginButton = page.getByRole("button", { name: "Log In" });
     await expect(loginButton).toBeVisible();
@@ -202,8 +200,7 @@ describe("Kinology", () => {
       test("users link is visible and users page can be accessed", async ({
         page,
       }) => {
-        const usersLink = page.getByRole("link", { name: "Users" });
-        await usersLink.click();
+        await clickLink(page, "Users");
 
         const userPageLink = page.getByRole("link", { name: "Mr Tester" });
         expect(userPageLink).toBeVisible();
@@ -240,12 +237,7 @@ describe("Kinology", () => {
 
       describe("and a search for movie Casino done", () => {
         beforeEach(async ({ page }) => {
-          const searchCTAButton = page.getByRole("button", {
-            name: "search",
-            exact: true,
-          });
-
-          await searchCTAButton.click();
+          await clickButton(page, "search");
 
           const genresSelector = page
             .locator("div")
@@ -321,6 +313,7 @@ describe("Kinology", () => {
           const submitCommentButton = page.getByRole("button", {
             name: "Submit comment",
           });
+
           const closeCommentButton = page.getByRole("button", {
             name: "cancel",
           });
@@ -369,19 +362,12 @@ describe("Kinology", () => {
           });
 
           test("a comment can be edited by its author", async ({ page }) => {
-            const editCommentButton = page.getByRole("button", {
-              name: "edit comment",
-            });
-            await editCommentButton.click();
-
-            const submitCommentButton = page.getByRole("button", {
-              name: "Submit comment",
-            });
+            await clickButton(page, "edit comment");
 
             const commentInput = page.getByRole("textbox", { name: "comment" });
             await commentInput.fill("it has been edited");
 
-            await submitCommentButton.click();
+            await clickButton(page, "Submit comment");
 
             await expect(
               page.getByText(
@@ -438,9 +424,7 @@ describe("Kinology", () => {
         });
 
         test("movie can be removed from watch list", async ({ page }) => {
-          const watchButton = page.getByRole("button", { name: "Watch" });
-
-          await watchButton.click();
+          await clickButton(page, "Watch");
 
           const unwatchButton = page.getByRole("button", { name: "Unwatch" });
           await expect(unwatchButton).toBeVisible();
@@ -489,9 +473,7 @@ describe("Kinology", () => {
         });
 
         test("movie can be removed from favorite list", async ({ page }) => {
-          const favoriteButton = page.getByRole("button", { name: "Favorite" });
-
-          await favoriteButton.click();
+          await clickButton(page, "Favorite");
 
           const unfavoriteButton = page.getByRole("button", {
             name: "Unfavorite",
@@ -542,9 +524,7 @@ describe("Kinology", () => {
         });
 
         test("movie can be removed from seen list", async ({ page }) => {
-          const seenButton = page.getByRole("button", { name: "Seen" });
-
-          await seenButton.click();
+          await clickButton(page, "Seen");
 
           const unseeButton = page.getByRole("button", {
             name: "Unsee",
@@ -571,21 +551,17 @@ describe("Kinology", () => {
         });
 
         test("movie can be added to multiple lists", async ({ page }) => {
-          const seenButton = page.getByRole("button", { name: "Seen" });
-          const favoriteButton = page.getByRole("button", { name: "Favorite" });
-          const watchButton = page.getByRole("button", { name: "Watch" });
-
-          await seenButton.click();
+          await clickButton(page, "Seen");
           await expect(
             page.getByText("Successfully added Scarface to watched")
           ).toBeVisible();
 
-          await favoriteButton.click();
+          await clickButton(page, "Favorite");
           await expect(
             page.getByText("Successfully added Scarface to favorite")
           ).toBeVisible();
 
-          await watchButton.click();
+          await clickButton(page, "Watch");
           await expect(
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible();
@@ -603,21 +579,17 @@ describe("Kinology", () => {
         });
 
         test("movie can be removed from multiple lists", async ({ page }) => {
-          const seenButton = page.getByRole("button", { name: "Seen" });
-          const favoriteButton = page.getByRole("button", { name: "Favorite" });
-          const watchButton = page.getByRole("button", { name: "Watch" });
-
-          await seenButton.click();
+          await clickButton(page, "Seen");
           await expect(
             page.getByText("Successfully added Scarface to watched")
           ).toBeVisible();
 
-          await favoriteButton.click();
+          await clickButton(page, "Favorite");
           await expect(
             page.getByText("Successfully added Scarface to favorite")
           ).toBeVisible();
 
-          await watchButton.click();
+          await clickButton(page, "Watch");
           await expect(
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible();
@@ -690,10 +662,7 @@ describe("Kinology", () => {
           });
 
           test("comment author can edit their comment", async ({ page }) => {
-            const editCommentButton = page.getByRole("button", {
-              name: "edit comment",
-            });
-            await editCommentButton.click();
+            await clickButton(page, "edit comment");
 
             const editCommentInput = page
               .locator("ul")
@@ -757,8 +726,7 @@ describe("Kinology", () => {
         });
 
         test("another user is visible in user list", async ({ page }) => {
-          const usersLink = page.getByRole("link", { name: "Users" });
-          await usersLink.click();
+          await clickLink(page, "Users");
 
           const userPageLink = page.getByRole("link", { name: "Ms Toster" });
           await expect(userPageLink).toBeVisible();
@@ -994,7 +962,6 @@ describe("Kinology", () => {
 
         const crimeGenre = page.getByText("Crime");
         await crimeGenre.click();
-        // await expect(page.getByText("Crime")).toBeVisible();
 
         const directorInput = page.getByPlaceholder("director");
         await directorInput.fill("Scorsese");

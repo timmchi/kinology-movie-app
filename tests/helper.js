@@ -109,6 +109,11 @@ const clickButton = async (page, buttonName) => {
   await button.click();
 };
 
+const clickLink = async (page, linkName) => {
+  const link = page.getByRole("link", { name: linkName });
+  await link.click();
+};
+
 export {
   loginWith,
   registerWith,
@@ -121,4 +126,5 @@ export {
   heroPageVisible,
   openCommentForm,
   clickButton,
+  clickLink,
 };
