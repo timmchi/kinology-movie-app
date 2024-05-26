@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { object, string, minLength } from "valibot";
+
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
@@ -24,7 +25,7 @@ const LoginSchema = object({
   ]),
 });
 
-const LogIn = ({ handleLogin }) => {
+const Test = ({ handleLogin }) => {
   const {
     register,
     handleSubmit,
@@ -157,4 +158,4 @@ const LogIn = ({ handleLogin }) => {
   );
 };
 
-export default LogIn;
+export default Test;

@@ -8,6 +8,7 @@ import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import User from "./components/User";
 import Users from "./components/Users";
+import Test from "./components/Test";
 import Movie from "./components/Movie";
 import NotificationAlert from "./components/Notification";
 import loginService from "./services/login";
@@ -196,6 +197,7 @@ function App() {
           path="/users"
           element={<Users users={users} removeUser={removeUser} />}
         />
+        <Route path="/test" element={<Test />} />
       </Routes>
     </>
   );
