@@ -89,7 +89,7 @@ const Navigation = (props) => {
   return (
     <Box sx={{ display: "flex" }}>
       {/* <CssBaseline /> */}
-      <AppBar component="nav" sx={{ bgcolor: "#549a71" }}>
+      <AppBar component="nav" sx={{ bgcolor: "#549a71" }} position="fixed">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -123,9 +123,7 @@ const Navigation = (props) => {
                   </NavLink>
                 </Button>
 
-                <Button sx={{ textAlign: "center" }}>
-                  <LogOut handleLogout={handleLogout} />
-                </Button>
+                <LogOut handleLogout={handleLogout} />
               </>
             ) : (
               <>
@@ -145,6 +143,7 @@ const Navigation = (props) => {
           </Box>
         </Toolbar>
       </AppBar>
+      <Toolbar />
       <nav>
         <Drawer
           container={container}
