@@ -53,6 +53,7 @@ const LogIn = ({ handleLogin }) => {
           justifyContent: "flex-end",
           backdropFilter: "blur(12px)",
           backgroundColor: "rgba(255 255 255 / 0.2)",
+          textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
         }}
       >
         <Box
@@ -86,12 +87,12 @@ const LogIn = ({ handleLogin }) => {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography component="h1" level="h3" sx={{ color: "#f7e382" }}>
-                  Sign in
+                  Log in
                 </Typography>
                 <Typography level="body-sm" sx={{ color: "#f7e382" }}>
                   New to Kinology?{" "}
                   <Link to="/signup" sx={{ color: "#E6E9E0" }}>
-                    Sign up
+                    Create an account
                   </Link>
                 </Typography>
               </Stack>

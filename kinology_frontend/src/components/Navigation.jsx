@@ -110,34 +110,34 @@ const Navigation = (props) => {
             </Link>
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Button>
-              <NavLink to="/about" className="nav-link">
-                About
-              </NavLink>
-            </Button>
+            {/* <Button> */}
+            <NavLink to="/about" className="nav-link">
+              About
+            </NavLink>
+            {/* </Button> */}
             {props.user ? (
               <>
-                <Button sx={{ textAlign: "center" }}>
-                  <NavLink to="/users" className="nav-link">
-                    Users
-                  </NavLink>
-                </Button>
+                {/* <Button sx={{ textAlign: "center" }}> */}
+                <NavLink to="/users" className="nav-link">
+                  Users
+                </NavLink>
+                {/* </Button> */}
 
                 <LogOut handleLogout={handleLogout} />
               </>
             ) : (
               <>
-                <Button sx={{ textAlign: "center" }}>
-                  <NavLink to="/login" className="nav-link">
-                    Log in
-                  </NavLink>
-                </Button>
+                {/* <Button sx={{ textAlign: "center" }}> */}
+                <NavLink to="/login" className="nav-link">
+                  Log in
+                </NavLink>
+                {/* </Button> */}
 
-                <Button sx={{ textAlign: "center" }}>
-                  <NavLink to="/signup" className="nav-link">
-                    Sign up
-                  </NavLink>
-                </Button>
+                {/* <Button sx={{ textAlign: "center" }}> */}
+                <NavLink to="/signup" className="nav-link">
+                  Sign up
+                </NavLink>
+                {/* </Button> */}
               </>
             )}
           </Box>

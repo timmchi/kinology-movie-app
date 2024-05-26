@@ -2,8 +2,14 @@ const { expect } = require("playwright/test");
 
 const loginWith = async (page, username, password) => {
   await page.getByRole("link", { name: "Log In" }).click();
-  await page.getByTestId("username").fill(username);
-  await page.getByTestId("password").fill(password);
+  await page
+    .getByTestId("username")
+    .getByPlaceholder("username")
+    .fill(username);
+  await page
+    .getByTestId("password")
+    .getByPlaceholder("password")
+    .fill(password);
   await page.getByRole("button", { name: "Log In" }).click();
 };
 
@@ -16,11 +22,11 @@ const registerWith = async (
   passwordConfirm
 ) => {
   await page.getByRole("link", { name: "Sign Up" }).click();
-  await page.getByTestId("username").fill(username);
-  await page.getByTestId("email").fill(email);
-  await page.getByTestId("name").fill(name);
-  await page.getByTestId("password").fill(password);
-  await page.getByTestId("password-confirm").fill(passwordConfirm);
+  await page.getByPlaceholder("username").fill(username);
+  await page.getByPlaceholder("email").fill(email);
+  await page.getByTestId("name").getByPlaceholder("name").fill(name);
+  await page.getByPlaceholder("password..").fill(password);
+  await page.getByPlaceholder("confirm password").fill(passwordConfirm);
 
   const signupButton = page.getByRole("button", { name: "Sign Up" });
   await signupButton.click();
@@ -68,7 +74,7 @@ const movieButtonsNotVisible = async (page) => {
 };
 
 const logOut = async (page) => {
-  const logoutButton = page.getByText("log out");
+  const logoutButton = page.getByRole("button", { name: "log out" });
   await logoutButton.click();
 };
 

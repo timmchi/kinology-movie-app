@@ -38,7 +38,7 @@ describe("Kinology", () => {
     await clickButton(page, "Register");
 
     const registrationFormFields = page.getByText(
-      "usernameemailnamepasswordconfirm passwordSign Up"
+      "UsernameNameEmailPasswordConfirm PasswordSign Up"
     );
 
     await buttonIsVisible(page, "Sign Up");
@@ -50,7 +50,7 @@ describe("Kinology", () => {
     await clickLink(page, "Sign Up");
 
     const registrationFormFields = page.getByText(
-      "usernameemailnamepasswordconfirm passwordSign Up"
+      "UsernameNameEmailPasswordConfirm PasswordSign Up"
     );
 
     await buttonIsVisible(page, "Sign Up");

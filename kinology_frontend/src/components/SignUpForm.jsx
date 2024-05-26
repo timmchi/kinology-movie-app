@@ -102,6 +102,7 @@ const SignUpForm = ({ handleSignUp }) => {
               width: 400,
               maxWidth: "100%",
               mx: "auto",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
               borderRadius: "sm",
               "& form": { display: "flex", flexDirection: "column", gap: 2 },
               [`& .MuiFormLabel-asterisk`]: {
@@ -117,7 +118,7 @@ const SignUpForm = ({ handleSignUp }) => {
                 <Typography level="body-sm" sx={{ color: "#f7e382" }}>
                   Already have an account?{" "}
                   <Link to="/login" sx={{ color: "#E6E9E0" }}>
-                    Log in
+                    Sign in
                   </Link>
                 </Typography>
               </Stack>
