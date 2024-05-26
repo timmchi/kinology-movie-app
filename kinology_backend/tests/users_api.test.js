@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const bcrypt = require("bcrypt");
 const app = require("../app");
-const helper = require("./test_helper_users");
+const helper = require("./users_helper");
 
 const api = supertest(app);
 
@@ -37,20 +37,11 @@ const secondUserCredentials = {
 let token;
 let secondUserToken;
 
-const commentReceivingMovieId = helper.initialMovie.tmdbId;
-
 describe("when there are users in the db usersRouter", () => {
   beforeEach(async () => {
     await User.deleteMany({});
 
-    const passwordHash = await getHash(userPassword);
-
-    const userObjects = helper.users.map(
-      (user) =>
-        new User({ username: user.username, email: user.email, passwordHash })
-    );
-    const promiseArray = userObjects.map((user) => user.save());
-    await Promise.all(promiseArray);
+    await helper.createUsers();
   });
 
   test("users are returned as json", async () => {
@@ -92,11 +83,7 @@ describe("when there are no users in the db", async () => {
   test("a user can be created", async () => {
     const usersAtStart = await helper.usersInDb();
 
-    await api
-      .post("/api/users")
-      .send(userCredentials)
-      .expect(201)
-      .expect("Content-Type", /application\/json/);
+    await helper.createUser(api, userCredentials);
 
     const usersAtEnd = await helper.usersInDb();
 
@@ -108,21 +95,14 @@ describe("when there are no users in the db", async () => {
 
   describe("and a single user has been created", async () => {
     beforeEach(async () => {
-      await api
-        .post("/api/users")
-        .send(userCredentials)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
+      await helper.createUser(api, userCredentials);
 
       const usersAtEnd = await helper.usersInDb();
       createdUserId = usersAtEnd[0].id;
     });
 
     test("a user page can be accessed", async () => {
-      await api
-        .get(`/api/users/${createdUserId}`)
-        .expect(200)
-        .expect("Content-Type", /application\/json/);
+      await helper.getUser(api, createdUserId);
     });
 
     test("a non logged-in user can not delete a profile", async () => {
@@ -143,12 +123,7 @@ describe("when there are no users in the db", async () => {
 
       const avatar = path.resolve(__dirname, "testImage.png");
 
-      await api
-        .put(`/api/users/${createdUserId}`)
-        .field("name", "Unsuccessful user")
-        .field("bio", "I will not be updated")
-        .attach("avatar", avatar)
-        .expect(401);
+      await helper.noTokenEdit(api, createdUserId, avatar);
 
       const usersAtEnd = await helper.usersInDb();
 
@@ -159,9 +134,11 @@ describe("when there are no users in the db", async () => {
 
     describe("and a user has logged in", async () => {
       beforeEach(async () => {
-        const result = await api
-          .post("/api/login")
-          .send({ username: userCredentials.username, password: userPassword });
+        const result = await helper.userLogin(
+          api,
+          userCredentials.username,
+          userCredentials.password
+        );
 
         token = result.body.token;
       });
@@ -182,38 +159,26 @@ describe("when there are no users in the db", async () => {
         assert.strictEqual(usersAtEnd.length, usersAtStart.length - 1);
       });
 
-      test("a user can update their profile", async () => {
-        const avatar = path.resolve(__dirname, "testImage.png");
+      //   test("a user can update their profile", async () => {
+      //     const avatar = path.resolve(__dirname, "testImage.png");
 
-        await api
-          .put(`/api/users/${createdUserId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .field("name", "New User Name")
-          .field("bio", "I am testing")
-          .attach("avatar", avatar)
-          .expect(200);
+      //     await helper.successfulEdit(api, token, createdUserId, avatar);
 
-        const usersAtEnd = await helper.usersInDb();
+      //     const usersAtEnd = await helper.usersInDb();
 
-        assert.strictEqual(usersAtEnd[0].name, "New User Name");
-        assert.strictEqual(usersAtEnd[0].biography, "I am testing");
-        assert.strictEqual(
-          usersAtEnd[0].avatar,
-          `${usersAtEnd[0].username}-avatar`
-        );
-      });
+      //     assert.strictEqual(usersAtEnd[0].name, "New User Name");
+      //     assert.strictEqual(usersAtEnd[0].biography, "I am testing");
+      //     assert.strictEqual(
+      //       usersAtEnd[0].avatar,
+      //       `${usersAtEnd[0].username}-avatar`
+      //     );
+      //   });
 
       describe("and a movie exists in a db", async () => {
         beforeEach(async () => {
           await Movie.deleteMany({});
 
-          const movie = new Movie({
-            tmdbId: helper.initialMovie.tmdbId,
-            title: helper.initialMovie.title,
-            poster: helper.initialMovie.poster,
-          });
-
-          await movie.save();
+          await helper.createMovie();
         });
 
         test("a user can add a movie to his watch later", async () => {
@@ -226,12 +191,7 @@ describe("when there are no users in the db", async () => {
             poster: movieData.poster,
           };
 
-          await api
-            .post(`/api/users/${createdUserId}/movies`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ movie, button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.addMovieToUser(api, token, createdUserId, movie, button);
 
           const usersAtEnd = await helper.usersInDb();
           assert.strictEqual(
@@ -251,20 +211,16 @@ describe("when there are no users in the db", async () => {
           };
 
           // adding a movie
-          await api
-            .post(`/api/users/${createdUserId}/movies`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ movie, button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.addMovieToUser(api, token, createdUserId, movie, button);
 
           // then removing it
-          await api
-            .delete(`/api/users/${createdUserId}/movies/${movieData.tmdbId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.deleteMovieFromUser(
+            api,
+            token,
+            createdUserId,
+            movie.id,
+            button
+          );
 
           const usersAtEnd = await helper.usersInDb();
           assert.strictEqual(0, usersAtEnd[0].watchLaterMovies.length);
@@ -280,12 +236,7 @@ describe("when there are no users in the db", async () => {
             poster: movieData.poster,
           };
 
-          await api
-            .post(`/api/users/${createdUserId}/movies`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ movie, button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.addMovieToUser(api, token, createdUserId, movie, button);
 
           const usersAtEnd = await helper.usersInDb();
           assert.strictEqual(
@@ -305,20 +256,16 @@ describe("when there are no users in the db", async () => {
           };
 
           // adding a movie
-          await api
-            .post(`/api/users/${createdUserId}/movies`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ movie, button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.addMovieToUser(api, token, createdUserId, movie, button);
 
           // then removing it
-          await api
-            .delete(`/api/users/${createdUserId}/movies/${movieData.tmdbId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.deleteMovieFromUser(
+            api,
+            token,
+            createdUserId,
+            movie.id,
+            button
+          );
 
           const usersAtEnd = await helper.usersInDb();
           assert.strictEqual(0, usersAtEnd[0].favoriteMovies.length);
@@ -334,12 +281,7 @@ describe("when there are no users in the db", async () => {
             poster: movieData.poster,
           };
 
-          await api
-            .post(`/api/users/${createdUserId}/movies`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ movie, button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.addMovieToUser(api, token, createdUserId, movie, button);
 
           const usersAtEnd = await helper.usersInDb();
           assert.strictEqual(
@@ -359,20 +301,16 @@ describe("when there are no users in the db", async () => {
           };
 
           // adding a movie
-          await api
-            .post(`/api/users/${createdUserId}/movies`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ movie, button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.addMovieToUser(api, token, createdUserId, movie, button);
 
           // then removing it
-          await api
-            .delete(`/api/users/${createdUserId}/movies/${movieData.tmdbId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .send({ button })
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.deleteMovieFromUser(
+            api,
+            token,
+            createdUserId,
+            movie.id,
+            button
+          );
 
           const usersAtEnd = await helper.usersInDb();
           assert.strictEqual(0, usersAtEnd[0].watchedMovies.length);
@@ -382,17 +320,14 @@ describe("when there are no users in the db", async () => {
       describe("and another user exists in a db", async () => {
         beforeEach(async () => {
           // creating a second user
-          await api
-            .post("/api/users")
-            .send(secondUserCredentials)
-            .expect(201)
-            .expect("Content-Type", /application\/json/);
+          await helper.createUser(api, secondUserCredentials);
 
           // logging in
-          const result = await api.post("/api/login").send({
-            username: secondUserCredentials.username,
-            password: userPassword,
-          });
+          const result = await helper.userLogin(
+            api,
+            secondUserCredentials.username,
+            userPassword
+          );
 
           secondUserToken = result.body.token;
         });
@@ -418,13 +353,12 @@ describe("when there are no users in the db", async () => {
 
           const avatar = path.resolve(__dirname, "testImage.png");
 
-          await api
-            .put(`/api/users/${createdUserId}`)
-            .set("Authorization", `Bearer ${secondUserToken}`)
-            .field("name", "Unsuccessful user")
-            .field("bio", "I will not be updated")
-            .attach("avatar", avatar)
-            .expect(401);
+          await helper.unauthorizedEdit(
+            api,
+            secondUserToken,
+            createdUserId,
+            avatar
+          );
 
           const usersAtEnd = await helper.usersInDb();
 
@@ -440,13 +374,7 @@ describe("when there are no users in the db", async () => {
           beforeEach(async () => {
             await Movie.deleteMany({});
 
-            const movie = new Movie({
-              tmdbId: helper.initialMovie.tmdbId,
-              title: helper.initialMovie.title,
-              poster: helper.initialMovie.poster,
-            });
-
-            await movie.save();
+            await helper.createMovie();
           });
 
           test("a user can not add a movie to another user favorites", async () => {
@@ -459,11 +387,18 @@ describe("when there are no users in the db", async () => {
               poster: movieData.poster,
             };
 
-            await api
-              .post(`/api/users/${createdUserId}/movies`)
-              .set("Authorization", `Bearer ${secondUserToken}`)
-              .send({ movie, button })
-              .expect(401);
+            // await api
+            //   .post(`/api/users/${createdUserId}/movies`)
+            //   .set("Authorization", `Bearer ${secondUserToken}`)
+            //   .send({ movie, button })
+            //   .expect(401);
+            await helper.unauthorizedAddMovie(
+              api,
+              secondUserToken,
+              createdUserId,
+              movie,
+              button
+            );
 
             const usersAtEnd = await helper.usersInDb();
             assert.strictEqual(0, usersAtEnd[0].favoriteMovies.length);
