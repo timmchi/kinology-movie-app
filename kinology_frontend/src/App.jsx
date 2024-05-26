@@ -16,8 +16,6 @@ import userService from "./services/users";
 import { useNotificationDispatch } from "./contexts/NotificationContext";
 
 function App() {
-  //   const [username, setUsername] = useState("");
-  //   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
   const dispatch = useNotificationDispatch();
@@ -69,7 +67,6 @@ function App() {
 
   // movie buttons continues here
   const handleMovieButton = async (event, button, movie) => {
-    // do i even need event here? check again after everything else works
     event.preventDefault();
     try {
       const currentUserId = users.find((u) => u.username === user.username)?.id;

@@ -7,12 +7,12 @@ const initialComments = [
   { content: "This is a bad movie" },
   { content: "This user is my friend" },
   { content: "This user is my enemy" },
-];
+]; // +
 
 const initialUser = {
   username: "commentstester",
   email: "commentstester@example.com",
-};
+}; // +
 
 const secondUser = {
   username: "seconduser",
@@ -48,7 +48,7 @@ const initialMovie = {
   title: "Scarface",
   poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
   tmdbId: "111",
-};
+}; // +
 
 const mockMovies = [
   { title: "Casino", poster: "/4TS5O1IP42bY2BvgMxL156EENy.jpg", tmdbId: "524" },
@@ -67,7 +67,7 @@ const mockMovies = [
 const commentsInDb = async () => {
   const comments = await UserComment.find({});
   return comments.map((comment) => comment.toJSON());
-};
+}; // +
 
 const moviesInDb = async () => {
   const movies = await Movie.find({});
@@ -88,7 +88,7 @@ const postComment = async (api, token, type, id, newComment) => {
     .expect("Content-Type", /application\/json/);
 
   return response.body;
-};
+}; // +
 
 const unauthorizedPostComment = async (api, type, id, newComment) => {
   const response = await api
@@ -97,7 +97,7 @@ const unauthorizedPostComment = async (api, type, id, newComment) => {
     .expect(401);
 
   return response.body;
-};
+}; // +
 
 const invalidPostComment = async (api, token, type, id, newComment) => {
   const response = await api
@@ -107,7 +107,7 @@ const invalidPostComment = async (api, token, type, id, newComment) => {
     .expect(400);
 
   return response.body;
-};
+}; // +
 
 const deleteComment = async (api, token, type, id, commentId, authorId) => {
   await api

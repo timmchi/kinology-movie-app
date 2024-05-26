@@ -228,7 +228,6 @@ a:hover {
   background-image: url(../heroimage-min.png);
   background-size: 160vh;
   background-repeat: no-repeat;
-  /* background-position: top 100% left 100%; */
   background-position: top 100% center;
   display: flex;
   flex-direction: row;
@@ -245,9 +244,7 @@ a:hover {
   font-size: 2rem;
   margin-right: 12%;
   margin-bottom: 20%;
-  /* margin-top: 5%; */
-  margin-left: 5%;
-  /* text-align: center; */
+  text-align: center;
 }
 
 .hero .register {

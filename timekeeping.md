@@ -49,6 +49,9 @@
 | 24.5 | 3     | e2e tests, styling components, refactoring of e2e tests started          |
 | 24.5 | 1     | e2e test refactoring                                                     |
 | 25.5 | 3     | e2e test refactoring                                                     |
+| 26.5 | 1     | changing nav bar to responsive with mui                                  |
+| 26.5 | 2     | responsive sign up form and login form with mui                          |
+| 26.5 | 1     | fixing e2e and unit tests to work with new components                    |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -56,4 +59,21 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-| tot  | 96.5  |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+|      |       |                                                                          |
+| tot  | 100.5 |                                                                          |

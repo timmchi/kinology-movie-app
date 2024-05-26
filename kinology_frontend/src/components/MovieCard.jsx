@@ -1,4 +1,5 @@
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -10,6 +11,8 @@ import { CardActionArea } from "@mui/material";
 import MovieButton from "./MovieButton";
 
 const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const buttonPress = (event, functionWord) => {
     onButtonPress(event, functionWord, {
       id: movie.id,
@@ -39,12 +42,17 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
       <CardActionArea component={Link} to={`/movies/${movie.id}`}>
         <div style={{ position: "relative" }}>
           <CardMedia
-            component="img"
+            component="picture"
             loading="lazy"
-            alt={`${movie.title} poster`}
-            image={`${basePosterUrl}${movie.image}`}
             sx={{ objectFit: "contain" }}
-          />
+          >
+            <img
+              src={`${basePosterUrl}${movie.image}`}
+              alt={`${movie.title} poster`}
+              onLoad={() => setImageLoaded(true)}
+              height="375"
+            />
+          </CardMedia>
 
           <CardCover
             sx={{

@@ -87,19 +87,10 @@ const SearchBar = ({ setMovies }) => {
 
   console.log(errors);
   const searchForMovies = async (data, pageValue) => {
-    // console.log(data);
-
     // TODO - refactor this: create a function that parses the data into suitable shape
     const actorsQuery = actors.map((actor) => actor.value);
     const { genresSelect, director, year, ratingUpper, ratingLower, country } =
       data;
-    // console.log(genresSelect);
-    // console.log(
-    //   ratingUpper,
-    //   ratingLower,
-    //   typeof ratingUpper,
-    //   typeof ratingLower
-    // );
     const genres = genresSelect
       ? genresSelect?.map((genreOption) => `${genreOption.value}`)
       : [];
