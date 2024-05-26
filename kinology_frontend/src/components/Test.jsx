@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength } from "valibot";
+import { object, string, minLength, forward, custom, email } from "valibot";
 
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
@@ -9,35 +9,61 @@ import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 // import IconButton, { IconButtonProps } from "@mui/joy/IconButton";
-import Link from "@mui/joy/Link";
+import { Link } from "react-router-dom";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
-const LoginSchema = object({
-  username: string("Username must be a string.", [
-    minLength(1, "Please enter your username."),
-    minLength(3, "Username needs to be at least 3 characters long."),
-  ]),
-  password: string("Your password must be a string.", [
-    minLength(1, "Password is required."),
-    minLength(6, "Your password must have 6 characters or more."),
-  ]),
-});
+const RegistrationSchema = object(
+  {
+    email: string([
+      minLength(1, "Please enter your email."),
+      email("The email address is badly formatted"),
+    ]),
+    username: string([
+      minLength(1, "Please enter your username."),
+      minLength(3, "Username should be 3 or more symbols"),
+    ]),
+    name: string([
+      minLength(1, "Please enter your name or nickname."),
+      minLength(3, "Name or nickname should be 3 or more symbols"),
+    ]),
+    password: string([
+      minLength(1, "Please enter your password."),
+      minLength(6, "Your password must have 6 characters or more."),
+    ]),
+    passwordConfirm: string([minLength(1, "Please confirm password")]),
+  },
+  [
+    forward(
+      custom(
+        (input) => input.password === input.passwordConfirm,
+        "The two passwords do not match"
+      ),
+      ["passwordConfirm"]
+    ),
+  ]
+);
 
-const Test = ({ handleLogin }) => {
+const Test = ({ handleSignUp }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm({
-    resolver: valibotResolver(LoginSchema),
+    resolver: valibotResolver(RegistrationSchema),
   });
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ username: "", password: "" });
+      reset({
+        username: "",
+        email: "",
+        password: "",
+        passwordConfirm: "",
+        name: "",
+      });
     }
   }, [isSubmitSuccessful, reset]);
 
@@ -87,28 +113,50 @@ const Test = ({ handleLogin }) => {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography component="h1" level="h3" sx={{ color: "#f7e382" }}>
-                  Sign in
+                  Sign up
                 </Typography>
                 <Typography level="body-sm" sx={{ color: "#f7e382" }}>
-                  New to Kinology?{" "}
-                  <Link to="/signup" sx={{ color: "#E6E9E0" }}>
-                    Sign up
+                  Already have an account?{" "}
+                  <Link to="/login" sx={{ color: "#E6E9E0" }}>
+                    Log in
                   </Link>
                 </Typography>
               </Stack>
             </Stack>
             <Divider sx={{ bgcolor: "#bdac4e" }} />
             <Stack gap={4} sx={{ mt: 2 }}>
-              <form onSubmit={handleSubmit(handleLogin)}>
+              <form onSubmit={handleSubmit(handleSignUp)}>
                 <FormControl>
                   <FormLabel sx={{ color: "#f7e382" }}>Username</FormLabel>
                   <Input
                     {...register("username")}
-                    placeholder="username..."
+                    placeholder="username"
                     data-testid="username"
                   />
                   {errors?.username?.message ? (
                     <p style={{ color: "red" }}>{errors.username?.message}</p>
+                  ) : null}
+                </FormControl>
+                <FormControl>
+                  <FormLabel sx={{ color: "#f7e382" }}>Name</FormLabel>
+                  <Input
+                    {...register("name")}
+                    placeholder="name"
+                    data-testid="name"
+                  />
+                  {errors?.name?.message ? (
+                    <p style={{ color: "red" }}>{errors.name?.message}</p>
+                  ) : null}
+                </FormControl>
+                <FormControl>
+                  <FormLabel sx={{ color: "#f7e382" }}>Email</FormLabel>
+                  <Input
+                    {...register("email")}
+                    placeholder="email"
+                    data-testid="email"
+                  />
+                  {errors?.email?.message ? (
+                    <p style={{ color: "red" }}>{errors.email?.message}</p>
                   ) : null}
                 </FormControl>
                 <FormControl>
@@ -123,13 +171,29 @@ const Test = ({ handleLogin }) => {
                     <p style={{ color: "red" }}>{errors.password?.message}</p>
                   ) : null}
                 </FormControl>
+                <FormControl>
+                  <FormLabel sx={{ color: "#f7e382" }}>
+                    Confirm Password
+                  </FormLabel>
+                  <Input
+                    type="password"
+                    {...register("passwordConfirm")}
+                    placeholder="confirm password"
+                    data-testid="password-confirm"
+                  />
+                  {errors?.passwordConfirm?.message ? (
+                    <p style={{ color: "red" }}>
+                      {errors.passwordConfirm?.message}
+                    </p>
+                  ) : null}
+                </FormControl>
                 <Button
                   type="submit"
                   fullWidth
                   disabled={isSubmitting}
-                  id="login-button"
+                  id="signup-button"
                 >
-                  {isSubmitting ? "Logging in..." : "Log In"}
+                  {isSubmitting ? "Signing up..." : "Sign Up"}
                 </Button>
               </form>
             </Stack>
