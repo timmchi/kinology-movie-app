@@ -4,7 +4,31 @@ import MovieCard from "./MovieCard";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 
-test("renders a movie card with all buttons", () => {
+test("renders a movie card with all buttons when there is a user", () => {
+  const movie = {
+    title: "Scarface",
+    poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
+    tmdbId: "111",
+  };
+
+  render(
+    <MemoryRouter>
+      <MovieCard movie={movie} user={true} />
+    </MemoryRouter>
+  );
+
+  const element = screen.getByText("Scarface");
+  const favButton = screen.getByText("Favorite");
+  const watchButton = screen.getByText("Watch");
+  const seenButton = screen.getByText("Seen");
+
+  expect(element).toBeDefined();
+  expect(favButton).toBeDefined();
+  expect(watchButton).toBeDefined();
+  expect(seenButton).toBeDefined();
+});
+
+test("renders a movie card with no buttons when there is no user", () => {
   const movie = {
     title: "Scarface",
     poster: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
@@ -18,14 +42,14 @@ test("renders a movie card with all buttons", () => {
   );
 
   const element = screen.getByText("Scarface");
-  const favButton = screen.getByText("Favorite");
-  const watchButton = screen.getByText("Watch");
-  const seenButton = screen.getByText("Seen");
+  const favButton = screen.queryByText("Favorite");
+  const watchButton = screen.queryByText("Watch");
+  const seenButton = screen.queryByText("Seen");
 
   expect(element).toBeDefined();
-  expect(favButton).toBeDefined();
-  expect(watchButton).toBeDefined();
-  expect(seenButton).toBeDefined();
+  expect(favButton).toBeNull();
+  expect(watchButton).toBeNull();
+  expect(seenButton).toBeNull();
 });
 
 test("calls onButtonPress with correct argumens when Watch button is pressed, then unpressed", async () => {
@@ -45,6 +69,7 @@ test("calls onButtonPress with correct argumens when Watch button is pressed, th
         movie={movie}
         onButtonPress={mockPressHandler}
         onButtonUnpress={mockUnpressHandler}
+        user={true}
       />
     </MemoryRouter>
   );
@@ -76,6 +101,7 @@ test("calls onButtonPress with correct argumens when Favorite button is pressed,
         movie={movie}
         onButtonPress={mockPressHandler}
         onButtonUnpress={mockUnpressHandler}
+        user={true}
       />
     </MemoryRouter>
   );
@@ -107,6 +133,7 @@ test("calls onButtonPress with correct argumens when Seen button is pressed, the
         movie={movie}
         onButtonPress={mockPressHandler}
         onButtonUnpress={mockUnpressHandler}
+        user={true}
       />
     </MemoryRouter>
   );

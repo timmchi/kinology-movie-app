@@ -1,25 +1,38 @@
 import { render, screen } from "@testing-library/react";
 import LogIn from "./LogIn";
 import { testSetup } from "../utils/testUtils";
+import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 
 test("Log in form is rendered correctly", () => {
-  const { container } = render(<LogIn />);
+  const { container } = render(
+    <MemoryRouter>
+      <LogIn />
+    </MemoryRouter>
+  );
 
-  const username = screen.getByText("username");
-  const password = screen.getByText("password");
+  const username = screen.getByText("Username");
+  const password = screen.getByText("Password");
+  const usernameInput = screen.getByPlaceholderText("username...");
+  const passwordInput = screen.getByPlaceholderText("password...");
 
   const button = container.querySelector("#login-button");
 
   expect(username).toBeDefined();
   expect(password).toBeDefined();
+  expect(usernameInput).toBeDefined();
+  expect(passwordInput).toBeDefined();
   expect(button).toBeDefined();
 });
 
 test("Log In form updates parent state and calls handleLogin", async () => {
   const handleLogin = vi.fn();
 
-  const { user } = testSetup(<LogIn handleLogin={handleLogin} />);
+  const { user } = testSetup(
+    <MemoryRouter>
+      <LogIn handleLogin={handleLogin} />
+    </MemoryRouter>
+  );
 
   const username = screen.getByPlaceholderText("username...");
   const password = screen.getByPlaceholderText("password...");
@@ -37,7 +50,11 @@ test("Log In form updates parent state and calls handleLogin", async () => {
 test("form fields are validated", async () => {
   const handleLogin = vi.fn();
 
-  const { user } = testSetup(<LogIn handleLogin={handleLogin} />);
+  const { user } = testSetup(
+    <MemoryRouter>
+      <LogIn handleLogin={handleLogin} />
+    </MemoryRouter>
+  );
 
   const username = screen.getByPlaceholderText("username...");
   const password = screen.getByPlaceholderText("password...");

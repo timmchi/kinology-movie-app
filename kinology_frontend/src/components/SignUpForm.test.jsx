@@ -1,16 +1,27 @@
 import { render, screen } from "@testing-library/react";
 import SignUpForm from "./SignUpForm";
 import { testSetup } from "../utils/testUtils";
+import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 
-test("Log in form is rendered correctly", () => {
-  const { container } = render(<SignUpForm />);
+test("Sign up form is rendered correctly", () => {
+  const { container } = render(
+    <MemoryRouter>
+      <SignUpForm />
+    </MemoryRouter>
+  );
 
-  const username = screen.getByText("username");
-  const password = screen.getByText("password");
-  const confirmPassword = screen.getByText("confirm password");
-  const name = screen.getByText("name");
-  const email = screen.getByText("email");
+  const username = screen.getByText("Username");
+  const password = screen.getByText("Password");
+  const confirmPassword = screen.getByText("Confirm Password");
+  const name = screen.getByText("Name");
+  const email = screen.getByText("Email");
+
+  const usernameInput = screen.getByPlaceholderText("username");
+  const passwordInput = screen.getByPlaceholderText("password...");
+  const nameInput = screen.getByPlaceholderText("name");
+  const confirmPwInput = screen.getByPlaceholderText("confirm password");
+  const emailInput = screen.getByPlaceholderText("email");
 
   const button = container.querySelector("#signup-button");
 
@@ -20,15 +31,25 @@ test("Log in form is rendered correctly", () => {
   expect(name).toBeDefined();
   expect(email).toBeDefined();
   expect(button).toBeDefined();
+
+  expect(usernameInput).toBeDefined();
+  expect(passwordInput).toBeDefined();
+  expect(confirmPwInput).toBeDefined();
+  expect(nameInput).toBeDefined();
+  expect(emailInput).toBeDefined();
 });
 
 test("Sign Up form updates parent state and calls handleSignup", async () => {
   const handleSignup = vi.fn();
 
-  const { user } = testSetup(<SignUpForm handleSignUp={handleSignup} />);
+  const { user } = testSetup(
+    <MemoryRouter>
+      <SignUpForm handleSignUp={handleSignup} />
+    </MemoryRouter>
+  );
 
   const username = screen.getByPlaceholderText("username");
-  const password = screen.getByPlaceholderText("password");
+  const password = screen.getByPlaceholderText("password...");
   const name = screen.getByPlaceholderText("name");
   const confirmPw = screen.getByPlaceholderText("confirm password");
   const email = screen.getByPlaceholderText("email");
@@ -53,10 +74,14 @@ test("Sign Up form updates parent state and calls handleSignup", async () => {
 test("form fields are validated", async () => {
   const handleSignup = vi.fn();
 
-  const { user } = testSetup(<SignUpForm handleSignUp={handleSignup} />);
+  const { user } = testSetup(
+    <MemoryRouter>
+      <SignUpForm handleSignUp={handleSignup} />
+    </MemoryRouter>
+  );
 
   const username = screen.getByPlaceholderText("username");
-  const password = screen.getByPlaceholderText("password");
+  const password = screen.getByPlaceholderText("password...");
   const name = screen.getByPlaceholderText("name");
   const confirmPw = screen.getByPlaceholderText("confirm password");
   const email = screen.getByPlaceholderText("email");

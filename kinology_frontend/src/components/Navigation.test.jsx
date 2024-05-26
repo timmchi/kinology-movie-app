@@ -13,15 +13,15 @@ test("renders correctly when the user is null", () => {
     </MemoryRouter>
   );
 
-  const siteTitle = screen.getByText("Kinology");
-  const about = screen.getByText("About");
-  const login = screen.getByText("Log in");
-  const signup = screen.getByText("Sign up");
+  const siteTitles = screen.getAllByText("Kinology");
+  const abouts = screen.getAllByText("About");
+  const logins = screen.getAllByText("Log in");
+  const signups = screen.getAllByText("Sign up");
 
-  expect(siteTitle).toBeDefined();
-  expect(about).toBeDefined();
-  expect(login).toBeDefined();
-  expect(signup).toBeDefined();
+  expect(siteTitles).toBeDefined();
+  expect(abouts).toBeDefined();
+  expect(logins).toBeDefined();
+  expect(signups).toBeDefined();
 });
 
 test("renders correctly when the user is logged in", () => {
@@ -31,15 +31,16 @@ test("renders correctly when the user is logged in", () => {
     </MemoryRouter>
   );
 
-  const siteTitle = screen.getByText("Kinology");
-  const about = screen.getByText("About");
-  const users = screen.getByText("Users");
-  const logout = screen.getByText("log out");
+  const siteTitles = screen.getAllByText("Kinology");
+  const abouts = screen.getAllByText("About");
+  const users = screen.getAllByText("Users");
+  const logoutButtons = screen.getAllByText("log out");
 
-  expect(siteTitle).toBeDefined();
-  expect(about).toBeDefined();
+  expect(siteTitles).toBeDefined();
+  expect(abouts).toBeDefined();
   expect(users).toBeDefined();
-  expect(logout).toBeDefined();
+  expect(logoutButtons[0]).toBeDefined();
+  expect(logoutButtons[1]).toBeDefined();
 });
 
 describe("testing routes", () => {
@@ -53,7 +54,7 @@ describe("testing routes", () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText("About"));
+    fireEvent.click(screen.getAllByText("About")[1]);
     expect(screen.getByText(/About me/i)).toBeDefined();
     expect(screen.getByText(/my favorite movies/i)).toBeDefined();
     expect(screen.getByText(/Web app uses TMDB api/i)).toBeDefined();
@@ -70,13 +71,13 @@ describe("testing routes", () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText("Sign up"));
+    fireEvent.click(screen.getAllByText("Sign up")[1]);
 
-    const username = screen.getByText("username");
-    const password = screen.getByText("password");
-    const confirmPassword = screen.getByText("confirm password");
-    const name = screen.getByText("name");
-    const email = screen.getByText("email");
+    const username = screen.getByText("Username");
+    const password = screen.getByText("Password");
+    const confirmPassword = screen.getByText("Confirm Password");
+    const name = screen.getByText("Name");
+    const email = screen.getByText("Email");
 
     expect(username).toBeDefined();
     expect(password).toBeDefined();
@@ -95,11 +96,11 @@ describe("testing routes", () => {
       </MemoryRouter>
     );
 
-    const login = screen.getByText("Log in");
+    const loginButtons = screen.getAllByText("Log in");
 
-    fireEvent.click(login);
-    const username = screen.getByText("username");
-    const password = screen.getByText("password");
+    fireEvent.click(loginButtons[1]);
+    const username = screen.getByText("Username");
+    const password = screen.getByText("Password");
 
     expect(username).toBeDefined();
     expect(password).toBeDefined();
@@ -109,10 +110,6 @@ describe("testing routes", () => {
 describe("local storage test", () => {
   const removeItemMock = vi.spyOn(Storage.prototype, "removeItem");
 
-  //   afterEach(() => {
-  //     localStorage.clear();
-  //   });
-
   test("handles logout function correctly", () => {
     render(
       <MemoryRouter>
@@ -120,8 +117,8 @@ describe("local storage test", () => {
       </MemoryRouter>
     );
 
-    const logoutButton = screen.getByText("log out");
-    fireEvent.click(logoutButton);
+    const logoutButtons = screen.getAllByText("log out");
+    fireEvent.click(logoutButtons[1]);
 
     expect(removeItemMock).toHaveBeenCalledWith("loggedKinologyUser");
   });
