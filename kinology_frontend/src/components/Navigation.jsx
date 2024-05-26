@@ -34,14 +34,14 @@ const Navigation = (props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography variant="h6" sx={{ my: 2 }} className="site-title">
         Kinology
       </Typography>
       <Divider />
       <List>
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <NavLink to="/about">
+            <NavLink to="/about" className="nav-link">
               <ListItemText primary="About" />
             </NavLink>
           </ListItemButton>
@@ -50,7 +50,7 @@ const Navigation = (props) => {
           <>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: "center" }}>
-                <NavLink to="/users">
+                <NavLink to="/users" className="nav-link">
                   <ListItemText primary="Users" />
                 </NavLink>
               </ListItemButton>
@@ -65,14 +65,14 @@ const Navigation = (props) => {
           <>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: "center" }}>
-                <NavLink to="/login">
+                <NavLink to="/login" className="nav-link">
                   <ListItemText primary="Log in" />
                 </NavLink>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: "center" }}>
-                <NavLink to="/signup">
+                <NavLink to="/signup" className="nav-link">
                   <ListItemText primary="Sign up" />
                 </NavLink>
               </ListItemButton>
@@ -96,7 +96,7 @@ const Navigation = (props) => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ mr: 2, display: { sm: "none" }, color: "#bdac4e" }}
           >
             <MenuIcon />
           </IconButton>
@@ -105,16 +105,22 @@ const Navigation = (props) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <Link to="/">Kinology</Link>
+            <Link to="/" className="site-title">
+              Kinology
+            </Link>
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Button sx={{ color: "#fff" }}>
-              <NavLink to="/about">About</NavLink>
+            <Button>
+              <NavLink to="/about" className="nav-link">
+                About
+              </NavLink>
             </Button>
             {props.user ? (
               <>
                 <Button sx={{ textAlign: "center" }}>
-                  <NavLink to="/users">Users</NavLink>
+                  <NavLink to="/users" className="nav-link">
+                    Users
+                  </NavLink>
                 </Button>
 
                 <Button sx={{ textAlign: "center" }}>
@@ -124,11 +130,15 @@ const Navigation = (props) => {
             ) : (
               <>
                 <Button sx={{ textAlign: "center" }}>
-                  <NavLink to="/login">Log in</NavLink>
+                  <NavLink to="/login" className="nav-link">
+                    Log in
+                  </NavLink>
                 </Button>
 
                 <Button sx={{ textAlign: "center" }}>
-                  <NavLink to="/signup">Sign up</NavLink>
+                  <NavLink to="/signup" className="nav-link">
+                    Sign up
+                  </NavLink>
                 </Button>
               </>
             )}
@@ -139,6 +149,11 @@ const Navigation = (props) => {
         <Drawer
           container={container}
           variant="temporary"
+          PaperProps={{
+            sx: {
+              bgcolor: "#549a71",
+            },
+          }}
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
