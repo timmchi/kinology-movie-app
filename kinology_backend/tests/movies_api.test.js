@@ -1,13 +1,11 @@
 const { test, after, beforeEach, describe } = require("node:test");
 const assert = require("node:assert/strict");
-const User = require("../models/user");
 const Movie = require("../models/movie");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const nock = require("nock");
-const bcrypt = require("bcrypt");
 const app = require("../app");
-const helper = require("./test_helper");
+const helper = require("./movies_helper");
 const config = require("../utils/config");
 
 const api = supertest(app);

@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const bcrypt = require("bcrypt");
 const app = require("../app");
-const helper = require("./test_helper_comments");
+const helper = require("./comments_helper");
 
 const api = supertest(app);
 
@@ -15,9 +15,6 @@ const getHash = async (pw) => {
   const testPasswordHash = await bcrypt.hash(pw, 10);
   return testPasswordHash;
 };
-
-// TODO FOR TMRW - test for when there is already a movie in db, also test for when commenting creates a movie in db. Different describes
-// also do tests for invalid ids
 
 // tokens are used for authentication
 let token;

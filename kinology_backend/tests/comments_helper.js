@@ -1,6 +1,4 @@
 const UserComment = require("../models/userComment");
-const Movie = require("../models/movie");
-const User = require("../models/user");
 
 const initialComments = [
   { content: "This is a great movie" },
@@ -17,7 +15,7 @@ const initialUser = {
 const secondUser = {
   username: "seconduser",
   email: "seconduser@example.com",
-};
+}; // +
 
 const users = [
   {
@@ -32,17 +30,12 @@ const users = [
     username: "thirduser",
     email: "thirduser@example.com",
   },
-];
-
-const loginUser = {
-  username: "logintester",
-  email: "logintester@example.com",
-};
+]; // -
 
 const secondLoginUser = {
   username: "logintester2",
   email: "logintester2@example.com",
-};
+}; // +
 
 const initialMovie = {
   title: "Scarface",
@@ -50,34 +43,10 @@ const initialMovie = {
   tmdbId: "111",
 }; // +
 
-const mockMovies = [
-  { title: "Casino", poster: "/4TS5O1IP42bY2BvgMxL156EENy.jpg", tmdbId: "524" },
-  {
-    title: "GoodFellas",
-    poster: "/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
-    tmdbId: "769",
-  },
-  {
-    title: "Easy Rider",
-    poster: "/mmGEB6ly9OG8SYVfvAoa6QqHNvN.jpg",
-    tmdbId: "624",
-  },
-];
-
 const commentsInDb = async () => {
   const comments = await UserComment.find({});
   return comments.map((comment) => comment.toJSON());
 }; // +
-
-const moviesInDb = async () => {
-  const movies = await Movie.find({});
-  return movies.map((movie) => movie.toJSON());
-};
-
-const usersInDb = async () => {
-  const users = await User.find({});
-  return users.map((user) => user.toJSON());
-};
 
 const postComment = async (api, token, type, id, newComment) => {
   const response = await api
@@ -115,7 +84,7 @@ const deleteComment = async (api, token, type, id, commentId, authorId) => {
     .set("Authorization", `Bearer ${token}`)
     .send({ authorId })
     .expect(204);
-};
+}; // +
 
 const failedDeleteComment = async (
   api,
@@ -130,7 +99,7 @@ const failedDeleteComment = async (
     .set("Authorization", `Bearer ${token}`)
     .send({ authorId })
     .expect(401);
-};
+}; // +
 
 const unauthorizedNoTokenDeleteComment = async (
   api,
@@ -143,7 +112,7 @@ const unauthorizedNoTokenDeleteComment = async (
     .delete(`/api/comments/${type}/${id}/${commentId}`)
     .send({ authorId })
     .expect(401);
-};
+}; // +
 
 const editComment = async (
   api,
@@ -163,7 +132,7 @@ const editComment = async (
     })
     .expect(200)
     .expect("Content-Type", /application\/json/);
-};
+}; // +
 
 const unauthorizedNoTokenEditComment = async (
   api,
@@ -180,7 +149,7 @@ const unauthorizedNoTokenEditComment = async (
       authorId,
     })
     .expect(401);
-};
+}; // +
 
 const unauthorizedEditComment = async (
   api,
@@ -199,7 +168,7 @@ const unauthorizedEditComment = async (
       authorId,
     })
     .expect(401);
-};
+}; // +
 
 module.exports = {
   initialComments,
@@ -207,12 +176,7 @@ module.exports = {
   secondUser,
   users,
   initialMovie,
-  mockMovies,
-  loginUser,
-  secondLoginUser,
   commentsInDb,
-  moviesInDb,
-  usersInDb,
   postComment,
   deleteComment,
   failedDeleteComment,
