@@ -173,15 +173,16 @@ commentsRouter.delete(
     const { authorId } = request.body;
     const user = request.user;
 
-    const parsedComment = v.parse(CommentSchema, { author: authorId });
+    const parsedComment = v.parse(CommentSchema, {
+      author: authorId,
+      receiver: id,
+    });
     const parsedParams = v.parse(paramsIdSchema, { commentId });
-
-    console.log(parsedComment, parsedParams);
 
     if (
       !user ||
       (user._id.toString() !== parsedComment.author.toString() &&
-        user._id.toString() !== id.toString())
+        user._id.toString() !== parsedComment.receiver.toString())
     )
       return response.status(401).json({ error: "not authorized" });
 
@@ -193,7 +194,7 @@ commentsRouter.delete(
       return response.status(404).json({ error: "no comment found" });
 
     const author = await User.findById(user._id);
-    const receiver = await User.findById(id);
+    const receiver = await User.findById(parsedComment.receiver);
 
     // console.log(author, receiver);
 
@@ -245,7 +246,6 @@ commentsRouter.post(
   async (request, response) => {
     const { id } = request.params;
     const user = request.user;
-    // validation needed
     const { content, movieTitle, moviePoster } = request.body;
 
     const parsedMovie = v.parse(MovieSchema, {
@@ -256,8 +256,6 @@ commentsRouter.post(
     const parsedParams = v.parse(paramsIdSchema, { movieId: id });
 
     let movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-
-    // console.log("searching if a movie exists", movie);
 
     if (!movie) {
       movie = new Movie({
@@ -289,7 +287,7 @@ commentsRouter.post(
     });
 
     const author = await User.findById(user._id);
-    // console.log(author.authoredComments);
+
     author.authoredComments = author.authoredComments.concat(savedComment._id);
     movie.comments = movie.comments.concat(savedComment._id);
     await Promise.all([author.save(), movie.save()]);
@@ -352,7 +350,6 @@ commentsRouter.delete(
       return response.status(404).json({ error: "no comment found" });
 
     const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-    console.log(movie);
     const author = await User.findById(user._id);
     movie.comments = movie.comments.filter(
       (c) => c._id.toString() !== parsedParams.commentId.toString()

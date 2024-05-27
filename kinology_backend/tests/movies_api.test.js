@@ -47,15 +47,6 @@ describe("there are already movies in the db", async () => {
   });
 });
 
-const mockResponse = {
-  results: helper.mockMovies.map((movie) => ({
-    id: movie.tmdbId,
-    title: movie.title,
-    poster_path: movie.poster,
-  })),
-  total_pages: 1,
-};
-
 after(async () => {
   await mongoose.connection.close();
 });

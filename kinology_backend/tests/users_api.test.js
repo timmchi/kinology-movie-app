@@ -156,20 +156,20 @@ describe("when there are no users in the db", async () => {
         assert.strictEqual(usersAtEnd.length, usersAtStart.length - 1);
       });
 
-      //   test("a user can update their profile", async () => {
-      //     const avatar = path.resolve(__dirname, "testImage.png");
+      test("a user can update their profile", async () => {
+        const avatar = path.resolve(__dirname, "testImage.png");
 
-      //     await helper.successfulEdit(api, token, createdUserId, avatar);
+        await helper.successfulEdit(api, token, createdUserId, avatar);
 
-      //     const usersAtEnd = await helper.usersInDb();
+        const usersAtEnd = await helper.usersInDb();
 
-      //     assert.strictEqual(usersAtEnd[0].name, "New User Name");
-      //     assert.strictEqual(usersAtEnd[0].biography, "I am testing");
-      //     assert.strictEqual(
-      //       usersAtEnd[0].avatar,
-      //       `${usersAtEnd[0].username}-avatar`
-      //     );
-      //   });
+        assert.strictEqual(usersAtEnd[0].name, "New User Name");
+        assert.strictEqual(usersAtEnd[0].biography, "I am testing");
+        assert.strictEqual(
+          usersAtEnd[0].avatar,
+          `${usersAtEnd[0].username}-avatar`
+        );
+      });
 
       describe("and a movie exists in a db", async () => {
         beforeEach(async () => {
