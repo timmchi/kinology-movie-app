@@ -8,10 +8,6 @@ const Movie = require("../models/movie");
 const baseMovieUrl = config.BASE_MOVIES_URL;
 const baseSingleMovieUrl = config.BASE_SINGLE_MOVIE_URL;
 
-const basePersonUrl =
-  "https://api.themoviedb.org/3/search/person?include_adult=false&page=1&";
-
-const authorizationHeader = `Authorization: Bearer ${config.TMDB_TOKEN}`;
 const headers = {
   accept: "application/json",
   Authorization: `Bearer ${config.TMDB_TOKEN}`,

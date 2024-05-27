@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const config = require("../utils/config");
+const routeUtils = require("../utils/routesUtils");
 const Movie = require("../models/movie");
 const UserComment = require("../models/userComment");
 const User = require("../models/user");
@@ -12,7 +13,9 @@ const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const bucketName = config.BUCKET_NAME;
 const { s3Client } = require("../utils/awsConfig");
 
-// TODO - maybe add validation for ids - uuid?
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 const v = require("valibot");
 
 const RegistrationSchema = v.object(
@@ -46,6 +49,34 @@ const RegistrationSchema = v.object(
   ]
 );
 
+const MovieActionSchema = v.object({
+  id: v.union([v.string([v.minValue(2)]), v.number([v.minValue(2)])]),
+  title: v.optional(v.string()),
+  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
+  button: v.picklist(["watched", "favorite", "later"]),
+});
+
+const UserUpdateSchema = v.object({
+  biography: v.string("About me should be a string", [
+    v.minLength(1, "Please enter something about yourself."),
+  ]),
+  name: v.string("Name should be a string", [
+    v.minLength(1, "Please enter your name"),
+    v.minLength(3, "Name should be 3 or more symbols long"),
+  ]),
+});
+
+const AvatarSchema = v.object({
+  fieldname: v.string("Field name is required"),
+  originalname: v.string("Original name is required"),
+  encoding: v.string("Encoding is required"),
+  mimetype: v.picklist(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
+  size: v.number([
+    v.maxValue(1024 * 1024 * 2, "The size must not exceed 2 MB"),
+  ]),
+  buffer: v.instance(Buffer),
+});
+
 usersRouter.post("/", async (request, response) => {
   const { email, username, password, passwordConfirm, name } = request.body;
 
@@ -57,24 +88,7 @@ usersRouter.post("/", async (request, response) => {
     name,
   });
 
-  //   console.log(parsedCredentials);
-
-  const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(
-    parsedCredentials.password,
-    saltRounds
-  );
-
-  const user = new User({
-    username: parsedCredentials.username,
-    email: parsedCredentials.email,
-    name: parsedCredentials.name,
-    passwordHash,
-    biography: "",
-    avatar: "",
-  });
-
-  const savedUser = await user.save();
+  const savedUser = await routeUtils.createUser(parsedCredentials);
 
   response.status(201).json(savedUser);
 });
@@ -90,15 +104,11 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
+// validate id
 usersRouter.get("/:id", async (request, response) => {
   const { id } = request.params;
 
-  const user = await User.findById(id)
-    .populate("watchedMovies")
-    .populate("favoriteMovies")
-    .populate("authoredComments")
-    .populate("profileComments")
-    .populate("watchLaterMovies");
+  const user = await routeUtils.fetchUser(id);
 
   if (!user)
     response.status(404).json({
@@ -118,10 +128,11 @@ usersRouter.get("/:id", async (request, response) => {
   response.json({ user, avatarUrl });
 });
 
+// validate id
 usersRouter.get("/:id/avatar", async (request, response) => {
   const { id } = request.params;
 
-  const user = await User.findById(id);
+  const user = await routeUtils.fetchUser(id);
 
   if (!user)
     response.status(404).json({
@@ -141,12 +152,6 @@ usersRouter.get("/:id/avatar", async (request, response) => {
 });
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
-const MovieActionSchema = v.object({
-  id: v.union([v.string([v.minValue(2)]), v.number([v.minValue(2)])]),
-  title: v.optional(v.string()),
-  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
-  button: v.picklist(["watched", "favorite", "later"]),
-});
 
 const handleWatchLaterAction = async (movie, user) => {
   if (!movie.watchLaterBy.includes(user._id)) {
@@ -189,7 +194,7 @@ usersRouter.post(
       button,
     });
 
-    const existingUser = await User.findById(id);
+    const existingUser = await routeUtils.fetchUser(id);
     if (!existingUser)
       return response.status(404).json({ error: "user does not exist" });
 
@@ -197,14 +202,14 @@ usersRouter.post(
 
     if (user._id.toString() !== id) return response.status(401).end();
 
-    let existingMovie = await Movie.findOne({ tmdbId: parsedMovieAction.id });
+    let existingMovie = await routeUtils.fetchMovie(parsedMovieAction.id);
 
     if (!existingMovie) {
-      existingMovie = new Movie({
-        tmdbId: parsedMovieAction.id,
-        title: parsedMovieAction.title,
-        poster: parsedMovieAction.poster,
-      });
+      existingMovie = await routeUtils.createMovie(
+        parsedMovieAction.id,
+        parsedMovieAction.title,
+        parsedMovieAction.poster
+      );
     }
 
     if (parsedMovieAction.button === "watched")
@@ -245,7 +250,6 @@ const handleUnwatchAction = async (movie, user) => {
 };
 
 const handleUnseeAction = async (movie, user) => {
-  console.log(movie, user);
   if (movie.watchedBy.includes(user._id)) {
     movie.watchedBy = movie.watchedBy.filter(
       (userId) => userId.toString() !== user._id.toString()
@@ -288,11 +292,7 @@ usersRouter.delete(
 
     if (user._id.toString() !== id) return response.status(401).end();
 
-    // console.log(movieId, button);
-
-    const existingMovie = await Movie.findOne({ tmdbId: parsedMovieAction.id });
-
-    // console.log(existingMovie);
+    const existingMovie = await routeUtils.fetchMovie(parsedMovieAction.id);
 
     if (!existingMovie) return response.status(404);
 
@@ -309,30 +309,6 @@ usersRouter.delete(
   }
 );
 
-const UserUpdateSchema = v.object({
-  biography: v.string("About me should be a string", [
-    v.minLength(1, "Please enter something about yourself."),
-  ]),
-  name: v.string("Name should be a string", [
-    v.minLength(1, "Please enter your name"),
-    v.minLength(3, "Name should be 3 or more symbols long"),
-  ]),
-});
-
-const AvatarSchema = v.object({
-  fieldname: v.string("Field name is required"),
-  originalname: v.string("Original name is required"),
-  encoding: v.string("Encoding is required"),
-  mimetype: v.picklist(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
-  size: v.number([
-    v.maxValue(1024 * 1024 * 2, "The size must not exceed 2 MB"),
-  ]),
-  buffer: v.instance(Buffer),
-});
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 usersRouter.put(
   "/:id",
   middleware.tokenExtractor,
@@ -340,7 +316,8 @@ usersRouter.put(
   upload.single("avatar"),
   async (request, response) => {
     const user = request.user;
-    const profileOwner = await User.findById(request.params.id);
+
+    const profileOwner = await routeUtils.fetchUser(request.params.id);
 
     if (!profileOwner)
       return response.status(404).json({ error: "user does not exist" });
@@ -364,9 +341,6 @@ usersRouter.put(
       size: file.size,
       buffer: file.buffer,
     });
-
-    console.log(parsedUserInfo);
-    console.log(parsedAvatar);
 
     // uploading avatar to s3 bucket
     const avatarBuffer = await sharp(parsedAvatar.buffer).toBuffer();
@@ -408,7 +382,8 @@ usersRouter.delete(
   middleware.userExtractor,
   async (request, response) => {
     const user = request.user;
-    const profileOwner = await User.findById(request.params.id);
+
+    const profileOwner = await routeUtils.fetchUser(request.params.id);
 
     if (!profileOwner)
       return response.status(404).json({ error: "user does not exist" });
