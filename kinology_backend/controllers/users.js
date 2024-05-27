@@ -1,10 +1,8 @@
-const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const config = require("../utils/config");
 const routeUtils = require("../utils/routesUtils");
 const Movie = require("../models/movie");
-const UserComment = require("../models/userComment");
 const User = require("../models/user");
 const multer = require("multer");
 const sharp = require("sharp");
@@ -66,6 +64,10 @@ const UserUpdateSchema = v.object({
   ]),
 });
 
+const IdSchema = v.optional(
+  v.string(v.hexadecimal("The receiverId hexadecimal is badly formatted."))
+);
+
 const AvatarSchema = v.object({
   fieldname: v.string("Field name is required"),
   originalname: v.string("Original name is required"),
@@ -108,7 +110,9 @@ usersRouter.get("/", async (request, response) => {
 usersRouter.get("/:id", async (request, response) => {
   const { id } = request.params;
 
-  const user = await routeUtils.fetchUser(id);
+  const parsedId = v.parse(IdSchema, id);
+
+  const user = await routeUtils.fetchUser(parsedId);
 
   if (!user)
     response.status(404).json({
@@ -132,7 +136,9 @@ usersRouter.get("/:id", async (request, response) => {
 usersRouter.get("/:id/avatar", async (request, response) => {
   const { id } = request.params;
 
-  const user = await routeUtils.fetchUser(id);
+  const parsedId = v.parse(IdSchema, id);
+
+  const user = await routeUtils.fetchUser(parsedId);
 
   if (!user)
     response.status(404).json({
@@ -194,13 +200,15 @@ usersRouter.post(
       button,
     });
 
-    const existingUser = await routeUtils.fetchUser(id);
+    const parsedId = v.parse(IdSchema, id);
+
+    const existingUser = await routeUtils.fetchUser(parsedId);
     if (!existingUser)
       return response.status(404).json({ error: "user does not exist" });
 
     const user = request.user;
 
-    if (user._id.toString() !== id) return response.status(401).end();
+    if (user._id.toString() !== parsedId) return response.status(401).end();
 
     let existingMovie = await routeUtils.fetchMovie(parsedMovieAction.id);
 
@@ -290,7 +298,9 @@ usersRouter.delete(
       button,
     });
 
-    if (user._id.toString() !== id) return response.status(401).end();
+    const parsedId = v.parse(IdSchema, id);
+
+    if (user._id.toString() !== parsedId) return response.status(401).end();
 
     const existingMovie = await routeUtils.fetchMovie(parsedMovieAction.id);
 
@@ -317,7 +327,9 @@ usersRouter.put(
   async (request, response) => {
     const user = request.user;
 
-    const profileOwner = await routeUtils.fetchUser(request.params.id);
+    const parsedId = v.parse(IdSchema, request.params.id);
+
+    const profileOwner = await routeUtils.fetchUser(parsedId);
 
     if (!profileOwner)
       return response.status(404).json({ error: "user does not exist" });
@@ -383,7 +395,9 @@ usersRouter.delete(
   async (request, response) => {
     const user = request.user;
 
-    const profileOwner = await routeUtils.fetchUser(request.params.id);
+    const parsedId = v.parse(IdSchema, request.params.id);
+
+    const profileOwner = await routeUtils.fetchUser(parsedId);
 
     if (!profileOwner)
       return response.status(404).json({ error: "user does not exist" });
