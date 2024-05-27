@@ -47,29 +47,8 @@ const searchQuerySchema = v.object({
   actors: v.array(v.string("Actor should be a string")),
 });
 
-moviesRouter.get("/", async (request, response) => {
-  const movies = await Movie.find({});
-  response.status(200).send(movies);
-});
-// for some reason searching for Coppola didnt work?
-// TODO could refactor this into 2 functions - one for parsing and one for making the api request
-moviesRouter.post("/", async (request, response) => {
-  // these parts are fine as they are to put into query
-  let { genres, year, ratingUpper, ratingLower, country, page } = request.body;
-
-  // these need to be turned into ids with peopleSearch
-  let { director, actors } = request.body;
-
-  const parsedQueryParams = v.parse(searchQuerySchema, {
-    genres,
-    year,
-    ratingUpper,
-    ratingLower,
-    country,
-    page,
-    director,
-    actors,
-  });
+const parseAndTurnIntoQuery = async (params) => {
+  const parsedQueryParams = v.parse(searchQuerySchema, params);
 
   ({ genres, year, ratingUpper, ratingLower, country, page, director, actors } =
     parsedQueryParams);
@@ -89,8 +68,34 @@ moviesRouter.post("/", async (request, response) => {
     page,
   });
 
+  return query;
+};
+
+moviesRouter.get("/", async (request, response) => {
+  const movies = await Movie.find({});
+  response.status(200).send(movies);
+});
+
+// TODO could refactor this into 2 functions - one for parsing and one for making the api request
+moviesRouter.post("/", async (request, response) => {
+  // these parts are fine as they are to put into query
+  let { genres, year, ratingUpper, ratingLower, country, page } = request.body;
+
+  // these need to be turned into ids with peopleSearch
+  let { director, actors } = request.body;
+
+  const query = await parseAndTurnIntoQuery({
+    genres,
+    year,
+    ratingUpper,
+    ratingLower,
+    country,
+    director,
+    actors,
+    page,
+  });
+
   const url = `${baseMovieUrl}${query}&sort_by=popularity.desc`;
-  console.log(url);
 
   const movieResponse = await axios.get(url, { headers });
 

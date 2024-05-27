@@ -313,7 +313,7 @@ commentsRouter.post(
       avatar: 1,
     });
 
-    const author = await User.findById(user._id);
+    const author = await fetchUser(user._id);
 
     author.authoredComments = author.authoredComments.concat(savedComment._id);
     movie.comments = movie.comments.concat(savedComment._id);

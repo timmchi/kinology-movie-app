@@ -22,8 +22,6 @@ loginRouter.post("/", async (request, response) => {
 
   const parsedCredentials = v.parse(LoginSchema, { username, password });
 
-  //   console.log(parsedCredentials);
-
   const user = await User.findOne({ username: parsedCredentials.username });
 
   const passwordCorrect =
