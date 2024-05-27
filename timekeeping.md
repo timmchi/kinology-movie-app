@@ -53,6 +53,7 @@
 | 26.5 | 2     | responsive sign up form and login form with mui                          |
 | 26.5 | 1     | fixing e2e and unit tests to work with new components                    |
 | 26.5 | 0.5   | backend tests refactoring                                                |
+| 27.5 | 2.5   | backend and tests refactoring                                            |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -75,5 +76,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 101   |                                                                          |
+| tot  | 103.5 |                                                                          |
