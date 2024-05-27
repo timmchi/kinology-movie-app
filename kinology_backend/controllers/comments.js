@@ -26,6 +26,53 @@ const paramsIdSchema = v.object({
   movieId: v.optional(v.string(v.minValue("2"))),
 });
 
+const MovieSchema = v.object({
+  title: v.optional(v.string()),
+  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
+});
+
+const fetchUser = async (userId) => {
+  const user = await User.findById(userId)
+    .populate("authoredComments")
+    .populate("profileComments");
+  return user;
+};
+
+const fetchComment = async (commentId) => {
+  const addedComment = await UserComment.findById(commentId)
+    .populate("author", { name: 1, avatar: 1, username: 1 })
+    .populate("receiver");
+
+  return addedComment;
+};
+
+const createComment = async ({ content, author, receiver }) => {
+  const newComment = new UserComment({
+    content,
+    author,
+    receiver,
+  });
+
+  const savedComment = await newComment.save();
+  return savedComment;
+};
+
+const fetchMovie = async (movieId) => {
+  const movie = await Movie.findOne({ tmdbId: movieId });
+  return movie;
+};
+
+const createMovie = async (tmdbId, title, poster) => {
+  const movie = new Movie({
+    tmdbId,
+    title,
+    poster,
+  });
+  const savedMovie = await movie.save();
+
+  return savedMovie;
+};
+
 commentsRouter.get("/", async (request, response) => {
   const comments = await UserComment.find({});
   response.status(200).send(comments);
@@ -40,9 +87,7 @@ commentsRouter.get("/profile/:id", async (request, response) => {
     .populate("author", { name: 1, avatar: 1, username: 1 })
     .populate("receiver");
 
-  await User.findById(parsedParams.receiver)
-    .populate("authoredComments")
-    .populate("profileComments");
+  await fetchUser(parsedParams.receiver);
 
   response.status(200).send(comments);
 });
@@ -104,20 +149,12 @@ commentsRouter.post(
       receiver: id,
     });
 
-    const newComment = new UserComment({
-      content: parsedComment.content,
-      author: parsedComment.author,
-      receiver: parsedComment.receiver,
-    });
+    const savedComment = await createComment(parsedComment);
 
-    const savedComment = await newComment.save();
+    const addedComment = await fetchComment(savedComment._id);
 
-    const addedComment = await UserComment.findById(savedComment._id)
-      .populate("author", { name: 1, avatar: 1, username: 1 })
-      .populate("receiver");
-
-    const author = await User.findById(user._id);
-    const receiver = await User.findById(parsedComment.receiver);
+    const author = await fetchUser(user._id);
+    const receiver = await fetchUser(user._id);
 
     if (author._id.toString() === receiver._id.toString()) {
       await handleSameProfileComment(addedComment, author);
@@ -163,7 +200,6 @@ commentsRouter.put(
   }
 );
 
-// TODO parse the profile id here
 commentsRouter.delete(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
@@ -193,10 +229,8 @@ commentsRouter.delete(
     if (!commentToDelete)
       return response.status(404).json({ error: "no comment found" });
 
-    const author = await User.findById(user._id);
-    const receiver = await User.findById(parsedComment.receiver);
-
-    // console.log(author, receiver);
+    const author = await fetchUser(user._id);
+    const receiver = await fetchUser(parsedComment.receiver);
 
     if (author._id.toString() === receiver._id.toString()) {
       await handleSameProfileCommentDeletion(commentToDelete, author);
@@ -221,7 +255,8 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   const parsedParams = v.parse(paramsIdSchema, { movieId: id });
 
-  const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+  //   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+  const movie = await fetchMovie(parsedParams.movieId);
 
   if (!movie) return response.status(200).send([]);
 
@@ -232,11 +267,6 @@ commentsRouter.get("/movie/:id", async (request, response) => {
   movie.populate("comments");
 
   response.status(200).send(comments);
-});
-
-const MovieSchema = v.object({
-  title: v.optional(v.string()),
-  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
 });
 
 commentsRouter.post(
@@ -255,15 +285,16 @@ commentsRouter.post(
 
     const parsedParams = v.parse(paramsIdSchema, { movieId: id });
 
-    let movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+    // let movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+    let movie = await fetchMovie(parsedParams.movieId);
 
+    // refactor
     if (!movie) {
-      movie = new Movie({
-        tmdbId: parsedParams.movieId,
-        title: parsedMovie.title,
-        poster: parsedMovie.poster,
-      });
-      await movie.save();
+      movie = await createMovie(
+        parsedParams.movieId,
+        parsedMovie.title,
+        parsedMovie.poster
+      );
     }
 
     const parsedComment = v.parse(CommentSchema, {
@@ -272,12 +303,8 @@ commentsRouter.post(
       receiver: movie._id.toString(),
     });
 
-    const movieComment = new UserComment({
-      content: parsedComment.content,
-      author: parsedComment.author,
-      movieReceiver: parsedComment.receiver,
-    });
-    const savedComment = await movieComment.save();
+    // refactor
+    const savedComment = await createComment(parsedComment);
 
     await savedComment.populate("author", {
       name: 1,
@@ -349,8 +376,9 @@ commentsRouter.delete(
     if (!commentToDelete)
       return response.status(404).json({ error: "no comment found" });
 
-    const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-    const author = await User.findById(user._id);
+    const movie = await fetchMovie(parsedParams.movieId);
+    const author = await fetchUser(user._id);
+
     movie.comments = movie.comments.filter(
       (c) => c._id.toString() !== parsedParams.commentId.toString()
     );
