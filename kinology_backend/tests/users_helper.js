@@ -33,6 +33,11 @@ const moviesInDb = async () => {
   return movies.map((movie) => movie.toJSON());
 };
 
+const returnMovie = async () => {
+  const movies = await moviesInDb();
+  return movies[0];
+};
+
 const getHash = async (pw) => {
   const testPasswordHash = await bcrypt.hash(pw, 10);
   return testPasswordHash;
@@ -62,6 +67,13 @@ const getUser = async (api, userId) => {
     .get(`/api/users/${userId}`)
     .expect(200)
     .expect("Content-Type", /application\/json/);
+};
+
+const deleteUser = async (api, token, userId) => {
+  await api
+    .delete(`/api/users/${userId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .expect(204);
 };
 
 const noTokenEdit = async (api, userId, avatar) => {
@@ -122,6 +134,7 @@ const unauthorizedAddMovie = async (api, token, userId, movie, button) => {
     .send({ movie, button })
     .expect(401);
 };
+
 const deleteMovieFromUser = async (api, token, userId, movieId, button) => {
   await api
     .delete(`/api/users/${userId}/movies/${movieId}`)
@@ -131,14 +144,37 @@ const deleteMovieFromUser = async (api, token, userId, movieId, button) => {
     .expect("Content-Type", /application\/json/);
 };
 
+const unauthorizedDeleteMovieFromUser = async (
+  api,
+  token,
+  userId,
+  movieId,
+  button
+) => {
+  await api
+    .delete(`/api/users/${userId}/movies/${movieId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ button })
+    .expect(401);
+};
+
+const noTokenDeleteMovieFromUser = async (api, userId, movieId, button) => {
+  await api
+    .delete(`/api/users/${userId}/movies/${movieId}`)
+    .send({ button })
+    .expect(401);
+};
+
 module.exports = {
   users,
-  moviesInDb,
-  usersInDb,
   initialMovie,
+  moviesInDb,
+  returnMovie,
+  usersInDb,
   createUsers,
   createUser,
   getUser,
+  deleteUser,
   noTokenEdit,
   successfulEdit,
   unauthorizedEdit,
@@ -147,4 +183,6 @@ module.exports = {
   addMovieToUser,
   deleteMovieFromUser,
   unauthorizedAddMovie,
+  unauthorizedDeleteMovieFromUser,
+  noTokenDeleteMovieFromUser,
 };

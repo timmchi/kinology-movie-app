@@ -146,10 +146,7 @@ describe("when there are no users in the db", async () => {
       test("a user can delete their profile", async () => {
         const usersAtStart = await helper.usersInDb();
 
-        await api
-          .delete(`/api/users/${createdUserId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .expect(204);
+        await helper.deleteUser(api, token, createdUserId);
 
         const usersAtEnd = await helper.usersInDb();
 
@@ -182,8 +179,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("a user can add a movie to his watch later", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "later";
           const movie = {
             id: movieData.tmdbId,
@@ -201,8 +197,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("a user can remove a movie from his watch later", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "later";
           const movie = {
             id: movieData.tmdbId,
@@ -227,8 +222,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("a user can add a movie to his favorites", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "favorite";
           const movie = {
             id: movieData.tmdbId,
@@ -246,8 +240,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("a user can remove a movie from his favorites", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "favorite";
           const movie = {
             id: movieData.tmdbId,
@@ -272,8 +265,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("a user can add a movie to his seen", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "watched";
           const movie = {
             id: movieData.tmdbId,
@@ -291,8 +283,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("a user can remove a movie from his seen", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "watched";
           const movie = {
             id: movieData.tmdbId,
@@ -378,8 +369,7 @@ describe("when there are no users in the db", async () => {
           });
 
           test("a user can not add a movie to another user favorites", async () => {
-            const movies = await helper.moviesInDb();
-            const movieData = movies[0];
+            const movieData = await helper.returnMovie();
             const button = "favorite";
             const movie = {
               id: movieData.tmdbId,
@@ -387,11 +377,6 @@ describe("when there are no users in the db", async () => {
               poster: movieData.poster,
             };
 
-            // await api
-            //   .post(`/api/users/${createdUserId}/movies`)
-            //   .set("Authorization", `Bearer ${secondUserToken}`)
-            //   .send({ movie, button })
-            //   .expect(401);
             await helper.unauthorizedAddMovie(
               api,
               secondUserToken,
@@ -414,19 +399,20 @@ describe("when there are no users in the db", async () => {
               poster: movieData.poster,
             };
 
-            await api
-              .post(`/api/users/${createdUserId}/movies`)
-              .set("Authorization", `Bearer ${secondUserToken}`)
-              .send({ movie, button })
-              .expect(401);
+            await helper.unauthorizedAddMovie(
+              api,
+              secondUserToken,
+              createdUserId,
+              movie,
+              button
+            );
 
             const usersAtEnd = await helper.usersInDb();
             assert.strictEqual(0, usersAtEnd[0].watchLaterMovies.length);
           });
 
           test("a user can not add a movie to another user seen", async () => {
-            const movies = await helper.moviesInDb();
-            const movieData = movies[0];
+            const movieData = await helper.returnMovie();
             const button = "watched";
             const movie = {
               id: movieData.tmdbId,
@@ -434,11 +420,13 @@ describe("when there are no users in the db", async () => {
               poster: movieData.poster,
             };
 
-            await api
-              .post(`/api/users/${createdUserId}/movies`)
-              .set("Authorization", `Bearer ${secondUserToken}`)
-              .send({ movie, button })
-              .expect(401);
+            await helper.unauthorizedAddMovie(
+              api,
+              secondUserToken,
+              createdUserId,
+              movie,
+              button
+            );
 
             const usersAtEnd = await helper.usersInDb();
             assert.strictEqual(0, usersAtEnd[0].watchedMovies.length);
@@ -446,8 +434,7 @@ describe("when there are no users in the db", async () => {
 
           describe("and a user has a movie in his favorites, watch list and seen", async () => {
             beforeEach(async () => {
-              const movies = await helper.moviesInDb();
-              const movieData = movies[0];
+              const movieData = await helper.returnMovie();
               const buttons = ["watched", "later", "favorite"];
               const movie = {
                 id: movieData.tmdbId,
@@ -456,23 +443,26 @@ describe("when there are no users in the db", async () => {
               };
 
               for (const button of buttons) {
-                await api
-                  .post(`/api/users/${createdUserId}/movies`)
-                  .set("Authorization", `Bearer ${token}`)
-                  .send({ movie, button })
-                  .expect(201)
-                  .expect("Content-Type", /application\/json/);
+                await helper.addMovieToUser(
+                  api,
+                  token,
+                  createdUserId,
+                  movie,
+                  button
+                );
               }
             });
 
             test("a user can not remove a movie from another user favorites", async () => {
               const button = "favorite";
 
-              await api
-                .delete(`/api/users/${createdUserId}/movies/111`)
-                .set("Authorization", `Bearer ${secondUserToken}`)
-                .send({ button })
-                .expect(401);
+              await helper.unauthorizedDeleteMovieFromUser(
+                api,
+                secondUserToken,
+                createdUserId,
+                "111",
+                button
+              );
 
               const movieCreator = await User.findOne({
                 username: "userstester",
@@ -484,11 +474,13 @@ describe("when there are no users in the db", async () => {
             test("a user can not remove a movie from another user watch list", async () => {
               const button = "later";
 
-              await api
-                .delete(`/api/users/${createdUserId}/movies/111`)
-                .set("Authorization", `Bearer ${secondUserToken}`)
-                .send({ button })
-                .expect(401);
+              await helper.unauthorizedDeleteMovieFromUser(
+                api,
+                secondUserToken,
+                createdUserId,
+                "111",
+                button
+              );
 
               const movieCreator = await User.findOne({
                 username: "userstester",
@@ -500,11 +492,13 @@ describe("when there are no users in the db", async () => {
             test("a user can not remove a movie from another user seen", async () => {
               const button = "watched";
 
-              await api
-                .delete(`/api/users/${createdUserId}/movies/111`)
-                .set("Authorization", `Bearer ${secondUserToken}`)
-                .send({ button })
-                .expect(401);
+              await helper.unauthorizedDeleteMovieFromUser(
+                api,
+                secondUserToken,
+                createdUserId,
+                "111",
+                button
+              );
 
               const movieCreator = await User.findOne({
                 username: "userstester",
@@ -516,10 +510,12 @@ describe("when there are no users in the db", async () => {
             test("a non logged in user can not remove a movie from another user favorites", async () => {
               const button = "favorite";
 
-              await api
-                .delete(`/api/users/${createdUserId}/movies/111`)
-                .send({ button })
-                .expect(401);
+              await helper.noTokenDeleteMovieFromUser(
+                api,
+                createdUserId,
+                "111",
+                button
+              );
 
               const movieCreator = await User.findOne({
                 username: "userstester",
@@ -531,10 +527,12 @@ describe("when there are no users in the db", async () => {
             test("a non logged in user can not remove a movie from another user watch list", async () => {
               const button = "later";
 
-              await api
-                .delete(`/api/users/${createdUserId}/movies/111`)
-                .send({ button })
-                .expect(401);
+              await helper.noTokenDeleteMovieFromUser(
+                api,
+                createdUserId,
+                "111",
+                button
+              );
 
               const movieCreator = await User.findOne({
                 username: "userstester",
@@ -546,10 +544,12 @@ describe("when there are no users in the db", async () => {
             test("a non logged in user can not remove a movie from another user seen", async () => {
               const button = "watched";
 
-              await api
-                .delete(`/api/users/${createdUserId}/movies/111`)
-                .send({ button })
-                .expect(401);
+              await helper.noTokenDeleteMovieFromUser(
+                api,
+                createdUserId,
+                "111",
+                button
+              );
 
               const movieCreator = await User.findOne({
                 username: "userstester",
@@ -563,10 +563,7 @@ describe("when there are no users in the db", async () => {
 
       describe("dealing with non-existingbut valid ids", async () => {
         beforeEach(async () => {
-          await api
-            .delete(`/api/users/${createdUserId}`)
-            .set("Authorization", `Bearer ${token}`)
-            .expect(204);
+          await helper.deleteUser(api, token, createdUserId);
         });
 
         test("trying to edit a deleted user returns a 404", async () => {
@@ -589,8 +586,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("trying to add a movie to a deleted user favorites returns a 404", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "favorite";
           const movie = {
             id: movieData.tmdbId,
@@ -606,8 +602,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("trying to add a movie to a deleted user watch list returns a 404", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "later";
           const movie = {
             id: movieData.tmdbId,
@@ -623,8 +618,7 @@ describe("when there are no users in the db", async () => {
         });
 
         test("trying to add a movie to a deleted user seen returns a 404", async () => {
-          const movies = await helper.moviesInDb();
-          const movieData = movies[0];
+          const movieData = await helper.returnMovie();
           const button = "watched";
           const movie = {
             id: movieData.tmdbId,
