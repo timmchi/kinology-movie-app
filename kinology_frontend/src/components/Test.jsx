@@ -57,11 +57,11 @@ const searchQuerySchema = object({
     ]),
     literal(""),
   ]),
-  ratingUpper: string("Rating should be a string", [
+  ratingUpper: number("Rating should be a number", [
     minValue(0, "Rating can not be lower than 0"),
     maxValue(10, "Rating can not be higher than 10"),
   ]),
-  ratingLower: string("Rating should be a string", [
+  ratingLower: number("Rating should be a number", [
     minValue(0, "Rating can not be lower than 0"),
     maxValue(11, "Rating can not be higher than 10"),
   ]),
@@ -72,7 +72,6 @@ const searchQuerySchema = object({
 });
 
 const textInputStyle = {
-  bgcolor: "#79C094",
   label: { color: "white" },
   input: {
     color: "white",
@@ -107,12 +106,21 @@ const Test = () => {
   const [actor, setActor] = useState("");
   const [actors, setActors] = useState([]);
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     reset,
-  } = useForm({ resolver: valibotResolver(searchQuerySchema) });
+  } = useForm({
+    resolver: valibotResolver(searchQuerySchema),
+    defaultValues: {
+      genresSelect: [],
+      director: "",
+      year: "",
+      ratingLower: 0,
+      ratingUpper: 10,
+      country: "",
+    },
+  });
 
   useEffect(() => {
     if (isSubmitSuccessful) {
@@ -185,31 +193,23 @@ const Test = () => {
         </div>
         <div>
           <p>Rating range</p>
-          {/* <TextFieldElement
-            name={"ratingLower"}
-            label={"Lower threshold"}
-            type={"number"}
-            control={control}
-            min={0}
-            max={10}
-            sx={textInputStyle}
-          /> */}
           <SliderElement
+            name="ratingLower"
             label="Lower threshold"
-            name={"ratingLower"}
+            control={control}
             max={10}
             min={0}
-            control={control}
-            sx={textInputStyle}
+            marks
+            valueLabelDisplay="auto"
           />
-          <TextFieldElement
-            name={"ratingUpper"}
-            label={"Upper threshold"}
+          <SliderElement
+            name="ratingUpper"
+            label="Upper threshold"
             control={control}
-            type={"number"}
-            min={1}
             max={10}
-            sx={textInputStyle}
+            min={0}
+            marks
+            valueLabelDisplay="auto"
           />
         </div>
         <div data-testid="actor-input">
@@ -243,6 +243,7 @@ const Test = () => {
         <div>
           <TextFieldElement
             name={"country"}
+            fullWidth
             label={"country"}
             control={control}
             sx={textInputStyle}
