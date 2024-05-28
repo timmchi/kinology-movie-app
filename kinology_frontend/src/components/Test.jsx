@@ -8,9 +8,8 @@ import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
+import Sheet from "@mui/joy/Sheet";
 import genreOptions from "../data/genres";
-
-import SearchIcon from "@mui/icons-material/Search";
 
 import {
   object,
@@ -72,13 +71,12 @@ const searchQuerySchema = object({
 });
 
 const textInputStyle = {
-  label: { color: "white" },
+  label: { color: "#0A6847" },
   input: {
-    color: "white",
-    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+    color: "#0A6847",
   },
   "& label.Mui-focused": {
-    color: "white",
+    color: "#0A6847",
   },
   "& label.Mui-error": {
     fontWeight: "bold",
@@ -91,7 +89,7 @@ const textInputStyle = {
       borderColor: "#397453",
     },
     "&:hover fieldset": {
-      borderColor: "white",
+      borderColor: "#609b76",
     },
     "&.Mui-focused fieldset": {
       borderColor: "#bdac4e",
@@ -102,7 +100,34 @@ const textInputStyle = {
   },
 };
 
+const reactSelectStyles = {
+  control: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+    ...styles,
+    backgroundColor: "inherit",
+    // borderColor: state.isFocused ? "#bdac4e" : "#397453",
+    borderColor: isFocused ? "#bdac4e" : "#0A6847",
+    borderWidth: isFocused ? "2px" : "1px",
+    boxShadow: "60px teal",
+    borderRadius: 0,
+    padding: "0.6em 0em",
+    "&:hover": {
+      borderColor: "#609b76",
+    },
+  }),
+  placeholder: (styles) => ({
+    ...styles,
+    color: "#0A6847",
+    fontWeight: 400,
+  }),
+  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+  option: (styles) => ({
+    ...styles,
+    color: "#0A6847",
+  }),
+};
+
 const Test = () => {
+  const [open, setOpen] = useState(false);
   const [actor, setActor] = useState("");
   const [actors, setActors] = useState([]);
   const {
@@ -144,127 +169,147 @@ const Test = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={1} sx={{ padding: "5em" }}>
-        <div>
-          <Controller
-            name="genresSelect"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    borderWidth: 0,
-                    borderRadius: 10,
-                  }),
-                }}
-                options={genreOptions}
-                isMulti
-                placeholder="Select genres"
-              />
-            )}
-          />
-        </div>
-        {errors.genresSelect?.message ?? (
-          <p className="validation-error">{errors.genresSelect?.message}</p>
-        )}
-
-        <TextFieldElement
-          name={"director"}
-          label={"Director"}
-          fullWidth
-          control={control}
-          margin={"dense"}
-          InputProps={{ sx: { borderRadius: 0 } }}
-          sx={textInputStyle}
-        />
-        <div>
-          <TextFieldElement
-            name={"year"}
-            label={"Year"}
-            fullWidth
-            control={control}
-            margin={"dense"}
-            InputProps={{ sx: { borderRadius: 0 } }}
-            sx={textInputStyle}
-          />
-        </div>
-        <div>
-          <p>Rating range</p>
-          <SliderElement
-            name="ratingLower"
-            label="Lower threshold"
-            control={control}
-            max={10}
-            min={0}
-            marks
-            valueLabelDisplay="auto"
-          />
-          <SliderElement
-            name="ratingUpper"
-            label="Upper threshold"
-            control={control}
-            max={10}
-            min={0}
-            marks
-            valueLabelDisplay="auto"
-          />
-        </div>
-        <div data-testid="actor-input">
-          <Controller
-            name="actorsSelect"
-            control={control}
-            render={({ field }) => (
-              <CreatableSelect
-                {...field}
-                components={components}
-                options={genreOptions}
-                inputValue={actor}
-                isMulti
-                isClearable
-                menuIsOpen={false}
-                placeholder="Type in actor and press enter"
-                onChange={(newActor) => setActors(newActor)}
-                onInputChange={(newActor) => setActor(newActor)}
-                onKeyDown={handleKeyDown}
-                value={actors}
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    borderWidth: 0,
-                  }),
-                }}
-              />
-            )}
-          />
-        </div>
-        <div>
-          <TextFieldElement
-            name={"country"}
-            fullWidth
-            label={"country"}
-            control={control}
-            sx={textInputStyle}
-          />
-        </div>
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          aria-label="Search for movies"
-          variant="contained"
-          size="small"
+    <>
+      <Button variant="outlined" onClick={() => setOpen(true)}>
+        Open modal
+      </Button>
+      <Modal
+        aria-labelledby="modal-title"
+        aria-describedby="modal-desc"
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <Sheet
+          variant="outlined"
           sx={{
-            backgroundColor: "#609b76",
-            "&:hover": { backgroundColor: "#00532f" },
-            marginBottom: 1,
+            maxWidth: 500,
+            borderRadius: "md",
+            p: 3,
+            boxShadow: "lg",
+            bgcolor: "#F6E9B2",
           }}
         >
-          {isSubmitting ? "Searching..." : "Search"}
-        </Button>
-      </Stack>
-    </form>
+          <ModalClose variant="plain" sx={{ m: 1 }} />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={1} sx={{ padding: "1em" }}>
+              <div>
+                <Controller
+                  name="genresSelect"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      styles={reactSelectStyles}
+                      options={genreOptions}
+                      menuPortalTarget={document.body}
+                      isMulti
+                      placeholder="Select genres"
+                    />
+                  )}
+                />
+              </div>
+              {errors.genresSelect?.message ?? (
+                <p className="validation-error">
+                  {errors.genresSelect?.message}
+                </p>
+              )}
+
+              <TextFieldElement
+                name={"director"}
+                label={"Director"}
+                fullWidth
+                control={control}
+                margin={"dense"}
+                InputProps={{ sx: { borderRadius: 0 } }}
+                sx={textInputStyle}
+              />
+              <div>
+                <TextFieldElement
+                  name={"year"}
+                  label={"Year"}
+                  fullWidth
+                  control={control}
+                  margin={"dense"}
+                  InputProps={{ sx: { borderRadius: 0 } }}
+                  sx={textInputStyle}
+                />
+              </div>
+              <div>
+                <p>Rating range</p>
+                <SliderElement
+                  name="ratingLower"
+                  label="Lower threshold"
+                  control={control}
+                  sx={{ color: "#609b76" }}
+                  max={10}
+                  min={0}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+                <SliderElement
+                  name="ratingUpper"
+                  label="Upper threshold"
+                  control={control}
+                  sx={{ color: "#609b76" }}
+                  max={10}
+                  min={0}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+              </div>
+              <div data-testid="actor-input">
+                <Controller
+                  name="actorsSelect"
+                  control={control}
+                  render={({ field }) => (
+                    <CreatableSelect
+                      {...field}
+                      components={components}
+                      options={genreOptions}
+                      inputValue={actor}
+                      isMulti
+                      isClearable
+                      menuIsOpen={false}
+                      placeholder="Type in actor and press enter"
+                      onChange={(newActor) => setActors(newActor)}
+                      onInputChange={(newActor) => setActor(newActor)}
+                      onKeyDown={handleKeyDown}
+                      value={actors}
+                      styles={reactSelectStyles}
+                    />
+                  )}
+                />
+              </div>
+              <div>
+                <TextFieldElement
+                  name={"country"}
+                  fullWidth
+                  label={"Country"}
+                  InputProps={{ sx: { borderRadius: 0 } }}
+                  control={control}
+                  sx={textInputStyle}
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                aria-label="Search for movies"
+                variant="contained"
+                size="small"
+                sx={{
+                  backgroundColor: "#609b76",
+                  "&:hover": { backgroundColor: "#00532f" },
+                  marginBottom: 1,
+                }}
+              >
+                {isSubmitting ? "Searching..." : "Search"}
+              </Button>
+            </Stack>
+          </form>
+        </Sheet>
+      </Modal>
+    </>
   );
 };
 
