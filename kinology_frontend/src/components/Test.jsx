@@ -100,6 +100,11 @@ const textInputStyle = {
   },
 };
 
+const sliderStyle = {
+  color: "#609b76",
+  label: { color: "red" },
+};
+
 const reactSelectStyles = {
   control: (styles, { data, isDisabled, isFocused, isSelected }) => ({
     ...styles,
@@ -170,8 +175,16 @@ const Test = () => {
 
   return (
     <>
-      <Button variant="outlined" onClick={() => setOpen(true)}>
-        Open modal
+      <Button
+        variant="contained"
+        onClick={() => setOpen(true)}
+        sx={{
+          backgroundColor: "#609b76",
+          "&:hover": { backgroundColor: "#00532f" },
+          marginBottom: 1,
+        }}
+      >
+        Open Search
       </Button>
       <Modal
         aria-labelledby="modal-title"
@@ -190,7 +203,7 @@ const Test = () => {
             bgcolor: "#F6E9B2",
           }}
         >
-          <ModalClose variant="plain" sx={{ m: 1 }} />
+          <ModalClose variant="plain" sx={{ marginLeft: 1 }} />
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={1} sx={{ padding: "1em" }}>
               <div>
@@ -236,12 +249,16 @@ const Test = () => {
                 />
               </div>
               <div>
-                <p>Rating range</p>
+                <Typography sx={{ paddingBottom: "0.5em", color: "#0A6847" }}>
+                  Rating range
+                </Typography>
                 <SliderElement
                   name="ratingLower"
                   label="Lower threshold"
                   control={control}
-                  sx={{ color: "#609b76" }}
+                  sx={{
+                    color: "#609b76",
+                  }}
                   max={10}
                   min={0}
                   marks
