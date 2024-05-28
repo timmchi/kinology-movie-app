@@ -1,57 +1,75 @@
-import * as React from "react";
-import AspectRatio from "@mui/joy/AspectRatio";
-import Card from "@mui/joy/Card";
-import Skeleton from "@mui/joy/Skeleton";
-import Typography from "@mui/joy/Typography";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { object, string, minLength } from "valibot";
 import Button from "@mui/material/Button";
+import Stack from "@mui/joy/Stack";
+import { TextFieldElement } from "react-hook-form-mui";
 
-const Test = () => {
-  const navigate = useNavigate();
+const CommentSchema = object({
+  content: string("Comment must be a string", [
+    minLength(1, "Comments can not be empty"),
+  ]),
+});
+
+const Test = ({ commentAction, commentId, authorId }) => {
+  //   const [content, setContent] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = useForm({
+    resolver: valibotResolver(CommentSchema),
+  });
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({
+        content: "",
+      });
+    }
+  }, [isSubmitSuccessful, reset]);
+
+  // comments are created and edited in the same way. On creation, commentId and authorId are not used, but on edit, they are
+  const submitComment = async ({ content }) => {
+    console.log(content);
+    commentAction(content, commentId, authorId);
+  };
+
   return (
-    <div className="hero">
-      <div className="intro">
-        <h2>
-          Welcome to <strong>Kinology</strong>
-        </h2>
-        <div>
-          Choosing a movie made easy
-          <br />
-          <br />
-          Pick actors, directors or genres <br /> then <strong>explore</strong>
-        </div>
-        <div className="searchButton">
-          <Button
-            className="CTA-search"
-            variant="contained"
-            sx={{
-              backgroundColor: "#C08B5C",
-              "&:hover": { backgroundColor: "#795458" },
-            }}
-          >
-            <a href="#search-function">search</a>
-          </Button>
-        </div>
-
-        <div>
-          Too many good options to choose from?
-          <br /> Create an account to save movies for later!
-        </div>
-        <div className="registerButton">
-          <Button
-            className="CTA-register"
-            variant="contained"
-            sx={{
-              backgroundColor: "#D9CE88",
-              "&:hover": { backgroundColor: "#8F916B" },
-            }}
-            onClick={() => navigate("/signup")}
-          >
-            Register
-          </Button>
-        </div>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit(submitComment)}>
+      {/* <div>
+        Your comment
+        <input {...register("content")} placeholder="comment" />
+        <p style={{ color: "red" }}>{errors.content?.message}</p>
+      </div> */}
+      <Stack spacing={1}>
+        <TextFieldElement
+          name={"content"}
+          label={"Your comment"}
+          fullWIdth
+          control={control}
+          margin={"dense"}
+          sx={{ bgcolor: "white" }}
+        />
+        <Button
+          disabled={isSubmitting}
+          variant="contained"
+          size="small"
+          sx={{
+            backgroundColor: "#79C094",
+            "&:hover": { backgroundColor: "#00532f" },
+            marginBottom: 1,
+          }}
+          type="submit"
+          id="comment-button"
+        >
+          {isSubmitting ? "Commenting..." : "Submit comment"}
+        </Button>
+      </Stack>
+    </form>
   );
 };
 
