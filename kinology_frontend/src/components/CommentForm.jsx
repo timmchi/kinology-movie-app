@@ -85,7 +85,7 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
           variant="contained"
           size="small"
           sx={{
-            backgroundColor: "#79C094",
+            backgroundColor: "#609b76",
             "&:hover": { backgroundColor: "#00532f" },
             marginBottom: 1,
           }}

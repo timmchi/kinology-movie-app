@@ -67,7 +67,7 @@ const UserUpdateForm = ({ updateUser }) => {
     <form onSubmit={handleSubmit(updatingUser)}>
       <Stack
         spacing={1}
-        sx={{ paddingBottom: 1, paddingRight: 1, width: "83%" }}
+        sx={{ paddingBottom: 1, paddingRight: 1, maxWidth: "310px" }}
       >
         <TextFieldElement
           name={"bio"}
@@ -147,7 +147,7 @@ const UserUpdateForm = ({ updateUser }) => {
             },
           }}
         />
-        <Typography>Avatar</Typography>
+        <Typography>Upload Avatar</Typography>
         <Controller
           name="avatar"
           control={control}
@@ -195,6 +195,12 @@ const UserUpdateForm = ({ updateUser }) => {
           type="submit"
           id="update-button"
           variant="contained"
+          size="small"
+          sx={{
+            backgroundColor: "#609b76",
+            "&:hover": { backgroundColor: "#00532f" },
+            marginBottom: 1,
+          }}
         >
           {isSubmitting ? "Updating..." : "Update your profile"}
         </Button>
