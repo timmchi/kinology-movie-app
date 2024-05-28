@@ -1,6 +1,11 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import Button from "@mui/material/Button";
+import Stack from "@mui/joy/Stack";
+import { TextFieldElement } from "react-hook-form-mui";
+import { MuiFileInput } from "mui-file-input";
+
 import {
   object,
   string,
@@ -11,10 +16,11 @@ import {
   parse,
   unknown,
 } from "valibot";
+import { Typography } from "@mui/material";
 
 const UserUpdateSchema = object(
   {
-    bio: string("About me should be a string", [
+    bio: string("About you should be a string", [
       minLength(1, "Please enter something about yourself."),
     ]),
     name: string("Name should be a string", [
@@ -34,6 +40,7 @@ const UserUpdateForm = ({ updateUser }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     reset,
   } = useForm({ resolver: valibotResolver(UserUpdateSchema) });
@@ -45,7 +52,7 @@ const UserUpdateForm = ({ updateUser }) => {
   }, [isSubmitSuccessful, reset]);
 
   const updatingUser = (data) => {
-    const parsedAvatar = parse(FileSchema, data.avatar[0]);
+    const parsedAvatar = parse(FileSchema, data.avatar);
 
     const formData = new FormData();
     formData.append("avatar", parsedAvatar);
@@ -58,35 +65,140 @@ const UserUpdateForm = ({ updateUser }) => {
 
   return (
     <form onSubmit={handleSubmit(updatingUser)}>
-      <div>
-        About you
-        <input
-          {...register("bio")}
-          placeholder="Write something about yourself"
+      <Stack
+        spacing={1}
+        sx={{ paddingBottom: 1, paddingRight: 1, width: "83%" }}
+      >
+        <TextFieldElement
+          name={"bio"}
+          label={"About you"}
+          fullWidth
+          control={control}
+          margin={"dense"}
+          InputProps={{ sx: { borderRadius: 0 } }}
+          sx={{
+            bgcolor: "#79C094",
+            label: { color: "white" },
+            input: {
+              color: "white",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+            },
+            "& label.Mui-focused": {
+              color: "white",
+            },
+            "& label.Mui-error": {
+              fontWeight: "bold",
+            },
+            "& .MuiInput-underline:after": {
+              borderBottomColor: "yellow",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#397453",
+              },
+              "&:hover fieldset": {
+                borderColor: "white",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#bdac4e",
+              },
+              "&.Mui-error fieldset": {
+                borderWidth: 2,
+              },
+            },
+          }}
         />
-        <div className="formError">
-          {errors.bio?.message ?? <p>{errors.bio?.message}</p>}
-        </div>
-      </div>
-      <div>
-        Avatar
-        <input
-          {...register("avatar")}
-          type="file"
-          accept="image/*"
-          placeholder="avatar"
+        <TextFieldElement
+          name={"name"}
+          label={"Name"}
+          fullWIdth
+          control={control}
+          margin={"dense"}
+          InputProps={{ sx: { borderRadius: 0 } }}
+          sx={{
+            bgcolor: "#79C094",
+            label: { color: "white" },
+            input: {
+              color: "white",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+            },
+            "& label.Mui-focused": {
+              color: "white",
+            },
+            "& label.Mui-error": {
+              fontWeight: "bold",
+            },
+            "& .MuiInput-underline:after": {
+              borderBottomColor: "yellow",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#397453",
+              },
+              "&:hover fieldset": {
+                borderColor: "white",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#bdac4e",
+              },
+              "&.Mui-error fieldset": {
+                borderWidth: 2,
+              },
+            },
+          }}
         />
-      </div>
-      <div>
-        Name
-        <input {...register("name")} placeholder="Change your name" />
-        <div className="formError">
-          {errors.name?.message ?? <p>{errors.name?.message}</p>}
-        </div>
-      </div>
-      <button disabled={isSubmitting} type="submit" id="update-button">
-        {isSubmitting ? "Updating..." : "Update your profile"}
-      </button>
+        <Typography>Avatar</Typography>
+        <Controller
+          name="avatar"
+          control={control}
+          render={({ field }) => (
+            <MuiFileInput
+              {...field}
+              inputProps={{ accept: ".png, .jpeg, .jpg, .svg" }}
+              placeholder="Insert a file"
+              sx={{
+                bgcolor: "#79C094",
+                label: { color: "white" },
+                input: {
+                  color: "white",
+                  textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+                },
+                "& label.Mui-focused": {
+                  color: "white",
+                },
+                "& label.Mui-error": {
+                  fontWeight: "bold",
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "yellow",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#397453",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "white",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#bdac4e",
+                  },
+                  "&.Mui-error fieldset": {
+                    borderWidth: 2,
+                  },
+                },
+              }}
+            />
+          )}
+        />
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          id="update-button"
+          variant="contained"
+        >
+          {isSubmitting ? "Updating..." : "Update your profile"}
+        </Button>
+      </Stack>
     </form>
   );
 };

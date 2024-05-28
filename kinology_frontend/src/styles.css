@@ -387,3 +387,7 @@ a:hover {
   background-color: #397453;
   margin: 0;
 }
+
+.MuiFileInput-placeholder {
+  color: "white";
+}

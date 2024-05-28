@@ -1,74 +1,229 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength } from "valibot";
 import Button from "@mui/material/Button";
 import Stack from "@mui/joy/Stack";
 import { TextFieldElement } from "react-hook-form-mui";
+import { MuiFileInput } from "mui-file-input";
 
-const CommentSchema = object({
-  content: string("Comment must be a string", [
-    minLength(1, "Comments can not be empty"),
-  ]),
-});
+import {
+  object,
+  string,
+  minLength,
+  mimeType,
+  maxSize,
+  instance,
+  parse,
+  unknown,
+} from "valibot";
+import { Typography } from "@mui/material";
 
-const Test = ({ commentAction, commentId, authorId }) => {
-  //   const [content, setContent] = useState("");
+const UserUpdateSchema = object(
+  {
+    bio: string("About you should be a string", [
+      minLength(1, "Please enter something about yourself."),
+    ]),
+    name: string("Name should be a string", [
+      minLength(1, "Please enter your name"),
+      minLength(3, "Name should be 3 or more symbols long"),
+    ]),
+  },
+  unknown()
+);
+
+const FileSchema = instance(File, [
+  mimeType(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
+  maxSize(1024 * 1024 * 2),
+]);
+
+const Test = ({ updateUser }) => {
   const {
     register,
     handleSubmit,
-    reset,
     control,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-  } = useForm({
-    resolver: valibotResolver(CommentSchema),
-  });
+    reset,
+  } = useForm({ resolver: valibotResolver(UserUpdateSchema) });
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({
-        content: "",
-      });
+      reset({ bio: "", name: "", avatar: null });
     }
   }, [isSubmitSuccessful, reset]);
 
-  // comments are created and edited in the same way. On creation, commentId and authorId are not used, but on edit, they are
-  const submitComment = async ({ content }) => {
-    console.log(content);
-    commentAction(content, commentId, authorId);
+  const updatingUser = (data) => {
+    const parsedAvatar = parse(FileSchema, data.avatar[0]);
+
+    const formData = new FormData();
+    formData.append("avatar", parsedAvatar);
+    formData.append("bio", data.bio);
+    formData.append("name", data.name);
+
+    console.log(formData.get("avatar"));
+    updateUser(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit(submitComment)}>
-      {/* <div>
-        Your comment
-        <input {...register("content")} placeholder="comment" />
-        <p style={{ color: "red" }}>{errors.content?.message}</p>
-      </div> */}
+    <form onSubmit={handleSubmit(updatingUser)}>
       <Stack spacing={1}>
         <TextFieldElement
-          name={"content"}
-          label={"Your comment"}
+          name={"bio"}
+          label={"About you"}
           fullWIdth
           control={control}
           margin={"dense"}
-          sx={{ bgcolor: "white" }}
+          InputProps={{ sx: { borderRadius: 0 } }}
+          sx={{
+            bgcolor: "#79C094",
+            label: { color: "white" },
+            input: {
+              color: "white",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+            },
+            "& label.Mui-focused": {
+              color: "white",
+            },
+            "& label.Mui-error": {
+              fontWeight: "bold",
+            },
+            "& .MuiInput-underline:after": {
+              borderBottomColor: "yellow",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#397453",
+              },
+              "&:hover fieldset": {
+                borderColor: "white",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#bdac4e",
+              },
+              "&.Mui-error fieldset": {
+                borderWidth: 2,
+              },
+            },
+          }}
+        />
+        <TextFieldElement
+          name={"name"}
+          label={"Name"}
+          fullWIdth
+          control={control}
+          margin={"dense"}
+          InputProps={{ sx: { borderRadius: 0 } }}
+          sx={{
+            bgcolor: "#79C094",
+            label: { color: "white" },
+            input: {
+              color: "white",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+            },
+            "& label.Mui-focused": {
+              color: "white",
+            },
+            "& label.Mui-error": {
+              fontWeight: "bold",
+            },
+            "& .MuiInput-underline:after": {
+              borderBottomColor: "yellow",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#397453",
+              },
+              "&:hover fieldset": {
+                borderColor: "white",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#bdac4e",
+              },
+              "&.Mui-error fieldset": {
+                borderWidth: 2,
+              },
+            },
+          }}
+        />
+        <Typography>Avatar</Typography>
+        <Controller
+          name="avatar"
+          control={control}
+          render={({ field }) => (
+            <MuiFileInput
+              {...field}
+              inputProps={{ accept: ".png, .jpeg, .jpg, .svg" }}
+              sx={{
+                bgcolor: "#79C094",
+                label: { color: "white" },
+                input: {
+                  color: "white",
+                  textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+                },
+                "& label.Mui-focused": {
+                  color: "white",
+                },
+                "& label.Mui-error": {
+                  fontWeight: "bold",
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "yellow",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#397453",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "white",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#bdac4e",
+                  },
+                  "&.Mui-error fieldset": {
+                    borderWidth: 2,
+                  },
+                },
+              }}
+            />
+          )}
         />
         <Button
           disabled={isSubmitting}
-          variant="contained"
-          size="small"
-          sx={{
-            backgroundColor: "#79C094",
-            "&:hover": { backgroundColor: "#00532f" },
-            marginBottom: 1,
-          }}
           type="submit"
-          id="comment-button"
+          id="update-button"
+          variant="contained"
         >
-          {isSubmitting ? "Commenting..." : "Submit comment"}
+          {isSubmitting ? "Updating..." : "Update your profile"}
         </Button>
       </Stack>
+      {/* <div>
+        About you
+        <input
+          {...register("bio")}
+          placeholder="Write something about yourself"
+        />
+        <div className="formError">
+          {errors.bio?.message ?? <p>{errors.bio?.message}</p>}
+        </div>
+      </div>
+      <div>
+        Avatar
+        <input
+          {...register("avatar")}
+          type="file"
+          accept="image/*"
+          placeholder="avatar"
+        />
+      </div>
+      <div>
+        Name
+        <input {...register("name")} placeholder="Change your name" />
+        <div className="formError">
+          {errors.name?.message ?? <p>{errors.name?.message}</p>}
+        </div>
+      </div>
+      <button disabled={isSubmitting} type="submit" id="update-button">
+        {isSubmitting ? "Updating..." : "Update your profile"}
+      </button> */}
     </form>
   );
 };
