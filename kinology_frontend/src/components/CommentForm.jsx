@@ -40,25 +40,6 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
 
   return (
     <form onSubmit={handleSubmit(submitComment)}>
-      {/* <div>
-        Your comment
-        <input {...register("content")} placeholder="comment" />
-        <p style={{ color: "red" }}>{errors.content?.message}</p>
-      </div>
-      <Button
-        disabled={isSubmitting}
-        variant="contained"
-        size="small"
-        sx={{
-          backgroundColor: "#79C094",
-          "&:hover": { backgroundColor: "#00532f" },
-          marginBottom: 1,
-        }}
-        type="submit"
-        id="comment-button"
-      >
-        {isSubmitting ? "Commenting..." : "Submit comment"}
-      </Button> */}
       <Stack spacing={1} sx={{ paddingBottom: 1, display: "inline-flex" }}>
         <TextFieldElement
           name={"content"}
@@ -66,11 +47,37 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
           fullWIdth
           control={control}
           margin={"dense"}
+          InputProps={{ sx: { borderRadius: 0 } }}
           sx={{
             bgcolor: "#79C094",
-            borderRadius: 2,
             label: { color: "white" },
-            input: { color: "white" },
+            input: {
+              color: "white",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+            },
+            "& label.Mui-focused": {
+              color: "white",
+            },
+            "& label.Mui-error": {
+              fontWeight: "bold",
+            },
+            "& .MuiInput-underline:after": {
+              borderBottomColor: "yellow",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#397453",
+              },
+              "&:hover fieldset": {
+                borderColor: "white",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#bdac4e",
+              },
+              "&.Mui-error fieldset": {
+                borderWidth: 2,
+              },
+            },
           }}
         />
         <Button
