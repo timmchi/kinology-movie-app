@@ -34,7 +34,11 @@ const UserSingleListView = ({ user }) => {
       </ListItemAvatar>
       <ListItemText
         primary={user.name}
-        secondary="Favorite movie: Godfather II"
+        secondary={
+          user.biography !== ""
+            ? user.biography
+            : "We don't know much about them yet..."
+        }
       />
     </ListItem>
   );

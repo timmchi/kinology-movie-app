@@ -304,7 +304,7 @@ a:hover {
 }
 
 .notification {
-  padding-top: 3em;
+  padding-top: 1em;
   position: fixed;
   opacity: 85%;
   z-index: 2;

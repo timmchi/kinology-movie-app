@@ -78,7 +78,10 @@ const UserUpdateForm = ({ updateUser }) => {
           InputProps={{ sx: { borderRadius: 0 } }}
           sx={{
             bgcolor: "#79C094",
-            label: { color: "white" },
+            label: {
+              color: "white",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+            },
             input: {
               color: "white",
               textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
@@ -117,7 +120,10 @@ const UserUpdateForm = ({ updateUser }) => {
           InputProps={{ sx: { borderRadius: 0 } }}
           sx={{
             bgcolor: "#79C094",
-            label: { color: "white" },
+            label: {
+              color: "white",
+              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+            },
             input: {
               color: "white",
               textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
@@ -155,6 +161,7 @@ const UserUpdateForm = ({ updateUser }) => {
             <MuiFileInput
               {...field}
               inputProps={{ accept: ".png, .jpeg, .jpg, .svg" }}
+              InputProps={{ sx: { borderRadius: 0 } }}
               placeholder="Insert a file"
               sx={{
                 bgcolor: "#79C094",
