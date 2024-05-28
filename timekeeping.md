@@ -54,6 +54,9 @@
 | 26.5 | 1     | fixing e2e and unit tests to work with new components                    |
 | 26.5 | 0.5   | backend tests refactoring                                                |
 | 27.5 | 2.5   | backend and tests refactoring                                            |
+| 28.5 | 1     | Styling comment form                                                     |
+| 28.5 | 1     | Styling user update form                                                 |
+| 28.5 | 2.5   | Work on changing search bar to search modal                              |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -73,7 +76,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 103.5 |                                                                          |
+| tot  | 108   |                                                                          |
