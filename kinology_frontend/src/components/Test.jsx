@@ -1,49 +1,118 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import Button from "@mui/material/Button";
 import Stack from "@mui/joy/Stack";
-import { TextFieldElement } from "react-hook-form-mui";
-import { MuiFileInput } from "mui-file-input";
+import { TextFieldElement, SliderElement } from "react-hook-form-mui";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
+import Modal from "@mui/joy/Modal";
+import ModalClose from "@mui/joy/ModalClose";
+import genreOptions from "../data/genres";
+
+import SearchIcon from "@mui/icons-material/Search";
 
 import {
   object,
   string,
   minLength,
-  mimeType,
-  maxSize,
-  instance,
-  parse,
-  unknown,
+  array,
+  literal,
+  union,
+  minValue,
+  maxValue,
+  number,
+  maxLength,
+  optional,
 } from "valibot";
 import { Typography } from "@mui/material";
 
-const UserUpdateSchema = object(
-  {
-    bio: string("About you should be a string", [
-      minLength(1, "Please enter something about yourself."),
+const components = {
+  DropdownIndicator: null,
+};
+
+const createOption = (label) => ({
+  label,
+  value: label,
+});
+
+// TODO = find a way to style the errors better
+
+const searchQuerySchema = object({
+  genresSelect: optional(
+    array(
+      object({
+        label: string("Genre label should be a string"),
+        value: number("Genre value should be a number"),
+      })
+    )
+  ),
+  year: union([
+    string([
+      minValue("1874", "Movies can not be shot before 1874"),
+      maxValue(
+        `${new Date().getFullYear()}`,
+        "Can not search for movies shot after current year"
+      ),
     ]),
-    name: string("Name should be a string", [
-      minLength(1, "Please enter your name"),
-      minLength(3, "Name should be 3 or more symbols long"),
-    ]),
+    literal(""),
+  ]),
+  ratingUpper: string("Rating should be a string", [
+    minValue(0, "Rating can not be lower than 0"),
+    maxValue(10, "Rating can not be higher than 10"),
+  ]),
+  ratingLower: string("Rating should be a string", [
+    minValue(0, "Rating can not be lower than 0"),
+    maxValue(11, "Rating can not be higher than 10"),
+  ]),
+  country: string("Country should be a string", [
+    maxLength(100, "Country name can not be this long"),
+  ]),
+  director: string("Director should be a string"),
+});
+
+const textInputStyle = {
+  bgcolor: "#79C094",
+  label: { color: "white" },
+  input: {
+    color: "white",
+    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
   },
-  unknown()
-);
+  "& label.Mui-focused": {
+    color: "white",
+  },
+  "& label.Mui-error": {
+    fontWeight: "bold",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "yellow",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#397453",
+    },
+    "&:hover fieldset": {
+      borderColor: "white",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#bdac4e",
+    },
+    "&.Mui-error fieldset": {
+      borderWidth: 2,
+    },
+  },
+};
 
-const FileSchema = instance(File, [
-  mimeType(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
-  maxSize(1024 * 1024 * 2),
-]);
-
-const Test = ({ updateUser }) => {
+const Test = () => {
+  const [actor, setActor] = useState("");
+  const [actors, setActors] = useState([]);
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     reset,
-  } = useForm({ resolver: valibotResolver(UserUpdateSchema) });
+  } = useForm({ resolver: valibotResolver(searchQuerySchema) });
 
   useEffect(() => {
     if (isSubmitSuccessful) {
@@ -51,179 +120,149 @@ const Test = ({ updateUser }) => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  const updatingUser = (data) => {
-    const parsedAvatar = parse(FileSchema, data.avatar[0]);
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
-    const formData = new FormData();
-    formData.append("avatar", parsedAvatar);
-    formData.append("bio", data.bio);
-    formData.append("name", data.name);
-
-    console.log(formData.get("avatar"));
-    updateUser(formData);
+  const handleKeyDown = (event) => {
+    if (!actor) return;
+    switch (event.key) {
+      case "Enter":
+      case "Tab":
+        setActors((prev) => [...prev, createOption(actor)]);
+        setActor("");
+        event.preventDefault();
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(updatingUser)}>
-      <Stack spacing={1}>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={1} sx={{ padding: "5em" }}>
+        <div>
+          <Controller
+            name="genresSelect"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    borderWidth: 0,
+                    borderRadius: 10,
+                  }),
+                }}
+                options={genreOptions}
+                isMulti
+                placeholder="Select genres"
+              />
+            )}
+          />
+        </div>
+        {errors.genresSelect?.message ?? (
+          <p className="validation-error">{errors.genresSelect?.message}</p>
+        )}
+
         <TextFieldElement
-          name={"bio"}
-          label={"About you"}
-          fullWIdth
+          name={"director"}
+          label={"Director"}
+          fullWidth
           control={control}
           margin={"dense"}
           InputProps={{ sx: { borderRadius: 0 } }}
-          sx={{
-            bgcolor: "#79C094",
-            label: { color: "white" },
-            input: {
-              color: "white",
-              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-            },
-            "& label.Mui-focused": {
-              color: "white",
-            },
-            "& label.Mui-error": {
-              fontWeight: "bold",
-            },
-            "& .MuiInput-underline:after": {
-              borderBottomColor: "yellow",
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#397453",
-              },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#bdac4e",
-              },
-              "&.Mui-error fieldset": {
-                borderWidth: 2,
-              },
-            },
-          }}
+          sx={textInputStyle}
         />
-        <TextFieldElement
-          name={"name"}
-          label={"Name"}
-          fullWIdth
-          control={control}
-          margin={"dense"}
-          InputProps={{ sx: { borderRadius: 0 } }}
-          sx={{
-            bgcolor: "#79C094",
-            label: { color: "white" },
-            input: {
-              color: "white",
-              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-            },
-            "& label.Mui-focused": {
-              color: "white",
-            },
-            "& label.Mui-error": {
-              fontWeight: "bold",
-            },
-            "& .MuiInput-underline:after": {
-              borderBottomColor: "yellow",
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#397453",
-              },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#bdac4e",
-              },
-              "&.Mui-error fieldset": {
-                borderWidth: 2,
-              },
-            },
-          }}
-        />
-        <Typography>Avatar</Typography>
-        <Controller
-          name="avatar"
-          control={control}
-          render={({ field }) => (
-            <MuiFileInput
-              {...field}
-              inputProps={{ accept: ".png, .jpeg, .jpg, .svg" }}
-              sx={{
-                bgcolor: "#79C094",
-                label: { color: "white" },
-                input: {
-                  color: "white",
-                  textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-                },
-                "& label.Mui-focused": {
-                  color: "white",
-                },
-                "& label.Mui-error": {
-                  fontWeight: "bold",
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "yellow",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#397453",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "white",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#bdac4e",
-                  },
-                  "&.Mui-error fieldset": {
-                    borderWidth: 2,
-                  },
-                },
-              }}
-            />
-          )}
-        />
+        <div>
+          <TextFieldElement
+            name={"year"}
+            label={"Year"}
+            fullWidth
+            control={control}
+            margin={"dense"}
+            InputProps={{ sx: { borderRadius: 0 } }}
+            sx={textInputStyle}
+          />
+        </div>
+        <div>
+          <p>Rating range</p>
+          {/* <TextFieldElement
+            name={"ratingLower"}
+            label={"Lower threshold"}
+            type={"number"}
+            control={control}
+            min={0}
+            max={10}
+            sx={textInputStyle}
+          /> */}
+          <SliderElement
+            label="Lower threshold"
+            name={"ratingLower"}
+            max={10}
+            min={0}
+            control={control}
+            sx={textInputStyle}
+          />
+          <TextFieldElement
+            name={"ratingUpper"}
+            label={"Upper threshold"}
+            control={control}
+            type={"number"}
+            min={1}
+            max={10}
+            sx={textInputStyle}
+          />
+        </div>
+        <div data-testid="actor-input">
+          <Controller
+            name="actorsSelect"
+            control={control}
+            render={({ field }) => (
+              <CreatableSelect
+                {...field}
+                components={components}
+                options={genreOptions}
+                inputValue={actor}
+                isMulti
+                isClearable
+                menuIsOpen={false}
+                placeholder="Type in actor and press enter"
+                onChange={(newActor) => setActors(newActor)}
+                onInputChange={(newActor) => setActor(newActor)}
+                onKeyDown={handleKeyDown}
+                value={actors}
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    borderWidth: 0,
+                  }),
+                }}
+              />
+            )}
+          />
+        </div>
+        <div>
+          <TextFieldElement
+            name={"country"}
+            label={"country"}
+            control={control}
+            sx={textInputStyle}
+          />
+        </div>
         <Button
-          disabled={isSubmitting}
           type="submit"
-          id="update-button"
+          disabled={isSubmitting}
+          aria-label="Search for movies"
           variant="contained"
+          size="small"
+          sx={{
+            backgroundColor: "#609b76",
+            "&:hover": { backgroundColor: "#00532f" },
+            marginBottom: 1,
+          }}
         >
-          {isSubmitting ? "Updating..." : "Update your profile"}
+          {isSubmitting ? "Searching..." : "Search"}
         </Button>
       </Stack>
-      {/* <div>
-        About you
-        <input
-          {...register("bio")}
-          placeholder="Write something about yourself"
-        />
-        <div className="formError">
-          {errors.bio?.message ?? <p>{errors.bio?.message}</p>}
-        </div>
-      </div>
-      <div>
-        Avatar
-        <input
-          {...register("avatar")}
-          type="file"
-          accept="image/*"
-          placeholder="avatar"
-        />
-      </div>
-      <div>
-        Name
-        <input {...register("name")} placeholder="Change your name" />
-        <div className="formError">
-          {errors.name?.message ?? <p>{errors.name?.message}</p>}
-        </div>
-      </div>
-      <button disabled={isSubmitting} type="submit" id="update-button">
-        {isSubmitting ? "Updating..." : "Update your profile"}
-      </button> */}
     </form>
   );
 };

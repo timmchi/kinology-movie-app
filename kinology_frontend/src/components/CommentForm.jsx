@@ -44,7 +44,7 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
         <TextFieldElement
           name={"content"}
           label={"Your comment"}
-          fullWIdth
+          fullWidth
           control={control}
           margin={"dense"}
           InputProps={{ sx: { borderRadius: 0 } }}
