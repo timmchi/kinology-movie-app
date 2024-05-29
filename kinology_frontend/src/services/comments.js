@@ -1,41 +1,17 @@
 import axios from "axios";
 const baseUrl = "http://localhost:3001/api/comments";
 
+const getConfig = (token) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  return config;
+};
+
 const getComments = async (id, type) => {
   const url = `${baseUrl}/${type}/${id}`;
   const response = await axios.get(url);
-  return response.data;
-};
-
-const createProfileComment = async (profileId, comment, currentUser) => {
-  const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
-  };
-
-  const response = await axios.post(
-    `${baseUrl}/profile/${profileId}`,
-    { content: comment },
-    config
-  );
-  return response.data;
-};
-
-const updateProfileComment = async (
-  profileId,
-  commentId,
-  currentUser,
-  content,
-  authorId
-) => {
-  const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
-  };
-
-  const response = await axios.put(
-    `${baseUrl}/profile/${profileId}/${commentId}`,
-    { content: content, authorId },
-    config
-  );
   return response.data;
 };
 
@@ -49,9 +25,7 @@ const updateComment = async (
 ) => {
   const url = `${baseUrl}/${type}/${receiverId}/${commentId}`;
 
-  const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
-  };
+  const config = getConfig(currentUser.token);
 
   const response = await axios.put(url, { content, authorId }, config);
 
@@ -66,7 +40,7 @@ const deleteComment = async (
   type
 ) => {
   const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
+    ...getConfig(currentUser.token),
     data: {
       authorId,
     },
@@ -78,50 +52,29 @@ const deleteComment = async (
   return response.data;
 };
 
-const createMovieComment = async (
-  movieId,
+const createComment = async (
+  receiverId,
   comment,
   currentUser,
+  type,
   movieTitle,
   moviePoster
 ) => {
-  const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
+  const config = getConfig(currentUser.token);
+
+  const url = `${baseUrl}/${type}/${receiverId}`;
+  const body = {
+    content: comment,
+    ...(type === "movie" && { movieTitle, moviePoster }),
   };
 
-  const response = await axios.post(
-    `${baseUrl}/movie/${movieId}`,
-    { content: comment, movieTitle, moviePoster },
-    config
-  );
-  return response.data;
-};
-
-const updateMovieComment = async (
-  movieId,
-  commentId,
-  currentUser,
-  content,
-  authorId
-) => {
-  const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
-  };
-
-  const response = await axios.put(
-    `${baseUrl}/movie/${movieId}/${commentId}`,
-    { content: content, authorId: authorId },
-    config
-  );
+  const response = await axios.post(url, body, config);
   return response.data;
 };
 
 export default {
   getComments,
-  createProfileComment,
-  updateProfileComment,
-  createMovieComment,
-  updateMovieComment,
+  createComment,
   deleteComment,
   updateComment,
 };

@@ -34,14 +34,14 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
 
   const createComment = async (content) => {
     try {
-      const createdComment = await commentsService.createMovieComment(
+      const createdComment = await commentsService.createComment(
         id,
         content,
         user,
+        "movie",
         movie.title,
         movie.image
       );
-      //   console.log(createComment);
       setComments(comments.concat(createdComment));
       dispatch({
         type: "SHOW",
@@ -98,13 +98,6 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
 
   const updateComment = async (commentId, content, authorId) => {
     try {
-      //   const updatedComment = await commentsService.updateMovieComment(
-      //     id,
-      //     commentId,
-      //     user,
-      //     content,
-      //     authorId
-      //   );
       const updatedComment = await commentsService.updateComment(
         id,
         commentId,

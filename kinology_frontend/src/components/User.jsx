@@ -88,10 +88,11 @@ const User = ({ currentUser, removeUser }) => {
   const createComment = async (comment) => {
     try {
       commentFormRef.current.toggleVisibility();
-      const createdComment = await commentsService.createProfileComment(
+      const createdComment = await commentsService.createComment(
         id,
         comment,
-        currentUser
+        currentUser,
+        "profile"
       );
       setComments(comments.concat(createdComment));
       dispatch({
@@ -159,12 +160,13 @@ const User = ({ currentUser, removeUser }) => {
   // HERE I THINK
   const updateComment = async (commentId, comment, authorId) => {
     try {
-      const updatedComment = await commentsService.updateProfileComment(
+      const updatedComment = await commentsService.updateComment(
         id,
         commentId,
         currentUser,
         comment,
-        authorId
+        authorId,
+        "profile"
       );
       setComments(
         comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
