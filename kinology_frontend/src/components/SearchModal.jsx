@@ -59,6 +59,29 @@ const searchQuerySchema = object({
   director: string("Director should be a string"),
 });
 
+const transformData = (data, actors, pageValue) => {
+  const { genresSelect, director, year, ratingUpper, ratingLower, country } =
+    data;
+
+  const actorsQuery = actors.map((actor) => actor.value);
+  const genres = genresSelect
+    ? genresSelect?.map((genreOption) => `${genreOption.value}`)
+    : [];
+
+  const transformedObject = {
+    genres,
+    director,
+    year,
+    ratingUpper: Number(ratingUpper),
+    ratingLower: Number(ratingLower),
+    actors: actorsQuery,
+    country,
+    page: pageValue,
+  };
+
+  return transformedObject;
+};
+
 const SearchModal = ({ setMovies }) => {
   const [actor, setActor] = useState("");
   const [actors, setActors] = useState([]);
@@ -85,25 +108,10 @@ const SearchModal = ({ setMovies }) => {
   });
 
   const searchForMovies = async (data, pageValue) => {
-    // TODO - refactor this: create a function that parses the data into suitable shape
-    const actorsQuery = actors.map((actor) => actor.value);
-    const { genresSelect, director, year, ratingUpper, ratingLower, country } =
-      data;
-    const genres = genresSelect
-      ? genresSelect?.map((genreOption) => `${genreOption.value}`)
-      : [];
     setFirstSearchData(data);
+    const dataObject = transformData(data, actors, pageValue);
     const { movieToFrontObjectArray: movies, totalPages: totalPageNumber } =
-      await moviesService.search({
-        genres,
-        director,
-        year,
-        ratingUpper: Number(ratingUpper),
-        ratingLower: Number(ratingLower),
-        actors: actorsQuery,
-        country,
-        page: pageValue,
-      });
+      await moviesService.search(dataObject);
     setTotalPages(totalPageNumber);
     setMovies(movies);
     setOpen(false);
