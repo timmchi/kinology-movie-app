@@ -37,12 +37,6 @@ a:hover {
   background-color: #438761;
 }
 
-#search-function {
-  height: 100vh;
-  padding-top: 4em;
-  width: 100%;
-}
-
 .resetSearch {
   margin: 2em;
 }
@@ -58,11 +52,7 @@ a:hover {
 .cardsContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  /* margin-top: 2em;
-  margin-left: 5em;
-  margin-right: 1em; */
-  padding-left: 8em;
-  margin-right: 2em;
+  padding-left: 4.5em;
   margin-top: 2em;
 }
 
@@ -113,10 +103,6 @@ a:hover {
   transform: scale(1.1);
 }
 
-/* .movieList {
-  margin: 0 1em;
-} */
-
 .userPage {
   margin: 0 1em;
 }
@@ -132,7 +118,7 @@ a:hover {
   color: "red";
 }
 
-.hero {
+/* .hero {
   height: 100vh;
   width: 100%;
   background-image: url(../heroimage-min.png);
@@ -161,7 +147,7 @@ a:hover {
   font-size: 1.8rem;
   margin-bottom: 15%;
   margin-right: 2%;
-}
+} */
 
 .registerButton {
   text-align: center;
@@ -171,6 +157,12 @@ a:hover {
 .searchButton {
   padding-top: 1em;
   margin-left: 5em;
+}
+
+#search-function {
+  height: 100vh;
+  padding-top: 4em;
+  width: 100%;
 }
 
 .aboutContainer {
@@ -302,8 +294,10 @@ a:hover {
   color: "white";
 }
 
+/* change margin based on screen width */
 .searchPage {
   display: flex;
   flex-direction: column;
-  margin: 1em 5em 0;
+  justify-content: center;
+  margin: 2em;
 }

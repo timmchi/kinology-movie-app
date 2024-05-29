@@ -11,6 +11,7 @@ const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
       <Hero />
       <div id="search-function">
         <SearchBar setMovies={setMovies} />
+
         <MovieList
           movies={movies}
           onButtonPress={onButtonPress}
