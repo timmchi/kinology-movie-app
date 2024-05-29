@@ -114,7 +114,7 @@ const UserUpdateForm = ({ updateUser }) => {
         <TextFieldElement
           name={"name"}
           label={"Name"}
-          fullWIdth
+          fullWidth
           control={control}
           margin={"dense"}
           InputProps={{ sx: { borderRadius: 0 } }}

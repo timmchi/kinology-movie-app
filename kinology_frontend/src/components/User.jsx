@@ -40,7 +40,7 @@ const User = ({ currentUser, removeUser }) => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const fetchedComments = await commentsService.getProfileComments(id);
+      const fetchedComments = await commentsService.getComments(id, "profile");
       setComments(fetchedComments);
     };
     fetchComments();
@@ -128,11 +128,12 @@ const User = ({ currentUser, removeUser }) => {
       try {
         const filteredComments = comments.filter((c) => c.id !== commentId);
         setComments(filteredComments);
-        await commentsService.deleteProfileComment(
+        await commentsService.deleteComment(
           user.id,
           commentId,
           currentUser,
-          authorId
+          authorId,
+          "profile"
         );
         dispatch({
           type: "SHOW",

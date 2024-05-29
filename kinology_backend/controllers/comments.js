@@ -46,12 +46,19 @@ const fetchComment = async (commentId) => {
   return addedComment;
 };
 
-const createComment = async ({ content, author, receiver }) => {
-  const newComment = new UserComment({
-    content,
-    author,
-    receiver,
-  });
+const createComment = async (content, author, receiver, type) => {
+  const newComment =
+    type === "movie"
+      ? new UserComment({
+          content,
+          author,
+          movieReceiver: receiver,
+        })
+      : new UserComment({
+          content,
+          author,
+          receiver,
+        });
 
   const savedComment = await newComment.save();
   return savedComment;
@@ -149,7 +156,12 @@ commentsRouter.post(
       receiver: id,
     });
 
-    const savedComment = await createComment(parsedComment);
+    const savedComment = await createComment(
+      parsedComment.content,
+      parsedComment.author,
+      parsedComment.receiver,
+      "profile"
+    );
 
     const addedComment = await fetchComment(savedComment._id);
 
@@ -255,14 +267,22 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   const parsedParams = v.parse(paramsIdSchema, { movieId: id });
 
-  //   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-  const movie = await fetchMovie(parsedParams.movieId);
+  const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+  //   const movie = await fetchMovie(parsedParams.movieId);
+
+  console.log("movie before findone", movie);
 
   if (!movie) return response.status(200).send([]);
+
+  console.log("movie after findone", movie);
+
+  console.log(movie);
 
   const comments = await UserComment.find({
     movieReceiver: movie?._id,
   }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
+
+  console.log("movie comments", comments);
 
   movie.populate("comments");
 
@@ -303,8 +323,13 @@ commentsRouter.post(
       receiver: movie._id.toString(),
     });
 
-    // refactor
-    const savedComment = await createComment(parsedComment);
+    // HERE IS THE BUG
+    const savedComment = await createComment(
+      parsedComment.content,
+      parsedComment.author,
+      parsedComment.receiver,
+      "movie"
+    );
 
     await savedComment.populate("author", {
       name: 1,

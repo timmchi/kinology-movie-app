@@ -1,8 +1,9 @@
 import axios from "axios";
 const baseUrl = "http://localhost:3001/api/comments";
 
-const getProfileComments = async (profileId) => {
-  const response = await axios.get(`${baseUrl}/profile/${profileId}`);
+const getComments = async (id, type) => {
+  const url = `${baseUrl}/${type}/${id}`;
+  const response = await axios.get(url);
   return response.data;
 };
 
@@ -14,26 +15,6 @@ const createProfileComment = async (profileId, comment, currentUser) => {
   const response = await axios.post(
     `${baseUrl}/profile/${profileId}`,
     { content: comment },
-    config
-  );
-  return response.data;
-};
-
-const deleteProfileComment = async (
-  profileId,
-  commentId,
-  currentUser,
-  authorId
-) => {
-  const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
-    data: {
-      authorId,
-    },
-  };
-
-  const response = await axios.delete(
-    `${baseUrl}/profile/${profileId}/${commentId}`,
     config
   );
   return response.data;
@@ -58,12 +39,45 @@ const updateProfileComment = async (
   return response.data;
 };
 
-// Big TODO - refactor these so I can use same service for both movie and profile comments. These functions repeat a lot, so I'm thinking base it on a word movie/profile?
+const updateComment = async (
+  receiverId,
+  commentId,
+  currentUser,
+  content,
+  authorId,
+  type
+) => {
+  const url = `${baseUrl}/${type}/${receiverId}/${commentId}`;
 
-const getMovieComments = async (movieId) => {
-  const response = await axios.get(`${baseUrl}/movie/${movieId}`);
+  const config = {
+    headers: { Authorization: `Bearer ${currentUser.token}` },
+  };
+
+  const response = await axios.put(url, { content, authorId }, config);
+
   return response.data;
 };
+
+const deleteComment = async (
+  receiverId,
+  commentId,
+  currentUser,
+  authorId,
+  type
+) => {
+  const config = {
+    headers: { Authorization: `Bearer ${currentUser.token}` },
+    data: {
+      authorId,
+    },
+  };
+
+  const url = `${baseUrl}/${type}/${receiverId}/${commentId}`;
+
+  const response = await axios.delete(url, config);
+  return response.data;
+};
+
 const createMovieComment = async (
   movieId,
   comment,
@@ -78,26 +92,6 @@ const createMovieComment = async (
   const response = await axios.post(
     `${baseUrl}/movie/${movieId}`,
     { content: comment, movieTitle, moviePoster },
-    config
-  );
-  return response.data;
-};
-
-const deleteMovieComment = async (
-  movieId,
-  commentId,
-  currentUser,
-  authorId
-) => {
-  const config = {
-    headers: { Authorization: `Bearer ${currentUser.token}` },
-    data: {
-      authorId,
-    },
-  };
-
-  const response = await axios.delete(
-    `${baseUrl}/movie/${movieId}/${commentId}`,
     config
   );
   return response.data;
@@ -123,12 +117,11 @@ const updateMovieComment = async (
 };
 
 export default {
-  getProfileComments,
+  getComments,
   createProfileComment,
-  deleteProfileComment,
   updateProfileComment,
-  getMovieComments,
   createMovieComment,
-  deleteMovieComment,
   updateMovieComment,
+  deleteComment,
+  updateComment,
 };

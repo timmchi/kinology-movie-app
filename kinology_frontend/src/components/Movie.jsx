@@ -14,9 +14,6 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
   const [comments, setComments] = useState([]);
   const dispatch = useNotificationDispatch();
 
-  //   console.log("id in movie", id);
-  //   console.log(comments);
-
   useEffect(() => {
     const fetchMovie = async () => {
       const movie = await moviesService.getSingleMovie(id);
@@ -28,7 +25,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const fetchedComments = await commentsService.getMovieComments(id);
+      const fetchedComments = await commentsService.getComments(id, "movie");
       setComments(fetchedComments);
     };
 
@@ -71,7 +68,13 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
       try {
         const filteredComments = comments.filter((c) => c.id !== commentId);
         setComments(filteredComments);
-        await commentsService.deleteMovieComment(id, commentId, user, authorId);
+        await commentsService.deleteComment(
+          id,
+          commentId,
+          user,
+          authorId,
+          "movie"
+        );
         dispatch({
           type: "SHOW",
           payload: {
@@ -95,12 +98,20 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
 
   const updateComment = async (commentId, content, authorId) => {
     try {
-      const updatedComment = await commentsService.updateMovieComment(
+      //   const updatedComment = await commentsService.updateMovieComment(
+      //     id,
+      //     commentId,
+      //     user,
+      //     content,
+      //     authorId
+      //   );
+      const updatedComment = await commentsService.updateComment(
         id,
         commentId,
         user,
         content,
-        authorId
+        authorId,
+        "movie"
       );
       setComments(
         comments.map((c) => (c.id === updatedComment.id ? updatedComment : c))
