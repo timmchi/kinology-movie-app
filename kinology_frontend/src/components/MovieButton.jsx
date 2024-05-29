@@ -29,7 +29,6 @@ const MovieButton = ({
   }, [movieId, user?.username, pressed, unpressedText]);
 
   const pressButton = (event) => {
-    // console.log("i am being pressed");
     try {
       setPressed(!pressed);
       onButtonPress(event);
@@ -39,7 +38,6 @@ const MovieButton = ({
   };
 
   const unpressButton = (event) => {
-    // console.log("i am being unpressed");
     try {
       setPressed(!pressed);
       onButtonUnpress(event);
@@ -55,8 +53,15 @@ const MovieButton = ({
       color={pressed ? "success" : "primary"}
       sx={{
         borderColor: "#BDAC4E",
-        "&:hover": { borderColor: "#BDAC4E" },
+        "&:hover": {
+          borderColor: "#BDAC4E",
+          backgroundColor: pressed ? "#BDAC4E" : "primary",
+        },
+        backgroundColor: pressed ? "#BDAC4E" : "primary",
         borderWidth: 2,
+        fontSize: 11,
+        paddingLeft: 2,
+        paddingRight: 2,
         color: "white",
         marginRight: 1.5,
         boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",

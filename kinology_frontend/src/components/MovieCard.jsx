@@ -95,7 +95,7 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
           />
           <MovieButton
             unpressedText={"Seen"}
-            pressedText={"Remove from seen"}
+            pressedText={"Unsee"}
             onButtonPress={(e) => buttonPress(e, "watched")}
             onButtonUnpress={(e) => buttonUnpress(e, "watched")}
             movieId={movie.id}
