@@ -4,7 +4,6 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import {
   object,
   string,
-  minLength,
   array,
   literal,
   union,
@@ -18,9 +17,13 @@ import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import PaginationController from "./PaginationController";
 import genreOptions from "../data/genres";
-
-import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
+import Modal from "@mui/joy/Modal";
+import ModalClose from "@mui/joy/ModalClose";
+import Sheet from "@mui/joy/Sheet";
+import { Typography } from "@mui/material";
+import Stack from "@mui/joy/Stack";
+import { TextFieldElement, SliderElement } from "react-hook-form-mui";
 import moviesService from "../services/movies";
 
 const components = {
@@ -32,7 +35,61 @@ const createOption = (label) => ({
   value: label,
 });
 
-// TODO = find a way to style the errors better
+const textInputStyle = {
+  label: { color: "#0A6847" },
+  input: {
+    color: "#0A6847",
+  },
+  "& label.Mui-focused": {
+    color: "#0A6847",
+  },
+  "& label.Mui-error": {
+    fontWeight: "bold",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "yellow",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#397453",
+    },
+    "&:hover fieldset": {
+      borderColor: "#609b76",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#bdac4e",
+    },
+    "&.Mui-error fieldset": {
+      borderWidth: 2,
+    },
+  },
+};
+
+const reactSelectStyles = {
+  control: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+    ...styles,
+    backgroundColor: "inherit",
+    // borderColor: state.isFocused ? "#bdac4e" : "#397453",
+    borderColor: isFocused ? "#bdac4e" : "#0A6847",
+    borderWidth: isFocused ? "2px" : "1px",
+    boxShadow: "60px teal",
+    borderRadius: 0,
+    padding: "0.6em 0em",
+    "&:hover": {
+      borderColor: "#609b76",
+    },
+  }),
+  placeholder: (styles) => ({
+    ...styles,
+    color: "#0A6847",
+    fontWeight: 400,
+  }),
+  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+  option: (styles) => ({
+    ...styles,
+    color: "#0A6847",
+  }),
+};
 
 const searchQuerySchema = object({
   genresSelect: optional(
@@ -53,11 +110,11 @@ const searchQuerySchema = object({
     ]),
     literal(""),
   ]),
-  ratingUpper: string("Rating should be a string", [
+  ratingUpper: number("Rating should be a number", [
     minValue(0, "Rating can not be lower than 0"),
     maxValue(10, "Rating can not be higher than 10"),
   ]),
-  ratingLower: string("Rating should be a string", [
+  ratingLower: number("Rating should be a number", [
     minValue(0, "Rating can not be lower than 0"),
     maxValue(11, "Rating can not be higher than 10"),
   ]),
@@ -73,19 +130,25 @@ const SearchBar = ({ setMovies }) => {
   const [firstSearchData, setFirstSearchData] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(-1);
+  const [open, setOpen] = useState(false);
 
   const {
-    register,
     handleSubmit,
     control,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     reset,
-    formState: { errors, isSubmitting },
   } = useForm({
     resolver: valibotResolver(searchQuerySchema),
-    // defaultValues: { ratingLower: 0, ratingUpper: 10, genresSelect: [] },
+    defaultValues: {
+      genresSelect: [],
+      director: "",
+      year: "",
+      ratingLower: 0,
+      ratingUpper: 10,
+      country: "",
+    },
   });
 
-  console.log(errors);
   const searchForMovies = async (data, pageValue) => {
     // TODO - refactor this: create a function that parses the data into suitable shape
     const actorsQuery = actors.map((actor) => actor.value);
@@ -106,10 +169,9 @@ const SearchBar = ({ setMovies }) => {
         country,
         page: pageValue,
       });
-    // console.log(movies);
-    // console.log("page number in searchbar", totalPageNumber);
     setTotalPages(totalPageNumber);
     setMovies(movies);
+    setOpen(false);
   };
 
   const handleKeyDown = (event) => {
@@ -133,121 +195,157 @@ const SearchBar = ({ setMovies }) => {
 
   return (
     <div>
-      <form
-        onSubmit={handleSubmit((data) => searchForMovies(data, 1))}
-        className="searchBar"
+      <Button
+        variant="contained"
+        onClick={() => setOpen(true)}
+        sx={{
+          backgroundColor: "#609b76",
+          "&:hover": { backgroundColor: "#00532f" },
+          marginBottom: 1,
+        }}
       >
-        <div className="genres">
-          <Controller
-            name="genresSelect"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    borderWidth: 0,
-                    borderRadius: 10,
-                  }),
-                }}
-                options={genreOptions}
-                isMulti
-                placeholder="Select genres"
+        Open Search
+      </Button>
+      <Modal
+        aria-labelledby="modal-title"
+        aria-describedby="modal-desc"
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <Sheet
+          variant="outlined"
+          sx={{
+            width: 650,
+            borderRadius: "md",
+            p: 3,
+            boxShadow: "lg",
+            bgcolor: "#F6E9B2",
+          }}
+        >
+          <ModalClose variant="plain" sx={{ marginLeft: 1 }} />
+          <form onSubmit={handleSubmit((data) => searchForMovies(data, 1))}>
+            <Stack spacing={1} sx={{ padding: "1em" }}>
+              <div>
+                <Controller
+                  name="genresSelect"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      styles={reactSelectStyles}
+                      options={genreOptions}
+                      menuPortalTarget={document.body}
+                      isMulti
+                      placeholder="Select genres"
+                    />
+                  )}
+                />
+              </div>
+              {errors.genresSelect?.message ?? (
+                <p className="validation-error">
+                  {errors.genresSelect?.message}
+                </p>
+              )}
+
+              <TextFieldElement
+                name={"director"}
+                label={"Director"}
+                fullWidth
+                control={control}
+                margin={"dense"}
+                InputProps={{ sx: { borderRadius: 0 } }}
+                sx={textInputStyle}
               />
-            )}
-          />
-        </div>
-        {errors.genresSelect?.message ?? (
-          <p className="validation-error">{errors.genresSelect?.message}</p>
-        )}
-        <div className="director">
-          <p>director</p>
-          <input
-            {...register("director")}
-            type="text"
-            className="bar-input"
-            placeholder="director"
-          />
-        </div>
-        {errors.director?.message ?? <p>{errors.director?.message}</p>}
-        <div className="year">
-          <p>year</p>
-          <input
-            {...register("year")}
-            className="bar-input"
-            placeholder="year"
-          />
-        </div>
-        {errors.year?.message ?? <p>{errors.year?.message}</p>}
-        <div className="rating">
-          <p>Rating range</p>
-          <input
-            {...register("ratingLower")}
-            placeholder="Lower threshold"
-            type="number"
-            min={0}
-            max={10}
-            defaultValue={0}
-            className="bar-input"
-          />
-          <input
-            {...register("ratingUpper")}
-            placeholder="Upper threshold"
-            type="number"
-            min={0}
-            max={10}
-            defaultValue={10}
-            className="bar-input"
-          />
-        </div>
-        {errors.ratingLower?.message ?? <p>{errors.ratingLower?.message}</p>}
-        {errors.ratingUpper?.message ?? <p>{errors.ratingUpper?.message}</p>}
-        <div className="actors" data-testid="actor-input">
-          <Controller
-            name="actorsSelect"
-            control={control}
-            render={({ field }) => (
-              <CreatableSelect
-                {...field}
-                components={components}
-                options={genreOptions}
-                inputValue={actor}
-                isMulti
-                isClearable
-                menuIsOpen={false}
-                placeholder="Type in actor and press enter"
-                onChange={(newActor) => setActors(newActor)}
-                onInputChange={(newActor) => setActor(newActor)}
-                onKeyDown={handleKeyDown}
-                value={actors}
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    borderWidth: 0,
-                  }),
+              <div>
+                <TextFieldElement
+                  name={"year"}
+                  label={"Year"}
+                  fullWidth
+                  control={control}
+                  margin={"dense"}
+                  InputProps={{ sx: { borderRadius: 0 } }}
+                  sx={textInputStyle}
+                />
+              </div>
+              <div>
+                <Typography sx={{ paddingBottom: "0.5em", color: "#0A6847" }}>
+                  Rating range
+                </Typography>
+                <SliderElement
+                  name="ratingLower"
+                  label="Lower threshold"
+                  control={control}
+                  sx={{
+                    color: "#609b76",
+                  }}
+                  max={10}
+                  min={0}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+                <SliderElement
+                  name="ratingUpper"
+                  label="Upper threshold"
+                  control={control}
+                  sx={{ color: "#609b76" }}
+                  max={10}
+                  min={0}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+              </div>
+              <div data-testid="actor-input">
+                <Controller
+                  name="actorsSelect"
+                  control={control}
+                  render={({ field }) => (
+                    <CreatableSelect
+                      {...field}
+                      components={components}
+                      options={genreOptions}
+                      inputValue={actor}
+                      isMulti
+                      isClearable
+                      menuIsOpen={false}
+                      placeholder="Type in actor and press enter"
+                      onChange={(newActor) => setActors(newActor)}
+                      onInputChange={(newActor) => setActor(newActor)}
+                      onKeyDown={handleKeyDown}
+                      value={actors}
+                      styles={reactSelectStyles}
+                    />
+                  )}
+                />
+              </div>
+              <div>
+                <TextFieldElement
+                  name={"country"}
+                  fullWidth
+                  label={"Country"}
+                  InputProps={{ sx: { borderRadius: 0 } }}
+                  control={control}
+                  sx={textInputStyle}
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                aria-label="Search for movies"
+                variant="contained"
+                size="small"
+                sx={{
+                  backgroundColor: "#609b76",
+                  "&:hover": { backgroundColor: "#00532f" },
+                  marginBottom: 1,
                 }}
-              />
-            )}
-          />
-        </div>
-        <div className="country">
-          <p>country</p>
-          <input
-            {...register("country")}
-            className="bar-input"
-            placeholder="country"
-          />
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            aria-label="Search for movies"
-          >
-            <SearchIcon />
-          </button>
-        </div>
-        {errors.country?.message ?? <p>{errors.country?.message}</p>}
-      </form>
+              >
+                {isSubmitting ? "Searching..." : "Search"}
+              </Button>
+            </Stack>
+          </form>
+        </Sheet>
+      </Modal>
       <Button
         onClick={handleNewSearch}
         variant="contained"

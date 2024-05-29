@@ -100,11 +100,6 @@ const textInputStyle = {
   },
 };
 
-const sliderStyle = {
-  color: "#609b76",
-  label: { color: "red" },
-};
-
 const reactSelectStyles = {
   control: (styles, { data, isDisabled, isFocused, isSelected }) => ({
     ...styles,
@@ -196,7 +191,7 @@ const Test = () => {
         <Sheet
           variant="outlined"
           sx={{
-            maxWidth: 500,
+            width: 650,
             borderRadius: "md",
             p: 3,
             boxShadow: "lg",
