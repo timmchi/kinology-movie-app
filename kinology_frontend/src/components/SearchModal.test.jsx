@@ -1,12 +1,12 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import SearchBar from "./SearchBar";
+import SearchModal from "./SearchModal";
 import { afterEach, describe, expect, test } from "vitest";
 
 const setMovies = vi.fn();
 
 test("renders SearchBar properly", () => {
-  render(<SearchBar setMovies={setMovies} />);
+  render(<SearchModal setMovies={setMovies} />);
 
   const genres = screen.getByText("Select genres");
   const director = screen.getByPlaceholderText("director");

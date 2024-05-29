@@ -52,7 +52,7 @@ a:hover {
 .cardsContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  padding-left: 4.5em;
+  padding-left: 3.5em;
   margin-top: 2em;
 }
 

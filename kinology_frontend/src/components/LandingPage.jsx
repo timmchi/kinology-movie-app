@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SearchBar from "./SearchBar";
+import SearchModal from "./SearchModal";
 import MovieList from "./MovieList";
 import Hero from "./Hero";
 
@@ -10,7 +10,7 @@ const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
     <>
       <Hero />
       <div id="search-function">
-        <SearchBar setMovies={setMovies} />
+        <SearchModal setMovies={setMovies} />
 
         <MovieList
           movies={movies}
