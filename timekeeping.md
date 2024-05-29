@@ -57,6 +57,11 @@
 | 28.5 | 1     | Styling comment form                                                     |
 | 28.5 | 1     | Styling user update form                                                 |
 | 28.5 | 2.5   | Work on changing search bar to search modal                              |
+| 29.5 | 1     | Search modal implementation                                              |
+| 29.5 | 1.25  | Search button, pagination, grid styling                                  |
+| 29.5 | 1.25  | Search modal, search functions refactoring                               |
+| 29.5 | 1     | Frontend service refactoring, bug fixing                                 |
+| 29.5 | 0.5   | Miscellaneous styling                                                    |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -71,9 +76,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 108   |                                                                          |
+| tot  | 113   |                                                                          |
