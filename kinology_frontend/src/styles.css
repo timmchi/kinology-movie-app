@@ -23,37 +23,6 @@ a:hover {
   cursor: pointer;
 }
 
-.nav {
-  background-color: #549a71;
-  color: #f7e382;
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 2rem;
-  padding: 0 1rem;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 2;
-}
-
-.nav ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-}
-
-.nav a {
-  color: inherit;
-  text-decoration: none;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0.25rem;
-}
-
 .site-title {
   color: #f7e382;
   font-size: 2rem;
@@ -68,22 +37,6 @@ a:hover {
   background-color: #438761;
 }
 
-.country {
-  position: relative;
-}
-.country button {
-  position: absolute;
-  top: 50%;
-  right: 1em;
-  transform: translateY(-50%);
-  font-size: 0.8rem;
-  padding: 0.6rem;
-  border-radius: 50%;
-  border-width: 0;
-  background: #549a71;
-  color: white;
-}
-
 #search-function {
   height: 100vh;
   padding-top: 4em;
@@ -92,11 +45,6 @@ a:hover {
 
 .resetSearch {
   margin: 2em;
-}
-
-.listContainer {
-  padding: 2em 9%;
-  padding-bottom: 100px;
 }
 
 .movieListHeading {
@@ -110,6 +58,12 @@ a:hover {
 .cardsContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* margin-top: 2em;
+  margin-left: 5em;
+  margin-right: 1em; */
+  padding-left: 8em;
+  margin-right: 2em;
+  margin-top: 2em;
 }
 
 .outerMovieContainer {
