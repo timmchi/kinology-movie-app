@@ -194,14 +194,15 @@ const SearchBar = ({ setMovies }) => {
   };
 
   return (
-    <div>
+    <div className="searchPage">
       <Button
         variant="contained"
         onClick={() => setOpen(true)}
         sx={{
           backgroundColor: "#609b76",
           "&:hover": { backgroundColor: "#00532f" },
-          marginBottom: 1,
+          marginLeft: "1.15em",
+          marginRight: "1.15em",
         }}
       >
         Open Search
@@ -356,7 +357,7 @@ const SearchBar = ({ setMovies }) => {
           "&:hover": { backgroundColor: "#BDAC4E" },
         }}
       >
-        new search
+        clear search
       </Button>
       <PaginationController
         pages={totalPages}
