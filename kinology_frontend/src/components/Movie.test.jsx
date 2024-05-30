@@ -51,15 +51,15 @@ vi.mock("../services/comments", async (importOriginal) => {
     ...actual,
     default: {
       ...actual.default,
-      getMovieComments: vi.fn().mockResolvedValue([]),
-      createMovieComment: vi.fn().mockResolvedValue({
+      getComments: vi.fn().mockResolvedValue([]),
+      createComment: vi.fn().mockResolvedValue({
         id: "1",
         content: "Great movie!",
         user: { username: "testUser", name: "Tester", id: 1 },
         movieId: "111",
       }),
-      deleteMovieComment: vi.fn().mockResolvedValue({}),
-      updateMovieComment: vi.fn().mockResolvedValue({
+      deleteComment: vi.fn().mockResolvedValue({}),
+      updatComment: vi.fn().mockResolvedValue({
         id: "1",
         content: "Updated comment",
         user: { username: "testUser" },
@@ -180,7 +180,7 @@ test("onButtonUnpress is called correct number of times and with correct paramet
   });
 });
 
-test("movie buttons are not rendered when there is not user", async () => {
+test("movie buttons are not rendered when there is no user", async () => {
   await act(async () =>
     render(
       <MemoryRouter initialEntries={[`/movies/111`]}>

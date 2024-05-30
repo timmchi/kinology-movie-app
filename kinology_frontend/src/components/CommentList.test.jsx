@@ -133,7 +133,7 @@ test("onEdit function is called properly with correct params", async () => {
 
   const user = userEvent.setup();
 
-  const editCommentInput = screen.getByPlaceholderText("comment");
+  const editCommentInput = document.getElementById(":r2:");
   await user.type(editCommentInput, "hello");
 
   const submitCommentButton = screen.getByText("Submit comment");

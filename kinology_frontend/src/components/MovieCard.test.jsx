@@ -141,7 +141,7 @@ test("calls onButtonPress with correct argumens when Seen button is pressed, the
   const seenButton = screen.getByText("Seen");
   await user.click(seenButton);
 
-  const unseeButton = screen.getByText("Remove from seen");
+  const unseeButton = screen.getByText("Unsee");
   await user.click(unseeButton);
 
   expect(mockPressHandler.mock.calls).toHaveLength(1);

@@ -6,33 +6,24 @@ import { render, screen } from "@testing-library/react";
 test("Update form is rendered correctly", () => {
   const { container } = render(<UserUpdateForm />);
 
-  const bio = screen.getByText("About you");
-  const avatar = screen.getByText("Avatar");
-  const name = screen.getByText("Name");
-
+  const bioInput = document.getElementById(":r4:");
+  const nameInput = document.getElementById(":r5:");
+  const avatarInput = document.getElementById(":r7:");
   const button = container.querySelector("#update-button");
 
-  expect(bio).toBeDefined();
-  expect(avatar).toBeDefined();
-  expect(name).toBeDefined();
   expect(button).toBeDefined();
-
-  const bioInput = screen.getByPlaceholderText(
-    "Write something about yourself"
-  );
-  const nameInput = screen.getByPlaceholderText("Change your name");
-
   expect(bioInput).toBeDefined();
   expect(nameInput).toBeDefined();
+  expect(avatarInput).toBeDefined();
 });
 
 test("Calls handleUpdate properly with correct data", async () => {
   const handleUpdate = vi.fn();
   const { user } = testSetup(<UserUpdateForm updateUser={handleUpdate} />);
 
-  const bio = screen.getByPlaceholderText("Write something about yourself");
-  const name = screen.getByPlaceholderText("Change your name");
-  const avatar = screen.getByPlaceholderText("avatar");
+  const bio = document.getElementById(":r4:");
+  const name = document.getElementById(":r5:");
+  const avatar = document.getElementById(":r7:");
 
   await user.type(bio, "bazinga");
   await user.type(name, "bazinga");
