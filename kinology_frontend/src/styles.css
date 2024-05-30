@@ -2,6 +2,14 @@ html {
   scroll-behavior: smooth;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #79c094 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -27,14 +35,6 @@ a:hover {
   color: #f7e382;
   font-size: 2rem;
   text-shadow: 4px 3px 2px rgba(13, 4, 2, 1);
-}
-
-.nav a.active {
-  background-color: #2f764f;
-}
-
-.nav li:hover {
-  background-color: #438761;
 }
 
 .resetSearch {

@@ -3,15 +3,20 @@ import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import CommentView from "./CommentView";
 import List from "@mui/material/List";
+import { Typography } from "@mui/material";
 
 const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
   console.log(comments);
-  if (!comments || comments.length === 0) return "no comments yet...";
+  if (!comments || comments.length === 0)
+    return (
+      <Typography variant="h5" sx={{ paddingTop: 2 }}>
+        No comments yet...
+      </Typography>
+    );
 
   const editCommentRef = useRef();
 
   const editComment = (content, commentId, authorId) => {
-    // console.log("authorId in editComment in CommentList");
     editCommentRef.current.toggleVisibility();
     onEdit(commentId, content, authorId);
   };
