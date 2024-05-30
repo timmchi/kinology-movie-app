@@ -157,7 +157,6 @@ const User = ({ currentUser, removeUser }) => {
     }
   };
 
-  // HERE I THINK
   const updateComment = async (commentId, comment, authorId) => {
     try {
       const updatedComment = await commentsService.updateComment(
