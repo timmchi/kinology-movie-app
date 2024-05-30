@@ -143,14 +143,23 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
     });
   };
 
+  console.log(movie);
   return (
     <div className="outerMovieContainer">
       <div className="moviePage">
         <div className="singleMovieContainer">
           <div className="singleMovieImage">
             <img
-              src={`${basePosterUrl}${movie?.image}`}
-              alt={`${movie.title} poster`}
+              src={
+                movie.image
+                  ? `${basePosterUrl}${movie?.image}`
+                  : "../../posterPlaceholder.png"
+              }
+              alt={
+                movie.image
+                  ? `${movie.title} poster`
+                  : "Icon made by Freepik from www.flaticon.com"
+              }
               width="400"
               className="movieImageElement"
             ></img>

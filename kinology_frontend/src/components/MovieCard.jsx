@@ -47,8 +47,16 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
             sx={{ objectFit: "contain" }}
           >
             <img
-              src={`${basePosterUrl}${movie.image}`}
-              alt={`${movie.title} poster`}
+              src={
+                movie.image
+                  ? `${basePosterUrl}${movie.image}`
+                  : "../../posterPlaceholder.png"
+              }
+              alt={
+                movie.image
+                  ? `${movie.title}`
+                  : `${movie.title} poster Icon made by Freepik from www.flaticon.com`
+              }
               onLoad={() => setImageLoaded(true)}
               height="375"
             />

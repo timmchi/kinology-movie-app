@@ -34,9 +34,11 @@ const Navigation = (props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }} className="site-title">
-        Kinology
-      </Typography>
+      <Link to="/" className="site-title">
+        <Typography variant="h6" sx={{ my: 2 }} className="site-title">
+          Kinology
+        </Typography>
+      </Link>
       <Divider />
       <List>
         <ListItem disablePadding>
