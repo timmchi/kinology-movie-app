@@ -118,7 +118,7 @@ const User = ({ currentUser, removeUser }) => {
   const commentCreateForm = () => {
     return (
       <Togglable buttonLabel="leave a comment" ref={commentFormRef}>
-        <CommentForm commentAction={createComment} />
+        <CommentForm commentAction={createComment} label={"Your comment"} />
       </Togglable>
     );
   };

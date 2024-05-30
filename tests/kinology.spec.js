@@ -222,6 +222,8 @@ describe("Kinology", () => {
         beforeEach(async ({ page }) => {
           await clickButton(page, "search");
 
+          await clickButton(page, "Open Search");
+
           const genresSelector = page
             .locator("div")
             .filter({ hasText: /^Select genres$/ })
@@ -232,19 +234,45 @@ describe("Kinology", () => {
           const crimeGenre = page.getByText("Crime");
           await crimeGenre.click();
 
-          const directorInput = page.getByPlaceholder("director");
+          const directorInput = page.getByLabel("Director");
           await directorInput.fill("Scorsese");
 
-          const yearInput = page.getByPlaceholder("year");
+          const yearInput = page.getByLabel("Year");
           await yearInput.fill("1995");
 
-          const lowerRatingInput = page.getByPlaceholder("Lower threshold");
-          await lowerRatingInput.fill("7");
+          const lowerRatingInput = page
+            .locator("span")
+            .filter({ hasText: /^0$/ })
+            .first();
 
-          const higherRatingInput = page.getByPlaceholder("Upper threshold");
-          await higherRatingInput.fill("9");
+          const lowerRatingInputOffsetWidth = await lowerRatingInput.evaluate(
+            (e) => {
+              return e.getBoundingClientRect().width;
+            }
+          );
 
-          const countryInput = page.getByPlaceholder("country");
+          await lowerRatingInput.click({
+            force: true,
+            position: { x: lowerRatingInputOffsetWidth / 1.5, y: 0 },
+          });
+
+          const higherRatingInput = page
+            .locator("span")
+            .filter({ hasText: "10" })
+            .first();
+
+          const higherRatingInputOffsetWidth = await higherRatingInput.evaluate(
+            (e) => {
+              return e.getBoundingClientRect().width;
+            }
+          );
+
+          await higherRatingInput.click({
+            force: true,
+            position: { x: higherRatingInputOffsetWidth, y: 0 },
+          });
+
+          const countryInput = page.getByLabel("Country");
           await countryInput.fill("United States of America");
 
           const searchMoviesButton = page.getByLabel("Search for movies");
@@ -270,11 +298,9 @@ describe("Kinology", () => {
         test("comment form can be opened", async ({ page }) => {
           await openCommentForm(page);
 
-          const commentInput = page.getByPlaceholder("comment");
-          const commentInputText = page.getByText("Your comment");
+          const commentInput = page.getByLabel("Your comment");
 
           await expect(commentInput).toBeVisible();
-          await expect(commentInputText).toBeVisible();
 
           await buttonIsVisible(page, "Submit comment");
           await buttonIsVisible(page, "cancel");
@@ -283,8 +309,7 @@ describe("Kinology", () => {
         test("comment form can be closed", async ({ page }) => {
           await openCommentForm(page);
 
-          const commentInput = page.getByPlaceholder("comment");
-          const commentInputText = page.getByText("Your comment");
+          const commentInput = page.getByLabel("Your comment");
 
           await clickButton(page, "cancel");
 
@@ -292,7 +317,6 @@ describe("Kinology", () => {
           await buttonIsVisible(page, "cancel", true);
 
           await expect(commentInput).not.toBeVisible();
-          await expect(commentInputText).not.toBeVisible();
         });
 
         test("user can leave a comment on his profile", async ({ page }) => {
@@ -585,10 +609,7 @@ describe("Kinology", () => {
           test("comment author can edit their comment", async ({ page }) => {
             await clickButton(page, "edit comment");
 
-            const editCommentInput = page
-              .locator("ul")
-              .filter({ hasText: "MMr TesterI love this" })
-              .getByPlaceholder("comment");
+            const editCommentInput = page.getByLabel("Edit your comment");
 
             const submitEditButton = page
               .locator("ul")
@@ -696,7 +717,6 @@ describe("Kinology", () => {
             // going to current users profile and leaving a comment there
             await visitUserPage(page, "Ms Toster");
 
-            // await openCommentButton.click();
             await openCommentForm(page);
 
             await postComment(page, "This is my own profile");
@@ -770,43 +790,87 @@ describe("Kinology", () => {
   });
 
   describe("Searching for movies", () => {
-    test("search bar is not immediately in the viewport", async ({ page }) => {
-      const searchForm = page.getByText(
-        "Select genresdirectoryearRating rangeType in actor and press entercountry"
-      );
-      await expect(searchForm).not.toBeInViewport();
-
-      await clickButton(page, "search");
-
-      await expect(searchForm).toBeInViewport();
-
-      const newSearchButton = page.getByRole("button", { name: "new search" });
-
-      await expect(newSearchButton).toBeInViewport();
-    });
-
-    test("search bar is moved into viewport by pressing 'search' cta", async ({
+    test("search button is not immediately in the viewport", async ({
       page,
     }) => {
-      const searchForm = page.getByText(
-        "Select genresdirectoryearRating rangeType in actor and press entercountry"
-      );
+      const searchButton = page.getByRole("button", { name: "Open Search" });
+
+      await expect(searchButton).not.toBeInViewport();
 
       await clickButton(page, "search");
 
-      await expect(searchForm).toBeInViewport();
+      await expect(searchButton).toBeInViewport();
 
-      const newSearchButton = page.getByRole("button", { name: "new search" });
+      const clearSearchButton = page.getByRole("button", {
+        name: "clear search",
+      });
 
-      await expect(newSearchButton).toBeInViewport();
+      await expect(clearSearchButton).toBeInViewport();
     });
 
-    describe("search bar is in viewport", () => {
+    test("search button is moved into viewport by pressing 'search' cta", async ({
+      page,
+    }) => {
+      const searchButton = page.getByRole("button", { name: "Open Search" });
+
+      await clickButton(page, "search");
+
+      await expect(searchButton).toBeInViewport();
+
+      const clearSearchButton = page.getByRole("button", {
+        name: "clear search",
+      });
+
+      await expect(clearSearchButton).toBeInViewport();
+    });
+
+    describe("search button is in viewport", () => {
       beforeEach(async ({ page }) => {
         await clickButton(page, "search");
       });
 
+      test("search modal can be opened", async ({ page }) => {
+        const searchButton = page.getByRole("button", { name: "Open Search" });
+        await searchButton.click();
+
+        const genresSelector = page
+          .locator("div")
+          .filter({ hasText: /^Select genres$/ })
+          .nth(2);
+
+        const directorInput = page.getByLabel("Director");
+
+        const yearInput = page.getByLabel("Year");
+
+        const lowerRatingInput = page
+          .locator("span")
+          .filter({ hasText: /^0$/ })
+          .first();
+
+        const higherRatingInput = page
+          .locator("span")
+          .filter({ hasText: "10" })
+          .first();
+
+        const countryInput = page.getByLabel("Country");
+
+        const searchMoviesButton = page.getByLabel("Search for movies");
+
+        await expect(genresSelector).toBeVisible();
+        await expect(directorInput).toBeVisible();
+        await expect(yearInput).toBeVisible();
+        await expect(lowerRatingInput).toBeVisible();
+        await expect(higherRatingInput).toBeVisible();
+        await expect(countryInput).toBeVisible();
+        await expect(searchMoviesButton).toBeVisible();
+      });
+
       test("empty search returns movie cards", async ({ page }) => {
+        const openSearchButton = page.getByRole("button", {
+          name: "Open Search",
+        });
+        await openSearchButton.click();
+
         const searchMoviesButton = page.getByLabel("Search for movies");
         await searchMoviesButton.click();
 
@@ -824,6 +888,11 @@ describe("Kinology", () => {
 
       describe("and an empty search was done", () => {
         beforeEach(async ({ page }) => {
+          const openSearchButton = page.getByRole("button", {
+            name: "Open Search",
+          });
+          await openSearchButton.click();
+
           const searchMoviesButton = page.getByLabel("Search for movies");
           await searchMoviesButton.click();
         });
@@ -848,6 +917,11 @@ describe("Kinology", () => {
       test("search fields can be filled and a search with them can be made", async ({
         page,
       }) => {
+        const openSearchButton = page.getByRole("button", {
+          name: "Open Search",
+        });
+        await openSearchButton.click();
+
         const genresSelector = page
           .locator("div")
           .filter({ hasText: /^Select genres$/ })
@@ -858,19 +932,45 @@ describe("Kinology", () => {
         const crimeGenre = page.getByText("Crime");
         await crimeGenre.click();
 
-        const directorInput = page.getByPlaceholder("director");
+        const directorInput = page.getByLabel("Director");
         await directorInput.fill("Scorsese");
 
-        const yearInput = page.getByPlaceholder("year");
+        const yearInput = page.getByLabel("Year");
         await yearInput.fill("1995");
 
-        const lowerRatingInput = page.getByPlaceholder("Lower threshold");
-        await lowerRatingInput.fill("7");
+        const lowerRatingInput = page
+          .locator("span")
+          .filter({ hasText: /^0$/ })
+          .first();
 
-        const higherRatingInput = page.getByPlaceholder("Upper threshold");
-        await higherRatingInput.fill("9");
+        const lowerRatingInputOffsetWidth = await lowerRatingInput.evaluate(
+          (e) => {
+            return e.getBoundingClientRect().width;
+          }
+        );
 
-        const countryInput = page.getByPlaceholder("country");
+        await lowerRatingInput.click({
+          force: true,
+          position: { x: lowerRatingInputOffsetWidth / 1.5, y: 0 },
+        });
+
+        const higherRatingInput = page
+          .locator("span")
+          .filter({ hasText: "10" })
+          .first();
+
+        const higherRatingInputOffsetWidth = await higherRatingInput.evaluate(
+          (e) => {
+            return e.getBoundingClientRect().width;
+          }
+        );
+
+        await higherRatingInput.click({
+          force: true,
+          position: { x: higherRatingInputOffsetWidth, y: 0 },
+        });
+
+        const countryInput = page.getByLabel("Country");
         await countryInput.fill("United States of America");
 
         const searchMoviesButton = page.getByLabel("Search for movies");
@@ -882,6 +982,11 @@ describe("Kinology", () => {
 
       describe("and a movie 'Casino' was found", () => {
         beforeEach(async ({ page }) => {
+          const openSearchButton = page.getByRole("button", {
+            name: "Open Search",
+          });
+          await openSearchButton.click();
+
           const genresSelector = page
             .locator("div")
             .filter({ hasText: /^Select genres$/ })
@@ -892,19 +997,45 @@ describe("Kinology", () => {
           const crimeGenre = page.getByText("Crime");
           await crimeGenre.click();
 
-          const directorInput = page.getByPlaceholder("director");
+          const directorInput = page.getByLabel("Director");
           await directorInput.fill("Scorsese");
 
-          const yearInput = page.getByPlaceholder("year");
+          const yearInput = page.getByLabel("Year");
           await yearInput.fill("1995");
 
-          const lowerRatingInput = page.getByPlaceholder("Lower threshold");
-          await lowerRatingInput.fill("7");
+          const lowerRatingInput = page
+            .locator("span")
+            .filter({ hasText: /^0$/ })
+            .first();
 
-          const higherRatingInput = page.getByPlaceholder("Upper threshold");
-          await higherRatingInput.fill("9");
+          const lowerRatingInputOffsetWidth = await lowerRatingInput.evaluate(
+            (e) => {
+              return e.getBoundingClientRect().width;
+            }
+          );
 
-          const countryInput = page.getByPlaceholder("country");
+          await lowerRatingInput.click({
+            force: true,
+            position: { x: lowerRatingInputOffsetWidth / 1.5, y: 0 },
+          });
+
+          const higherRatingInput = page
+            .locator("span")
+            .filter({ hasText: "10" })
+            .first();
+
+          const higherRatingInputOffsetWidth = await higherRatingInput.evaluate(
+            (e) => {
+              return e.getBoundingClientRect().width;
+            }
+          );
+
+          await higherRatingInput.click({
+            force: true,
+            position: { x: higherRatingInputOffsetWidth, y: 0 },
+          });
+
+          const countryInput = page.getByLabel("Country");
           await countryInput.fill("United States of America");
 
           const searchMoviesButton = page.getByLabel("Search for movies");
@@ -929,7 +1060,7 @@ describe("Kinology", () => {
         test("new search button clears search results and resets the form", async ({
           page,
         }) => {
-          await clickButton(page, "new search");
+          await clickButton(page, "clear search");
 
           await expect(page.getByText("Casino")).not.toBeVisible();
           await expect(page.getByText("1")).not.toBeVisible();

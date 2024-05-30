@@ -12,7 +12,7 @@ const CommentSchema = object({
   ]),
 });
 
-const CommentForm = ({ commentAction, commentId, authorId }) => {
+const CommentForm = ({ commentAction, commentId, authorId, label }) => {
   //   const [content, setContent] = useState("");
   const {
     register,
@@ -43,7 +43,8 @@ const CommentForm = ({ commentAction, commentId, authorId }) => {
       <Stack spacing={1} sx={{ paddingBottom: 1, display: "inline-flex" }}>
         <TextFieldElement
           name={"content"}
-          label={"Your comment"}
+          //   label={"Your comment"}
+          label={label}
           fullWidth
           control={control}
           margin={"dense"}

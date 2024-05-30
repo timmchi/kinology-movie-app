@@ -118,6 +118,11 @@ a:hover {
   color: "red";
 }
 
+.hero {
+  height: 100vh;
+  width: 100%;
+}
+
 /* .hero {
   height: 100vh;
   width: 100%;

@@ -33,7 +33,7 @@ const registerWith = async (
 };
 
 const postComment = async (page, content) => {
-  const commentInput = page.getByPlaceholder("comment");
+  const commentInput = page.getByLabel("Your comment");
   const submitCommentButton = page.getByRole("button", {
     name: "Submit comment",
   });

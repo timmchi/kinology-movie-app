@@ -23,6 +23,7 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
           commentAction={editComment}
           commentId={commentId}
           authorId={authorId}
+          label={"Edit your comment"}
         />
       </Togglable>
     );
