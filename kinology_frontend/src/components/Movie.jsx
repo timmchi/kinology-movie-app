@@ -4,6 +4,7 @@ import { useNotificationDispatch } from "../contexts/NotificationContext";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import MovieButton from "./MovieButton";
+import GenreList from "./GenreList";
 import moviesService from "../services/movies";
 import commentsService from "../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
@@ -171,11 +172,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
               <i>{movie.slogan}</i>
             </p>
             <p style={{ maxWidth: "800px" }}>{movie.overview}</p>
-            <ul>
-              {movie?.genres?.map((genre) => (
-                <li key={genre.id}>{genre.name}</li>
-              ))}
-            </ul>
+            <GenreList genres={movie?.genres} />
             <p>{movie.rating} rating</p>
             <p> released {movie.release}</p>
             <p>{movie.runtime} minutes</p>
