@@ -65,15 +65,15 @@
 | 30.5 | 2     | Fixing e2e and unit tests                                                |
 | 30.5 | 1     | Making user and movie pages responsive                                   |
 | 30.5 | 0.5   | Poster placeholder, autofill style                                       |
+| 31.5 | 0.5   | Separate component for movie lists in user profile                       |
+| 31.5 | 0.5   | Comment form refactoring to use submitbutton component                   |
+| 31.5 | 1     | Prop types for all components                                            |
+| 31.5 | 0.5   | User list styling                                                        |
+| 31.5 | 1.5   | New hero section                                                         |
+| 31.5 | 1     | Responsive hero section                                                  |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 116.5 |                                                                          |
+| tot  | 121.5 |                                                                          |
