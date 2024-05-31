@@ -45,8 +45,9 @@ const UserSingleListView = ({ user }) => {
         primaryTypographyProps={{
           style: {
             color: "#bdac4e",
-            textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 0.7)",
+            textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 0.8)",
             fontSize: 18,
+            fontWeight: "bold",
           },
         }}
         secondaryTypographyProps={{
