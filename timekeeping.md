@@ -63,7 +63,7 @@
 | 29.5 | 1     | Frontend service refactoring, bug fixing                                 |
 | 29.5 | 0.5   | Miscellaneous styling                                                    |
 | 30.5 | 2     | Fixing e2e and unit tests                                                |
-| 30.5 | 1     | Making user and moviepages responsive                                    |
+| 30.5 | 1     | Making user and movie pages responsive                                   |
 | 30.5 | 0.5   | Poster placeholder, autofill style                                       |
 |      |       |                                                                          |
 |      |       |                                                                          |

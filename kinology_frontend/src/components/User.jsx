@@ -6,7 +6,7 @@ import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
 import CommentList from "./CommentList";
-import MovieSmallCard from "./MovieSmallCard";
+import MovieProfileList from "./MovieProfileList";
 import usersService from "../services/users";
 import commentsService from "../services/comments";
 import { Button } from "@mui/material";
@@ -267,42 +267,28 @@ const User = ({ currentUser, removeUser }) => {
               className="movieList"
               style={{ display: watchLaterMovies.length === 0 ? "none" : "" }}
             >
-              <h3>Watch List</h3>
-              <div className="profileMovieContainer">
-                {watchLaterMovies?.map((movie) => (
-                  <div key={`${movie.id} later`} className="movieSmallCard">
-                    <MovieSmallCard movie={movie} />
-                  </div>
-                ))}
-              </div>
+              <MovieProfileList
+                movies={watchLaterMovies}
+                header={"Watch List"}
+              />
             </div>
             <div
               className="movieList"
               style={{ display: favoriteMovies.length === 0 ? "none" : "" }}
             >
-              <h3>Favorite movies</h3>
-              {/* 
-        good candidate for refactoring, along with MovieList and big movie card */}
-              <div className="profileMovieContainer">
-                {favoriteMovies?.map((movie) => (
-                  <div key={`${movie?.id} favorite`} className="movieSmallCard">
-                    <MovieSmallCard movie={movie} />
-                  </div>
-                ))}
-              </div>
+              <MovieProfileList
+                movies={favoriteMovies}
+                header={"Favorite movies"}
+              />
             </div>
             <div
               className="movieList"
               style={{ display: watchedMovies.length === 0 ? "none" : "" }}
             >
-              <h3>Already seen</h3>
-              <div className="profileMovieContainer">
-                {watchedMovies?.map((movie) => (
-                  <div key={`${movie.id} watched`} className="movieSmallCard">
-                    <MovieSmallCard movie={movie} />
-                  </div>
-                ))}
-              </div>
+              <MovieProfileList
+                movies={watchedMovies}
+                header={"Already seen"}
+              />
             </div>
           </div>
         </div>
