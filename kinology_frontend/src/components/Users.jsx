@@ -22,7 +22,7 @@ const Users = ({ users }) => {
         {users?.map((user) => (
           <div key={user.id}>
             <UserSingleListView user={user} />
-            <Divider variant="inset" component="li" />
+            {/* <Divider variant="inset" component="li" /> */}
           </div>
         ))}
       </List>

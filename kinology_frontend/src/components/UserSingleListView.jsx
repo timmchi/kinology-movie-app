@@ -25,6 +25,9 @@ const UserSingleListView = ({ user }) => {
         backgroundColor: "#79C094",
         color: "#fff",
         borderRadius: 10,
+        marginBottom: 1,
+        border: "3px solid #bdac4e",
+        boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
       }}
       component={Link}
       to={`/users/${user.id}`}
@@ -39,6 +42,19 @@ const UserSingleListView = ({ user }) => {
             ? user.biography
             : "We don't know much about them yet..."
         }
+        primaryTypographyProps={{
+          style: {
+            color: "#bdac4e",
+            textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 0.7)",
+            fontSize: 18,
+          },
+        }}
+        secondaryTypographyProps={{
+          style: {
+            color: "white",
+            textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 1)",
+          },
+        }}
       />
     </ListItem>
   );
