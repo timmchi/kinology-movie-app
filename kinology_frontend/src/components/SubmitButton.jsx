@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 
-const SearchButton = ({ isSubmitting, label, submittingText, normalText }) => {
+const SubmitButton = ({ isSubmitting, label, submittingText, normalText }) => {
   return (
     <Button
       type="submit"
@@ -19,4 +19,4 @@ const SearchButton = ({ isSubmitting, label, submittingText, normalText }) => {
   );
 };
 
-export default SearchButton;
+export default SubmitButton;

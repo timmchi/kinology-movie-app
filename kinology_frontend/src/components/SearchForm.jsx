@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 import genreOptions from "../data/genres";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import SearchButton from "./SearchButton";
+import SubmitButton from "./SubmitButton";
 import Slider from "./Slider";
 import InputField from "./InputField";
 import Stack from "@mui/joy/Stack";
@@ -110,7 +110,7 @@ const SearchForm = ({
         <div>
           <InputField name={"country"} label={"Country"} control={control} />
         </div>
-        <SearchButton
+        <SubmitButton
           isSubmitting={isSubmitting}
           label={"Search for movies"}
           submittingText={"Searching..."}
