@@ -26,6 +26,9 @@ const Hero = () => {
                     backgroundColor: "#00C9AB",
                     "&:hover": { backgroundColor: "#00755F" },
                     fontSize: 25,
+                    "@media (max-width: 780px)": {
+                      fontSize: 15,
+                    },
                   }}
                 >
                   <a href="#search-function">search</a>
@@ -45,6 +48,9 @@ const Hero = () => {
                     backgroundColor: "#00A660",
                     "&:hover": { backgroundColor: "#00532f" },
                     fontSize: 20,
+                    "@media (max-width: 780px)": {
+                      fontSize: 15,
+                    },
                   }}
                   onClick={() => navigate("/signup")}
                 >
