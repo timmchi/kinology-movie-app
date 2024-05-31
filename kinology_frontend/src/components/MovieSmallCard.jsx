@@ -2,6 +2,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
@@ -22,3 +23,7 @@ const MovieSmallCard = ({ movie }) => {
 };
 
 export default MovieSmallCard;
+
+MovieSmallCard.propTypes = {
+  movie: PropTypes.object.isRequired,
+};

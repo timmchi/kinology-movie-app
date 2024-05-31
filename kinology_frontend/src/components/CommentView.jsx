@@ -5,7 +5,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-
+import PropTypes from "prop-types";
 import usersService from "../services/users";
 
 const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
@@ -81,3 +81,10 @@ const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
 };
 
 export default CommentView;
+
+CommentView.propTypes = {
+  comment: PropTypes.object,
+  currentUser: PropTypes.object,
+  editForm: PropTypes.func,
+  onDelete: PropTypes.func,
+};

@@ -5,6 +5,7 @@ import { object, string, minLength } from "valibot";
 import SubmitButton from "./SubmitButton";
 import Stack from "@mui/joy/Stack";
 import { TextFieldElement } from "react-hook-form-mui";
+import PropTypes from "prop-types";
 
 const commentInputStyle = {
   bgcolor: "#79C094",
@@ -46,11 +47,10 @@ const CommentSchema = object({
 
 const CommentForm = ({ commentAction, commentId, authorId, label }) => {
   const {
-    register,
     handleSubmit,
     reset,
     control,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting, isSubmitSuccessful },
   } = useForm({
     resolver: valibotResolver(CommentSchema),
   });
@@ -94,3 +94,10 @@ const CommentForm = ({ commentAction, commentId, authorId, label }) => {
 };
 
 export default CommentForm;
+
+CommentForm.propTypes = {
+  commentAction: PropTypes.func,
+  commentId: PropTypes.string,
+  authorId: PropTypes.string,
+  label: PropTypes.string,
+};

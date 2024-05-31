@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import PropTypes from "prop-types";
 
 // outlined contained
 
@@ -74,3 +75,12 @@ const MovieButton = ({
 };
 
 export default MovieButton;
+
+MovieButton.propTypes = {
+  unpressedText: PropTypes.string.isRequired,
+  pressedText: PropTypes.string.isRequired,
+  onButtonPress: PropTypes.func.isRequired,
+  onButtonUnpress: PropTypes.func.isRequired,
+  movieId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  user: PropTypes.object,
+};

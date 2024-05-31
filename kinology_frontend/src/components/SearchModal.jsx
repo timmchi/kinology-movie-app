@@ -20,6 +20,7 @@ import ModalClose from "@mui/joy/ModalClose";
 import Sheet from "@mui/joy/Sheet";
 import SearchForm from "./SearchForm";
 import moviesService from "../services/movies";
+import PropTypes from "prop-types";
 
 const createOption = (label) => ({
   label,
@@ -93,7 +94,7 @@ const SearchModal = ({ setMovies }) => {
   const {
     handleSubmit,
     control,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting },
     reset,
   } = useForm({
     resolver: valibotResolver(searchQuerySchema),
@@ -203,3 +204,7 @@ const SearchModal = ({ setMovies }) => {
 };
 
 export default SearchModal;
+
+SearchModal.propTypes = {
+  setMovies: PropTypes.func.isRequired,
+};

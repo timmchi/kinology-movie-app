@@ -1,4 +1,5 @@
 import { SliderElement } from "react-hook-form-mui";
+import PropTypes from "prop-types";
 
 const Slider = ({ name, label, control }) => {
   return (
@@ -18,3 +19,9 @@ const Slider = ({ name, label, control }) => {
 };
 
 export default Slider;
+
+Slider.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  control: PropTypes.object.isRequired,
+};

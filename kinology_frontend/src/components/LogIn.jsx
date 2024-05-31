@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
+import PropTypes from "prop-types";
 
 const LoginSchema = object({
   username: string("Username must be a string.", [
@@ -158,3 +159,7 @@ const LogIn = ({ handleLogin }) => {
 };
 
 export default LogIn;
+
+LogIn.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+};

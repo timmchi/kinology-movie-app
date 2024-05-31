@@ -1,4 +1,5 @@
 import MovieCard from "./MovieCard";
+import PropTypes from "prop-types";
 
 const MovieList = ({ movies, onButtonPress, onButtonUnpress, user }) => {
   if (!movies) return <>no movies yet</>;
@@ -24,3 +25,10 @@ const MovieList = ({ movies, onButtonPress, onButtonUnpress, user }) => {
 };
 
 export default MovieList;
+
+MovieList.propTypes = {
+  movies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onButtonPress: PropTypes.func.isRequired,
+  onButtonUnpress: PropTypes.func.isRequired,
+  user: PropTypes.object,
+};

@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
+import PropTypes from "prop-types";
 
 const RegistrationSchema = object(
   {
@@ -223,3 +224,7 @@ const SignUpForm = ({ handleSignUp }) => {
 };
 
 export default SignUpForm;
+
+SignUpForm.propTypes = {
+  handleSignUp: PropTypes.func.isRequired,
+};

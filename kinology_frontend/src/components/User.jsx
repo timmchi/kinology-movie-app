@@ -10,6 +10,7 @@ import MovieProfileList from "./MovieProfileList";
 import usersService from "../services/users";
 import commentsService from "../services/comments";
 import { Button } from "@mui/material";
+import PropTypes from "prop-types";
 
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
@@ -310,3 +311,8 @@ const User = ({ currentUser, removeUser }) => {
 };
 
 export default User;
+
+User.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  removeUser: PropTypes.func.isRequired,
+};

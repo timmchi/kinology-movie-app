@@ -4,17 +4,17 @@ import CommentForm from "./CommentForm";
 import CommentView from "./CommentView";
 import List from "@mui/material/List";
 import { Typography } from "@mui/material";
+import PropTypes from "prop-types";
 
 const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
-  console.log(comments);
+  const editCommentRef = useRef();
+
   if (!comments || comments.length === 0)
     return (
       <Typography variant="h5" sx={{ paddingTop: 2 }}>
         No comments yet...
       </Typography>
     );
-
-  const editCommentRef = useRef();
 
   const editComment = (content, commentId, authorId) => {
     editCommentRef.current.toggleVisibility();
@@ -51,3 +51,10 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
 };
 
 export default CommentList;
+
+CommentList.propTypes = {
+  comments: PropTypes.arrayOf(PropTypes.object),
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
+  currentUser: PropTypes.object,
+};

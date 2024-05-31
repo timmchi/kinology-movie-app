@@ -1,5 +1,4 @@
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -7,12 +6,10 @@ import CardCover from "@mui/joy/CardCover";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
-
 import MovieButton from "./MovieButton";
+import PropTypes from "prop-types";
 
 const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   const buttonPress = (event, functionWord) => {
     onButtonPress(event, functionWord, {
       id: movie.id,
@@ -57,7 +54,6 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
                   ? `${movie.title}`
                   : `${movie.title} poster Icon made by Freepik from www.flaticon.com`
               }
-              onLoad={() => setImageLoaded(true)}
               height="375"
             />
           </CardMedia>
@@ -118,3 +114,10 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
 };
 
 export default MovieCard;
+
+MovieCard.propTypes = {
+  movie: PropTypes.object.isRequired,
+  onButtonPress: PropTypes.func.isRequired,
+  onButtonUnpress: PropTypes.func.isRequired,
+  user: PropTypes.object,
+};

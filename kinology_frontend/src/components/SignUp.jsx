@@ -1,13 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength, forward, custom, email } from "valibot";
 import { useNotificationDispatch } from "../contexts/NotificationContext";
 import signUpService from "../services/signup";
 import SignUpForm from "./SignUpForm";
+import PropTypes from "prop-types";
 
-const SignUp = ({ user, setUsers, users }) => {
+const SignUp = ({ setUsers, users }) => {
   const navigate = useNavigate();
   const dispatch = useNotificationDispatch();
 
@@ -50,3 +47,8 @@ const SignUp = ({ user, setUsers, users }) => {
 };
 
 export default SignUp;
+
+SignUp.propTypes = {
+  setUsers: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

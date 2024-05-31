@@ -1,6 +1,7 @@
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import UserSingleListView from "./UserSingleListView";
+import PropTypes from "prop-types";
 
 // TODO - fix the state so that on profile update user information in user list changes
 const Users = ({ users }) => {
@@ -30,3 +31,7 @@ const Users = ({ users }) => {
 };
 
 export default Users;
+
+Users.propTypes = {
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

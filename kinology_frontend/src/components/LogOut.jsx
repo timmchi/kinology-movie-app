@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import PropTypes from "prop-types";
 
 const LogOut = ({ handleLogout }) => {
   return (
@@ -23,3 +24,7 @@ const LogOut = ({ handleLogout }) => {
 };
 
 export default LogOut;
+
+LogOut.propTypes = {
+  handleLogout: PropTypes.func.isRequired,
+};

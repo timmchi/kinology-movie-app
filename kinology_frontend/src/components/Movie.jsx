@@ -7,6 +7,7 @@ import MovieButton from "./MovieButton";
 import moviesService from "../services/movies";
 import commentsService from "../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
+import PropTypes from "prop-types";
 
 const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
   let { id } = useParams();
@@ -226,3 +227,9 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
 };
 
 export default Movie;
+
+Movie.propTypes = {
+  onButtonPress: PropTypes.func,
+  onButtonUnpress: PropTypes.func,
+  user: PropTypes.object,
+};

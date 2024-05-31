@@ -1,5 +1,6 @@
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import PropTypes from "prop-types";
 
 const paginationStyles = {
   button: { color: "white" },
@@ -37,3 +38,10 @@ const PaginationController = ({ pages, page, setPage, pageChange }) => {
 };
 
 export default PaginationController;
+
+PaginationController.propTypes = {
+  pages: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  pageChange: PropTypes.func.isRequired,
+};

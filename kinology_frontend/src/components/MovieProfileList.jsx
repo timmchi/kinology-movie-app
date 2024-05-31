@@ -1,4 +1,5 @@
 import MovieSmallCard from "./MovieSmallCard";
+import PropTypes from "prop-types";
 
 const MovieProfileList = ({ movies, header }) => {
   const moviesList = movies;
@@ -18,3 +19,8 @@ const MovieProfileList = ({ movies, header }) => {
 };
 
 export default MovieProfileList;
+
+MovieProfileList.propTypes = {
+  movies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  header: PropTypes.string,
+};

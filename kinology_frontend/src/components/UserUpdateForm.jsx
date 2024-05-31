@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/joy/Stack";
 import { TextFieldElement } from "react-hook-form-mui";
 import { MuiFileInput } from "mui-file-input";
-
 import {
   object,
   string,
@@ -17,6 +16,7 @@ import {
   unknown,
 } from "valibot";
 import { Typography } from "@mui/material";
+import PropTypes from "prop-types";
 
 const UserUpdateSchema = object(
   {
@@ -38,10 +38,9 @@ const FileSchema = instance(File, [
 
 const UserUpdateForm = ({ updateUser }) => {
   const {
-    register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting, isSubmitSuccessful },
     reset,
   } = useForm({ resolver: valibotResolver(UserUpdateSchema) });
 
@@ -217,3 +216,7 @@ const UserUpdateForm = ({ updateUser }) => {
 };
 
 export default UserUpdateForm;
+
+UserUpdateForm.propTypes = {
+  updateUser: PropTypes.func.isRequired,
+};

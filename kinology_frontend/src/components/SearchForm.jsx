@@ -1,5 +1,4 @@
 import { Controller } from "react-hook-form";
-
 import genreOptions from "../data/genres";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
@@ -8,13 +7,14 @@ import Slider from "./Slider";
 import InputField from "./InputField";
 import Stack from "@mui/joy/Stack";
 import { Typography } from "@mui/material";
+import PropTypes from "prop-types";
 
 const components = {
   DropdownIndicator: null,
 };
 
 const reactSelectStyles = {
-  control: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+  control: (styles, { isFocused }) => ({
     ...styles,
     backgroundColor: "inherit",
     borderColor: isFocused ? "#bdac4e" : "#0A6847",
@@ -122,3 +122,14 @@ const SearchForm = ({
 };
 
 export default SearchForm;
+
+SearchForm.propTypes = {
+  control: PropTypes.object.isRequired,
+  handleKeyDown: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
+  actor: PropTypes.string,
+  actors: PropTypes.arrayOf(PropTypes.string),
+  setActor: PropTypes.func.isRequired,
+  setActors: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};

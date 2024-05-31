@@ -1,4 +1,5 @@
 import { TextFieldElement } from "react-hook-form-mui";
+import PropTypes from "prop-types";
 
 const textInputStyle = {
   label: { color: "#0A6847" },
@@ -45,3 +46,9 @@ const InputField = ({ name, label, control }) => {
 };
 
 export default InputField;
+
+InputField.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  control: PropTypes.object.isRequired,
+};

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import usersService from "../services/users";
+import PropTypes from "prop-types";
 
 const UserSingleListView = ({ user }) => {
   const [avatar, setAvatar] = useState("");
@@ -45,3 +45,7 @@ const UserSingleListView = ({ user }) => {
 };
 
 export default UserSingleListView;
+
+UserSingleListView.propTypes = {
+  user: PropTypes.object.isRequired,
+};
