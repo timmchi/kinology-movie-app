@@ -59,7 +59,7 @@ const Test = () => {
             bgcolor: "#F6E9B2",
           }}
         >
-          <ContactForm />
+          <ContactForm setOpen={setOpen} />
           <ModalClose variant="plain" />
         </Sheet>
       </Modal>

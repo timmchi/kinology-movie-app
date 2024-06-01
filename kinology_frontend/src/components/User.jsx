@@ -12,8 +12,6 @@ import commentsService from "../services/comments";
 import { Button } from "@mui/material";
 import PropTypes from "prop-types";
 
-const basePosterUrl = "https://image.tmdb.org/t/p/original";
-
 const User = ({ currentUser, removeUser }) => {
   let { id } = useParams();
   const [user, setUser] = useState("");

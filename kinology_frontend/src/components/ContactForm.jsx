@@ -3,10 +3,12 @@ import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import InputField from "./InputField";
 import { TextFieldElement } from "react-hook-form-mui";
-import { object, string, minLength } from "valibot";
+import { object, string, minLength, email } from "valibot";
 import SubmitButton from "./SubmitButton";
 import Stack from "@mui/joy/Stack";
 import contactService from "../services/contact";
+import { useNotificationDispatch } from "../contexts/NotificationContext";
+import PropTypes from "prop-types";
 
 const textInputStyle = {
   label: { color: "#0A6847" },
@@ -38,14 +40,30 @@ const textInputStyle = {
   },
 };
 
-const ContactForm = () => {
+const ContactFormSchema = object({
+  email: string([
+    minLength(1, "Please enter your email."),
+    email("The email address is badly formatted"),
+  ]),
+  name: string([
+    minLength(1, "Please enter your name or nickname."),
+    minLength(3, "Name or nickname should be 3 or more symbols"),
+  ]),
+  message: string([
+    minLength(1, "Please enter your message"),
+    minLength(3, "Message should be 3 or more symbols "),
+  ]),
+});
+
+const ContactForm = ({ setOpen }) => {
+  const dispatch = useNotificationDispatch();
   const {
     handleSubmit,
     reset,
     control,
     formState: { isSubmitting, isSubmitSuccessful },
   } = useForm({
-    // resolver: valibotResolver(CommentSchema),
+    resolver: valibotResolver(ContactFormSchema),
   });
 
   useEffect(() => {
@@ -59,8 +77,28 @@ const ContactForm = () => {
   }, [isSubmitSuccessful, reset]);
 
   const submitMessage = async (data) => {
-    console.log(data);
-    await contactService.sendMessage(data);
+    try {
+      console.log(data);
+      await contactService.sendMessage(data);
+      setOpen(false);
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: "Your message was sent successfully",
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    } catch (exception) {
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: "Something went wrong when sending your message",
+          type: "error",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    }
   };
 
   return (
@@ -89,3 +127,7 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
+
+ContactForm.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+};
