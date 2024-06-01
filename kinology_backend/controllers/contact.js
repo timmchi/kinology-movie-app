@@ -5,6 +5,21 @@ const contactRouter = require("express").Router();
 
 const v = require("valibot");
 
+const MessageSchema = v.object({
+  email: v.string([
+    v.minLength(1, "Please enter your email."),
+    v.email("The email address is badly formatted"),
+  ]),
+  name: v.string([
+    v.minLength(1, "Please enter your name or nickname."),
+    v.minLength(3, "Name or nickname should be 3 or more symbols"),
+  ]),
+  message: v.string([
+    v.minLength(1, "Please enter your message"),
+    v.minLength(3, "Message should be 3 or more symbols"),
+  ]),
+});
+
 const transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
   port: 587,
@@ -20,12 +35,16 @@ contactRouter.post("/", async (request, response) => {
 
   console.log(name, email, message);
 
+  const parsedMessage = v.parse(MessageSchema, { email, name, message });
+
+  console.log(parsedMessage);
+
   const info = await transporter.sendMail({
-    from: email,
+    from: parsedMessage.email,
     to: config.ETHEREAL_USER,
-    subject: `Email from ${name}`,
-    text: `${message}`,
-    html: `<p>${name}</p><p>${message}</p>`,
+    subject: `Email from ${parsedMessage.name}`,
+    text: `${parsedMessage.message}`,
+    html: `<p>${parsedMessage.name}</p><p>${parsedMessage.message}</p>`,
   });
 
   console.log("Message sent: %s", info.messageId);
