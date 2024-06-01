@@ -121,9 +121,10 @@ a:hover {
 .hero {
   height: 100vh;
   width: 100%;
-  background: url(../hero2-min.png) no-repeat center center;
+  background: url(../hero-test-min.png) no-repeat center center;
   background-size: cover;
   display: flex;
+  color: #0a6847;
 }
 
 .hero > * {
@@ -132,7 +133,11 @@ a:hover {
 
 .box1 {
   margin-top: 6em;
-  text-shadow: 1px 1px 2px rgba(13, 4, 2, 1);
+  text-shadow: 1px 1px 2px rgb(223, 219, 219);
+}
+
+.intro {
+  text-align: center;
 }
 
 .intro h2 {
@@ -368,6 +373,7 @@ a:hover {
   .hero {
     flex-direction: column;
     background: #609b76;
+    color: #bdac4e;
   }
 
   .hero > * {
@@ -378,22 +384,19 @@ a:hover {
     background: url(../hero-mobile.png) no-repeat center center;
     background-size: cover;
     margin-top: 0;
-    /* min-height: min(13em, 300px); */
     min-height: 30vh;
   }
 
   .box1 {
     margin: 0;
     padding: 0;
+    text-shadow: 1px 1px 2px rgba(13, 4, 2, 1);
   }
 
   .cta-with-buttons {
     flex-direction: column;
   }
 
-  .intro {
-    text-align: center;
-  }
   .intro h2 {
     font-size: 2rem;
   }
@@ -415,5 +418,31 @@ a:hover {
 
   .register-div {
     margin-right: 2em;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .intro h2 {
+    font-size: 3rem;
+  }
+
+  .intro p {
+    font-size: 2rem;
+  }
+
+  .search-div,
+  .register-div {
+    font-size: 1.3rem;
+  }
+
+  .search-div {
+    margin-bottom: 2em;
+    margin-top: 1em;
+    margin-left: 2em;
+  }
+
+  .register-div {
+    margin-right: 2em;
+    margin-top: 0.9em;
   }
 }
