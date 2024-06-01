@@ -45,6 +45,25 @@ const RegistrationSchema = object(
   ]
 );
 
+const credentialsInputStyle = {
+  bgcolor: "#79C094",
+  input: {
+    color: "white",
+    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+  },
+  borderRadius: 0,
+  padding: 1.5,
+  "--Input-placeholderOpacity": 1,
+  "--Input-focusedInset": "var(--any, )",
+  "--Input-focusedThickness": "2px",
+  "--Input-focusedHighlight": "#bdac4e !important",
+  "&:focus-within": {
+    borderColor: "#bdac4e",
+  },
+};
+
+const formLabelStyle = { color: "#f7e382", fontSize: 18 };
+
 const SignUpForm = ({ handleSignUp }) => {
   const {
     register,
@@ -116,7 +135,7 @@ const SignUpForm = ({ handleSignUp }) => {
                 <Typography component="h1" level="h3" sx={{ color: "#f7e382" }}>
                   Sign up
                 </Typography>
-                <Typography level="body-sm" sx={{ color: "#f7e382" }}>
+                <Typography level="body-sm" sx={formLabelStyle}>
                   Already have an account?{" "}
                   <Link to="/login" sx={{ color: "#E6E9E0" }}>
                     Sign in
@@ -128,59 +147,62 @@ const SignUpForm = ({ handleSignUp }) => {
             <Stack gap={4} sx={{ mt: 2 }}>
               <form onSubmit={handleSubmit(handleSignUp)}>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382" }}>Username</FormLabel>
+                  <FormLabel sx={formLabelStyle}>Username</FormLabel>
                   <Input
                     {...register("username")}
                     placeholder="username"
                     data-testid="username"
+                    sx={credentialsInputStyle}
                   />
                   {errors?.username?.message ? (
                     <p style={{ color: "red" }}>{errors.username?.message}</p>
                   ) : null}
                 </FormControl>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382" }}>Name</FormLabel>
+                  <FormLabel sx={formLabelStyle}>Name</FormLabel>
                   <Input
                     {...register("name")}
                     placeholder="name"
                     data-testid="name"
+                    sx={credentialsInputStyle}
                   />
                   {errors?.name?.message ? (
                     <p style={{ color: "red" }}>{errors.name?.message}</p>
                   ) : null}
                 </FormControl>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382" }}>Email</FormLabel>
+                  <FormLabel sx={formLabelStyle}>Email</FormLabel>
                   <Input
                     {...register("email")}
                     placeholder="email"
                     data-testid="email"
+                    sx={credentialsInputStyle}
                   />
                   {errors?.email?.message ? (
                     <p style={{ color: "red" }}>{errors.email?.message}</p>
                   ) : null}
                 </FormControl>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382" }}>Password</FormLabel>
+                  <FormLabel sx={formLabelStyle}>Password</FormLabel>
                   <Input
                     type="password"
                     {...register("password")}
                     placeholder="password..."
                     data-testid="password"
+                    sx={credentialsInputStyle}
                   />
                   {errors?.password?.message ? (
                     <p style={{ color: "red" }}>{errors.password?.message}</p>
                   ) : null}
                 </FormControl>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382" }}>
-                    Confirm Password
-                  </FormLabel>
+                  <FormLabel sx={formLabelStyle}>Confirm Password</FormLabel>
                   <Input
                     type="password"
                     {...register("passwordConfirm")}
                     placeholder="confirm password"
                     data-testid="password-confirm"
+                    sx={credentialsInputStyle}
                   />
                   {errors?.passwordConfirm?.message ? (
                     <p style={{ color: "red" }}>
@@ -193,6 +215,7 @@ const SignUpForm = ({ handleSignUp }) => {
                   fullWidth
                   disabled={isSubmitting}
                   id="signup-button"
+                  sx={{ fontSize: 18 }}
                 >
                   {isSubmitting ? "Signing up..." : "Sign Up"}
                 </Button>

@@ -4,7 +4,7 @@ import signUpService from "../services/signup";
 import SignUpForm from "./SignUpForm";
 import PropTypes from "prop-types";
 
-const SignUp = ({ setUsers, users }) => {
+const SignUp = ({ addUser }) => {
   const navigate = useNavigate();
   const dispatch = useNotificationDispatch();
 
@@ -20,7 +20,7 @@ const SignUp = ({ setUsers, users }) => {
         passwordConfirm,
         name,
       });
-      setUsers(users.concat(user));
+      addUser(user);
       dispatch({
         type: "SHOW",
         payload: {
@@ -49,6 +49,5 @@ const SignUp = ({ setUsers, users }) => {
 export default SignUp;
 
 SignUp.propTypes = {
-  setUsers: PropTypes.func.isRequired,
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  addUser: PropTypes.func.isRequired,
 };

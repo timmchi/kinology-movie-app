@@ -8,6 +8,8 @@ const Users = ({ users }) => {
   console.log(users);
   if (!users) return <>no users yet</>;
 
+  // users state is not being updated when new user gets added, but is it worth it creating a state in this component? Users list should only be available after logging in anyway, after which the users list IS updated..
+
   return (
     <div>
       <h1>users</h1>

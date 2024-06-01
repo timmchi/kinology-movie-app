@@ -24,6 +24,23 @@ const LoginSchema = object({
   ]),
 });
 
+const credentialsInputStyle = {
+  bgcolor: "#79C094",
+  input: {
+    color: "white",
+    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+  },
+  borderRadius: 0,
+  padding: 1.5,
+  "--Input-placeholderOpacity": 1,
+  "--Input-focusedInset": "var(--any, )",
+  "--Input-focusedThickness": "2px",
+  "--Input-focusedHighlight": "#bdac4e !important",
+  "&:focus-within": {
+    borderColor: "#bdac4e",
+  },
+};
+
 const LogIn = ({ handleLogin }) => {
   const {
     register,
@@ -89,7 +106,10 @@ const LogIn = ({ handleLogin }) => {
                 <Typography component="h1" level="h3" sx={{ color: "#f7e382" }}>
                   Log in
                 </Typography>
-                <Typography level="body-sm" sx={{ color: "#f7e382" }}>
+                <Typography
+                  level="body-sm"
+                  sx={{ color: "#f7e382", fontSize: 18 }}
+                >
                   New to Kinology?{" "}
                   <Link to="/signup" sx={{ color: "#E6E9E0" }}>
                     Create an account
@@ -101,23 +121,29 @@ const LogIn = ({ handleLogin }) => {
             <Stack gap={4} sx={{ mt: 2 }}>
               <form onSubmit={handleSubmit(handleLogin)}>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382" }}>Username</FormLabel>
+                  <FormLabel sx={{ color: "#f7e382", fontSize: 18 }}>
+                    Username
+                  </FormLabel>
                   <Input
                     {...register("username")}
-                    placeholder="username..."
+                    placeholder="Your username"
                     data-testid="username"
+                    sx={credentialsInputStyle}
                   />
                   {errors?.username?.message ? (
                     <p style={{ color: "red" }}>{errors.username?.message}</p>
                   ) : null}
                 </FormControl>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382" }}>Password</FormLabel>
+                  <FormLabel sx={{ color: "#f7e382", fontSize: 18 }}>
+                    Password
+                  </FormLabel>
                   <Input
                     type="password"
                     {...register("password")}
-                    placeholder="password..."
+                    placeholder="Your password"
                     data-testid="password"
+                    sx={credentialsInputStyle}
                   />
                   {errors?.password?.message ? (
                     <p style={{ color: "red" }}>{errors.password?.message}</p>
@@ -128,6 +154,7 @@ const LogIn = ({ handleLogin }) => {
                   fullWidth
                   disabled={isSubmitting}
                   id="login-button"
+                  sx={{ fontSize: 18 }}
                 >
                   {isSubmitting ? "Logging in..." : "Log In"}
                 </Button>

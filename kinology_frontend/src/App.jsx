@@ -40,6 +40,10 @@ function App() {
     fetchUsers();
   }, []);
 
+  const addUser = (user) => {
+    setUsers(users.concat(user));
+  };
+
   const removeUser = (userId) => {
     try {
       setUsers(users.filter((user) => user.id !== userId));
@@ -185,7 +189,14 @@ function App() {
         />
         <Route
           path="/signup"
-          element={<SignUp user={user} users={users} setUsers={setUsers} />}
+          element={
+            <SignUp
+              user={user}
+              users={users}
+              setUsers={setUsers}
+              addUser={addUser}
+            />
+          }
         />
         <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />
         <Route path="/about" element={<About />} />
