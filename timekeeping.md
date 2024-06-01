@@ -71,6 +71,10 @@
 | 31.5 | 0.5   | User list styling                                                        |
 | 31.5 | 1.5   | New hero section                                                         |
 | 31.5 | 1     | Responsive hero section                                                  |
+| 1.6  | 0.5   | Color change for hero, responsiveness fixes                              |
+| 1.6  | 2     | Functionality to send emails to website author, styling, validation      |
+| 1.6  | 1     | Change to scroll button, /me page implementation                         |
+| 1.6  | 0.5   | Log in and sign up styling                                               |
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
@@ -92,8 +96,4 @@
 |      |       |                                                                          |
 |      |       |                                                                          |
 |      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-|      |       |                                                                          |
-| tot  | 121.5 |                                                                          |
+| tot  | 125.5 |                                                                          |

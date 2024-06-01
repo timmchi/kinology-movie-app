@@ -41,6 +41,8 @@ const credentialsInputStyle = {
   },
 };
 
+const formLabelStyle = { color: "#f7e382", fontSize: 18 };
+
 const LogIn = ({ handleLogin }) => {
   const {
     register,
@@ -106,10 +108,7 @@ const LogIn = ({ handleLogin }) => {
                 <Typography component="h1" level="h3" sx={{ color: "#f7e382" }}>
                   Log in
                 </Typography>
-                <Typography
-                  level="body-sm"
-                  sx={{ color: "#f7e382", fontSize: 18 }}
-                >
+                <Typography level="body-sm" sx={formLabelStyle}>
                   New to Kinology?{" "}
                   <Link to="/signup" sx={{ color: "#E6E9E0" }}>
                     Create an account
@@ -121,9 +120,7 @@ const LogIn = ({ handleLogin }) => {
             <Stack gap={4} sx={{ mt: 2 }}>
               <form onSubmit={handleSubmit(handleLogin)}>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382", fontSize: 18 }}>
-                    Username
-                  </FormLabel>
+                  <FormLabel sx={formLabelStyle}>Username</FormLabel>
                   <Input
                     {...register("username")}
                     placeholder="Your username"
@@ -135,9 +132,7 @@ const LogIn = ({ handleLogin }) => {
                   ) : null}
                 </FormControl>
                 <FormControl>
-                  <FormLabel sx={{ color: "#f7e382", fontSize: 18 }}>
-                    Password
-                  </FormLabel>
+                  <FormLabel sx={formLabelStyle}>Password</FormLabel>
                   <Input
                     type="password"
                     {...register("password")}
