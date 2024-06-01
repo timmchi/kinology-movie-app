@@ -25,6 +25,8 @@ const User = ({ currentUser, removeUser }) => {
   const navigate = useNavigate();
   const dispatch = useNotificationDispatch();
 
+  console.log(currentUser);
+
   useEffect(() => {
     const fetchUser = async () => {
       const { user: fetchedUser, avatarUrl } = await usersService.getUser(id);

@@ -14,6 +14,7 @@ import NotificationAlert from "./components/Notification";
 import loginService from "./services/login";
 import userService from "./services/users";
 import { useNotificationDispatch } from "./contexts/NotificationContext";
+import { Navigate } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -29,8 +30,6 @@ function App() {
       userService.setToken(user.token);
     }
   }, []);
-
-  console.log(user);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -193,6 +192,16 @@ function App() {
         <Route
           path="/users"
           element={<Users users={users} removeUser={removeUser} />}
+        />
+        <Route
+          path="/me"
+          element={
+            user !== null ? (
+              <Navigate replace to={`/users/${user.id}`} />
+            ) : (
+              <LogIn handleLogin={handleLogin} />
+            )
+          }
         />
         <Route path="/test" element={<Test />} />
       </Routes>

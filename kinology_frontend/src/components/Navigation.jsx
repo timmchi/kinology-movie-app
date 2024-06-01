@@ -51,6 +51,13 @@ const Navigation = (props) => {
           <>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: "center" }}>
+                <NavLink to="/me" className="nav-link">
+                  <ListItemText primary="Me" />
+                </NavLink>
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
                 <NavLink to="/users" className="nav-link">
                   <ListItemText primary="Users" />
                 </NavLink>
@@ -116,6 +123,9 @@ const Navigation = (props) => {
 
             {props.user ? (
               <>
+                <NavLink to="/me" className="nav-link">
+                  Me
+                </NavLink>
                 <NavLink to="/users" className="nav-link">
                   Users
                 </NavLink>
