@@ -313,6 +313,6 @@ const User = ({ currentUser, removeUser }) => {
 export default User;
 
 User.propTypes = {
-  currentUser: PropTypes.object.isRequired,
+  currentUser: PropTypes.object,
   removeUser: PropTypes.func.isRequired,
 };

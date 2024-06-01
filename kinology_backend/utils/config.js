@@ -18,6 +18,9 @@ const BASE_MOVIES_URL =
 
 const BASE_SINGLE_MOVIE_URL = "https://api.themoviedb.org/3/movie/";
 
+const ETHEREAL_USER = process.env.ETHEREAL_USER;
+const ETHEREAL_PW = process.env.ETHEREAL_PW;
+
 module.exports = {
   PORT,
   MONGODB_URI,
@@ -30,4 +33,6 @@ module.exports = {
   SECRET_ACCESS_KEY,
   BUCKET_NAME,
   BUCKET_REGION,
+  ETHEREAL_USER,
+  ETHEREAL_PW,
 };

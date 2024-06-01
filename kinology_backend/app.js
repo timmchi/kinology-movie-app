@@ -10,6 +10,7 @@ const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 const moviesRouter = require("./controllers/movies");
 const commentsRouter = require("./controllers/comments");
+const contactRouter = require("./controllers/contact");
 
 mongoose.set("strictQuery", false);
 
@@ -32,6 +33,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/movies", moviesRouter);
 app.use("/api/comments", commentsRouter);
+app.use("/api/contact", contactRouter);
 
 if (process.env.NODE_ENV === "test") {
   const testingRouter = require("./controllers/testing");
