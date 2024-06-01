@@ -1,6 +1,7 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import MovieSmallCard from "./MovieSmallCard";
+import ContactModal from "./ContactModal";
 import myFavoriteMovies from "../data/myFavoriteMovies";
 
 const About = () => {
@@ -23,7 +24,7 @@ const About = () => {
               <li>
                 portfolio <OpenInNewIcon />
               </li>
-              <li>contact me</li>
+              <ContactModal />
             </ul>
             <h3>my favorite movies</h3>
             <div className="profileMovieContainer about">

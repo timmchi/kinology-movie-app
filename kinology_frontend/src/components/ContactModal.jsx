@@ -7,7 +7,7 @@ import Sheet from "@mui/joy/Sheet";
 
 import ContactForm from "./ContactForm";
 
-const Test = () => {
+const ContactModal = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -48,4 +48,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default ContactModal;
