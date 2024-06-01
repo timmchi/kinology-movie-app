@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import SearchModal from "./SearchModal";
 import MovieList from "./MovieList";
 import Hero from "./Hero";
@@ -6,13 +6,17 @@ import PropTypes from "prop-types";
 
 const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
   const [movies, setMovies] = useState([]);
+  const searchRef = useRef(null);
+
+  const goToSearch = () => {
+    searchRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
 
   return (
     <>
-      <Hero />
-      <div id="search-function">
+      <Hero goToSearch={goToSearch} />
+      <div id="search-function" ref={searchRef}>
         <SearchModal setMovies={setMovies} />
-
         <MovieList
           movies={movies}
           onButtonPress={onButtonPress}

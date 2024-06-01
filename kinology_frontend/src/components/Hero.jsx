@@ -1,7 +1,8 @@
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const Hero = () => {
+const Hero = ({ goToSearch }) => {
   const navigate = useNavigate();
   return (
     <div className="hero">
@@ -30,8 +31,9 @@ const Hero = () => {
                       fontSize: 15,
                     },
                   }}
+                  onClick={goToSearch}
                 >
-                  <a href="#search-function">search</a>
+                  Search
                 </Button>
               </div>
             </div>
@@ -66,3 +68,7 @@ const Hero = () => {
 };
 
 export default Hero;
+
+Hero.propTypes = {
+  goToSearch: PropTypes.func,
+};
