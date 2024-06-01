@@ -21,6 +21,7 @@ const textInputStyle = {
   "& label.Mui-error": {
     fontWeight: "bold",
   },
+  "& .MuiInputBase-input": { color: "#0A6847" },
   "& .MuiInput-underline:after": {
     borderBottomColor: "yellow",
   },
@@ -110,6 +111,8 @@ const ContactForm = ({ setOpen }) => {
           name="message"
           label="Your message"
           multiline
+          inputProps={{ spellCheck: "false" }}
+          InputProps={{ sx: { borderRadius: 0 } }}
           minRows={5}
           maxRows={Infinity}
           sx={textInputStyle}
