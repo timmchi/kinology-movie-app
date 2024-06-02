@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Navigation from "./Navigation";
-import About from "./About";
+import About from "../About/About";
 import SignUpForm from "../SignUp/SignUpForm";
-import LogIn from "./LogIn";
+import LogIn from "../Auth/LogIn";
 import { afterEach, describe, expect, test } from "vitest";
 
 test("renders correctly when the user is null", () => {

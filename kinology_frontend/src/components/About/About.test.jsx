@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import About from "./About";
-import myFavoriteMovies from "../data/myFavoriteMovies";
+import myFavoriteMovies from "../../data/myFavoriteMovies";
 
 test("renders About component properly", () => {
   render(

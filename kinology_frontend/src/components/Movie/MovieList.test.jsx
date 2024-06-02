@@ -27,9 +27,15 @@ test("renders properly with a list of movies", () => {
   expect(movie2).toBeDefined();
   expect(movie3).toBeDefined();
 
-  const movie1Img = screen.getByAltText(`${myFavoriteMovies[0].title} poster`);
-  const movie2Img = screen.getByAltText(`${myFavoriteMovies[1].title} poster`);
-  const movie3Img = screen.getByAltText(`${myFavoriteMovies[2].title} poster`);
+  const movie1Img = screen.getByAltText(
+    `${myFavoriteMovies[0].title} poster Icon made by Freepik from www.flaticon.com`
+  );
+  const movie2Img = screen.getByAltText(
+    `${myFavoriteMovies[1].title} poster Icon made by Freepik from www.flaticon.com`
+  );
+  const movie3Img = screen.getByAltText(
+    `${myFavoriteMovies[2].title} poster Icon made by Freepik from www.flaticon.com`
+  );
 
   expect(movie1Img).toBeDefined();
   expect(movie2Img).toBeDefined();

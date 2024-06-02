@@ -34,16 +34,12 @@ test("renders Hero component correctly", () => {
   const searchButton = screen.getByRole("button", { name: /search/i });
   expect(searchButton).toBeDefined();
   expect(searchButton).toHaveClass("CTA-search");
-  expect(searchButton).toHaveStyle("background-color: rgb(121, 84, 88);");
-  expect(screen.getByText(/search/i).closest("a")).toHaveAttribute(
-    "href",
-    "#search-function"
-  );
+  expect(searchButton).toHaveStyle("background-color: rgb(0, 117, 95);");
 
   const registerButton = screen.getByRole("button", { name: /register/i });
   expect(registerButton).toBeDefined();
   expect(registerButton).toHaveClass("CTA-register");
-  expect(registerButton).toHaveStyle("background-color: rgb(143, 145, 107);");
+  expect(registerButton).toHaveStyle("background-color: rgb(0, 83, 47);");
 });
 
 test("navigates to signup on register button click", async () => {

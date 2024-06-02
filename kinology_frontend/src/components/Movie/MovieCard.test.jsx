@@ -161,7 +161,9 @@ test("movie card has an image with correct alt text", () => {
     </MemoryRouter>
   );
 
-  const smallCard = screen.getByAltText(`${movie.title} poster`);
+  const smallCard = screen.getByAltText(
+    `${movie.title} poster Icon made by Freepik from www.flaticon.com`
+  );
   expect(smallCard).toBeDefined();
 });
 
@@ -178,6 +180,8 @@ test("movie card has an image with correct alt text when poster path is incorrec
     </MemoryRouter>
   );
 
-  const smallCard = screen.getByAltText(`${movie.title} poster`);
+  const smallCard = screen.getByAltText(
+    `${movie.title} poster Icon made by Freepik from www.flaticon.com`
+  );
   expect(smallCard).toBeDefined();
 });

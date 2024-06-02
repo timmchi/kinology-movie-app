@@ -7,7 +7,7 @@ import { expect, test } from "vitest";
 import { act } from "@testing-library/react";
 import { testSetup } from "../../utils/testUtils";
 
-vi.mock("../services/users", async (importOriginal) => {
+vi.mock("../../services/users", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

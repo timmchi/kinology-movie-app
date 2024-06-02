@@ -23,7 +23,7 @@ const exampleUsers = [
   },
 ];
 
-vi.mock("../services/users", async (importOriginal) => {
+vi.mock("../../services/users", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

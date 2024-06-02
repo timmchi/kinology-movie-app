@@ -13,8 +13,8 @@ test("Log in form is rendered correctly", () => {
 
   const username = screen.getByText("Username");
   const password = screen.getByText("Password");
-  const usernameInput = screen.getByPlaceholderText("username...");
-  const passwordInput = screen.getByPlaceholderText("password...");
+  const usernameInput = screen.getByPlaceholderText("Your username");
+  const passwordInput = screen.getByPlaceholderText("Your password");
 
   const button = container.querySelector("#login-button");
 
@@ -34,8 +34,8 @@ test("Log In form updates parent state and calls handleLogin", async () => {
     </MemoryRouter>
   );
 
-  const username = screen.getByPlaceholderText("username...");
-  const password = screen.getByPlaceholderText("password...");
+  const username = screen.getByPlaceholderText("Your username");
+  const password = screen.getByPlaceholderText("Your password");
   const loginButton = screen.getByText("Log In");
 
   await user.type(username, "tester");
@@ -56,8 +56,8 @@ test("form fields are validated", async () => {
     </MemoryRouter>
   );
 
-  const username = screen.getByPlaceholderText("username...");
-  const password = screen.getByPlaceholderText("password...");
+  const username = screen.getByPlaceholderText("Your username");
+  const password = screen.getByPlaceholderText("Your password");
   const loginButton = screen.getByText("Log In");
 
   await user.type(username, "t");

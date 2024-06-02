@@ -22,7 +22,7 @@ const movieExample = {
   image: "/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg",
 };
 
-vi.mock("../services/movies", async (importOriginal) => {
+vi.mock("../../services/movies", async (importOriginal) => {
   const movieExample = {
     id: "111",
     title: "Scarface",
@@ -45,7 +45,7 @@ vi.mock("../services/movies", async (importOriginal) => {
   };
 });
 
-vi.mock("../services/comments", async (importOriginal) => {
+vi.mock("../../services/comments", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
@@ -92,7 +92,7 @@ test("Movie component is rendered properly", async () => {
   );
 
   const commentsHeader = screen.getByText("Comments");
-  const comments = screen.getByText("no comments yet...");
+  const comments = screen.getByText("No comments yet...");
 
   const watchButton = screen.getByText("Watch");
   const favoriteButton = screen.getByText("Favorite");

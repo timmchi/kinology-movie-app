@@ -31,7 +31,7 @@ const currentUser = { username: "comment_tester1", id: 1 };
 const onEdit = vi.fn();
 const onDelete = vi.fn();
 
-vi.mock("../services/users", async (importOriginal) => {
+vi.mock("../../services/users", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
@@ -51,7 +51,7 @@ test("renders properly when there are no comments", () => {
     />
   );
 
-  const text = screen.getByText("no comments yet...");
+  const text = screen.getByText("No comments yet...");
   expect(text).toBeDefined();
 });
 
