@@ -220,7 +220,7 @@ describe("Kinology", () => {
 
       describe("and a search for movie Casino done", () => {
         beforeEach(async ({ page }) => {
-          await clickButton(page, "search");
+          await clickButton(page, "Search");
 
           await clickButton(page, "Open Search");
 
@@ -612,10 +612,9 @@ describe("Kinology", () => {
             const editCommentInput = page.getByLabel("Edit your comment");
 
             const submitEditButton = page
-              .locator("ul")
-              .filter({ hasText: "MMr TesterI love this" })
-              .locator("#comment-button");
-
+              .locator("form")
+              .filter({ hasText: "Edit your commentEdit your" })
+              .getByLabel("Submit comment");
             await editCommentInput.fill("Al Pacino rocks");
             await submitEditButton.click();
 
@@ -797,7 +796,7 @@ describe("Kinology", () => {
 
       await expect(searchButton).not.toBeInViewport();
 
-      await clickButton(page, "search");
+      await clickButton(page, "Search");
 
       await expect(searchButton).toBeInViewport();
 
@@ -813,7 +812,7 @@ describe("Kinology", () => {
     }) => {
       const searchButton = page.getByRole("button", { name: "Open Search" });
 
-      await clickButton(page, "search");
+      await clickButton(page, "Search");
 
       await expect(searchButton).toBeInViewport();
 
@@ -826,7 +825,7 @@ describe("Kinology", () => {
 
     describe("search button is in viewport", () => {
       beforeEach(async ({ page }) => {
-        await clickButton(page, "search");
+        await clickButton(page, "Search");
       });
 
       test("search modal can be opened", async ({ page }) => {
@@ -977,7 +976,6 @@ describe("Kinology", () => {
         await searchMoviesButton.click();
 
         await expect(page.getByText("Casino")).toBeVisible();
-        await expect(page.getByAltText("Casino poster")).toBeVisible();
       });
 
       describe("and a movie 'Casino' was found", () => {

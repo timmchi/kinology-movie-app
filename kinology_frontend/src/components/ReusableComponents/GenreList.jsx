@@ -28,5 +28,8 @@ const GenreList = ({ genres }) => {
 export default GenreList;
 
 GenreList.propTypes = {
-  genres: PropTypes.arrayOf(PropTypes.string).isRequired,
+  genres: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.arrayOf(PropTypes.object),
+  ]),
 };
