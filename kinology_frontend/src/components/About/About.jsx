@@ -11,22 +11,24 @@ const About = () => {
         <div className="box">
           <h2>About me</h2>
           <div className="content">
-            <ul>
-              <li>
+            <div className="about-me-info">
+              <div>
                 <a
                   href="https://github.com/timmchi"
                   target="_blank"
                   aria-label="Github profile"
                 >
-                  <GitHubIcon />
+                  <GitHubIcon sx={{ fontSize: "3rem" }} />
                 </a>
-              </li>
-              <li>
-                portfolio <OpenInNewIcon />
-              </li>
-              <ContactModal />
-            </ul>
-            <h3>my favorite movies</h3>
+              </div>
+              <div>
+                My portfolio (WIP) <OpenInNewIcon />
+              </div>
+              <div>
+                <ContactModal />
+              </div>
+            </div>
+            <h3>My favorite movies</h3>
             <div className="profileMovieContainer about">
               {myFavoriteMovies.map((movie) => (
                 <div key={movie.tmdbId} className="movieSmallCard">
@@ -65,14 +67,14 @@ const About = () => {
           <h2>Fullstack open</h2>
           <div className="content">
             <p>
-              This website is my attempt at completing a 10 credit final
+              This website is my attempt at completing the 10 credit final
               project, which is a part of Full Stack Open course.
             </p>
             <p>
               {" "}
-              I gained most of my React and Express knowledge through that
-              course, so I highly recommend it to anyone who wants to get better
-              at modern web development.
+              I gained most of my React and Node knowledge through that course,
+              so I highly recommend it to anyone who wants to get better at
+              modern web development.
             </p>
             Link to the course{" "}
             <a
