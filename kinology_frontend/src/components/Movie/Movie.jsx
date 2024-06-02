@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNotificationDispatch } from "../../contexts/NotificationContext";
-import CommentForm from "./CommentForm";
-import CommentList from "./CommentList";
+import CommentForm from "../Comment/CommentForm";
+import CommentList from "../Comment/CommentList";
 import MovieButton from "./MovieButton";
 import GenreList from "../ReusableComponents/GenreList";
 import moviesService from "../../services/movies";

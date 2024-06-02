@@ -1,8 +1,8 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import MovieSmallCard from "./MovieSmallCard";
-import ContactModal from "./ContactModal";
-import myFavoriteMovies from "../data/myFavoriteMovies";
+import MovieSmallCard from "../Movie/MovieSmallCard";
+import ContactModal from "../Contact/ContactModal";
+import myFavoriteMovies from "../../data/myFavoriteMovies";
 
 const About = () => {
   return (

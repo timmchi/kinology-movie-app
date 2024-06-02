@@ -6,7 +6,7 @@ import CardCover from "@mui/joy/CardCover";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
-import MovieButton from "./Movie/MovieButton";
+import MovieButton from "./MovieButton";
 import PropTypes from "prop-types";
 
 const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {

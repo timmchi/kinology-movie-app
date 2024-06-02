@@ -4,7 +4,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import usersService from "../services/users";
+import usersService from "../../services/users";
 import PropTypes from "prop-types";
 
 const UserSingleListView = ({ user }) => {

@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import usersService from "../services/users";
+import usersService from "../../services/users";
 
 const CommentView = ({ comment, currentUser, editForm, onDelete }) => {
   const [avatar, setAvatar] = useState("");

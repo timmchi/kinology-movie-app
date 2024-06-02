@@ -1,10 +1,10 @@
 import { Controller } from "react-hook-form";
-import genreOptions from "../data/genres";
+import genreOptions from "../../data/genres";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import SubmitButton from "./SubmitButton";
-import Slider from "./Slider";
-import InputField from "./InputField";
+import SubmitButton from "../ReusableComponents/SubmitButton";
+import Slider from "../ReusableComponents/Slider";
+import InputField from "../ReusableComponents/InputField";
 import Stack from "@mui/joy/Stack";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
