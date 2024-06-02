@@ -304,6 +304,10 @@ a:hover {
   margin: 0;
 }
 
+.contact-form .MuiFormHelperText-root.Mui-error {
+  background-color: #f6e9b2;
+}
+
 .MuiFileInput-placeholder {
   color: "white";
 }

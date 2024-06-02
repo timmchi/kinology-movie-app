@@ -103,7 +103,7 @@ const ContactForm = ({ setOpen }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitMessage)}>
+    <form onSubmit={handleSubmit(submitMessage)} className="contact-form">
       <Stack spacing={1} sx={{ paddingBottom: 1 }}>
         <InputField name="name" label="Name" control={control} />
         <InputField name="email" label="Email" control={control} />
