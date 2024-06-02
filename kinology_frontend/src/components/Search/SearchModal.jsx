@@ -13,13 +13,13 @@ import {
   maxLength,
   optional,
 } from "valibot";
-import PaginationController from "./PaginationController";
+import PaginationController from "../Pagination/PaginationController";
 import { Button } from "@mui/material";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Sheet from "@mui/joy/Sheet";
 import SearchForm from "./SearchForm";
-import moviesService from "../services/movies";
+import moviesService from "../../services/movies";
 import PropTypes from "prop-types";
 
 const createOption = (label) => ({

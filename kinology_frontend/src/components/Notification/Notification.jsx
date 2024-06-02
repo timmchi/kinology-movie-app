@@ -1,5 +1,5 @@
 import Alert from "@mui/material/Alert";
-import { useNotificationValue } from "../contexts/NotificationContext";
+import { useNotificationValue } from "../../contexts/NotificationContext";
 
 // success/error
 const NotificationAlert = () => {

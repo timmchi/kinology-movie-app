@@ -1,7 +1,7 @@
 import MovieList from "./MovieList";
-import myFavoriteMovies from "../data/myFavoriteMovies";
+import myFavoriteMovies from "../../data/myFavoriteMovies";
 import { expect, test } from "vitest";
-import { testSetup } from "../utils/testUtils";
+import { testSetup } from "../../utils/testUtils";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 

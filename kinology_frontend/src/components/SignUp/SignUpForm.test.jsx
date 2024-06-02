@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import SignUpForm from "./SignUpForm";
-import { testSetup } from "../utils/testUtils";
+import { testSetup } from "../../utils/testUtils";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 

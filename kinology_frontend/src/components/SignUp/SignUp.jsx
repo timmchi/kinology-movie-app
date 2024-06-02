@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useNotificationDispatch } from "../contexts/NotificationContext";
-import signUpService from "../services/signup";
+import { useNotificationDispatch } from "../../contexts/NotificationContext";
+import signUpService from "../../services/signup";
 import SignUpForm from "./SignUpForm";
 import PropTypes from "prop-types";
 

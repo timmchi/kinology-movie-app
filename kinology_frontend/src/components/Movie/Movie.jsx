@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useNotificationDispatch } from "../contexts/NotificationContext";
+import { useNotificationDispatch } from "../../contexts/NotificationContext";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import MovieButton from "./MovieButton";
-import GenreList from "./GenreList";
-import moviesService from "../services/movies";
-import commentsService from "../services/comments";
+import GenreList from "../ReusableComponents/GenreList";
+import moviesService from "../../services/movies";
+import commentsService from "../../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 import PropTypes from "prop-types";
 

@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import InputField from "./InputField";
+import InputField from "../InputField";
 import { TextFieldElement } from "react-hook-form-mui";
 import { object, string, minLength, email } from "valibot";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../SubmitButton";
 import Stack from "@mui/joy/Stack";
-import contactService from "../services/contact";
-import { useNotificationDispatch } from "../contexts/NotificationContext";
+import contactService from "../../services/contact";
+import { useNotificationDispatch } from "../../contexts/NotificationContext";
 import PropTypes from "prop-types";
 
 const textInputStyle = {

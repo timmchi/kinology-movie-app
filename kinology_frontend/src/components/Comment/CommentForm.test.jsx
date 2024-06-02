@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import CommentForm from "./CommentForm";
-import { testSetup } from "../utils/testUtils";
+import { testSetup } from "../../utils/testUtils";
 import { expect, test } from "vitest";
 
 test("Comment form is rendered correctly", () => {

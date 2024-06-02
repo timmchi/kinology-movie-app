@@ -1,6 +1,6 @@
 import UserUpdateForm from "./UserUpdateForm";
 import { expect, test } from "vitest";
-import { testSetup } from "../utils/testUtils";
+import { testSetup } from "../../utils/testUtils";
 import { render, screen } from "@testing-library/react";
 
 test("Update form is rendered correctly", () => {

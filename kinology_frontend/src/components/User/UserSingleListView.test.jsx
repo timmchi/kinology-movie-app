@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import UserSingleListView from "./UserSingleListView";
-import usersService from "../services/users";
+import usersService from "../../services/users";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 import { act } from "@testing-library/react";
-import { testSetup } from "../utils/testUtils";
+import { testSetup } from "../../utils/testUtils";
 
 vi.mock("../services/users", async (importOriginal) => {
   const actual = await importOriginal();

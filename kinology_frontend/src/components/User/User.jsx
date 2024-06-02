@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useNotificationDispatch } from "../contexts/NotificationContext";
+import { useNotificationDispatch } from "../../contexts/NotificationContext";
 import Togglable from "./Togglable";
 import CommentForm from "./CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
 import CommentList from "./CommentList";
 import MovieProfileList from "./MovieProfileList";
-import usersService from "../services/users";
-import commentsService from "../services/comments";
+import usersService from "../../services/users";
+import commentsService from "../../services/comments";
 import { Button } from "@mui/material";
 import PropTypes from "prop-types";
 

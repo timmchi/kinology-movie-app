@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import SearchModal from "./SearchModal";
-import MovieList from "./MovieList";
+import SearchModal from "../Search/SearchModal";
+import MovieList from "../Movie/MovieList";
 import Hero from "./Hero";
 import PropTypes from "prop-types";
 

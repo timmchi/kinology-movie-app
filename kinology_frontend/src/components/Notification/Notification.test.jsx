@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import NotificationAlert from "./Notification";
-import { NotificationContext } from "../contexts/NotificationContext";
+import { NotificationContext } from "../../contexts/NotificationContext";
 import { expect, test } from "vitest";
 
 const renderWithContext = (contextValue) => {

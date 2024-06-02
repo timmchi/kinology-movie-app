@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { object, string, minLength } from "valibot";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../ReusableComponents/SubmitButton";
 import Stack from "@mui/joy/Stack";
 import { TextFieldElement } from "react-hook-form-mui";
 import PropTypes from "prop-types";

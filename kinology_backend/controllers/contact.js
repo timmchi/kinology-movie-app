@@ -20,6 +20,7 @@ const MessageSchema = v.object({
   ]),
 });
 
+// same can be configured for gmail
 const transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
   port: 587,

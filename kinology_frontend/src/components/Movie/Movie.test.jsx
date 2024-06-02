@@ -3,7 +3,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import Movie from "./Movie";
 import { expect, test, vi } from "vitest";
 import { act } from "@testing-library/react";
-import { NotificationContextProvider } from "../contexts/NotificationContext";
+import { NotificationContextProvider } from "../../contexts/NotificationContext";
 import userEvent from "@testing-library/user-event";
 
 const onButtonPress = vi.fn();

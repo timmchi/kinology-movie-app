@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import Togglable from "./Togglable";
+import Togglable from "../Togglable/Togglable";
 import CommentForm from "./CommentForm";
-import CommentView from "./CommentView";
+import CommentView from "../CommentView";
 import List from "@mui/material/List";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
