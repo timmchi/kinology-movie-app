@@ -9,7 +9,10 @@ const MovieProfileList = ({ movies, header }) => {
       <h3>{header}</h3>
       <div className="profileMovieContainer">
         {moviesList?.map((movie) => (
-          <div key={`${movie?.id} header`} className="movieSmallCard">
+          <div
+            key={`${movie.id ? movie.id : movie.tmdbId} header`}
+            className="movieSmallCard"
+          >
             <MovieSmallCard movie={movie} />
           </div>
         ))}
