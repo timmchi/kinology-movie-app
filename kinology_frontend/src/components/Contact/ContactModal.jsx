@@ -19,6 +19,7 @@ const ContactModal = () => {
           backgroundColor: "#609b76",
           "&:hover": { backgroundColor: "#00532f" },
           marginBottom: 1,
+          marginTop: 1,
         }}
       >
         Contact Me

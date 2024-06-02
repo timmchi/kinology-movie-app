@@ -22,9 +22,6 @@ const About = () => {
                 </a>
               </div>
               <div>
-                My portfolio (WIP) <OpenInNewIcon />
-              </div>
-              <div>
                 <ContactModal />
               </div>
             </div>
@@ -58,7 +55,7 @@ const About = () => {
                 target="_blank"
                 aria-label="TMDB link"
               >
-                <OpenInNewIcon />
+                <OpenInNewIcon sx={{ fontSize: "2rem" }} />
               </a>
             </p>
           </div>
@@ -67,8 +64,8 @@ const About = () => {
           <h2>Fullstack open</h2>
           <div className="content">
             <p>
-              This website is my attempt at completing the 10 credit final
-              project, which is a part of Full Stack Open course.
+              This website is my submission for the final project part of Full
+              Stack Open course, worth 10 credits or 175 hours.
             </p>
             <p>
               {" "}
@@ -76,14 +73,16 @@ const About = () => {
               so I highly recommend it to anyone who wants to get better at
               modern web development.
             </p>
-            Link to the course{" "}
-            <a
-              href="https://fullstackopen.com/en/"
-              target="_blank"
-              aria-label="Fullstackopen link"
-            >
-              <OpenInNewIcon />
-            </a>
+            <p>
+              Link to the course{" "}
+              <a
+                href="https://fullstackopen.com/en/"
+                target="_blank"
+                aria-label="Fullstackopen link"
+              >
+                <OpenInNewIcon sx={{ fontSize: "2rem" }} />
+              </a>
+            </p>
           </div>
         </div>
       </div>
