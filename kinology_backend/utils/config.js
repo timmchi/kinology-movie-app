@@ -21,6 +21,9 @@ const BASE_SINGLE_MOVIE_URL = "https://api.themoviedb.org/3/movie/";
 const ETHEREAL_USER = process.env.ETHEREAL_USER;
 const ETHEREAL_PW = process.env.ETHEREAL_PW;
 
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_PW = process.env.GMAIL_PW;
+
 module.exports = {
   PORT,
   MONGODB_URI,
@@ -35,4 +38,6 @@ module.exports = {
   BUCKET_REGION,
   ETHEREAL_USER,
   ETHEREAL_PW,
+  GMAIL_USER,
+  GMAIL_PW,
 };

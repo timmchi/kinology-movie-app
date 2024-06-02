@@ -21,13 +21,23 @@ const MessageSchema = v.object({
 });
 
 // same can be configured for gmail
+// const transporter = nodemailer.createTransport({
+//   host: "smtp.ethereal.email",
+//   port: 587,
+//   secure: false,
+//   auth: {
+//     user: config.ETHEREAL_USER,
+//     pass: config.ETHEREAL_PW,
+//   },
+// });
 const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
+  service: "gmail",
+  host: "smtp.gmail.com",
   port: 587,
   secure: false,
   auth: {
-    user: config.ETHEREAL_USER,
-    pass: config.ETHEREAL_PW,
+    user: config.GMAIL_USER,
+    pass: config.GMAIL_PW,
   },
 });
 
@@ -42,7 +52,7 @@ contactRouter.post("/", async (request, response) => {
 
   const info = await transporter.sendMail({
     from: parsedMessage.email,
-    to: config.ETHEREAL_USER,
+    to: config.GMAIL_USER,
     subject: `Email from ${parsedMessage.name}`,
     text: `${parsedMessage.message}`,
     html: `<p>${parsedMessage.name}</p><p>${parsedMessage.message}</p>`,
