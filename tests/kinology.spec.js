@@ -103,6 +103,96 @@ describe("Kinology", () => {
     await buttonIsVisible(page, "Log In");
   });
 
+  test("about section can be opened through nav bar", async ({ page }) => {
+    await clickLink(page, "About");
+
+    await expect(page.getByText("About me")).toBeVisible();
+    await expect(page.getByText("Web app uses TMDB api")).toBeVisible();
+    await expect(page.getByText("Fullstack open")).toBeVisible();
+  });
+
+  describe("about page is open", () => {
+    beforeEach(async ({ page }) => {
+      await clickLink(page, "About");
+
+      await expect(page.getByText("About me")).toBeVisible();
+    });
+
+    test("contact form can be opened and has all fields", async ({ page }) => {
+      await page.getByText("About me").hover();
+
+      await clickButton(page, "Contact Me");
+
+      const nameInput = page.getByLabel("Name");
+      const emailInput = page.getByLabel("Email");
+      const messageInput = page.getByLabel("Your message");
+
+      const submitButton = page.getByLabel("Submit message");
+
+      await expect(nameInput).toBeVisible();
+      await expect(emailInput).toBeVisible();
+      await expect(messageInput).toBeVisible();
+      await expect(submitButton).toBeVisible();
+    });
+
+    describe("and contact modal is open", () => {
+      beforeEach(async ({ page }) => {
+        await page.getByText("About me").hover();
+
+        await clickButton(page, "Contact Me");
+      });
+
+      test("contact form can be filled and submitted, and it closes the modal", async ({
+        page,
+      }) => {
+        const nameInput = page.getByLabel("Name");
+        const emailInput = page.getByLabel("Email");
+        const messageInput = page.getByLabel("Your message");
+
+        const submitButton = page.getByLabel("Submit message");
+
+        await nameInput.fill("Tester");
+        await emailInput.fill("tester@example.com");
+        await messageInput.fill("I am testing this sites functionality");
+
+        await submitButton.click();
+
+        await expect(
+          page.getByText("Your message was sent successfully")
+        ).toBeVisible();
+
+        await expect(nameInput).not.toBeVisible();
+        await expect(emailInput).not.toBeVisible();
+        await expect(messageInput).not.toBeVisible();
+        await expect(submitButton).not.toBeVisible();
+      });
+
+      test("validation in contact form", async ({ page }) => {
+        const nameInput = page.getByLabel("Name");
+        const emailInput = page.getByLabel("Email");
+        const messageInput = page.getByLabel("Your message");
+
+        const submitButton = page.getByLabel("Submit message");
+
+        await nameInput.fill("a");
+        await emailInput.fill("a");
+        await messageInput.fill("a");
+
+        await submitButton.click();
+
+        await expect(
+          page.getByText("Name or nickname should be 3 or more symbols")
+        ).toBeVisible();
+        await expect(
+          page.getByText("The email address is badly formatted")
+        ).toBeVisible();
+        await expect(
+          page.getByText("Message should be 3 or more symbols")
+        ).toBeVisible();
+      });
+    });
+  });
+
   describe("when registered", () => {
     beforeEach(async ({ page }) => {
       await registerWith(
