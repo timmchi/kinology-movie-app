@@ -82,6 +82,7 @@
 | 3.6  | 1     | Responsivness fixes, changing movie cards from grid to flex                 |
 | 3.6  | 1.5   | Deploying and fixing deployment issues                                      |
 | 3.6  | 2.5   | attempts at CI/CD pipeline                                                  |
+| 3.6  | 1     | backend tests added to pipeline                                             |
 |      |       |                                                                             |
 |      |       |                                                                             |
 |      |       |                                                                             |
@@ -95,5 +96,4 @@
 |      |       |                                                                             |
 |      |       |                                                                             |
 |      |       |                                                                             |
-|      |       |                                                                             |
-| tot  | 134.5 |                                                                             |
+| tot  | 135.5 |                                                                             |

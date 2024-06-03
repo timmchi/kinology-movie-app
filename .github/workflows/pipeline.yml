@@ -25,6 +25,7 @@ jobs:
           npm install
 
       - name: Frontend unit tests
+        if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
         run: |
           cd kinology_frontend
           npm test
@@ -43,6 +44,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
+        if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
         run: |
           cd kinology_backend
           npm test -- ./tests/comments_api.test.js && 
