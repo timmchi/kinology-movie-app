@@ -45,12 +45,12 @@ jobs:
           cd kinology_backend
           npm run build:ui
 
-          - name: Wait for MongoDB to be ready
-          run: |
-            until mongo --eval 'db.runCommand({ ping: 1 })'; do
-              echo "Waiting for MongoDB..."
-              sleep 2
-            done
+      - name: Wait for MongoDB to be ready
+        run: |
+          until mongo --eval 'db.runCommand({ ping: 1 })'; do
+            echo "Waiting for MongoDB..."
+            sleep 2
+          done
 
       - name: Run backend integration tests
         env:
