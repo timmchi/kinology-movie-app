@@ -16,6 +16,7 @@
     "@types/node": "^20.12.12"
   },
   "dependencies": {
-    "playwright": "^1.44.1"
+    "playwright": "^1.44.1",
+    "@playwright/test": "^1.44.0"
   }
 }

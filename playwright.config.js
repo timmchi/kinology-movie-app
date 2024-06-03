@@ -47,6 +47,7 @@ module.exports = defineConfig({
   webServer: {
     command: "cd kinology_backend && npm run start:test",
     url: "http://localhost:3001",
+    reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
   use: {
