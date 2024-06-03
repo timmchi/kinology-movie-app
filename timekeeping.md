@@ -79,6 +79,9 @@
 | 2.6  | 1     | E2e test fixes and e2e tests for contact form                               |
 | 2.6  | 1     | Unit test fixing, unit tests for new components                             |
 | 2.6  | 1     | Miscellaneous styling, about section styling, email service change to gmail |
+| 3.6  | 1     | Responsivness fixes, changing movie cards from grid to flex                 |
+| 3.6  | 1.5   | Deploying and fixing deployment issues                                      |
+| 3.6  | 2.5   | attempts at CI/CD pipeline                                                  |
 |      |       |                                                                             |
 |      |       |                                                                             |
 |      |       |                                                                             |
@@ -93,7 +96,4 @@
 |      |       |                                                                             |
 |      |       |                                                                             |
 |      |       |                                                                             |
-|      |       |                                                                             |
-|      |       |                                                                             |
-|      |       |                                                                             |
-| tot  | 129.5 |                                                                             |
+| tot  | 134.5 |                                                                             |
