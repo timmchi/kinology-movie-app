@@ -1,4 +1,5 @@
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
+import placeholderUrl from "../../../posterPlaceholder.png";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -45,9 +46,7 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
           >
             <img
               src={
-                movie.image
-                  ? `${basePosterUrl}${movie.image}`
-                  : "../../posterPlaceholder.png"
+                movie.image ? `${basePosterUrl}${movie.image}` : placeholderUrl
               }
               alt={
                 movie.image

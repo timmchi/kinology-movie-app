@@ -8,6 +8,7 @@ import GenreList from "../ReusableComponents/GenreList";
 import moviesService from "../../services/movies";
 import commentsService from "../../services/comments";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
+import placeholderUrl from "../../../posterPlaceholder.png";
 import PropTypes from "prop-types";
 
 const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
@@ -153,9 +154,7 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
           <div className="singleMovieImage">
             <img
               src={
-                movie.image
-                  ? `${basePosterUrl}${movie?.image}`
-                  : "../../posterPlaceholder.png"
+                movie.image ? `${basePosterUrl}${movie?.image}` : placeholderUrl
               }
               alt={
                 movie.image

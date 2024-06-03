@@ -1,6 +1,7 @@
 const config = require("./utils/config");
 const express = require("express");
 require("express-async-errors");
+const path = require("path");
 const app = express();
 const cors = require("cors");
 const usersRouter = require("./controllers/users");
@@ -25,8 +26,9 @@ mongoose
     logger.error(`Error connecting to MongoDB: ${err.message}`);
   });
 
-app.use(cors());
 app.use(express.static("dist"));
+
+app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 
@@ -35,6 +37,14 @@ app.use("/api/login", loginRouter);
 app.use("/api/movies", moviesRouter);
 app.use("/api/comments", commentsRouter);
 app.use("/api/contact", contactRouter);
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "./dist/index.html"), function (err) {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
+});
 
 if (process.env.NODE_ENV === "test") {
   const testingRouter = require("./controllers/testing");
