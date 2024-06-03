@@ -27,7 +27,5 @@ jobs:
         run: |
           cd kinology_frontend
           npm test
-      - name: Install Playwright Browsers
-        run: npm playwright install --with-deps
       - name: e2e tests
         run: npm test -- --project chromium
