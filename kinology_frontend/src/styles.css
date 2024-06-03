@@ -52,10 +52,11 @@ a:hover {
 }
 
 .cardsContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  padding-left: 3.5em;
-  margin-top: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2em 1em;
+  gap: 3em;
 }
 
 .outerMovieContainer {
@@ -354,7 +355,7 @@ a:hover {
   }
 
   .cardsContainer {
-    padding-left: 4em;
+    gap: 0.5em;
   }
 
   .userProfileContainer {
@@ -462,6 +463,10 @@ a:hover {
 }
 
 @media (max-width: 1024px) and (min-width: 768px) {
+  .cardsContainer {
+    gap: 2em;
+  }
+
   .intro h2 {
     font-size: 3rem;
   }
