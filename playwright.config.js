@@ -44,12 +44,11 @@ module.exports = defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
   ],
-
-  webServer: {
-    command: "cd kinology_backend && npm run start:test",
-    url: "http://localhost:3001",
-    reuseExistingServer: !process.env.CI,
-  },
+  //   webServer: {
+  //     command: "cd kinology_backend && npm run start:test",
+  //     url: "http://localhost:3001",
+  //     reuseExistingServer: !process.env.CI,
+  //   },
   use: {
     baseURL: "http://localhost:3001/",
     trace: "on-first-retry",
