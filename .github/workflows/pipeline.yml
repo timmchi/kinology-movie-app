@@ -39,6 +39,10 @@ jobs:
           NODE_ENV: test
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
         run: |
           cd kinology_backend
           npm test -- ./tests/comments_api.test.js && 
