@@ -18,9 +18,9 @@ const {
 
 describe("Kinology", () => {
   beforeEach(async ({ page, request }) => {
-    await request.post("http:localhost:3001/api/testing/reset");
+    await request.post("/api/testing/reset");
 
-    await page.goto("http://localhost:5173");
+    await page.goto("/");
   });
 
   test("front page can be opened", async ({ page }) => {
@@ -300,7 +300,7 @@ describe("Kinology", () => {
       test("user can access a single movie page and movie buttons will be shown", async ({
         page,
       }) => {
-        await page.goto("http://localhost:5173/movies/111");
+        await page.goto("/movies/111");
 
         const title = page.getByText("Scarface");
         await expect(title).toBeVisible();
@@ -466,7 +466,7 @@ describe("Kinology", () => {
 
       describe("adding a movie to user page", () => {
         beforeEach(async ({ page }) => {
-          await page.goto("http://localhost:5173/movies/111");
+          await page.goto("/movies/111");
 
           const title = page.getByText("Scarface");
           await expect(title).toBeVisible();
@@ -667,7 +667,7 @@ describe("Kinology", () => {
 
       describe("dealing with comments to a movie page", () => {
         beforeEach(async ({ page }) => {
-          await page.goto("http://localhost:5173/movies/111");
+          await page.goto("/movies/111");
 
           const title = page.getByText("Scarface");
           await expect(title).toBeVisible();
