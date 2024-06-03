@@ -57,6 +57,7 @@ a:hover {
   justify-content: center;
   padding: 2em 1em;
   gap: 3em;
+  max-width: 1500px;
 }
 
 .outerMovieContainer {
@@ -504,5 +505,23 @@ a:hover {
   .search-div,
   .register-div {
     font-size: 1rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .cardsContainer {
+    margin-left: 3em;
+  }
+}
+
+@media (min-width: 1650px) {
+  .cardsContainer {
+    margin-left: 5em;
+  }
+}
+
+@media (min-width: 1750px) {
+  .cardsContainer {
+    margin-left: 12em;
   }
 }
