@@ -37,9 +37,17 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
+      - name: Start Backend Server
+        run: |
+          cd kinology_backend
+          npm run start:test &
+          # Wait for the server to start
+          sleep 30
+          # Check if the server is up
+          curl --retry 10 --retry-delay 5 --retry-connrefused http://localhost:3001/api/testing/reset
+
       - name: e2e tests
-        env:
-          NODE_ENV: "test"
         run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
