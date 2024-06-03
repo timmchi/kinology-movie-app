@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/api/movies";
+const baseUrl = "/api/movies";
 
 const search = async (queryDetails) => {
   console.log("query deatils in movies service in frontend", queryDetails);

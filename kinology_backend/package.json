@@ -8,7 +8,9 @@
     "dev": "cross-env NODE_NEV=development nodemon index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "lint": "eslint .",
-    "start:test": "cross-env NODE_ENV=test node index.js"
+    "start:test": "cross-env NODE_ENV=test node index.js",
+    "build:ui": "rm -rf dist && cd ../kinology_frontend && npm run build && cp -r dist ../kinology_backend",
+    "deploy:full": "npm run build:ui && cd .. && git add . && git commit -m uibuild && git push "
   },
   "author": "timmchi",
   "license": "MIT",
