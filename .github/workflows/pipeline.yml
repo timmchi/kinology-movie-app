@@ -8,6 +8,18 @@ on:
 jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,3 +44,21 @@ jobs:
         run: |
           cd kinology_backend
           npm run build:ui
+
+          - name: Wait for MongoDB to be ready
+          run: |
+            until mongo --eval 'db.runCommand({ ping: 1 })'; do
+              echo "Waiting for MongoDB..."
+              sleep 2
+            done
+
+      - name: Run backend integration tests
+        env:
+          NODE_ENV: test
+          TEST_MONGODB_URI: mongodb://localhost:27017/testdb
+        run: |
+          cd kinology_backend
+          npm test -- ./tests/comments_api.test.js && \
+          npm test -- ./tests/login_api.test.js && \
+          npm test -- ./tests/movies_api.test.js && \
+          npm test -- ./tests/users_api.test.js
