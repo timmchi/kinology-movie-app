@@ -33,6 +33,6 @@ jobs:
           cd kinology_frontend
           npm test
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
       - name: e2e tests
         run: npx playwright test --project=chromium
