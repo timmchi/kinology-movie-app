@@ -370,7 +370,6 @@ usersRouter.put(
     user.avatar = `${user.username}-avatar`;
     user.name = parsedUserInfo.name;
 
-    console.log("user after updating", user);
     await user.save();
 
     // generating signed url so that avatar changes on update

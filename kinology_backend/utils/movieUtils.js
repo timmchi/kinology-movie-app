@@ -23,13 +23,6 @@ const peopleSearch = async (people) => {
 };
 
 const queryCreator = (params) => {
-  console.log(
-    "in query creator",
-    params.director,
-    params.actors,
-    params.genres
-  );
-
   const vote_gte = `vote_average.gte=${params.ratingLower}`;
   const vote_lte = `&vote_average.lte=${params.ratingUpper}`;
   const with_genres =

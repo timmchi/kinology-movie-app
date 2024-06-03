@@ -65,7 +65,6 @@ const CommentForm = ({ commentAction, commentId, authorId, label }) => {
 
   // comments are created and edited in the same way. On creation, commentId and authorId are not used, but on edit, they are
   const submitComment = async ({ content }) => {
-    console.log(content);
     commentAction(content, commentId, authorId);
   };
 

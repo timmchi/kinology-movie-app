@@ -43,7 +43,6 @@ const removeMovieFromProfile = async (movie, button, userId) => {
     },
   };
 
-  console.log("movie and button in remove movie from ..", movie, button);
   const response = await axios.delete(
     `${baseUrl}/${userId}/movies/${movie.id}`,
     config

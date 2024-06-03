@@ -58,7 +58,6 @@ const UserUpdateForm = ({ updateUser }) => {
     formData.append("bio", data.bio);
     formData.append("name", data.name);
 
-    console.log(formData.get("avatar"));
     updateUser(formData);
   };
 

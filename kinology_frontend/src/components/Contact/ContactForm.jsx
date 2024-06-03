@@ -79,7 +79,6 @@ const ContactForm = ({ setOpen }) => {
 
   const submitMessage = async (data) => {
     try {
-      console.log(data);
       await contactService.sendMessage(data);
       setOpen(false);
       dispatch({

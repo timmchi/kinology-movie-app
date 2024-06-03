@@ -18,7 +18,6 @@ import PropTypes from "prop-types";
 const drawerWidth = 240;
 
 const handleLogout = () => {
-  console.log("logging out...");
   window.localStorage.removeItem("loggedKinologyUser");
   window.location.reload();
 };

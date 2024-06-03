@@ -44,11 +44,7 @@ const transporter = nodemailer.createTransport({
 contactRouter.post("/", async (request, response) => {
   const { name, email, message } = request.body;
 
-  console.log(name, email, message);
-
   const parsedMessage = v.parse(MessageSchema, { email, name, message });
-
-  console.log(parsedMessage);
 
   const info = await transporter.sendMail({
     from: parsedMessage.email,
@@ -57,8 +53,6 @@ contactRouter.post("/", async (request, response) => {
     text: `${parsedMessage.message}`,
     html: `<p>${parsedMessage.name}</p><p>${parsedMessage.message}</p>`,
   });
-
-  console.log("Message sent: %s", info.messageId);
 
   response.status(200).end();
 });

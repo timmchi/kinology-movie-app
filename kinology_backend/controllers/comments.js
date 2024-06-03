@@ -270,19 +270,11 @@ commentsRouter.get("/movie/:id", async (request, response) => {
   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
   //   const movie = await fetchMovie(parsedParams.movieId);
 
-  console.log("movie before findone", movie);
-
   if (!movie) return response.status(200).send([]);
-
-  console.log("movie after findone", movie);
-
-  console.log(movie);
 
   const comments = await UserComment.find({
     movieReceiver: movie?._id,
   }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
-
-  console.log("movie comments", comments);
 
   movie.populate("comments");
 

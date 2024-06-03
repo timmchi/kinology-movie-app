@@ -9,7 +9,6 @@ const SignUp = ({ addUser }) => {
   const dispatch = useNotificationDispatch();
 
   const handleSignUp = async (data) => {
-    console.log(data);
     const { username, email, password, passwordConfirm, name } = data;
 
     try {
@@ -31,7 +30,6 @@ const SignUp = ({ addUser }) => {
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
       navigate("/login");
     } catch (exception) {
-      console.log(exception);
       dispatch({
         type: "SHOW",
         payload: {

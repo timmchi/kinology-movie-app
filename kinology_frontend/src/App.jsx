@@ -73,7 +73,6 @@ function App() {
     event.preventDefault();
     try {
       const currentUserId = users.find((u) => u.username === user.username)?.id;
-      console.log(movie, button, currentUserId);
       await userService.addMovieToProfile(movie, button, currentUserId);
       dispatch({
         type: "SHOW",
@@ -122,7 +121,6 @@ function App() {
   };
 
   const handleLogin = async (data) => {
-    console.log(data);
     const { username, password } = data;
 
     try {

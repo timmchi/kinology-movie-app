@@ -146,7 +146,6 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
     });
   };
 
-  console.log(movie);
   return (
     <div className="outerMovieContainer">
       <div className="moviePage">
