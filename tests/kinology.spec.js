@@ -18,7 +18,7 @@ const {
 
 describe("Kinology", () => {
   beforeEach(async ({ page, request }) => {
-    await request.post("/api/testing/reset");
+    // await request.post("/api/testing/reset");
 
     await page.goto("/");
   });
