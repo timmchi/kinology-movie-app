@@ -1,6 +1,5 @@
 const { test, after, beforeEach, describe } = require("node:test");
 const path = require("path");
-const fs = require("fs");
 const assert = require("node:assert/strict");
 const User = require("../models/user");
 const Movie = require("../models/movie");
@@ -159,10 +158,6 @@ describe("when there are no users in the db", async () => {
 
       test("a user can update their profile", async () => {
         const avatar = path.resolve(__dirname, "testImage.png");
-
-        if (!fs.existsSync(avatar)) {
-          throw new Error("Test image file does not exist");
-        }
 
         await helper.successfulEdit(api, token, createdUserId, avatar);
 
