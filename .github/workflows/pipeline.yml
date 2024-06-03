@@ -13,8 +13,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Install project dependencies
-        run: npm install
       - name: Install frontend dependencies
         run: |
           cd kinology_frontend
@@ -27,12 +25,22 @@ jobs:
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: 7.0.0
 
       - name: Frontend unit tests
         run: |
           cd kinology_frontend
           npm test
+
+      - name: Backend integration tests
+        run: |
+          cd kinology_backend
+          npm test -- ./tests/comments_api.test.js && npm test -- ./tests/login_api.test.js && npm test -- ./tests/movies_api.test.js && npm test -- ./tests/users_api.test.js
+
+      - name: Install dependencies
+        run: npm ci
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install-deps chromium
       - name: e2e tests
         run: npx playwright test --project=chromium
