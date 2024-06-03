@@ -9,12 +9,6 @@ jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
 
-    services:
-      mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -43,10 +37,10 @@ jobs:
       - name: Run backend integration tests
         env:
           NODE_ENV: test
-          TEST_MONGODB_URI: mongodb://localhost:27017/testdb
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
         run: |
           cd kinology_backend
-          npm test -- ./tests/comments_api.test.js && \
-          npm test -- ./tests/login_api.test.js && \
-          npm test -- ./tests/movies_api.test.js && \
+          npm test -- ./tests/comments_api.test.js && 
+          npm test -- ./tests/login_api.test.js && 
+          npm test -- ./tests/movies_api.test.js && 
           npm test -- ./tests/users_api.test.js
