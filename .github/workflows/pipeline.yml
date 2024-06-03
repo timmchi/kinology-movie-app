@@ -19,10 +19,15 @@ jobs:
         run: |
           cd kinology_frontend
           npm install
+
       - name: Install backend dependencies
         run: |
           cd kinology_backend
           npm install
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+
       - name: Frontend unit tests
         run: |
           cd kinology_frontend
@@ -30,4 +35,4 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: e2e tests
-        run: npm test -- --project chromium
+        run: npx playwright test --project=chromium
