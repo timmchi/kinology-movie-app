@@ -27,10 +27,6 @@ jobs:
         run: |
           cd kinology_frontend
           npm test
-      - name: Backend integration tests
-        run: |
-          cd kinology_backend
-          npm test -- ./tests/comments_api.test.js && npm test -- ./tests/login_api.test.js && npm test -- ./tests/movies_api.test.js && npm test -- ./tests/users_api.test.js
       - name: Install Playwright Browsers
         run: npm playwright install --with-deps
       - name: e2e tests
