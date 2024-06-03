@@ -3,10 +3,8 @@ const assert = require("node:assert/strict");
 const Movie = require("../models/movie");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
-const nock = require("nock");
 const app = require("../app");
 const helper = require("./movies_helper");
-const config = require("../utils/config");
 
 const api = supertest(app);
 
