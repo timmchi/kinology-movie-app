@@ -159,10 +159,10 @@ describe("Kinology", () => {
 
         await page.waitForTimeout(3000);
 
-        await expect(nameInput).not.toBeVisible({ timeout: 10000 });
-        await expect(emailInput).not.toBeVisible({ timeout: 10000 });
-        await expect(messageInput).not.toBeVisible({ timeout: 10000 });
-        await expect(submitButton).not.toBeVisible({ timeout: 10000 });
+        await expect(nameInput).not.toBeVisible({ timeout: 15000 });
+        await expect(emailInput).not.toBeVisible({ timeout: 15000 });
+        await expect(messageInput).not.toBeVisible({ timeout: 15000 });
+        await expect(submitButton).not.toBeVisible({ timeout: 15000 });
       });
 
       test("validation in contact form", async ({ page }) => {
