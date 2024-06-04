@@ -38,6 +38,10 @@ app.use("/api/movies", moviesRouter);
 app.use("/api/comments", commentsRouter);
 app.use("/api/contact", contactRouter);
 
+app.get("/health", (req, res) => {
+  res.send("ok");
+});
+
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "./dist/index.html"), function (err) {
     if (err) {

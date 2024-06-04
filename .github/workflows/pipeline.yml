@@ -84,7 +84,7 @@ jobs:
           retention-days: 5
 
       - name: Deploy
-        if: ${{ !contains(toJson(github.event.commits.*.message),'#deployskip') }} && github.ref == 'refs/heads/main'
+        if: ${{ !contains(toJson(github.event.commits.*.message),'#deployskip') }} && ${{ github.event_name == 'push' }}
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL}}
         run: curl "$deploy_url"
