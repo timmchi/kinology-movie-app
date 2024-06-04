@@ -75,6 +75,7 @@ jobs:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PW: ${{ secrets.GMAIL_PW }}
+        if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
         run: DEBUG=pw:webserver npx playwright test --project=chromium
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

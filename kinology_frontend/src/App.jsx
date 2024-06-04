@@ -144,11 +144,10 @@ function App() {
       setUser(user);
       navigate("/");
     } catch (exception) {
-      console.log("wrong credentials");
       dispatch({
         type: "SHOW",
         payload: {
-          message: `Something went wrong when logging in`,
+          message: `${exception.response.data.error}`,
           type: "error",
         },
       });
