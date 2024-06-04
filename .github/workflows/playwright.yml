@@ -1,0 +1,59 @@
+name: E2E tests with playwright
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  e2e_pipeline:
+    runs-on: ubuntu-20.04
+
+    if: ${{ !contains(toJson(github.event.commits.*.message),'#skipe2e') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies
+        run: |
+          cd kinology_frontend
+          npm install
+
+      - name: Install backend dependencies
+        run: |
+          cd kinology_backend
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd kinology_backend
+          npm run build:ui
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Install Playwright chromium browser and dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e tests
+        env:
+          NODE_ENV: test
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          SECRET: ${{ secrets.SECRET }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PW: ${{ secrets.GMAIL_PW }}
+        run: npx playwright test --project=chromium
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5
