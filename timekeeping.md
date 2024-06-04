@@ -84,7 +84,7 @@
 | 3.6  | 2.5   | attempts at CI/CD pipeline                                                    |
 | 3.6  | 1     | backend tests added to pipeline                                               |
 | 4.6  | 2     | e2e tests added to github actions, deployment pipeline finished (no lint yet) |
-| 4.6  | 2     | health check added, styles fixes, error message on login                      |
+| 4.6  | 2     | health check added, small movie card style fix, error message on login        |
 |      |       |                                                                               |
 |      |       |                                                                               |
 |      |       |                                                                               |
