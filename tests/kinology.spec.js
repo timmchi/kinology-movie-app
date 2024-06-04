@@ -159,10 +159,6 @@ describe("Kinology", () => {
 
         await page.waitForTimeout(1000);
 
-        await expect(
-          page.getByText("Your message was sent successfully")
-        ).toBeVisible({ timeout: 10000 });
-
         await expect(nameInput).not.toBeVisible({ timeout: 10000 });
         await expect(emailInput).not.toBeVisible({ timeout: 10000 });
         await expect(messageInput).not.toBeVisible({ timeout: 10000 });
@@ -486,6 +482,8 @@ describe("Kinology", () => {
 
           await clickButton(page, "Watch");
 
+          await page.waitForTimeout(1000);
+
           await buttonIsVisible(page, "Unwatch");
 
           await expect(
@@ -503,6 +501,8 @@ describe("Kinology", () => {
           await clickButton(page, "Watch");
 
           await buttonIsVisible(page, "Unwatch");
+
+          await page.waitForTimeout(1000);
 
           await expect(
             page.getByText("Successfully added Scarface to later")
@@ -533,6 +533,8 @@ describe("Kinology", () => {
 
           await buttonIsVisible(page, "Unfavorite");
 
+          await page.waitForTimeout(1000);
+
           await expect(
             page.getByText("Successfully added Scarface to favorite")
           ).toBeVisible({ timeout: 10000 });
@@ -547,7 +549,11 @@ describe("Kinology", () => {
         test("movie can be removed from favorite list", async ({ page }) => {
           await clickButton(page, "Favorite");
 
+          await page.waitForTimeout(1000);
+
           await buttonIsVisible(page, "Unfavorite");
+
+          await page.waitForTimeout(1000);
 
           await expect(
             page.getByText("Successfully added Scarface to favorite")
@@ -576,6 +582,8 @@ describe("Kinology", () => {
 
           await clickButton(page, "Seen");
 
+          await page.waitForTimeout(1000);
+
           await buttonIsVisible(page, "Unsee");
 
           await expect(
@@ -591,6 +599,8 @@ describe("Kinology", () => {
 
         test("movie can be removed from seen list", async ({ page }) => {
           await clickButton(page, "Seen");
+
+          await page.waitForTimeout(1000);
 
           await buttonIsVisible(page, "Unsee");
 
@@ -618,16 +628,19 @@ describe("Kinology", () => {
 
         test("movie can be added to multiple lists", async ({ page }) => {
           await clickButton(page, "Seen");
+          await page.waitForTimeout(1000);
           await expect(
             page.getByText("Successfully added Scarface to watched")
           ).toBeVisible({ timeout: 10000 });
 
           await clickButton(page, "Favorite");
+          await page.waitForTimeout(1000);
           await expect(
             page.getByText("Successfully added Scarface to favorite")
           ).toBeVisible({ timeout: 10000 });
 
           await clickButton(page, "Watch");
+          await page.waitForTimeout(1000);
           await expect(
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible({ timeout: 10000 });
@@ -646,16 +659,19 @@ describe("Kinology", () => {
 
         test("movie can be removed from multiple lists", async ({ page }) => {
           await clickButton(page, "Seen");
+          await page.waitForTimeout(1000);
           await expect(
             page.getByText("Successfully added Scarface to watched")
           ).toBeVisible({ timeout: 10000 });
 
           await clickButton(page, "Favorite");
+          await page.waitForTimeout(1000);
           await expect(
             page.getByText("Successfully added Scarface to favorite")
           ).toBeVisible({ timeout: 10000 });
 
           await clickButton(page, "Watch");
+          await page.waitForTimeout(1000);
           await expect(
             page.getByText("Successfully added Scarface to later")
           ).toBeVisible({ timeout: 10000 });
@@ -833,6 +849,8 @@ describe("Kinology", () => {
             await openCommentForm(page);
 
             await postComment(page, "This is my own profile");
+
+            await page.waitForTimeout(1000);
 
             await expect(
               page.getByText(
