@@ -52,8 +52,8 @@ jobs:
           npm test -- ./tests/movies_api.test.js && 
           npm test -- ./tests/users_api.test.js
 
-          - name: Install project dependencies
-          run: npm ci
+      - name: Install project dependencies
+        run: npm ci
 
       - name: Install Playwright chromium browser and dependencies
         run: npx playwright install --with-deps chromium
@@ -79,3 +79,7 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 5
+
+      - name: Trigger deployment
+        if: ${{ !contains(toJson(github.event.commits.*.message),'#deployskip') }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.MY_RENDER_SERVICE_ID }}?key=${{ secrets.MY_RENDER_API_KEY }}
