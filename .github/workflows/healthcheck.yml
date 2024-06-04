@@ -1,0 +1,16 @@
+name: Periodic Health Check
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  health_check:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v4
+        with:
+          url: https://kinology-movie-app.onrender.com/health
+          max-attemps: 2
