@@ -10,7 +10,7 @@ jobs:
   e2e_pipeline:
     runs-on: ubuntu-20.04
 
-    if: ${{ !contains(toJson(github.event.commits.*.message),'#skipe2e') }}
+    if: ${{ !contains(toJson(github.event.commits.*.message),'#noe2e') }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
