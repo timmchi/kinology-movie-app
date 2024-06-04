@@ -1,16 +1,14 @@
 name: E2E tests with playwright
 
 on:
-  workflow_run:
-    workflows: ["Deployment pipeline"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   e2e_pipeline:
+    if: ${{ contains(toJson(github.event.commits.*.message),'#separatee2e') }}
     runs-on: ubuntu-20.04
-
-    if: ${{ !contains(toJson(github.event.commits.*.message),'#noe2e') }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
