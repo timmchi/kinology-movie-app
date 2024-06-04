@@ -10,6 +10,7 @@ import MovieProfileList from "../Movie/MovieProfileList";
 import usersService from "../../services/users";
 import commentsService from "../../services/comments";
 import { Button } from "@mui/material";
+import placeholderUrl from "../../../avatar-placeholder.png";
 import PropTypes from "prop-types";
 
 const User = ({ currentUser, removeUser }) => {
@@ -228,7 +229,8 @@ const User = ({ currentUser, removeUser }) => {
         <div className="userProfileContainer">
           <div className="userAvatar">
             <img
-              src={avatar}
+              src={avatar ? avatar : placeholderUrl}
+              onError={() => setAvatar(placeholderUrl)}
               width="300"
               height="300"
               alt="user avatar"
