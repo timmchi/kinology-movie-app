@@ -239,7 +239,7 @@ describe("Kinology", () => {
       await loginWith(page, "tester", "toster");
 
       await expect(
-        page.getByText("Something went wrong when logging in")
+        page.getByText("invalid username or password")
       ).toBeVisible();
 
       await linkIsVisible(page, "Log In");
