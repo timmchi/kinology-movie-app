@@ -83,6 +83,8 @@ jobs:
           path: playwright-report/
           retention-days: 5
 
-      - name: Trigger deployment
-        if: ${{ !contains(toJson(github.event.commits.*.message),'#deployskip') }}
-        run: curl https://api.render.com/deploy/srv-${{ secrets.MY_RENDER_SERVICE_ID }}?key=${{ secrets.MY_RENDER_API_KEY }}
+      - name: Deploy
+        if: ${{ !contains(toJson(github.event.commits.*.message),'#deployskip') }} && github.ref == 'refs/heads/main'
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL}}
+        run: curl "$deploy_url"
