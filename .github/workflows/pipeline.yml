@@ -95,7 +95,7 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PW: ${{ secrets.GMAIL_PW }}
         if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
-        run: DEBUG=pw:webserver npx playwright test --project=chromium
+        run: DEBUG=pw:browser npx playwright test --project=chromium
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

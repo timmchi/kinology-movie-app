@@ -1172,18 +1172,15 @@ describe("Kinology", () => {
           context,
           page,
         }) => {
-          const [newPage] = await Promise.all([
-            context.waitForEvent("page"),
-            page.getByRole("link", { name: "Casino Casino" }).click(),
-          ]);
-
-          await newPage.bringToFront();
+          const pagePromise = context.waitForEvent("popup");
+          await page.getByRole("link", { name: "Casino Casino " }).click();
+          const newPage = await pagePromise;
 
           await expect(
-            page.getByRole("heading", { name: "Casino" })
+            newPage.getByRole("heading", { name: "Casino" })
           ).toBeVisible();
           await expect(
-            page.getByText("No one stays at the top forever.")
+            newPage.getByText("No one stays at the top forever.")
           ).toBeVisible();
         });
 
