@@ -1169,10 +1169,9 @@ describe("Kinology", () => {
         });
 
         test("a movie card can be clicked, which takes user to movie profile", async ({
-          context,
           page,
         }) => {
-          const pagePromise = context.waitForEvent("popup");
+          const pagePromise = page.waitForEvent("popup");
           await page.getByRole("link", { name: "Casino Casino " }).click();
           const newPage = await pagePromise;
 
