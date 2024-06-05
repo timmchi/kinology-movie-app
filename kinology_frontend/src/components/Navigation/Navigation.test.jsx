@@ -1,10 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Navigation from "./Navigation";
+import { NotificationContextProvider } from "../../contexts/NotificationContext";
 import About from "../About/About";
 import SignUpForm from "../SignUp/SignUpForm";
 import LogIn from "../Auth/LogIn";
-import { afterEach, describe, expect, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 test("renders correctly when the user is null", () => {
   render(
@@ -63,12 +64,14 @@ describe("testing routes", () => {
 
   test("signup form can be accessed through navigation", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <Routes>
-          <Route path="/" element={<Navigation user={null} />} />
-          <Route path="/signup" element={<SignUpForm />} />
-        </Routes>
-      </MemoryRouter>
+      <NotificationContextProvider>
+        <MemoryRouter initialEntries={["/"]}>
+          <Routes>
+            <Route path="/" element={<Navigation user={null} />} />
+            <Route path="/signup" element={<SignUpForm />} />
+          </Routes>
+        </MemoryRouter>
+      </NotificationContextProvider>
     );
 
     fireEvent.click(screen.getAllByText("Sign up")[1]);
