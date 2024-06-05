@@ -24,7 +24,12 @@ const transformData = (data, actors, pageValue) => {
   return transformedObject;
 };
 
-const useMovieSearch = (setMovies) => {
+const createOption = (label) => ({
+  label,
+  value: label,
+});
+
+const useMovieSearch = (setMovies, reset) => {
   const [actor, setActor] = useState("");
   const [actors, setActors] = useState([]);
   const [firstSearchData, setFirstSearchData] = useState(null);
@@ -53,11 +58,29 @@ const useMovieSearch = (setMovies) => {
     }
   };
 
-  const handleNewSearch = (reset) => {
+  const handleNewSearch = () => {
     reset();
     setActors([]);
     setPage(1);
     setTotalPages(-1);
     setMovies([]);
   };
+
+  return {
+    handleKeyDown,
+    handleNewSearch,
+    searchForMovies,
+    firstSearchData,
+    page,
+    totalPages,
+    open,
+    actor,
+    actors,
+    setActor,
+    setActors,
+    setPage,
+    setOpen,
+  };
 };
+
+export default useMovieSearch;
