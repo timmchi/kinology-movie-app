@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");
-    if (loggedUserJSON) {
+    if (loggedUserJSON && loggedUserJSON != null) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       userService.setToken(user.token);
@@ -38,6 +38,10 @@ function App() {
     };
 
     fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    handlePageLoad();
   }, []);
 
   const addUser = (user) => {
@@ -120,6 +124,21 @@ function App() {
     }
   };
 
+  const handlePageLoad = () => {
+    if (window.localStorage.getItem("sessionExpired") === "true") {
+      window.localStorage.removeItem("sessionExpired");
+      dispatch({
+        type: "SHOW",
+        payload: {
+          message: "Your session has run out, please log in again",
+          type: "success",
+        },
+      });
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+      navigate("/login");
+    }
+  };
+
   const handleLogin = async (data) => {
     const { username, password } = data;
 
@@ -142,6 +161,13 @@ function App() {
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
 
       setUser(user);
+
+      setTimeout(() => {
+        window.localStorage.removeItem("loggedKinologyUser");
+        window.localStorage.setItem("sessionExpired", "true");
+        window.location.reload();
+      }, 60 * 60 * 1000);
+
       navigate("/");
     } catch (exception) {
       dispatch({
@@ -184,18 +210,7 @@ function App() {
             />
           }
         />
-        <Route
-          path="/signup"
-          element={
-            // <SignUp
-            //   user={user}
-            //   users={users}
-            //   setUsers={setUsers}
-            //   addUser={addUser}
-            // />
-            <SignUpForm addUser={addUser} />
-          }
-        />
+        <Route path="/signup" element={<SignUpForm addUser={addUser} />} />
         <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />
         <Route path="/about" element={<About />} />
         <Route
