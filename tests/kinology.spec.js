@@ -1177,10 +1177,6 @@ describe("Kinology", () => {
             page.getByText("Casino").click(),
           ]);
 
-          await context.grantPermissions(newPage, [
-            "clipboard-read",
-            "clipboard-write",
-          ]);
           await newPage.bringToFront();
 
           await expect(
