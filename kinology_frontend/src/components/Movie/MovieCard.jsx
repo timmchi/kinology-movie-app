@@ -37,7 +37,11 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
       className="movieCard"
       data-testid="search-movie-card"
     >
-      <CardActionArea component={Link} to={`/movies/${movie.id}`}>
+      <CardActionArea
+        component={Link}
+        to={`/movies/${movie.id}`}
+        target="_blank"
+      >
         <div style={{ position: "relative" }}>
           <CardMedia
             component="picture"
