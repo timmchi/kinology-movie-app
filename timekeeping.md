@@ -88,6 +88,7 @@
 | 5.6  | 2     | useMovie, useUser, userSignUp, useMovieSearch hooks                           |
 | 5.6  | 1     | fixing tests to work locally, to work in github actions                       |
 | 5.6  | 1     | Movie cards open in new window, automatic logout, refactoring                 |
+| 5.6  | 1     | Wrestling with tests                                                          |
 |      |       |                                                                               |
 |      |       |                                                                               |
 |      |       |                                                                               |
@@ -95,5 +96,4 @@
 |      |       |                                                                               |
 |      |       |                                                                               |
 |      |       |                                                                               |
-|      |       |                                                                               |
-| tot  | 143.5 |                                                                               |
+| tot  | 144.5 |                                                                               |
