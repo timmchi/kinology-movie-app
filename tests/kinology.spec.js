@@ -1174,7 +1174,7 @@ describe("Kinology", () => {
         }) => {
           const [newPage] = await Promise.all([
             context.waitForEvent("page"),
-            page.getByText("Casino").click(),
+            page.getByRole("link", { name: "Casino Casino" }).click(),
           ]);
 
           await newPage.bringToFront();
