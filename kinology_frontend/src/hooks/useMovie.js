@@ -5,7 +5,6 @@ import moviesService from "../services/movies";
 import commentsService from "../services/comments";
 
 const useMovie = (user, id) => {
-  //   const { id } = useParams();
   const [movie, setMovie] = useState("");
   const [comments, setComments] = useState([]);
   const dispatch = useNotificationDispatch();
