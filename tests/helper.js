@@ -132,6 +132,22 @@ const buttonIsVisible = async (page, buttonName, not) => {
     : await expect(button).toBeVisible();
 };
 
+const waitForCommentCreation = async (page, comment) => {
+  await expect(
+    page.getByText(`Comment '${comment}' successfully created`)
+  ).toBeVisible({ timeout: 15000 });
+};
+
+const postCommentForUser = async (page, username, comment) => {
+  await visitUserPage(page, username);
+  await expect(page.getByText(username)).toBeVisible();
+
+  await openCommentForm(page);
+  await postComment(page, comment);
+
+  await waitForCommentCreation(page, comment);
+};
+
 export {
   loginWith,
   registerWith,
@@ -147,4 +163,5 @@ export {
   clickLink,
   linkIsVisible,
   buttonIsVisible,
+  postCommentForUser,
 };

@@ -85,6 +85,9 @@
 | 3.6  | 1     | backend tests added to pipeline                                               |
 | 4.6  | 2     | e2e tests added to github actions, deployment pipeline finished (no lint yet) |
 | 4.6  | 2     | health check added, small movie card style fix, error message on login        |
+| 5.6  | 2     | useMovie, useUser, userSignUp, useMovieSearch hooks                           |
+| 5.6  | 1     | fixing tests to work locally, to work in github actions                       |
+| 5.6  | 1     | Movie cards open in new window, automatic logout, refactoring                 |
 |      |       |                                                                               |
 |      |       |                                                                               |
 |      |       |                                                                               |
@@ -93,7 +96,4 @@
 |      |       |                                                                               |
 |      |       |                                                                               |
 |      |       |                                                                               |
-|      |       |                                                                               |
-|      |       |                                                                               |
-|      |       |                                                                               |
-| tot  | 139.5 |                                                                               |
+| tot  | 143.5 |                                                                               |

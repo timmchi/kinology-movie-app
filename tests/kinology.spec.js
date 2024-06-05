@@ -14,6 +14,7 @@ const {
   clickLink,
   linkIsVisible,
   buttonIsVisible,
+  postCommentForUser,
 } = require("./helper");
 
 describe("Kinology", () => {
@@ -66,6 +67,8 @@ describe("Kinology", () => {
       "secret",
       "secret"
     );
+
+    await page.waitForTimeout(1000);
 
     await expect(
       page.getByText("Sign up was successful, please log in")
@@ -207,9 +210,13 @@ describe("Kinology", () => {
     test("failed registration when using same credentials as already registered user", async ({
       page,
     }) => {
+      await page.waitForTimeout(1000);
+
       await expect(
         page.getByText("Sign up was successful, please log in")
       ).toBeVisible({ timeout: 10000 });
+
+      await page.waitForTimeout(1000);
 
       await registerWith(
         page,
@@ -220,6 +227,8 @@ describe("Kinology", () => {
         "secret"
       );
 
+      await page.waitForTimeout(1000);
+
       await expect(
         page.getByText("Something went wrong when signing up")
       ).toBeVisible();
@@ -228,6 +237,7 @@ describe("Kinology", () => {
     test("login form can be filled and submitted", async ({ page }) => {
       await loginWith(page, "tester", "secret");
 
+      await page.waitForTimeout(1000);
       await expect(page.getByText("Successfully logged in")).toBeVisible({
         timeout: 10000,
       });
@@ -237,6 +247,8 @@ describe("Kinology", () => {
 
     test("failed log in attempt", async ({ page }) => {
       await loginWith(page, "tester", "toster");
+
+      await page.waitForTimeout(1000);
 
       await expect(page.getByText("Something went wrong")).toBeVisible();
 
@@ -264,6 +276,8 @@ describe("Kinology", () => {
       beforeEach(async ({ page }) => {
         await loginWith(page, "tester", "secret");
 
+        await page.waitForTimeout(1000);
+
         await expect(page.getByText("Successfully logged in")).toBeVisible({
           timeout: 10000,
         });
@@ -275,6 +289,8 @@ describe("Kinology", () => {
         });
 
         await logOut(page);
+
+        await page.waitForTimeout(1000);
 
         await linkIsVisible(page, "Log In");
         await linkIsVisible(page, "Sign Up");
@@ -371,6 +387,8 @@ describe("Kinology", () => {
           const searchMoviesButton = page.getByLabel("Search for movies");
           await searchMoviesButton.click();
 
+          await page.waitForTimeout(1000);
+
           await expect(page.getByText("Casino")).toBeVisible();
         });
 
@@ -417,6 +435,8 @@ describe("Kinology", () => {
 
           await postComment(page, "my comment");
 
+          await page.waitForTimeout(1000);
+
           await expect(
             page.getByText("Comment 'my comment' successfully created")
           ).toBeVisible({ timeout: 10000 });
@@ -433,6 +453,8 @@ describe("Kinology", () => {
 
             await postComment(page, "my comment");
 
+            await page.waitForTimeout(1000);
+
             await expect(
               page.getByText("Comment 'my comment' successfully created")
             ).toBeVisible({ timeout: 10000 });
@@ -446,6 +468,8 @@ describe("Kinology", () => {
 
             await clickButton(page, "Submit comment");
 
+            await page.waitForTimeout(1000);
+
             await expect(
               page.getByText(
                 "Comment successfully updated with 'it has been edited'"
@@ -457,6 +481,8 @@ describe("Kinology", () => {
 
           test("a comment can be deleted by its author", async ({ page }) => {
             await deleteComment(page);
+
+            await page.waitForTimeout(1000);
 
             await expect(
               page.getByText("Comment successfully deleted")
@@ -470,6 +496,8 @@ describe("Kinology", () => {
       describe("adding a movie to user page", () => {
         beforeEach(async ({ page }) => {
           await page.goto("/movies/111");
+
+          await page.waitForTimeout(1000);
 
           const title = page.getByText("Scarface");
           await expect(title).toBeVisible();
@@ -487,6 +515,8 @@ describe("Kinology", () => {
 
           await visitUserPage(page, "Mr Tester");
 
+          await page.waitForTimeout(1000);
+
           await expect(page.getByText("Watch List")).toBeVisible();
 
           await linkIsVisible(page, "Scarface poster");
@@ -498,11 +528,15 @@ describe("Kinology", () => {
 
           await buttonIsVisible(page, "Unwatch");
 
+          await page.waitForTimeout(1000);
+
           await clickButton(page, "Unwatch");
 
           await page.waitForTimeout(1000);
 
           await visitUserPage(page, "Mr Tester");
+
+          await page.waitForTimeout(1000);
 
           await expect(
             page.getByText("Successfully removed movie from your profile")
@@ -526,6 +560,8 @@ describe("Kinology", () => {
 
           await visitUserPage(page, "Mr Tester");
 
+          await page.waitForTimeout(1000);
+
           await expect(page.getByText("Favorite movies")).toBeVisible();
 
           await linkIsVisible(page, "Scarface poster");
@@ -543,6 +579,8 @@ describe("Kinology", () => {
           await page.waitForTimeout(1000);
 
           await visitUserPage(page, "Mr Tester");
+
+          await page.waitForTimeout(1000);
 
           await expect(
             page.getByText("Successfully removed movie from your profile")
@@ -566,6 +604,8 @@ describe("Kinology", () => {
 
           await visitUserPage(page, "Mr Tester");
 
+          await page.waitForTimeout(1000);
+
           await expect(page.getByText("Already seen")).toBeVisible();
 
           await linkIsVisible(page, "Scarface poster");
@@ -580,9 +620,9 @@ describe("Kinology", () => {
           await clickButton(page, "Unsee");
           await page.waitForTimeout(1000);
 
-          await page.waitForTimeout(1000);
-
           await visitUserPage(page, "Mr Tester");
+
+          await page.waitForTimeout(1000);
 
           await expect(
             page.getByText("Successfully removed movie from your profile")
@@ -607,6 +647,8 @@ describe("Kinology", () => {
           await page.waitForTimeout(1000);
 
           await visitUserPage(page, "Mr Tester");
+
+          await page.waitForTimeout(1000);
 
           await expect(page.getByText("Watch List")).toBeVisible();
           await expect(page.getByText("Favorite Movies")).toBeVisible();
@@ -633,10 +675,15 @@ describe("Kinology", () => {
           await buttonIsVisible(page, "Unfavorite");
 
           await clickButton(page, "Unsee");
+          await page.waitForTimeout(1000);
           await clickButton(page, "Unwatch");
+          await page.waitForTimeout(1000);
           await clickButton(page, "Unfavorite");
+          await page.waitForTimeout(1000);
 
           await visitUserPage(page, "Mr Tester");
+
+          await page.waitForTimeout(1000);
 
           await expect(page.getByText("Watch List")).not.toBeVisible();
           await expect(page.getByText("Favorite Movies")).not.toBeVisible();
@@ -675,6 +722,8 @@ describe("Kinology", () => {
           beforeEach(async ({ page }) => {
             await postComment(page, "I love this movie");
 
+            await page.waitForTimeout(1000);
+
             await expect(
               page.getByText("Comment 'I love this movie' successfully added")
             ).toBeVisible({ timeout: 10000 });
@@ -692,6 +741,8 @@ describe("Kinology", () => {
             await editCommentInput.fill("Al Pacino rocks");
             await submitEditButton.click();
 
+            await page.waitForTimeout(1000);
+
             await expect(page.getByText("Al Pacino rocks")).toBeVisible();
             await expect(
               page.getByText("Comment successfully updated")
@@ -700,6 +751,8 @@ describe("Kinology", () => {
 
           test("comment author can delete their comment", async ({ page }) => {
             await deleteComment(page);
+
+            await page.waitForTimeout(1000);
 
             await expect(
               page.getByText("Comment successfully deleted")
@@ -713,6 +766,7 @@ describe("Kinology", () => {
 
     describe("and there is one more registered user", () => {
       beforeEach(async ({ page }) => {
+        await page.waitForTimeout(1000);
         await expect(
           page.getByText("Sign up was successful, please log in")
         ).toBeVisible({ timeout: 10000 });
@@ -730,6 +784,8 @@ describe("Kinology", () => {
       test("and another user can log in", async ({ page }) => {
         await loginWith(page, "toster", "secret");
 
+        await page.waitForTimeout(1000);
+
         await expect(page.getByText("Successfully logged in")).toBeVisible({
           timeout: 10000,
         });
@@ -738,6 +794,8 @@ describe("Kinology", () => {
       describe("and another user has logged in", () => {
         beforeEach(async ({ page }) => {
           await loginWith(page, "toster", "secret");
+
+          await page.waitForTimeout(1000);
 
           await expect(page.getByText("Successfully logged in")).toBeVisible({
             timeout: 10000,
@@ -761,6 +819,8 @@ describe("Kinology", () => {
 
           await postComment(page, "Another user was here");
 
+          await page.waitForTimeout(1000);
+
           await expect(
             page.getByText(
               "Comment 'Another user was here' successfully created"
@@ -776,41 +836,25 @@ describe("Kinology", () => {
 
         describe("a second user created a comment in their own profile and another user profile, logged in with another user", () => {
           beforeEach(async ({ page }) => {
-            // comment on first user profile
-            await visitUserPage(page, "Mr Tester");
+            await postCommentForUser(
+              page,
+              "Mr Tester",
+              "Another user was here"
+            );
 
-            await expect(page.getByText("Mr Tester")).toBeVisible();
-
-            await openCommentForm(page);
-
-            await postComment(page, "Another user was here");
-
-            await expect(
-              page.getByText(
-                "Comment 'Another user was here' successfully created"
-              )
-            ).toBeVisible({ timeout: 10000 });
-
-            // going to current users profile and leaving a comment there
-            await visitUserPage(page, "Ms Toster");
-
-            await openCommentForm(page);
-
-            await postComment(page, "This is my own profile");
-
-            await page.waitForTimeout(1000);
-
-            await expect(
-              page.getByText(
-                "Comment 'This is my own profile' successfully created"
-              )
-            ).toBeVisible({ timeout: 10000 });
+            await postCommentForUser(
+              page,
+              "Ms Toster",
+              "This is my own profile"
+            );
 
             // logging out
             await logOut(page);
 
             // logging in to another profile
             await loginWith(page, "tester", "secret");
+
+            await page.waitForTimeout(1000);
 
             await expect(page.getByText("Successfully logged in")).toBeVisible({
               timeout: 10000,
@@ -855,6 +899,8 @@ describe("Kinology", () => {
             await expect(page.getByText("Another user was here")).toBeVisible();
 
             await deleteComment(page);
+
+            await page.waitForTimeout(1000);
 
             await expect(
               page.getByText("Comment successfully deleted")
