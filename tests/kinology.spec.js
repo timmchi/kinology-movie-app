@@ -500,6 +500,8 @@ describe("Kinology", () => {
 
           await clickButton(page, "Unwatch");
 
+          await page.waitForTimeout(1000);
+
           await visitUserPage(page, "Mr Tester");
 
           await expect(
