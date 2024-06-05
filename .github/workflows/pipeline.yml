@@ -9,7 +9,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  deployment_pipeline:
+  setup_and_tests:
     runs-on: ubuntu-20.04
 
     steps:
@@ -33,11 +33,6 @@ jobs:
           cd kinology_frontend
           npm test
 
-      - name: Build
-        run: |
-          cd kinology_backend
-          npm run build:ui
-
       - name: Run backend integration tests
         env:
           NODE_ENV: test
@@ -54,6 +49,30 @@ jobs:
           npm test -- ./tests/login_api.test.js && 
           npm test -- ./tests/movies_api.test.js && 
           npm test -- ./tests/users_api.test.js
+
+  e2e_tests:
+    needs: setup_and_tests
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install frontend dependencies
+        run: |
+          cd kinology_frontend
+          npm install
+
+      - name: Install backend dependencies
+        run: |
+          cd kinology_backend
+          npm install
+
+      - name: Build
+        run: |
+          cd kinology_backend
+          npm run build:ui
 
       - name: Install project dependencies
         run: npm ci
@@ -84,6 +103,29 @@ jobs:
           path: playwright-report/
           retention-days: 5
 
+  deploying:
+    needs: e2e_tests
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install frontend dependencies
+        run: |
+          cd kinology_frontend
+          npm install
+
+      - name: Install backend dependencies
+        run: |
+          cd kinology_backend
+          npm install
+
+      - name: Build
+        run: |
+          cd kinology_backend
+          npm run build:ui
       - name: Deploy
         if: ${{ !contains(toJson(github.event.commits.*.message),'#deployskip') }} && ${{ github.event_name == 'push' }}
         env:
