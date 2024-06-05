@@ -6,6 +6,7 @@ import Navigation from "./components/Navigation/Navigation";
 import About from "./components/About/About";
 import LogIn from "./components/Auth/LogIn";
 import SignUp from "./components/SignUp/SignUp";
+import SignUpForm from "./components/SignUp/SignUpForm";
 import User from "./components/User/User";
 import Users from "./components/User/Users";
 import Test from "./components/Test";
@@ -187,12 +188,13 @@ function App() {
         <Route
           path="/signup"
           element={
-            <SignUp
-              user={user}
-              users={users}
-              setUsers={setUsers}
-              addUser={addUser}
-            />
+            // <SignUp
+            //   user={user}
+            //   users={users}
+            //   setUsers={setUsers}
+            //   addUser={addUser}
+            // />
+            <SignUpForm addUser={addUser} />
           }
         />
         <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />

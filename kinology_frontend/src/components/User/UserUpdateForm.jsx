@@ -36,6 +36,41 @@ const FileSchema = instance(File, [
   maxSize(1024 * 1024 * 2),
 ]);
 
+const inputStyle = {
+  bgcolor: "#79C094",
+  label: {
+    color: "white",
+    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+  },
+  input: {
+    color: "white",
+    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+  },
+  "& label.Mui-focused": {
+    color: "white",
+  },
+  "& label.Mui-error": {
+    fontWeight: "bold",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "yellow",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#397453",
+    },
+    "&:hover fieldset": {
+      borderColor: "white",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#bdac4e",
+    },
+    "&.Mui-error fieldset": {
+      borderWidth: 2,
+    },
+  },
+};
+
 const UserUpdateForm = ({ updateUser }) => {
   const {
     handleSubmit,
@@ -74,40 +109,7 @@ const UserUpdateForm = ({ updateUser }) => {
           control={control}
           margin={"dense"}
           InputProps={{ sx: { borderRadius: 0 } }}
-          sx={{
-            bgcolor: "#79C094",
-            label: {
-              color: "white",
-              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-            },
-            input: {
-              color: "white",
-              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-            },
-            "& label.Mui-focused": {
-              color: "white",
-            },
-            "& label.Mui-error": {
-              fontWeight: "bold",
-            },
-            "& .MuiInput-underline:after": {
-              borderBottomColor: "yellow",
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#397453",
-              },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#bdac4e",
-              },
-              "&.Mui-error fieldset": {
-                borderWidth: 2,
-              },
-            },
-          }}
+          sx={inputStyle}
         />
         <TextFieldElement
           name={"name"}
@@ -116,40 +118,7 @@ const UserUpdateForm = ({ updateUser }) => {
           control={control}
           margin={"dense"}
           InputProps={{ sx: { borderRadius: 0 } }}
-          sx={{
-            bgcolor: "#79C094",
-            label: {
-              color: "white",
-              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-            },
-            input: {
-              color: "white",
-              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-            },
-            "& label.Mui-focused": {
-              color: "white",
-            },
-            "& label.Mui-error": {
-              fontWeight: "bold",
-            },
-            "& .MuiInput-underline:after": {
-              borderBottomColor: "yellow",
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#397453",
-              },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#bdac4e",
-              },
-              "&.Mui-error fieldset": {
-                borderWidth: 2,
-              },
-            },
-          }}
+          sx={inputStyle}
         />
         <Typography>Upload Avatar</Typography>
         <Controller
@@ -161,37 +130,7 @@ const UserUpdateForm = ({ updateUser }) => {
               inputProps={{ accept: ".png, .jpeg, .jpg, .svg" }}
               InputProps={{ sx: { borderRadius: 0 } }}
               placeholder="Insert a file"
-              sx={{
-                bgcolor: "#79C094",
-                label: { color: "white" },
-                input: {
-                  color: "white",
-                  textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-                },
-                "& label.Mui-focused": {
-                  color: "white",
-                },
-                "& label.Mui-error": {
-                  fontWeight: "bold",
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "yellow",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#397453",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "white",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#bdac4e",
-                  },
-                  "&.Mui-error fieldset": {
-                    borderWidth: 2,
-                  },
-                },
-              }}
+              sx={inputStyle}
             />
           )}
         />

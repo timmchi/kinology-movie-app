@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useNotificationDispatch } from "../../contexts/NotificationContext";
-import signUpService from "../../services/signup";
-import SignUpForm from "./SignUpForm";
-import PropTypes from "prop-types";
+import { useNotificationDispatch } from "../contexts/NotificationContext";
+import signUpService from "../services/signup";
 
-const SignUp = ({ addUser }) => {
+const useSignUp = (addUser) => {
   const navigate = useNavigate();
   const dispatch = useNotificationDispatch();
 
@@ -41,11 +39,9 @@ const SignUp = ({ addUser }) => {
     }
   };
 
-  return <SignUpForm handleSignUp={handleSignUp} />;
+  return {
+    handleSignUp,
+  };
 };
 
-export default SignUp;
-
-SignUp.propTypes = {
-  addUser: PropTypes.func.isRequired,
-};
+export default useSignUp;
