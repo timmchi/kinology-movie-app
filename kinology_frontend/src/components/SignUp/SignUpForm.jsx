@@ -253,6 +253,5 @@ const SignUpForm = ({ addUser }) => {
 export default SignUpForm;
 
 SignUpForm.propTypes = {
-  handleSignUp: PropTypes.func.isRequired,
   addUser: PropTypes.func.isRequired,
 };

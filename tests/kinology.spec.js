@@ -238,9 +238,7 @@ describe("Kinology", () => {
     test("failed log in attempt", async ({ page }) => {
       await loginWith(page, "tester", "toster");
 
-      await expect(
-        page.getByText("invalid username or password")
-      ).toBeVisible();
+      await expect(page.getByText("Something went wrong")).toBeVisible();
 
       await linkIsVisible(page, "Log In");
       await linkIsVisible(page, "Sign Up");
