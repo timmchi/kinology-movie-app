@@ -1169,9 +1169,19 @@ describe("Kinology", () => {
         });
 
         test("a movie card can be clicked, which takes user to movie profile", async ({
+          context,
           page,
         }) => {
-          await page.getByText("Casino").click();
+          const [newPage] = await Promise.all([
+            context.waitForEvent("page"),
+            page.getByText("Casino").click(),
+          ]);
+
+          await context.grantPermissions(newPage, [
+            "clipboard-read",
+            "clipboard-write",
+          ]);
+          await newPage.bringToFront();
 
           await expect(
             page.getByRole("heading", { name: "Casino" })
