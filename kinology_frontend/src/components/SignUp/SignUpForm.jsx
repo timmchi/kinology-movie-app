@@ -14,6 +14,8 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import PropTypes from "prop-types";
 
+import useSignUp from "../../hooks/useSignUp";
+
 const RegistrationSchema = object(
   {
     email: string([
@@ -64,7 +66,7 @@ const credentialsInputStyle = {
 
 const formLabelStyle = { color: "#f7e382", fontSize: 18 };
 
-const SignUpForm = ({ handleSignUp }) => {
+const SignUpForm = ({ addUser }) => {
   const {
     register,
     handleSubmit,
@@ -85,6 +87,8 @@ const SignUpForm = ({ handleSignUp }) => {
       });
     }
   }, [isSubmitSuccessful, reset]);
+
+  const { handleSignUp } = useSignUp(addUser);
 
   return (
     <div style={{ backgroundColor: "#397453" }}>
@@ -249,5 +253,5 @@ const SignUpForm = ({ handleSignUp }) => {
 export default SignUpForm;
 
 SignUpForm.propTypes = {
-  handleSignUp: PropTypes.func.isRequired,
+  addUser: PropTypes.func.isRequired,
 };
