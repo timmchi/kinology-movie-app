@@ -71,12 +71,21 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
             style={{
               position: "absolute",
               color: "white",
-              bottom: "25%",
+              bottom: "20%",
               left: "50%",
               transform: "translateX(-50%)",
             }}
           >
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              sx={{
+                fontWeight: "bold",
+                textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+                color: "#f7e382",
+              }}
+            >
               {movie.title}
             </Typography>
           </div>
