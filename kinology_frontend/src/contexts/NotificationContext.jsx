@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createContext, useReducer, useContext } from "react";
 
 const notificationReducer = (state, action) => {

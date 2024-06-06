@@ -8,6 +8,7 @@
     "dev": "cross-env NODE_NEV=development nodemon index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "lint": "eslint .",
+    "eslint": "eslint --fix",
     "start:test": "cross-env NODE_ENV=test node index.js",
     "build:ui": "rm -rf dist && cd ../kinology_frontend && npm run build && cp -r dist ../kinology_backend",
     "deploy:full": "npm run build:ui && cd .. && git add . && git commit -m uibuild && git push "
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin-js": "^1.8.0",
+    "@types/node": "^20.14.2",
     "cross-env": "^7.0.3",
     "eslint": "^9.2.0",
     "nock": "^13.5.4",

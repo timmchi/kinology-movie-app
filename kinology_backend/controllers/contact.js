@@ -46,12 +46,12 @@ contactRouter.post("/", async (request, response) => {
 
   const parsedMessage = v.parse(MessageSchema, { email, name, message });
 
-  const info = await transporter.sendMail({
+  await transporter.sendMail({
     from: parsedMessage.email,
     to: config.GMAIL_USER,
     subject: `Email from ${parsedMessage.name}`,
     text: `${parsedMessage.message}`,
-    html: `<p>${parsedMessage.name}</p><p>${parsedMessage.message}</p>`,
+    html: `<p>${parsedMessage.name} at ${parsedMessage.email}</p><p>${parsedMessage.message}</p>`,
   });
 
   response.status(200).end();

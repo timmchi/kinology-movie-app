@@ -76,6 +76,7 @@ const AvatarSchema = v.object({
   size: v.number([
     v.maxValue(1024 * 1024 * 2, "The size must not exceed 2 MB"),
   ]),
+  // eslint-disable-next-line no-undef
   buffer: v.instance(Buffer),
 });
 

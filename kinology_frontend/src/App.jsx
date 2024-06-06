@@ -41,8 +41,23 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const handlePageLoad = () => {
+      if (window.localStorage.getItem("sessionExpired") === "true") {
+        window.localStorage.removeItem("sessionExpired");
+        console.log("expired, logging you out...");
+        dispatch({
+          type: "SHOW",
+          payload: {
+            message: "Your session has run out, please log in again",
+            type: "success",
+          },
+        });
+        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+        navigate("/login");
+      }
+    };
     handlePageLoad();
-  }, []);
+  }, [dispatch, navigate]);
 
   const addUser = (user) => {
     setUsers(users.concat(user));
@@ -121,21 +136,6 @@ const App = () => {
         },
       });
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
-    }
-  };
-
-  const handlePageLoad = () => {
-    if (window.localStorage.getItem("sessionExpired") === "true") {
-      window.localStorage.removeItem("sessionExpired");
-      dispatch({
-        type: "SHOW",
-        payload: {
-          message: "Your session has run out, please log in again",
-          type: "success",
-        },
-      });
-      setTimeout(() => dispatch({ type: "HIDE" }), 5000);
-      navigate("/login");
     }
   };
 

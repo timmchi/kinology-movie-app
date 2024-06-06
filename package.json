@@ -6,7 +6,8 @@
   "scripts": {
     "test": "playwright test",
     "test:e2e": "playwright test --project=chromium",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "lint": "cd kinology_frontend && npm run lint && cd ../kinology_backend && npm run eslint"
   },
   "keywords": [],
   "author": "",

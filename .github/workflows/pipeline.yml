@@ -27,6 +27,9 @@ jobs:
           cd kinology_backend
           npm install
 
+      - name: Linting
+        run: npm run lint
+
       - name: Frontend unit tests
         if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
         run: |
