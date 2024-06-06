@@ -1,5 +1,6 @@
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import Fab from "@mui/material/Fab";
+import PropTypes from "prop-types";
 
 const ScrollTop = ({ goToSearch }) => {
   return (
@@ -13,3 +14,7 @@ const ScrollTop = ({ goToSearch }) => {
 };
 
 export default ScrollTop;
+
+ScrollTop.propTypes = {
+  goToSearch: PropTypes.func,
+};
