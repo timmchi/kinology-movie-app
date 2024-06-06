@@ -43,6 +43,7 @@ app.get("/health", (req, res) => {
 });
 
 app.get("/*", function (req, res) {
+  // eslint-disable-next-line no-undef
   res.sendFile(path.join(__dirname, "./dist/index.html"), function (err) {
     if (err) {
       res.status(500).send(err);
@@ -50,6 +51,7 @@ app.get("/*", function (req, res) {
   });
 });
 
+// eslint-disable-next-line no-undef
 if (process.env.NODE_ENV === "test") {
   const testingRouter = require("./controllers/testing");
   app.use("/api/testing", testingRouter);

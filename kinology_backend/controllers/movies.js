@@ -46,8 +46,10 @@ const searchQuerySchema = v.object({
 const parseAndTurnIntoQuery = async (params) => {
   const parsedQueryParams = v.parse(searchQuerySchema, params);
 
-  ({ genres, year, ratingUpper, ratingLower, country, page, director, actors } =
-    parsedQueryParams);
+  const { genres, year, ratingUpper, ratingLower, country, page } =
+    parsedQueryParams;
+
+  let { director, actors } = parsedQueryParams;
 
   if (director !== "") director = await movieUtils.peopleSearch([director]);
 
