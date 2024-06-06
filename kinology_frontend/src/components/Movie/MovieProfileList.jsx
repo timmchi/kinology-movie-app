@@ -5,7 +5,10 @@ const MovieProfileList = ({ movies, header }) => {
   const moviesList = movies;
 
   return (
-    <>
+    <div
+      className="movieList"
+      style={{ display: moviesList.length === 0 ? "none" : "" }}
+    >
       <h3>{header}</h3>
       <div className="profileMovieContainer">
         {moviesList?.map((movie) => (
@@ -17,7 +20,7 @@ const MovieProfileList = ({ movies, header }) => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ import userService from "./services/users";
 import { useNotificationDispatch } from "./contexts/NotificationContext";
 import { Navigate } from "react-router-dom";
 
-function App() {
+const App = () => {
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
   const dispatch = useNotificationDispatch();
@@ -215,7 +215,13 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route
           path="/users"
-          element={<Users users={users} removeUser={removeUser} />}
+          element={
+            user ? (
+              <Users users={users} removeUser={removeUser} />
+            ) : (
+              <Navigate replace to="/login" />
+            )
+          }
         />
         <Route
           path="/me"
@@ -231,6 +237,6 @@ function App() {
       </Routes>
     </>
   );
-}
+};
 
 export default App;
