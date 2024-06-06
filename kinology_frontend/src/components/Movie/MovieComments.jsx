@@ -1,35 +1,38 @@
 import CommentList from "../Comment/CommentList";
+import CommentForm from "../Comment/CommentForm";
 import PropTypes from "prop-types";
 
-const UserProfileComments = ({
+const MovieComments = ({
   currentUser,
-  commentCreateForm,
+  createComment,
   comments,
   deleteComment,
   updateComment,
 }) => {
   return (
-    <div className="userProfileComments">
+    <div className="singleMovieComments">
       <h2>Comments</h2>
-      <div className="profileCommentTogglable">
-        {currentUser && commentCreateForm()}
-      </div>
+      {currentUser ? (
+        <CommentForm commentAction={createComment} label={"Your comment"} />
+      ) : (
+        ""
+      )}
       <CommentList
         comments={comments}
+        currentUser={currentUser}
         onDelete={deleteComment}
         onEdit={updateComment}
-        currentUser={currentUser}
       />
     </div>
   );
 };
 
-export default UserProfileComments;
+export default MovieComments;
 
-UserProfileComments.propTypes = {
+MovieComments.propTypes = {
   currentUser: PropTypes.object,
-  commentCreateForm: PropTypes.func.isRequired,
   comments: PropTypes.arrayOf(PropTypes.object),
   deleteComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
+  createComment: PropTypes.func.isRequired,
 };
