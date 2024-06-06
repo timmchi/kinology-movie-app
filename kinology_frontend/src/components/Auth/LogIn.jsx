@@ -138,6 +138,7 @@ const LogIn = ({ handleLogin }) => {
                     {...register("password")}
                     placeholder="Your password"
                     data-testid="password"
+                    autoComplete="on"
                     sx={credentialsInputStyle}
                   />
                   {errors?.password?.message ? (

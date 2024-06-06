@@ -193,6 +193,7 @@ const SignUpForm = ({ addUser }) => {
                     {...register("password")}
                     placeholder="password..."
                     data-testid="password"
+                    autoComplete="on"
                     sx={credentialsInputStyle}
                   />
                   {errors?.password?.message ? (
@@ -206,6 +207,7 @@ const SignUpForm = ({ addUser }) => {
                     {...register("passwordConfirm")}
                     placeholder="confirm password"
                     data-testid="password-confirm"
+                    autoComplete="on"
                     sx={credentialsInputStyle}
                   />
                   {errors?.passwordConfirm?.message ? (
