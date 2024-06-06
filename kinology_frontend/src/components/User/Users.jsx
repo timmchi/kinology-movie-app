@@ -9,7 +9,6 @@ const Users = ({ users }) => {
 
   return (
     <div>
-      <h1>users</h1>
       <List
         sx={{
           width: "100%",
@@ -21,7 +20,6 @@ const Users = ({ users }) => {
         {users?.map((user) => (
           <div key={user.id}>
             <UserSingleListView user={user} />
-            {/* <Divider variant="inset" component="li" /> */}
           </div>
         ))}
       </List>

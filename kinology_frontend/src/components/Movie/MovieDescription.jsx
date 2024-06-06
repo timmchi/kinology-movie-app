@@ -17,8 +17,8 @@ const MovieDescription = ({
       </p>
       <p style={{ maxWidth: "800px" }}>{movie.overview}</p>
       <GenreList genres={movie?.genres} />
-      <p>{movie.rating} rating</p>
-      <p> released {movie.release}</p>
+      <p>{movie.rating} Rating</p>
+      <p>Released {movie.release}</p>
       <p>{movie.runtime} minutes</p>
       {user ? (
         <>

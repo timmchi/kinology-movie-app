@@ -35,7 +35,7 @@ const queryCreator = (params) => {
     params.actors.length === 0
       ? ""
       : `&with_people=${params.actors.join("%2C%20")}`;
-  const year = params.year === "" ? "" : `&year=${params.year}`;
+  const year = params.year === "" ? "" : `&primary_release_year=${params.year}`;
   const origin_country =
     params.country === ""
       ? ""

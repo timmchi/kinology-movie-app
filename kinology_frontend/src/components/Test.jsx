@@ -1,15 +1,11 @@
 /* eslint-disable */
 import { useState } from "react";
-
-import Button from "@mui/material/Button";
-import Modal from "@mui/joy/Modal";
-import ModalClose from "@mui/joy/ModalClose";
-import Sheet from "@mui/joy/Sheet";
+import ScrollTop from "./Pagination/ScrollTop";
 
 const Test = () => {
   const [open, setOpen] = useState(false);
 
-  return <></>;
+  return <ScrollTop goToSearch={() => console.log("scrolling top")} />;
 };
 
 export default Test;

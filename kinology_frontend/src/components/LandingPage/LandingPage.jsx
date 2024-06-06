@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import SearchModal from "../Search/SearchModal";
 import MovieList from "../Movie/MovieList";
+import ScrollTop from "../Pagination/ScrollTop";
 import Hero from "../Hero/Hero";
 import PropTypes from "prop-types";
 
@@ -23,6 +24,7 @@ const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
           onButtonUnpress={onButtonUnpress}
           user={user}
         />
+        {movies.length > 0 && <ScrollTop goToSearch={goToSearch} />}
       </div>
     </>
   );
