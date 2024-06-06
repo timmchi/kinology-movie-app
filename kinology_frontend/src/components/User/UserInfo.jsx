@@ -21,6 +21,6 @@ const UserInfo = ({ name, biography }) => {
 export default UserInfo;
 
 UserInfo.propTypes = {
-  name: PropTypes.string.isRequired,
-  biography: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  biography: PropTypes.string,
 };

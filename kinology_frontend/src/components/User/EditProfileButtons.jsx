@@ -28,8 +28,8 @@ const EditProfileButtons = ({ currentUser, user, updateForm, deleteUser }) => {
 export default EditProfileButtons;
 
 EditProfileButtons.propTypes = {
-  currentUser: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  currentUser: PropTypes.object,
+  user: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   updateForm: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
 };

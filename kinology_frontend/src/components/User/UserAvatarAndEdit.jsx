@@ -35,8 +35,8 @@ export default UserAvatarAndEdit;
 UserAvatarAndEdit.propTypes = {
   avatar: PropTypes.string.isRequired,
   setAvatar: PropTypes.func.isRequired,
-  currentUser: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  currentUser: PropTypes.object,
+  user: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   updateForm: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
 };
