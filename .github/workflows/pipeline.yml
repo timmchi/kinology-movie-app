@@ -53,7 +53,7 @@ jobs:
   e2e_tests:
     needs: setup_and_tests
     runs-on: ubuntu-20.04
-
+    if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

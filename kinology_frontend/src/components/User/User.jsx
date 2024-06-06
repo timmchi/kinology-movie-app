@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import Togglable from "../Togglable/Togglable";
 import CommentForm from "../Comment/CommentForm";
 import UserUpdateForm from "./UserUpdateForm";
-import CommentList from "../Comment/CommentList";
 import MovieProfileList from "../Movie/MovieProfileList";
+import UserProfileComments from "./UserProfileComments";
 import { Button } from "@mui/material";
 import placeholderUrl from "../../../avatar-placeholder.png";
 import useUser from "../../hooks/useUser";
@@ -83,49 +83,27 @@ const User = ({ currentUser, removeUser }) => {
             </h1>
             <div>
               <h2>About me</h2>
-              <p>{user.biography}</p>
+              <p>
+                {user.biography === ""
+                  ? "We don't know anything about them yet"
+                  : user.biography}
+              </p>
             </div>
-            <div
-              className="movieList"
-              style={{ display: watchLaterMovies.length === 0 ? "none" : "" }}
-            >
-              <MovieProfileList
-                movies={watchLaterMovies}
-                header={"Watch List"}
-              />
-            </div>
-            <div
-              className="movieList"
-              style={{ display: favoriteMovies.length === 0 ? "none" : "" }}
-            >
-              <MovieProfileList
-                movies={favoriteMovies}
-                header={"Favorite movies"}
-              />
-            </div>
-            <div
-              className="movieList"
-              style={{ display: watchedMovies.length === 0 ? "none" : "" }}
-            >
-              <MovieProfileList
-                movies={watchedMovies}
-                header={"Already seen"}
-              />
-            </div>
+            <MovieProfileList movies={watchLaterMovies} header={"Watch List"} />
+            <MovieProfileList
+              movies={favoriteMovies}
+              header={"Favorite movies"}
+            />
+            <MovieProfileList movies={watchedMovies} header={"Already seen"} />
           </div>
         </div>
-        <div className="userProfileComments">
-          <h2>Comments</h2>
-          <div className="profileCommentTogglable">
-            {currentUser && commentCreateForm()}
-          </div>
-          <CommentList
-            comments={comments}
-            onDelete={deleteComment}
-            onEdit={updateComment}
-            currentUser={currentUser}
-          />
-        </div>
+        <UserProfileComments
+          currentUser={currentUser}
+          commentCreateForm={commentCreateForm}
+          comments={comments}
+          deleteComment={deleteComment}
+          updateComment={updateComment}
+        />
       </div>
     </div>
   );

@@ -89,7 +89,11 @@ const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
         </div>
         <div className="singleMovieComments">
           <h2>Comments</h2>
-          <CommentForm commentAction={createComment} label={"Your comment"} />
+          {user ? (
+            <CommentForm commentAction={createComment} label={"Your comment"} />
+          ) : (
+            ""
+          )}
           <CommentList
             comments={comments}
             currentUser={user}
