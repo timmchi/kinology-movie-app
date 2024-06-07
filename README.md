@@ -9,8 +9,9 @@
 5. [Docker](#docker)
 6. [Env variables](#env-variables)
 7. [Github actions](#github-actions)
-8. [TMDB api](#tmdb)
-9. [Fullstack open](#fso)
+8. [What's next for Kinology?](#todos)
+9. [TMDB api](#tmdb)
+10. [Fullstack open](#fso)
 
 ## <a name="what-is-this-app">What is this app?</a>
 
@@ -125,6 +126,8 @@ Environment variables used in this project are the following:
 |       `GMAIL_PW`        |     App key from your gmail account     |
 
 ## <a name="github-actions">Github actions</a>
+
+## <a name="todos">What's next for Kinology?</a>
 
 ## <a name="tmdb">TMDB api</a>
 
