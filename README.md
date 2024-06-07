@@ -18,6 +18,38 @@ You can check out the production version of Kinology [here](https://kinology-mov
 
 ## <a name="installation">Installation</a>
 
+In order to run this app on your machine, you will need to have Node and npm installed.
+
+Then after cloning the repository, install the frontend dependencies by running:
+
+```
+#Change to frontend directory
+cd kinology_frontend
+
+#Install dependencies
+npm install
+
+#Run the frontend in development mode
+npm run dev
+```
+
+Then, go back to the root of the project, and install backend dependencies by running:
+
+```
+#Change to backend directory
+cd kinology_backend
+
+#Install dependencies
+npm install
+
+#Run the backend in development mode
+npm run dev
+```
+
+The above commands will start the app in development mode, and will watch out for changes in code.
+
+App can also be run in development mode with Docker, for more info go here **[Docker](#docker)**
+
 ## <a name="build">Build</a>
 
 In order to build the application, run the following command in kinology_backend directory:
