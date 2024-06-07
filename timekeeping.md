@@ -92,6 +92,7 @@
 | 6.6  | 0.5   | Conditional rendering, users route only available to logged in users                      |
 | 6.6  | 2     | Refactoring monolothic components into smaller parts                                      |
 | 6.6  | 1     | Fixes of linting errors, lint added to pipeline, movie search change, other small changes |
+| 7.6  | 1     | Readme                                                                                    |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
@@ -115,5 +116,4 @@
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
-|      |       |                                                                                           |
-| tot  | 148   |                                                                                           |
+| tot  | 149   |                                                                                           |
