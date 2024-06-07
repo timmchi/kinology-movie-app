@@ -14,6 +14,8 @@
 
 ## <a name="what-is-this-app">What is this app?</a>
 
+You can check out the production version of Kinology [here](https://kinology-movie-app.onrender.com/)
+
 ## <a name="installation">Installation</a>
 
 ## <a name="build">Build</a>
@@ -31,6 +33,38 @@ npm run start
 App can also be run in production mode with Docker, for more info go here **[Docker](#docker)**
 
 ## <a name="tests">Tests</a>
+
+### Unit tests
+
+Frontend components are tested using unit tests. To run them, change to kinology_frontend directory and run:
+
+```
+npm test
+```
+
+### Integration tests
+
+Backend apis are tested using integration tests. To run them, change to kinology_backend directory and run:
+
+```
+npm test
+```
+
+### E2E Tests
+
+E2E tests were built using Playwright and they code is available in the root directory in tests folder
+
+You can run e2e tests by running the following command in project directory:
+
+```
+npm run test:e2e
+```
+
+If you would like to run e2e tests with ui, run the following command in project directory:
+
+```
+npm run test -- --ui
+```
 
 ## <a name="docker">Docker</a>
 
