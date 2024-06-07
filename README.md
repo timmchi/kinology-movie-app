@@ -18,6 +18,18 @@
 
 ## <a name="build">Build</a>
 
+In order to build the application, run the following command in kinology_backend directory:
+
+```
+#Build the app
+npm run build:ui
+
+#Start app in production mode
+npm run start
+```
+
+App can also be run in production mode with Docker, for more info go here **[Docker](#docker)**
+
 ## <a name="tests">Tests</a>
 
 ## <a name="docker">Docker</a>
@@ -28,8 +40,7 @@
 
     Environment variables used in this project are the following:
 
-    |               Name           |               Description               |
-
+    |             Name             |               Description               |
     |:----------------------------:|:---------------------------------------:|
     |       `PORT`                 | Port on which the API will be available |
     |       `PROD_MONGODB_URI`     | MongoDB database URL in production      |
@@ -52,3 +63,7 @@
 ## <a name="tmdb">TMDB api</a>
 
 ## <a name="fso">Fullstack open</a>
+
+```
+
+```
