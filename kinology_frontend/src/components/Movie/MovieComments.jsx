@@ -19,7 +19,6 @@ const MovieComments = ({
       )}
       <CommentList
         comments={comments}
-        currentUser={currentUser}
         onDelete={deleteComment}
         onEdit={updateComment}
       />

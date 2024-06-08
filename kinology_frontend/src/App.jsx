@@ -14,19 +14,26 @@ import NotificationAlert from "./components/Notification/Notification";
 import loginService from "./services/login";
 import userService from "./services/users";
 import { useNotificationDispatch } from "./contexts/NotificationContext";
+import { useUserDispatch, useUserValue } from "./contexts/UserContext";
 import { Navigate } from "react-router-dom";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  //   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
+  const user = useUserValue();
   const dispatch = useNotificationDispatch();
+  const userDispatch = useUserDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");
     if (loggedUserJSON && loggedUserJSON != null) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      userDispatch({
+        type: "LOGIN",
+        payload: user,
+      });
+      //   setUser(user);
       userService.setToken(user.token);
     }
   }, []);
@@ -45,6 +52,7 @@ const App = () => {
       if (window.localStorage.getItem("sessionExpired") === "true") {
         window.localStorage.removeItem("sessionExpired");
         console.log("expired, logging you out...");
+
         dispatch({
           type: "SHOW",
           payload: {
@@ -57,7 +65,7 @@ const App = () => {
       }
     };
     handlePageLoad();
-  }, [dispatch, navigate]);
+  }, [dispatch, userDispatch, navigate]); // idk ??
 
   const addUser = (user) => {
     setUsers(users.concat(user));
@@ -114,7 +122,6 @@ const App = () => {
   };
 
   const handleMovieButtonUnpress = async (event, button, movie) => {
-    // do i even need event here? check again after everything else works
     event.preventDefault();
     try {
       const currentUserId = users.find((u) => u.username === user.username)?.id;
@@ -151,6 +158,10 @@ const App = () => {
       window.localStorage.setItem("loggedKinologyUser", JSON.stringify(user));
       userService.setToken(user.token);
 
+      userDispatch({
+        type: "LOGIN",
+        payload: user,
+      });
       dispatch({
         type: "SHOW",
         payload: {
@@ -160,11 +171,12 @@ const App = () => {
       });
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
 
-      setUser(user);
+      //   setUser(user);
 
       setTimeout(() => {
         window.localStorage.removeItem("loggedKinologyUser");
         window.localStorage.setItem("sessionExpired", "true");
+        userDispatch({ type: "LOGOUT" });
         window.location.reload();
       }, 60 * 60 * 1000);
 
@@ -183,20 +195,16 @@ const App = () => {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation />
       <NotificationAlert />
       <Routes>
-        <Route
-          path="/users/:id"
-          element={<User currentUser={user} removeUser={removeUser} />}
-        />
+        <Route path="/users/:id" element={<User removeUser={removeUser} />} />
         <Route
           path="/"
           element={
             <LandingPage
               onButtonPress={handleMovieButton}
               onButtonUnpress={handleMovieButtonUnpress}
-              user={user}
             />
           }
         />

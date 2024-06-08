@@ -2,17 +2,26 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Navigation from "./Navigation";
 import { NotificationContextProvider } from "../../contexts/NotificationContext";
+import { UserContextProvider, UserContext } from "../../contexts/UserContext";
 import About from "../About/About";
 import SignUpForm from "../SignUp/SignUpForm";
 import LogIn from "../Auth/LogIn";
 import { describe, expect, test } from "vitest";
 
-test("renders correctly when the user is null", () => {
-  render(
-    <MemoryRouter>
-      <Navigation user={null} />
+const renderWithUserContext = (children, { initialUser } = {}) => {
+  return render(
+    <MemoryRouter initialEntries={["/"]}>
+      <UserContextProvider>
+        <UserContext.Provider value={[initialUser, () => {}]}>
+          {children}
+        </UserContext.Provider>
+      </UserContextProvider>
     </MemoryRouter>
   );
+};
+
+test("renders correctly when the user is null", () => {
+  renderWithUserContext(<Navigation />, { initialUser: null });
 
   const siteTitles = screen.getAllByText("Kinology");
   const abouts = screen.getAllByText("About");
@@ -26,11 +35,9 @@ test("renders correctly when the user is null", () => {
 });
 
 test("renders correctly when the user is logged in", () => {
-  render(
-    <MemoryRouter>
-      <Navigation user={{ username: "user" }} />
-    </MemoryRouter>
-  );
+  const mockUser = { username: "user" };
+
+  renderWithUserContext(<Navigation />, { initialUser: mockUser });
 
   const siteTitles = screen.getAllByText("Kinology");
   const abouts = screen.getAllByText("About");
@@ -47,12 +54,14 @@ test("renders correctly when the user is logged in", () => {
 describe("testing routes", () => {
   test("about page can be accessed through navigation", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <Routes>
-          <Route path="/" element={<Navigation user={null} />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </MemoryRouter>
+      <UserContextProvider value={null}>
+        <MemoryRouter initialEntries={["/"]}>
+          <Routes>
+            <Route path="/" element={<Navigation />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </MemoryRouter>
+      </UserContextProvider>
     );
 
     fireEvent.click(screen.getAllByText("About")[1]);
@@ -65,12 +74,14 @@ describe("testing routes", () => {
   test("signup form can be accessed through navigation", () => {
     render(
       <NotificationContextProvider>
-        <MemoryRouter initialEntries={["/"]}>
-          <Routes>
-            <Route path="/" element={<Navigation user={null} />} />
-            <Route path="/signup" element={<SignUpForm />} />
-          </Routes>
-        </MemoryRouter>
+        <UserContextProvider value={null}>
+          <MemoryRouter initialEntries={["/"]}>
+            <Routes>
+              <Route path="/" element={<Navigation />} />
+              <Route path="/signup" element={<SignUpForm />} />
+            </Routes>
+          </MemoryRouter>
+        </UserContextProvider>
       </NotificationContextProvider>
     );
 
@@ -91,12 +102,14 @@ describe("testing routes", () => {
 
   test("log in form can be accessed through navigation", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <Routes>
-          <Route path="/" element={<Navigation user={null} />} />
-          <Route path="/login" element={<LogIn />} />
-        </Routes>
-      </MemoryRouter>
+      <UserContextProvider value={null}>
+        <MemoryRouter initialEntries={["/"]}>
+          <Routes>
+            <Route path="/" element={<Navigation />} />
+            <Route path="/login" element={<LogIn />} />
+          </Routes>
+        </MemoryRouter>
+      </UserContextProvider>
     );
 
     const loginButtons = screen.getAllByText("Log in");
@@ -112,13 +125,17 @@ describe("testing routes", () => {
 
 describe("local storage test", () => {
   const removeItemMock = vi.spyOn(Storage.prototype, "removeItem");
+  const mockUser = { username: "user" };
 
   test("handles logout function correctly", () => {
-    render(
-      <MemoryRouter>
-        <Navigation user={{ username: "user" }} />
-      </MemoryRouter>
-    );
+    // render(
+    //   <UserContextProvider value={mockUser}>
+    //     <MemoryRouter>
+    //       <Navigation />
+    //     </MemoryRouter>
+    //   </UserContextProvider>
+    // );
+    renderWithUserContext(<Navigation />, { initialUser: mockUser });
 
     const logoutButtons = screen.getAllByText("log out");
     fireEvent.click(logoutButtons[1]);

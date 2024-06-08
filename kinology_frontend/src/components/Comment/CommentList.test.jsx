@@ -2,6 +2,7 @@ import { expect, test } from "vitest";
 import CommentList from "./CommentList";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
+import { UserContextProvider, UserContext } from "../../contexts/UserContext";
 import { act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -44,11 +45,9 @@ vi.mock("../../services/users", async (importOriginal) => {
 
 test("renders properly when there are no comments", () => {
   render(
-    <CommentList
-      onEdit={onEdit}
-      onDelete={onDelete}
-      currentUser={currentUser}
-    />
+    <UserContextProvider>
+      <CommentList onEdit={onEdit} onDelete={onDelete} />
+    </UserContextProvider>
   );
 
   const text = screen.getByText("No comments yet...");
@@ -58,14 +57,15 @@ test("renders properly when there are no comments", () => {
 test("renders properly when passed a list of comments", async () => {
   await act(async () =>
     render(
-      <MemoryRouter>
-        <CommentList
-          comments={testComments}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          currentUser={currentUser}
-        />
-      </MemoryRouter>
+      <UserContextProvider>
+        <MemoryRouter>
+          <CommentList
+            comments={testComments}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        </MemoryRouter>
+      </UserContextProvider>
     )
   );
 
@@ -98,12 +98,13 @@ test("onDelete function is called properly with correct params", async () => {
   await act(async () =>
     render(
       <MemoryRouter>
-        <CommentList
-          comments={testComments}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          currentUser={currentUser}
-        />
+        <UserContext.Provider value={[currentUser, () => {}]}>
+          <CommentList
+            comments={testComments}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        </UserContext.Provider>
       </MemoryRouter>
     )
   );
@@ -121,19 +122,20 @@ test("onEdit function is called properly with correct params", async () => {
   await act(async () =>
     render(
       <MemoryRouter>
-        <CommentList
-          comments={testComments}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          currentUser={currentUser}
-        />
+        <UserContext.Provider value={[currentUser, () => {}]}>
+          <CommentList
+            comments={testComments}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        </UserContext.Provider>
       </MemoryRouter>
     )
   );
 
   const user = userEvent.setup();
 
-  const editCommentInput = document.getElementById(":r2:");
+  const editCommentInput = document.getElementById(":r1:");
   await user.type(editCommentInput, "hello");
 
   const submitCommentButton = screen.getByText("Submit comment");

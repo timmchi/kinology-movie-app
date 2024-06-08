@@ -6,7 +6,7 @@ import List from "@mui/material/List";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
+const CommentList = ({ comments, onEdit, onDelete }) => {
   const editCommentRef = useRef();
 
   if (!comments || comments.length === 0)
@@ -40,7 +40,6 @@ const CommentList = ({ comments, onEdit, onDelete, currentUser }) => {
         <div key={comment.id}>
           <CommentView
             comment={comment}
-            currentUser={currentUser}
             editForm={editForm}
             onDelete={onDelete}
           />
@@ -56,5 +55,4 @@ CommentList.propTypes = {
   comments: PropTypes.arrayOf(PropTypes.object),
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
-  currentUser: PropTypes.object,
 };

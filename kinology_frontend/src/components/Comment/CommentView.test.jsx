@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import CommentView from "./CommentView";
 import usersService from "../../services/users";
+import { UserContextProvider, UserContext } from "../../contexts/UserContext";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 import { act } from "@testing-library/react";
@@ -37,12 +37,13 @@ test("render comment with avatar correctly", async () => {
   await act(async () =>
     render(
       <MemoryRouter>
-        <CommentView
-          comment={comment}
-          currentUser={currentUser}
-          editForm={editForm}
-          onDelete={onDelete}
-        />
+        <UserContextProvider>
+          <CommentView
+            comment={comment}
+            editForm={editForm}
+            onDelete={onDelete}
+          />
+        </UserContextProvider>
       </MemoryRouter>
     )
   );
@@ -67,12 +68,13 @@ test("Component renders edit and delete buttons for comment author", async () =>
   await act(async () =>
     render(
       <MemoryRouter>
-        <CommentView
-          comment={comment}
-          currentUser={currentUser}
-          editForm={editForm}
-          onDelete={onDelete}
-        />
+        <UserContext.Provider value={[currentUser, () => {}]}>
+          <CommentView
+            comment={comment}
+            editForm={editForm}
+            onDelete={onDelete}
+          />
+        </UserContext.Provider>
       </MemoryRouter>
     )
   );
@@ -87,12 +89,13 @@ test("Component renders edit and delete buttons for comment author", async () =>
 test("OnDelete is called when button is clicked", async () => {
   const { user } = testSetup(
     <MemoryRouter>
-      <CommentView
-        comment={comment}
-        currentUser={currentUser}
-        editForm={editForm}
-        onDelete={onDelete}
-      />
+      <UserContext.Provider value={[currentUser, () => {}]}>
+        <CommentView
+          comment={comment}
+          editForm={editForm}
+          onDelete={onDelete}
+        />
+      </UserContext.Provider>
     </MemoryRouter>
   );
 
@@ -109,12 +112,14 @@ test("Delete button is rendered for the comment receiver", async () => {
   await act(async () =>
     render(
       <MemoryRouter>
-        <CommentView
-          comment={comment}
-          currentUser={commentReceiver}
-          editForm={editForm}
-          onDelete={onDelete}
-        />
+        <UserContext.Provider value={[commentReceiver, () => {}]}>
+          <CommentView
+            comment={comment}
+            currentUser={commentReceiver}
+            editForm={editForm}
+            onDelete={onDelete}
+          />
+        </UserContext.Provider>
       </MemoryRouter>
     )
   );
@@ -129,12 +134,14 @@ test("delete and edit buttons are not rendered for other users", async () => {
   await act(async () =>
     render(
       <MemoryRouter>
-        <CommentView
-          comment={comment}
-          currentUser={otherUser}
-          editForm={editForm}
-          onDelete={onDelete}
-        />
+        <UserContext.Provider value={[otherUser, () => {}]}>
+          <CommentView
+            comment={comment}
+            currentUser={otherUser}
+            editForm={editForm}
+            onDelete={onDelete}
+          />
+        </UserContext.Provider>
       </MemoryRouter>
     )
   );

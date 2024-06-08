@@ -5,7 +5,7 @@ import ScrollTop from "../ReusableComponents/ScrollTop";
 import Hero from "../Hero/Hero";
 import PropTypes from "prop-types";
 
-const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
+const LandingPage = ({ onButtonPress, onButtonUnpress }) => {
   const [movies, setMovies] = useState([]);
   const searchRef = useRef(null);
 
@@ -22,7 +22,6 @@ const LandingPage = ({ onButtonPress, onButtonUnpress, user }) => {
           movies={movies}
           onButtonPress={onButtonPress}
           onButtonUnpress={onButtonUnpress}
-          user={user}
         />
         {movies.length > 0 && <ScrollTop goToSearch={goToSearch} />}
       </div>
@@ -35,5 +34,4 @@ export default LandingPage;
 LandingPage.propTypes = {
   onButtonPress: PropTypes.func,
   onButtonUnpress: PropTypes.func,
-  user: PropTypes.object,
 };

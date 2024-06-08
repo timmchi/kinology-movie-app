@@ -1,13 +1,16 @@
 import LandingPage from "./LandingPage";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { UserContextProvider } from "../../contexts/UserContext";
 import { expect, test } from "vitest";
 
 test("landing page renders properly", () => {
   const { container } = render(
-    <MemoryRouter>
-      <LandingPage />
-    </MemoryRouter>
+    <UserContextProvider>
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    </UserContextProvider>
   );
 
   expect(screen.getByText("Welcome to")).toBeDefined();

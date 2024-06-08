@@ -1,12 +1,16 @@
 import MovieList from "./MovieList";
 import myFavoriteMovies from "../../data/myFavoriteMovies";
 import { expect, test } from "vitest";
-import { testSetup } from "../../utils/testUtils";
+import { UserContextProvider } from "../../contexts/UserContext";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 
 test("renders properly when there are no movies", () => {
-  render(<MovieList />);
+  render(
+    <UserContextProvider>
+      <MovieList />
+    </UserContextProvider>
+  );
 
   const text = screen.getByText("no movies yet");
   expect(text).toBeDefined();
@@ -14,9 +18,11 @@ test("renders properly when there are no movies", () => {
 
 test("renders properly with a list of movies", () => {
   render(
-    <MemoryRouter>
-      <MovieList movies={myFavoriteMovies.slice(0, 3)} />
-    </MemoryRouter>
+    <UserContextProvider>
+      <MemoryRouter>
+        <MovieList movies={myFavoriteMovies.slice(0, 3)} />
+      </MemoryRouter>
+    </UserContextProvider>
   );
 
   const movie1 = screen.getByText(myFavoriteMovies[0].title);

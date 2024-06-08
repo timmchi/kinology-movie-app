@@ -18,7 +18,6 @@ const UserProfileComments = ({
         comments={comments}
         onDelete={deleteComment}
         onEdit={updateComment}
-        currentUser={currentUser}
       />
     </div>
   );
