@@ -34,7 +34,7 @@ test("renders Hero component correctly", () => {
   const searchButton = screen.getByRole("button", { name: /search/i });
   expect(searchButton).toBeDefined();
   expect(searchButton).toHaveClass("CTA-search");
-  expect(searchButton).toHaveStyle("background-color: rgb(0, 117, 95);");
+  expect(searchButton).toHaveStyle("background-color: rgb(0, 83, 47);");
 
   const registerButton = screen.getByRole("button", { name: /register/i });
   expect(registerButton).toBeDefined();
