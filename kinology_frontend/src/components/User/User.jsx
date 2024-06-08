@@ -7,10 +7,12 @@ import UserProfileComments from "./UserProfileComments";
 import UserInfo from "./UserInfo";
 import UserAvatarAndEdit from "./UserAvatarAndEdit";
 import useUser from "../../hooks/useUser";
+import { useUserValue } from "../../contexts/UserContext";
 import PropTypes from "prop-types";
 
-const User = ({ currentUser, removeUser }) => {
+const User = ({ removeUser }) => {
   const { id } = useParams();
+  const currentUser = useUserValue();
   const {
     user,
     avatar,
@@ -51,7 +53,6 @@ const User = ({ currentUser, removeUser }) => {
           <UserAvatarAndEdit
             avatar={avatar}
             setAvatar={setAvatar}
-            currentUser={currentUser}
             user={user}
             updateForm={updateForm}
             deleteUser={deleteUser}
@@ -82,6 +83,5 @@ const User = ({ currentUser, removeUser }) => {
 export default User;
 
 User.propTypes = {
-  currentUser: PropTypes.object,
   removeUser: PropTypes.func.isRequired,
 };

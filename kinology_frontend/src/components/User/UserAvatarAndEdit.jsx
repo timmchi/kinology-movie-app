@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 const UserAvatarAndEdit = ({
   avatar,
   setAvatar,
-  currentUser,
   user,
   updateForm,
   deleteUser,
@@ -21,7 +20,6 @@ const UserAvatarAndEdit = ({
         className="avatar"
       />
       <EditProfileButtons
-        currentUser={currentUser}
         user={user}
         updateForm={updateForm}
         deleteUser={deleteUser}
@@ -35,7 +33,6 @@ export default UserAvatarAndEdit;
 UserAvatarAndEdit.propTypes = {
   avatar: PropTypes.string.isRequired,
   setAvatar: PropTypes.func.isRequired,
-  currentUser: PropTypes.object,
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   updateForm: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,

@@ -13,6 +13,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { useUserValue } from "../../contexts/UserContext";
 import PropTypes from "prop-types";
 
 const drawerWidth = 240;
@@ -24,6 +25,7 @@ const handleLogout = () => {
 
 const Navigation = (props) => {
   const { window } = props;
+  const user = useUserValue();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -46,7 +48,7 @@ const Navigation = (props) => {
             </NavLink>
           </ListItemButton>
         </ListItem>
-        {props.user ? (
+        {user ? (
           <>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: "center" }}>
@@ -120,7 +122,7 @@ const Navigation = (props) => {
               About
             </NavLink>
 
-            {props.user ? (
+            {user ? (
               <>
                 <NavLink to="/me" className="nav-link">
                   Me
@@ -177,6 +179,5 @@ const Navigation = (props) => {
 export default Navigation;
 
 Navigation.propTypes = {
-  user: PropTypes.object,
   window: PropTypes.instanceOf(window.constructor),
 };

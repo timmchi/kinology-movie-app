@@ -1,7 +1,9 @@
 import { Button } from "@mui/material";
+import { useUserValue } from "../../contexts/UserContext";
 import PropTypes from "prop-types";
 
-const EditProfileButtons = ({ currentUser, user, updateForm, deleteUser }) => {
+const EditProfileButtons = ({ user, updateForm, deleteUser }) => {
+  const currentUser = useUserValue();
   return (
     <div className="profileButtons">
       {currentUser && currentUser?.username === user.username && (
@@ -28,7 +30,6 @@ const EditProfileButtons = ({ currentUser, user, updateForm, deleteUser }) => {
 export default EditProfileButtons;
 
 EditProfileButtons.propTypes = {
-  currentUser: PropTypes.object,
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   updateForm: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
