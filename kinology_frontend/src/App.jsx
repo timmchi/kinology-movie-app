@@ -24,6 +24,7 @@ const App = () => {
   const userDispatch = useUserDispatch();
   const navigate = useNavigate();
 
+  // checks if the user is in local storage, if so - logs in
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedKinologyUser");
     if (loggedUserJSON && loggedUserJSON != null) {
@@ -32,7 +33,6 @@ const App = () => {
         type: "LOGIN",
         payload: user,
       });
-      //   setUser(user);
       userService.setToken(user.token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,6 +47,7 @@ const App = () => {
     fetchUsers();
   }, []);
 
+  // on mount checks if the user session has expired, if so, logs the user out.
   useEffect(() => {
     const handlePageLoad = () => {
       if (window.localStorage.getItem("sessionExpired") === "true") {
@@ -65,12 +66,14 @@ const App = () => {
       }
     };
     handlePageLoad();
-  }, [dispatch, userDispatch, navigate]); // idk ??
+  }, [dispatch, userDispatch, navigate]);
 
+  // This function is used in signing up
   const addUser = (user) => {
     setUsers(users.concat(user));
   };
 
+  // Used in User component
   const removeUser = (userId) => {
     try {
       setUsers(users.filter((user) => user.id !== userId));
@@ -95,7 +98,7 @@ const App = () => {
     }
   };
 
-  // movie buttons continues here
+  // This handles pressing one of the three movie buttons (watch, seen, favorite)
   const handleMovieButton = async (event, button, movie) => {
     event.preventDefault();
     try {
@@ -121,6 +124,7 @@ const App = () => {
     }
   };
 
+  // This handles the opposite press of one of the three movie buttons (unwatch, unsee, unfavorite)
   const handleMovieButtonUnpress = async (event, button, movie) => {
     event.preventDefault();
     try {
@@ -171,12 +175,10 @@ const App = () => {
       });
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
 
-      //   setUser(user);
-
+      // a bit of a hack, works in tandem with handlePageLoad. Token in backend is set for an hour, so after logging user token will be removed, expired token will be set, and then useEffect with handlePageLoad will take over. This will need a better implementation
       setTimeout(() => {
         window.localStorage.removeItem("loggedKinologyUser");
         window.localStorage.setItem("sessionExpired", "true");
-        userDispatch({ type: "LOGOUT" });
         window.location.reload();
       }, 60 * 60 * 1000);
 
@@ -234,6 +236,7 @@ const App = () => {
         <Route
           path="/me"
           element={
+            // if the user is logged in, do a basic user page with current user id, then inside of the User component useParams handles rendering the correct user. Otherwise, sends to log in
             user !== null ? (
               <Navigate replace to={`/users/${user.id}`} />
             ) : (
