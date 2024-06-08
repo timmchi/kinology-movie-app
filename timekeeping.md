@@ -93,6 +93,11 @@
 | 6.6  | 2     | Refactoring monolothic components into smaller parts                                      |
 | 6.6  | 1     | Fixes of linting errors, lint added to pipeline, movie search change, other small changes |
 | 7.6  | 1     | Readme                                                                                    |
+| 8.6  | 1     | contact api ethereal in test env, gmail in dev and prod                                   |
+| 8.6  | 0.5   | Scrolltop style change, cta buttons style change, css variables                           |
+| 8.6  | 0.5   | Dev, prod and test env implemented, test fix                                              |
+| 8.6  | 1.5   | User context added, implemented in components to avoid prop drilling, tests fixed         |
+| 8.6  | 0.5   | Comments                                                                                  |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
@@ -111,9 +116,4 @@
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-| tot  | 149   |                                                                                           |
+| tot  | 153   |                                                                                           |
