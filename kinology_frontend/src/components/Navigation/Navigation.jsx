@@ -13,17 +13,13 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useUserValue } from "../../contexts/UserContext";
+import { useUserValue, useUserDispatch } from "../../contexts/UserContext";
 import PropTypes from "prop-types";
 
 const drawerWidth = 240;
 
-const handleLogout = () => {
-  window.localStorage.removeItem("loggedKinologyUser");
-  window.location.reload();
-};
-
 const Navigation = (props) => {
+  const userDispatch = useUserDispatch();
   const { window } = props;
   const user = useUserValue();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -32,6 +28,16 @@ const Navigation = (props) => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  // this is inside of the component so that userDispatch can be used
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedKinologyUser");
+    userDispatch({
+      type: "LOGOUT",
+    });
+    window.location.reload();
+  };
+
+  // hamburger which opens this menu on smaller screens
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Link to="/" className="site-title">
