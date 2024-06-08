@@ -2,10 +2,14 @@
 require("dotenv").config();
 
 const PORT = process.env.PORT || 3001;
+
 const MONGODB_URI =
   process.env.NODE_ENV === "test"
     ? process.env.TEST_MONGODB_URI
-    : process.env.MONGODB_URI;
+    : process.env.NODE_ENV === "production"
+    ? process.env.PROD_MONGODB_URI
+    : process.env.DEV_MONGODB_URI;
+
 const SECRET = process.env.SECRET;
 const TMDB_TOKEN = process.env.TMDB_TOKEN;
 const TMDB_API = process.env.TMDB_API_KEY;
