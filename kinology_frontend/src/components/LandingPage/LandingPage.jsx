@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import SearchModal from "../Search/SearchModal";
 import MovieList from "../Movie/MovieList";
-import ScrollTop from "../Pagination/ScrollTop";
+import ScrollTop from "../ReusableComponents/ScrollTop";
 import Hero from "../Hero/Hero";
 import PropTypes from "prop-types";
 

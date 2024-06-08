@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useState } from "react";
-import ScrollTop from "./Pagination/ScrollTop";
+import ScrollTop from "./ReusableComponents/ScrollTop";
 
 const Test = () => {
   const [open, setOpen] = useState(false);

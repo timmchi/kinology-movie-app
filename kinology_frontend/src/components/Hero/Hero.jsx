@@ -24,9 +24,9 @@ const Hero = ({ goToSearch }) => {
                   className="CTA-search"
                   variant="contained"
                   sx={{
-                    backgroundColor: "#00C9AB",
+                    backgroundColor: "#00A660",
                     "&:hover": { backgroundColor: "#00755F" },
-                    fontSize: 25,
+                    fontSize: 20,
                     "@media (max-width: 1024px)": {
                       fontSize: 15,
                     },
@@ -48,7 +48,7 @@ const Hero = ({ goToSearch }) => {
                   variant="contained"
                   sx={{
                     backgroundColor: "#00A660",
-                    "&:hover": { backgroundColor: "#00532f" },
+                    "&:hover": { backgroundColor: "#00755F" },
                     fontSize: 20,
                     "@media (max-width: 1024px)": {
                       fontSize: 15,
