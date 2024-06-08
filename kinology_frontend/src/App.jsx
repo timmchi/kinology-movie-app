@@ -18,7 +18,6 @@ import { useUserDispatch, useUserValue } from "./contexts/UserContext";
 import { Navigate } from "react-router-dom";
 
 const App = () => {
-  //   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
   const user = useUserValue();
   const dispatch = useNotificationDispatch();
@@ -36,6 +35,7 @@ const App = () => {
       //   setUser(user);
       userService.setToken(user.token);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
