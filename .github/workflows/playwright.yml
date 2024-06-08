@@ -48,8 +48,8 @@ jobs:
           BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
           TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_PW: ${{ secrets.GMAIL_PW }}
+          ETHEREAL_USER: ${{ secrets.ETHEREAL_USER }}
+          ETHEREAL_PW: ${{ secrets.ETHEREAL_PW }}
         run: DEBUG=pw:webserver npx playwright test --project=chromium
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
