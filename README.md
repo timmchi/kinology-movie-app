@@ -1,5 +1,14 @@
 # Kinology
 
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+
+![Test and deploy to production workflow](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg)
+
+![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)
+
 ## Table of Contents
 
 1. [What is this app?](#what-is-this-app)
@@ -14,10 +23,9 @@
 
 ## <a name="what-is-this-app">What is this app?</a>
 
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
-![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+Kinology is a web app that helps you decide which movie you should watch. You can search for movies based genre, year of release, actor, rating and other parameters, greatly simplifying choosing what to watch this evening.
+
+You can also create your own account, to which you can then add movies you've already seen, your favorite movies or movies you would like to watch. And you can also comment on movies and other users' profiles.
 
 The frontend for the app was built with React, with a lot of styling based on MUI components. Backend was built with Node and it utilizes MongoDB to store data.
 
@@ -25,7 +33,7 @@ You can check out the production version of Kinology [here](https://kinology-mov
 
 ## <a name="installation">Installation</a>
 
-In order to run this app on your machine, you will need to have Node and npm installed.
+In order to run this app on your machine, you will need to have Node, Vite and npm installed.
 
 Then after cloning the repository, install the frontend dependencies by running:
 
@@ -136,7 +144,7 @@ Environment variables used in this project are the following:
 
 Kinology uses **Github Actions** to automate various tasks.
 
-Workflows are available in the \*\*[.github/workflows directory](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows)
+Workflows are available in the **[.github/workflows directory](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows).**
 
 ### Workflows
 
