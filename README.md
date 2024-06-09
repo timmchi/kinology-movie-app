@@ -6,7 +6,6 @@
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 
 ![Test and deploy to production workflow](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg)
-
 ![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)
 
 ## Table of Contents
@@ -148,9 +147,10 @@ Workflows are available in the **[.github/workflows directory](https://github.co
 
 ### Workflows
 
-![Deployment pipeline](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg)
-
-![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)
+|                                                       Name                                                        |                                                                               Description and Status                                                                                |
+| :---------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| **[Deployment pipeline]**(https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/pipeline.yml) | Includes building, linting, tests and deployment to Render.</br></br>![Deployment pipeline](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg) |
+|   **[Healthcheck]**(https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/healthcheck.yml)    |     Checks if the app is running and available on Render. </br></br> ![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)      |
 
 ## <a name="todos">What's next for Kinology?</a>
 
