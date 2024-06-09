@@ -128,13 +128,6 @@ describe("local storage test", () => {
   const mockUser = { username: "user" };
 
   test("handles logout function correctly", () => {
-    // render(
-    //   <UserContextProvider value={mockUser}>
-    //     <MemoryRouter>
-    //       <Navigation />
-    //     </MemoryRouter>
-    //   </UserContextProvider>
-    // );
     renderWithUserContext(<Navigation />, { initialUser: mockUser });
 
     const logoutButtons = screen.getAllByText("log out");

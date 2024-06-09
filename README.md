@@ -6,12 +6,11 @@
 2. [Installation](#installation)
 3. [Build](#build)
 4. [Tests](#tests)
-5. [Docker](#docker)
-6. [Env variables](#env-variables)
-7. [Github actions](#github-actions)
-8. [What's next for Kinology?](#todos)
-9. [TMDB api](#tmdb)
-10. [Fullstack open](#fso)
+5. [Env variables](#env-variables)
+6. [Github actions](#github-actions)
+7. [What's next for Kinology?](#todos)
+8. [TMDB api](#tmdb)
+9. [Fullstack open](#fso)
 
 ## <a name="what-is-this-app">What is this app?</a>
 
@@ -56,8 +55,6 @@ npm run dev
 
 The above commands will start the app in development mode, and will watch out for changes in code.
 
-App can also be run in development mode with Docker, for more info go here **[Docker](#docker)**
-
 ## <a name="build">Build</a>
 
 In order to build the application, run the following command in kinology_backend directory:
@@ -69,8 +66,6 @@ npm run build:ui
 # Start app in production mode
 npm run start
 ```
-
-App can also be run in production mode with Docker, for more info go here **[Docker](#docker)**
 
 ## <a name="tests">Tests</a>
 
@@ -105,8 +100,6 @@ If you would like to run e2e tests with ui, run the following command in project
 ```
 npm run test -- --ui
 ```
-
-## <a name="docker">Docker</a>
 
 ## <a name="env-variables">Env variables</a>
 
