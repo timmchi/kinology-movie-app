@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useUserValue } from "../../contexts/UserContext";
 import PropTypes from "prop-types";
 import usersService from "../../services/users";
+import { Typography } from "@mui/material";
 
 const CommentView = ({ comment, editForm, onDelete }) => {
   const [avatar, setAvatar] = useState("");
@@ -39,6 +40,11 @@ const CommentView = ({ comment, editForm, onDelete }) => {
           sx={{ color: "#F7E382" }}
           secondaryTypographyProps={{ color: "white" }}
         />
+        <Typography>
+          {comment.createdAt
+            ? new Date(comment.createdAt).toLocaleString()
+            : ""}
+        </Typography>
       </ListItem>
       <div className="commentButtons">
         {currentUser && (

@@ -51,11 +51,13 @@ const createComment = async (content, author, receiver, type) => {
     type === "movie"
       ? new UserComment({
           content,
+          createdAt: Date.now(),
           author,
           movieReceiver: receiver,
         })
       : new UserComment({
           content,
+          createdAt: Date.now(),
           author,
           receiver,
         });
