@@ -149,8 +149,8 @@ Workflows are available in the **[.github/workflows directory](https://github.co
 
 |                                                       Name                                                        |                                                                               Description and Status                                                                                |
 | :---------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| **[Deployment pipeline]**(https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/pipeline.yml) | Includes building, linting, tests and deployment to Render.</br></br>![Deployment pipeline](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg) |
-|   **[Healthcheck]**(https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/healthcheck.yml)    |     Checks if the app is running and available on Render. </br></br> ![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)      |
+| **[Deployment pipeline](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/pipeline.yml)** | Includes building, linting, tests and deployment to Render.</br></br>![Deployment pipeline](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg) |
+|   **[Healthcheck](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/healthcheck.yml)**    |     Checks if the app is running and available on Render. </br></br> ![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)      |
 
 ## <a name="todos">What's next for Kinology?</a>
 
