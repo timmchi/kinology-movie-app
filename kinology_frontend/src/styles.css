@@ -363,6 +363,10 @@ a:hover {
   z-index: 99;
 }
 
+.sort-comments {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   .box {
     padding: 2em;
