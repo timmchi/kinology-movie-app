@@ -18,6 +18,11 @@ import PropTypes from "prop-types";
 
 const drawerWidth = 240;
 
+const handleLogout = () => {
+  window.localStorage.removeItem("loggedKinologyUser");
+  window.location.reload();
+};
+
 const Navigation = (props) => {
   const userDispatch = useUserDispatch();
   const { window } = props;
@@ -28,13 +33,12 @@ const Navigation = (props) => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  // this is inside of the component so that userDispatch can be used
-  const handleLogout = () => {
-    window.localStorage.removeItem("loggedKinologyUser");
+  // this is divided into parts so that userDispatch can be used and so that unit tests dont fail due to localstorage being undefined
+  const logout = () => {
+    handleLogout();
     userDispatch({
       type: "LOGOUT",
     });
-    window.location.reload();
   };
 
   // hamburger which opens this menu on smaller screens
@@ -137,7 +141,7 @@ const Navigation = (props) => {
                   Users
                 </NavLink>
 
-                <LogOut handleLogout={handleLogout} />
+                <LogOut handleLogout={logout} />
               </>
             ) : (
               <>
