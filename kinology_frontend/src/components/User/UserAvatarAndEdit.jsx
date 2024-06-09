@@ -31,7 +31,7 @@ const UserAvatarAndEdit = ({
 export default UserAvatarAndEdit;
 
 UserAvatarAndEdit.propTypes = {
-  avatar: PropTypes.string.isRequired,
+  avatar: PropTypes.string,
   setAvatar: PropTypes.func.isRequired,
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   updateForm: PropTypes.func.isRequired,

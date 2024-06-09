@@ -11,7 +11,7 @@ const updateForm = () => {
 const deleteUser = vi.fn();
 const setAvatar = vi.fn();
 
-test("renders avatar with correct alt-text", () => {
+test("renders avatar with correct alt-text and src when avatar is provided", () => {
   render(
     <UserContextProvider>
       <UserAvatarAndEdit
@@ -24,7 +24,24 @@ test("renders avatar with correct alt-text", () => {
     </UserContextProvider>
   );
 
-  screen.getByAltText("user avatar");
+  const avatarElement = screen.getByAltText("user avatar");
+  expect(avatarElement).toHaveAttribute("src", "avatar");
+});
+
+test("renders avatar with placeholder src when avatar is not provided", () => {
+  render(
+    <UserContextProvider>
+      <UserAvatarAndEdit
+        updateForm={updateForm}
+        deleteUser={deleteUser}
+        user={mockUserProfile}
+        setAvatar={setAvatar}
+      />
+    </UserContextProvider>
+  );
+
+  const avatarElement = screen.getByAltText("user avatar");
+  expect(avatarElement).toHaveAttribute("src", "/avatar-placeholder.png");
 });
 
 test("renders with EditProfileButtons when the logged in user is the profile owner", () => {

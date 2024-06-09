@@ -15,9 +15,20 @@ vi.mock("../../services/users", async (importOriginal) => {
   };
 });
 
-const user = { id: 1, name: "User Tester", username: "user_tester" };
+const user = {
+  id: 1,
+  name: "User Tester",
+  username: "user_tester",
+  biography: "hello world",
+};
 
-test("renders user with avatar correctly", async () => {
+const emptyBioUser = {
+  id: 1,
+  name: "User Tester",
+  username: "user_tester",
+  biography: "",
+};
+test("renders user with avatar and bio correctly", async () => {
   render(
     <MemoryRouter>
       <UserSingleListView user={user} />
@@ -33,4 +44,16 @@ test("renders user with avatar correctly", async () => {
 
   const userElement = screen.getByText(user.name);
   expect(userElement).toBeDefined();
+
+  screen.getByText("hello world");
+});
+
+test("user bio is set to placeholder text when it is blank", () => {
+  render(
+    <MemoryRouter>
+      <UserSingleListView user={emptyBioUser} />
+    </MemoryRouter>
+  );
+
+  screen.getByText("We don't know much about them yet...");
 });
