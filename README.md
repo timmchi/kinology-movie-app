@@ -69,9 +69,11 @@ npm run start
 
 ## <a name="tests">Tests</a>
 
+There are currently 216 tests in total. 89 Frontend unit tests, 75 backend integration tests, and 52 e2e tests.
+
 ### Unit tests
 
-Frontend components are tested using unit tests. To run them, change to kinology_frontend directory and run:
+Frontend components are tested using unit tests using vitest and react testing library. To run them, change to kinology_frontend directory and run:
 
 ```
 npm test
@@ -79,15 +81,20 @@ npm test
 
 ### Integration tests
 
-Backend apis are tested using integration tests. To run them, change to kinology_backend directory and run:
+Backend apis are tested using integration tests. To run them, change to kinology_backend directory and run the following command:
 
 ```
-npm test
+npm test -- ./tests/comments_api.test.js &&
+npm test -- ./tests/login_api.test.js &&
+npm test -- ./tests/movies_api.test.js &&
+npm test -- ./tests/users_api.test.js
 ```
+
+or, alternatively, you can run the above commands one after the other. Unfortunately, as the tests use the database, they crash when executing them in parallel, hence why `npm test` is not an option here.
 
 ### E2E Tests
 
-E2E tests were built using Playwright and they code is available in the root directory in tests folder
+E2E tests were built using Playwright and the code is available in the root directory in tests folder.
 
 You can run e2e tests by running the following command in project directory:
 
@@ -127,12 +134,22 @@ Environment variables used in this project are the following:
 
 ## <a name="github-actions">Github actions</a>
 
+Kinology uses **Github Actions** to automate various tasks.
+
+Workflows are available in the \*\*[.github/workflows directory](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows)
+
+### Workflows
+
+![Deployment pipeline](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg)
+
+![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)
+
 ## <a name="todos">What's next for Kinology?</a>
 
 ## <a name="tmdb">TMDB api</a>
 
+Kinology uses [TMDB api](https://www.themoviedb.org) to implement movie searching functionality. Big thanks for awesome api and easy to understand documentation!
+
 ## <a name="fso">Fullstack open</a>
 
-```
-
-```
+This project is my submission for [Fullstack project](https://fullstackopen.com/en/), worth 10 credits, which is a part of Fullstackopen course. [Link](https://github.com/timmchi/kinology-movie-app/blob/main/timekeeping.md) to the timekeeping document.
