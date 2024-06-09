@@ -2,4 +2,4 @@
 
 echo "Build script"
 
-npm install && npm run build:ui 
+cd kinology_backend && npm install && npm run build:ui 
