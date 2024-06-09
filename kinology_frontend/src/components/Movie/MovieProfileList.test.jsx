@@ -25,3 +25,19 @@ test("renders correctly with props provided", () => {
     screen.getByAltText(`${myFavoriteMovies[2].title} poster`)
   ).toBeVisible();
 });
+
+test("renders div with display none when movie list is empty", () => {
+  render(
+    <MemoryRouter>
+      <MovieProfileList header={"Test header"} movies={[]} />
+    </MemoryRouter>
+  );
+
+  const headerElement = screen.getByText("Test header");
+
+  const movieListDiv = headerElement.closest(".movieList");
+
+  expect(movieListDiv).toBeDefined();
+
+  expect(movieListDiv).toHaveStyle("display: none");
+});
