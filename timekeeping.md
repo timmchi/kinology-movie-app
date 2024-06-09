@@ -98,6 +98,9 @@
 | 8.6  | 0.5   | Dev, prod and test env implemented, test fix                                              |
 | 8.6  | 1.5   | User context added, implemented in components to avoid prop drilling, tests fixed         |
 | 8.6  | 0.5   | Comments                                                                                  |
+| 9.6  | 1.5   | Unit tests                                                                                |
+| 9.6  | 2     | Date functionality to comments, sorting, unit tests                                       |
+| 9.6  | 0.5   | Readme                                                                                    |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
@@ -113,7 +116,4 @@
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-| tot  | 153   |                                                                                           |
+| tot  | 157   |                                                                                           |
