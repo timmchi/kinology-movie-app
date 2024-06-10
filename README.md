@@ -1,7 +1,7 @@
 # Kinology
 
 <p align="center">
-  <img src="https://github.com/timmchi/kinology-movie-app/main/assets/kinology-logo.png?raw=true" width="400" alt="logo"/>
+  <img src="https://github.com/timmchi/kinology-movie-app/blob/main/assets/kinology-logo.png" width="400" alt="logo"/>
 </p>
 
 ---
