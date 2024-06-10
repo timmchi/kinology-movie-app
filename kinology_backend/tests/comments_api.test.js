@@ -61,7 +61,7 @@ describe("a user already exists and no comments in db", async () => {
 
     // creating a user
     await User.deleteMany({});
-    const passwordHash = await getHash("123456");
+    const passwordHash = await getHash("Secret123");
     const user = new User({
       username: helper.initialUser.username,
       email: helper.initialUser.email,
@@ -73,7 +73,7 @@ describe("a user already exists and no comments in db", async () => {
     // logging in and getting a token
     const result = await api
       .post("/api/login")
-      .send({ username: "commentstester", password: "123456" });
+      .send({ username: "commentstester", password: "Secret123" });
 
     token = result.body.token;
   });
@@ -496,7 +496,7 @@ describe("a user already exists and no comments in db", async () => {
     describe("there is another user in db when deleting", async () => {
       beforeEach(async () => {
         // creation of a second user
-        const passwordHash = await getHash("654321");
+        const passwordHash = await getHash("Secret654321");
         const user = new User({
           username: helper.secondUser.username,
           email: helper.secondUser.email,
@@ -507,7 +507,10 @@ describe("a user already exists and no comments in db", async () => {
         // logging in with second user's credentials
         const result = await api
           .post("/api/login")
-          .send({ username: helper.secondUser.username, password: "654321" });
+          .send({
+            username: helper.secondUser.username,
+            password: "Secret654321",
+          });
 
         secondUserToken = result.body.token;
       });
@@ -886,7 +889,7 @@ describe("a user already exists and no comments in db", async () => {
     describe("there is another user in db when editing", async () => {
       beforeEach(async () => {
         // creation of a second user
-        const passwordHash = await getHash("654321");
+        const passwordHash = await getHash("Secret654321");
         const user = new User({
           username: helper.secondUser.username,
           email: helper.secondUser.email,
@@ -897,7 +900,10 @@ describe("a user already exists and no comments in db", async () => {
         // logging in with second user's credentials
         const result = await api
           .post("/api/login")
-          .send({ username: helper.secondUser.username, password: "654321" });
+          .send({
+            username: helper.secondUser.username,
+            password: "Secret654321",
+          });
 
         secondUserToken = result.body.token;
       });

@@ -7,9 +7,7 @@ const v = require("valibot");
 
 const CommentSchema = v.object({
   content: v.optional(
-    v.string("Comment must be a string", [
-      v.minLength(1, "Comments can not be empty"),
-    ])
+    v.pipe(v.string("Comment must be a string"), v.minLength(1, "Comments can not be empty"),)
   ),
   author: v.optional(
     v.string(v.hexadecimal("The authorId hexadecimal is badly formatted."))
@@ -28,7 +26,7 @@ const paramsIdSchema = v.object({
 
 const MovieSchema = v.object({
   title: v.optional(v.string()),
-  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
+  poster: v.optional(v.pipe(v.string(), v.includes("/"), v.endsWith(".jpg"))),
 });
 
 const fetchUser = async (userId) => {

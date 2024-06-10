@@ -16,7 +16,7 @@ const getHash = async (pw) => {
   return testPasswordHash;
 };
 
-const userPassword = "123123";
+const userPassword = "Secret123";
 
 let createdUserId;
 

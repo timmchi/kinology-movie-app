@@ -29,7 +29,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.13",
     "sharp": "^0.33.3",
-    "valibot": "^0.30.0"
+    "valibot": "^0.31.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin-js": "^1.8.0",
