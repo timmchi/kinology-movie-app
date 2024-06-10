@@ -246,7 +246,7 @@ describe("Kinology", () => {
     });
 
     test("failed log in attempt", async ({ page }) => {
-      await loginWith(page, "tester", "toster");
+      await loginWith(page, "tester", "Toster123");
 
       await page.waitForTimeout(1000);
 
