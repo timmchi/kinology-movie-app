@@ -15,11 +15,7 @@ const MovieSmallCard = ({ movie }) => {
           component="img"
           loading="lazy"
           height="150"
-          alt={
-            movie.image
-              ? `${movie.title} poster`
-              : "Icon made by Freepik from www.flaticon.com"
-          }
+          alt={`${movie.title} poster`}
           src={movie.image ? `${basePosterUrl}${movie?.image}` : placeholderUrl}
         />
       </CardActionArea>
