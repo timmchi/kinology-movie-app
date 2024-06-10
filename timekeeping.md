@@ -101,6 +101,10 @@
 | 9.6  | 1.5   | Unit tests                                                                                |
 | 9.6  | 2     | Date functionality to comments, sorting, unit tests                                       |
 | 9.6  | 0.5   | Readme                                                                                    |
+| 10.6 | 1.5   | movie search now uses useSearchParams, movie card opening reverted, tests fix             |
+| 10.6 | 1.5   | Valibot migrations, proper password validation, test fixes                                |
+| 10.6 | 0.5   | Readme improvements                                                                       |
+| 10.6 | 0.5   | More consistent styling                                                                   |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
@@ -112,8 +116,4 @@
 |      |       |                                                                                           |
 |      |       |                                                                                           |
 |      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-|      |       |                                                                                           |
-| tot  | 157   |                                                                                           |
+| tot  | 161   |                                                                                           |
