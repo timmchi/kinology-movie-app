@@ -1,5 +1,3 @@
-# Kinology
-
 <p align="center">
   <img src="https://github.com/timmchi/kinology-movie-app/blob/main/assets/kinology-logo.png" width="400" alt="logo"/>
 </p>
@@ -22,9 +20,8 @@
 4. [Tests](#tests)
 5. [Env variables](#env-variables)
 6. [Github actions](#github-actions)
-7. [What's next for Kinology?](#todos)
-8. [TMDB api](#tmdb)
-9. [Fullstack open](#fso)
+7. [TMDB api](#tmdb)
+8. [Fullstack open](#fso)
 
 ## <a name="what-is-this-app">What is this app?</a>
 
@@ -32,7 +29,7 @@ Kinology is a web app that helps you decide which movie you should watch. You ca
 
 You can also create your own account, to which you can then add movies you've already seen, your favorite movies or movies you would like to watch. And you can also comment on movies and other users' profiles.
 
-The frontend for the app was built with React, with a lot of styling based on MUI components. Backend was built with Node and it utilizes MongoDB to store data.
+The frontend for the app was built with React, with a lot of styling based on MUI components, and it is responsive and mobile friendly. Backend was built with Node and it utilizes MongoDB to store data.
 
 You can check out the production version of Kinology [here](https://kinology-movie-app.onrender.com/)
 
@@ -72,7 +69,7 @@ The above commands will start the app in development mode, and will watch out fo
 
 ## <a name="build">Build</a>
 
-In order to build the application, run the following command in kinology_backend directory:
+In order to build the application, change to kinology_backend directory `cd kinology_frontend` and run:
 
 ```
 # Build the app
@@ -88,7 +85,7 @@ There are currently 216 tests in total. 89 Frontend unit tests, 75 backend integ
 
 ### Unit tests
 
-Frontend components are tested using unit tests using vitest and react testing library. To run them, change to kinology_frontend directory and run:
+Frontend components are tested using unit tests using vitest and react testing library. To run them, change to kinology_frontend directory `cd kinology_frontend` and run:
 
 ```
 npm test
@@ -160,12 +157,10 @@ Workflows are available in the **[.github/workflows directory](https://github.co
 | **[Deployment pipeline](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/pipeline.yml)** | Includes building, linting, tests and deployment to Render.</br></br>![Deployment pipeline](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg) |
 |   **[Healthcheck](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/healthcheck.yml)**    |     Checks if the app is running and available on Render. </br></br> ![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)      |
 
-## <a name="todos">What's next for Kinology?</a>
-
 ## <a name="tmdb">TMDB api</a>
 
-Kinology uses [TMDB api](https://www.themoviedb.org) to implement movie searching functionality. Big thanks for awesome api and easy to understand documentation!
+Kinology uses [TMDB api](https://www.themoviedb.org) to implement movie searching functionality. Big thanks for the awesome api and easy to understand documentation!
 
 ## <a name="fso">Fullstack open</a>
 
-This project is my submission for [Fullstack project](https://fullstackopen.com/en/), worth 10 credits, which is a part of Fullstackopen course.
+This project is my submission for Fullstack project, worth 10 credits. I completed it as a part of the [Fullstackopen course](https://fullstackopen.com/en/).
