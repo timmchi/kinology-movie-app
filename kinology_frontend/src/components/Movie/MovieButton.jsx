@@ -2,7 +2,23 @@ import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 
-// outlined contained
+const movieButtonStyle = (pressed) => {
+  return {
+    borderColor: "#BDAC4E",
+    "&:hover": {
+      borderColor: "#BDAC4E",
+      backgroundColor: pressed ? "#BDAC4E" : "primary",
+    },
+    backgroundColor: pressed ? "#BDAC4E" : "primary",
+    borderWidth: 2,
+    fontSize: 11,
+    paddingLeft: 2,
+    paddingRight: 2,
+    color: "white",
+    marginRight: 1.5,
+    boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+  };
+};
 
 const MovieButton = ({
   unpressedText,
@@ -52,21 +68,7 @@ const MovieButton = ({
       variant={pressed ? "contained" : "outlined"}
       size="small"
       color={pressed ? "success" : "primary"}
-      sx={{
-        borderColor: "#BDAC4E",
-        "&:hover": {
-          borderColor: "#BDAC4E",
-          backgroundColor: pressed ? "#BDAC4E" : "primary",
-        },
-        backgroundColor: pressed ? "#BDAC4E" : "primary",
-        borderWidth: 2,
-        fontSize: 11,
-        paddingLeft: 2,
-        paddingRight: 2,
-        color: "white",
-        marginRight: 1.5,
-        boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-      }}
+      sx={() => movieButtonStyle(pressed)}
       onClick={!pressed ? pressButton : unpressButton}
     >
       {!pressed ? unpressedText : pressedText}

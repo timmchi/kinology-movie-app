@@ -81,6 +81,23 @@ const credentialsInputStyle = {
 
 const formLabelStyle = { color: "#f7e382", fontSize: 18 };
 
+const imageBoxStyle = {
+  height: "100%",
+  position: "fixed",
+  right: 0,
+  top: 0,
+  bottom: 0,
+  left: { xs: 0, md: "50vw" },
+  transition:
+    "background-image var(--Transition-duration), left var(--Transition-duration) !important",
+  transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  backgroundImage:
+    "url(https://images.unsplash.com/photo-1589053739346-ed32227546a4?q=80&w=1031&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+};
+
 const SignUpForm = ({ addUser }) => {
   const {
     register,
@@ -245,24 +262,7 @@ const SignUpForm = ({ addUser }) => {
           </Box>
         </Box>
       </Box>
-      <Box
-        sx={{
-          height: "100%",
-          position: "fixed",
-          right: 0,
-          top: 0,
-          bottom: 0,
-          left: { xs: 0, md: "50vw" },
-          transition:
-            "background-image var(--Transition-duration), left var(--Transition-duration) !important",
-          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1589053739346-ed32227546a4?q=80&w=1031&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
-        }}
-      />
+      <Box sx={imageBoxStyle} />
     </div>
   );
 };

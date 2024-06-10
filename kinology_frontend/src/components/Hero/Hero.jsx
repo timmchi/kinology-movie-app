@@ -2,6 +2,15 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
+const ctaStyle = {
+  backgroundColor: "#00A660",
+  "&:hover": { backgroundColor: "#00755F" },
+  fontSize: 20,
+  "@media (max-width: 1024px)": {
+    fontSize: 15,
+  },
+};
+
 const Hero = ({ goToSearch }) => {
   const navigate = useNavigate();
   return (
@@ -23,14 +32,7 @@ const Hero = ({ goToSearch }) => {
                 <Button
                   className="CTA-search"
                   variant="contained"
-                  sx={{
-                    backgroundColor: "#00A660",
-                    "&:hover": { backgroundColor: "#00755F" },
-                    fontSize: 20,
-                    "@media (max-width: 1024px)": {
-                      fontSize: 15,
-                    },
-                  }}
+                  sx={ctaStyle}
                   onClick={goToSearch}
                 >
                   Search
@@ -46,14 +48,7 @@ const Hero = ({ goToSearch }) => {
                 <Button
                   className="CTA-register"
                   variant="contained"
-                  sx={{
-                    backgroundColor: "#00A660",
-                    "&:hover": { backgroundColor: "#00755F" },
-                    fontSize: 20,
-                    "@media (max-width: 1024px)": {
-                      fontSize: 15,
-                    },
-                  }}
+                  sx={ctaStyle}
                   onClick={() => navigate("/signup")}
                 >
                   Register
