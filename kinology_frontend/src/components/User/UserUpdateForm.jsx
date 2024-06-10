@@ -12,29 +12,27 @@ import {
   mimeType,
   maxSize,
   instance,
-  parse,
-  unknown,
+  pipe,
 } from "valibot";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-const UserUpdateSchema = object(
-  {
-    bio: string("About you should be a string", [
-      minLength(1, "Please enter something about yourself."),
-    ]),
-    name: string("Name should be a string", [
-      minLength(1, "Please enter your name"),
-      minLength(3, "Name should be 3 or more symbols long"),
-    ]),
-  },
-  unknown()
-);
-
-const FileSchema = instance(File, [
-  mimeType(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
-  maxSize(1024 * 1024 * 2),
-]);
+const UserUpdateSchema = object({
+  bio: pipe(
+    string("About you should be a string"),
+    minLength(1, "Please enter something about yourself.")
+  ),
+  name: pipe(
+    string("Name should be a string"),
+    minLength(1, "Please enter your name"),
+    minLength(3, "Name should be 3 or more symbols long")
+  ),
+  avatar: pipe(
+    instance(File),
+    mimeType(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
+    maxSize(1024 * 1024 * 2)
+  ),
+});
 
 const inputStyle = {
   bgcolor: "#79C094",
@@ -86,10 +84,11 @@ const UserUpdateForm = ({ updateUser }) => {
   }, [isSubmitSuccessful, reset]);
 
   const updatingUser = (data) => {
-    const parsedAvatar = parse(FileSchema, data.avatar);
+    console.log(data.avatar);
+    console.log(data);
 
     const formData = new FormData();
-    formData.append("avatar", parsedAvatar);
+    formData.append("avatar", data.avatar);
     formData.append("bio", data.bio);
     formData.append("name", data.name);
 

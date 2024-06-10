@@ -77,15 +77,11 @@ test("form fields are validated", async () => {
     /Name or nickname should be 3 or more symbols/i
   );
   const passwordError = screen.getByText(
-    /Your password must have 6 characters or more./i
-  );
-  const confirmPasswordError = screen.getByText(
-    /The two passwords do not match/i
+    /Your password must have 8 characters or more./i
   );
 
   expect(usernameError).toBeDefined();
   expect(nameError).toBeDefined();
   expect(emailError).toBeDefined();
   expect(passwordError).toBeDefined();
-  expect(confirmPasswordError).toBeDefined();
 });

@@ -1,7 +1,16 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength, forward, custom, email } from "valibot";
+import {
+  object,
+  string,
+  minLength,
+  forward,
+  check,
+  email,
+  pipe,
+  regex,
+} from "valibot";
 
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
@@ -16,35 +25,41 @@ import PropTypes from "prop-types";
 
 import useSignUp from "../../hooks/useSignUp";
 
-const RegistrationSchema = object(
-  {
-    email: string([
+const RegistrationSchema = pipe(
+  object({
+    email: pipe(
+      string(),
       minLength(1, "Please enter your email."),
-      email("The email address is badly formatted"),
-    ]),
-    username: string([
-      minLength(1, "Please enter your username."),
-      minLength(3, "Username should be 3 or more symbols"),
-    ]),
-    name: string([
-      minLength(1, "Please enter your name or nickname."),
-      minLength(3, "Name or nickname should be 3 or more symbols"),
-    ]),
-    password: string([
-      minLength(1, "Please enter your password."),
-      minLength(6, "Your password must have 6 characters or more."),
-    ]),
-    passwordConfirm: string([minLength(1, "Please confirm password")]),
-  },
-  [
-    forward(
-      custom(
-        (input) => input.password === input.passwordConfirm,
-        "The two passwords do not match"
-      ),
-      ["passwordConfirm"]
+      email("The email address is badly formatted")
     ),
-  ]
+    username: pipe(
+      string(),
+      minLength(1, "Please enter your username."),
+      minLength(3, "Username should be 3 or more symbols")
+    ),
+    name: pipe(
+      string(),
+      minLength(1, "Please enter your name or nickname."),
+      minLength(3, "Name or nickname should be 3 or more symbols")
+    ),
+    password: pipe(
+      string(),
+      minLength(1, "Please enter your password."),
+      minLength(8, "Your password must have 8 characters or more."),
+      regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        "Your password must have one uppercase letter, one lowercase letter and one number"
+      )
+    ),
+    passwordConfirm: pipe(string(), minLength(1, "Please confirm password")),
+  }),
+  forward(
+    check(
+      (input) => input.password === input.passwordConfirm,
+      "The two passwords do not match"
+    ),
+    ["passwordConfirm"]
+  )
 );
 
 const credentialsInputStyle = {

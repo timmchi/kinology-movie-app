@@ -10,7 +10,7 @@ import {
   maxValue,
   number,
   maxLength,
-  optional,
+  optional, pipe,
 } from "valibot";
 import PaginationController from "../Pagination/PaginationController";
 import { Button } from "@mui/material";
@@ -31,26 +31,18 @@ const searchQuerySchema = object({
     )
   ),
   year: union([
-    string([
-      minValue("1874", "Movies can not be shot before 1874"),
+    pipe(string(), minValue("1874", "Movies can not be shot before 1874"),
       maxValue(
         `${new Date().getFullYear()}`,
         "Can not search for movies shot after current year"
-      ),
-    ]),
+      ),),
     literal(""),
   ]),
-  ratingUpper: number("Rating should be a number", [
-    minValue(0, "Rating can not be lower than 0"),
-    maxValue(10, "Rating can not be higher than 10"),
-  ]),
-  ratingLower: number("Rating should be a number", [
-    minValue(0, "Rating can not be lower than 0"),
-    maxValue(11, "Rating can not be higher than 10"),
-  ]),
-  country: string("Country should be a string", [
-    maxLength(100, "Country name can not be this long"),
-  ]),
+  ratingUpper: pipe(number("Rating should be a number"), minValue(0, "Rating can not be lower than 0"),
+    maxValue(10, "Rating can not be higher than 10"),),
+  ratingLower: pipe(number("Rating should be a number"), minValue(0, "Rating can not be lower than 0"),
+    maxValue(11, "Rating can not be higher than 10"),),
+  country: pipe(string("Country should be a string"), maxLength(100, "Country name can not be this long"),),
   director: string("Director should be a string"),
 });
 

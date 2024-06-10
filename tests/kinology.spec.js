@@ -64,8 +64,8 @@ describe("Kinology", () => {
       "tester",
       "Mr Tester",
       "tester@example.com",
-      "secret",
-      "secret"
+      "Secret123",
+      "Secret123"
     );
 
     await page.waitForTimeout(1000);
@@ -202,8 +202,8 @@ describe("Kinology", () => {
         "tester",
         "Mr Tester",
         "tester@example.com",
-        "secret",
-        "secret"
+        "Secret123",
+        "Secret123"
       );
     });
 
@@ -223,8 +223,8 @@ describe("Kinology", () => {
         "tester",
         "Mr Tester",
         "tester@example.com",
-        "secret",
-        "secret"
+        "Secret123",
+        "Secret123"
       );
 
       await page.waitForTimeout(1000);
@@ -235,7 +235,7 @@ describe("Kinology", () => {
     });
 
     test("login form can be filled and submitted", async ({ page }) => {
-      await loginWith(page, "tester", "secret");
+      await loginWith(page, "tester", "Secret123");
 
       await page.waitForTimeout(1000);
       await expect(page.getByText("Successfully logged in")).toBeVisible({
@@ -274,7 +274,7 @@ describe("Kinology", () => {
 
     describe("when logged in", () => {
       beforeEach(async ({ page }) => {
-        await loginWith(page, "tester", "secret");
+        await loginWith(page, "tester", "Secret123");
 
         await page.waitForTimeout(1000);
 
@@ -776,13 +776,13 @@ describe("Kinology", () => {
           "toster",
           "Ms Toster",
           "toster@example.com",
-          "secret",
-          "secret"
+          "Secret123",
+          "Secret123"
         );
       });
 
       test("and another user can log in", async ({ page }) => {
-        await loginWith(page, "toster", "secret");
+        await loginWith(page, "toster", "Secret123");
 
         await page.waitForTimeout(1000);
 
@@ -793,7 +793,7 @@ describe("Kinology", () => {
 
       describe("and another user has logged in", () => {
         beforeEach(async ({ page }) => {
-          await loginWith(page, "toster", "secret");
+          await loginWith(page, "toster", "Secret123");
 
           await page.waitForTimeout(1000);
 
@@ -852,7 +852,7 @@ describe("Kinology", () => {
             await logOut(page);
 
             // logging in to another profile
-            await loginWith(page, "tester", "secret");
+            await loginWith(page, "tester", "Secret123");
 
             await page.waitForTimeout(1000);
 
