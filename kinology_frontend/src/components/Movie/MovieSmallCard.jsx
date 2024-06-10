@@ -2,6 +2,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
 import { Link } from "react-router-dom";
+import placeholderUrl from "../../../posterPlaceholder.png";
 import PropTypes from "prop-types";
 
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
@@ -14,8 +15,12 @@ const MovieSmallCard = ({ movie }) => {
           component="img"
           loading="lazy"
           height="150"
-          alt={`${movie.title} poster`}
-          src={`${basePosterUrl}/${movie.poster}`}
+          alt={
+            movie.image
+              ? `${movie.title} poster`
+              : "Icon made by Freepik from www.flaticon.com"
+          }
+          src={movie.image ? `${basePosterUrl}${movie?.image}` : placeholderUrl}
         />
       </CardActionArea>
     </Card>

@@ -7,6 +7,31 @@ import Avatar from "@mui/material/Avatar";
 import usersService from "../../services/users";
 import PropTypes from "prop-types";
 
+const listItemStyle = {
+  backgroundColor: "#79C094",
+  color: "#fff",
+  borderRadius: 10,
+  marginBottom: 1,
+  border: "3px solid #bdac4e",
+  boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+};
+
+const primaryTypographyProp = {
+  style: {
+    color: "#bdac4e",
+    textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 0.8)",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+};
+
+const secondaryTypographyProp = {
+  style: {
+    color: "white",
+    textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 1)",
+  },
+};
+
 const UserSingleListView = ({ user }) => {
   const [avatar, setAvatar] = useState("");
 
@@ -21,14 +46,7 @@ const UserSingleListView = ({ user }) => {
   return (
     <ListItem
       alignItems="flex-start"
-      sx={{
-        backgroundColor: "#79C094",
-        color: "#fff",
-        borderRadius: 10,
-        marginBottom: 1,
-        border: "3px solid #bdac4e",
-        boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-      }}
+      sx={listItemStyle}
       component={Link}
       to={`/users/${user.id}`}
     >
@@ -42,20 +60,8 @@ const UserSingleListView = ({ user }) => {
             ? user.biography
             : "We don't know much about them yet..."
         }
-        primaryTypographyProps={{
-          style: {
-            color: "#bdac4e",
-            textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 0.8)",
-            fontSize: 18,
-            fontWeight: "bold",
-          },
-        }}
-        secondaryTypographyProps={{
-          style: {
-            color: "white",
-            textShadow: "0.5px 0.5px 2px rgba(13, 4, 2, 1)",
-          },
-        }}
+        primaryTypographyProps={primaryTypographyProp}
+        secondaryTypographyProps={secondaryTypographyProp}
       />
     </ListItem>
   );

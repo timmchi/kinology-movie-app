@@ -10,7 +10,8 @@ import {
   maxValue,
   number,
   maxLength,
-  optional, pipe,
+  optional,
+  pipe,
 } from "valibot";
 import PaginationController from "../Pagination/PaginationController";
 import { Button } from "@mui/material";
@@ -20,6 +21,28 @@ import Sheet from "@mui/joy/Sheet";
 import SearchForm from "./SearchForm";
 import useMovieSearch from "../../hooks/useMovieSearch";
 import PropTypes from "prop-types";
+
+const modalOpenStyle = {
+  backgroundColor: "#609b76",
+  "&:hover": { backgroundColor: "#00532f" },
+  marginLeft: "1.15em",
+  marginRight: "1.15em",
+};
+
+const sheetStyle = {
+  width: 650,
+  borderRadius: "md",
+  p: 3,
+  boxShadow: "lg",
+  bgcolor: "#F6E9B2",
+};
+
+const newSearchStyle = {
+  margin: 2,
+  backgroundColor: "#F7E382",
+  color: "#00532f",
+  "&:hover": { backgroundColor: "#BDAC4E" },
+};
 
 const searchQuerySchema = object({
   genresSelect: optional(
@@ -31,18 +54,30 @@ const searchQuerySchema = object({
     )
   ),
   year: union([
-    pipe(string(), minValue("1874", "Movies can not be shot before 1874"),
+    pipe(
+      string(),
+      minValue("1874", "Movies can not be shot before 1874"),
       maxValue(
         `${new Date().getFullYear()}`,
         "Can not search for movies shot after current year"
-      ),),
+      )
+    ),
     literal(""),
   ]),
-  ratingUpper: pipe(number("Rating should be a number"), minValue(0, "Rating can not be lower than 0"),
-    maxValue(10, "Rating can not be higher than 10"),),
-  ratingLower: pipe(number("Rating should be a number"), minValue(0, "Rating can not be lower than 0"),
-    maxValue(11, "Rating can not be higher than 10"),),
-  country: pipe(string("Country should be a string"), maxLength(100, "Country name can not be this long"),),
+  ratingUpper: pipe(
+    number("Rating should be a number"),
+    minValue(0, "Rating can not be lower than 0"),
+    maxValue(10, "Rating can not be higher than 10")
+  ),
+  ratingLower: pipe(
+    number("Rating should be a number"),
+    minValue(0, "Rating can not be lower than 0"),
+    maxValue(11, "Rating can not be higher than 10")
+  ),
+  country: pipe(
+    string("Country should be a string"),
+    maxLength(100, "Country name can not be this long")
+  ),
   director: string("Director should be a string"),
 });
 
@@ -85,12 +120,7 @@ const SearchModal = ({ setMovies }) => {
       <Button
         variant="contained"
         onClick={() => setOpen(true)}
-        sx={{
-          backgroundColor: "#609b76",
-          "&:hover": { backgroundColor: "#00532f" },
-          marginLeft: "1.15em",
-          marginRight: "1.15em",
-        }}
+        sx={modalOpenStyle}
       >
         Open Search
       </Button>
@@ -101,16 +131,7 @@ const SearchModal = ({ setMovies }) => {
         onClose={() => setOpen(false)}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <Sheet
-          variant="outlined"
-          sx={{
-            width: 650,
-            borderRadius: "md",
-            p: 3,
-            boxShadow: "lg",
-            bgcolor: "#F6E9B2",
-          }}
-        >
+        <Sheet variant="outlined" sx={sheetStyle}>
           <ModalClose variant="plain" sx={{ marginLeft: 1 }} />
           <SearchForm
             control={control}
@@ -124,16 +145,7 @@ const SearchModal = ({ setMovies }) => {
           />
         </Sheet>
       </Modal>
-      <Button
-        onClick={handleNewSearch}
-        variant="contained"
-        sx={{
-          margin: 2,
-          backgroundColor: "#F7E382",
-          color: "#00532f",
-          "&:hover": { backgroundColor: "#BDAC4E" },
-        }}
-      >
+      <Button onClick={handleNewSearch} variant="contained" sx={newSearchStyle}>
         clear search
       </Button>
       <PaginationController

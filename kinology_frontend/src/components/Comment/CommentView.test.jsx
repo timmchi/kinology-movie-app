@@ -18,11 +18,15 @@ vi.mock("../../services/users", async (importOriginal) => {
   };
 });
 
+const date = new Date();
+const formattedDate = date.toLocaleString();
+
 const comment = {
   id: 1,
   content: "Comment by me",
   author: { id: 1, name: "Comment Tester", username: "comment_tester" },
   receiver: { username: "comment_receiver" },
+  createdAt: date.getTime(),
 };
 
 const currentUser = { username: "comment_tester" };
@@ -62,6 +66,8 @@ test("render comment with avatar correctly", async () => {
 
   const commentText = screen.getByText(comment.content);
   expect(commentText).toBeDefined();
+
+  expect(screen.getByText(formattedDate)).toBeDefined();
 });
 
 test("Component renders edit and delete buttons for comment author", async () => {
