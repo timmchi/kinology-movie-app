@@ -16,52 +16,66 @@ const upload = multer({ storage: storage });
 
 const v = require("valibot");
 
-const RegistrationSchema = v.object(
-  {
-    email: v.string([
+const RegistrationSchema = v.pipe(
+  v.object({
+    email: v.pipe(
+      v.string(),
       v.minLength(1, "Please enter your email."),
-      v.email("The email address is badly formatted"),
-    ]),
-    username: v.string([
-      v.minLength(1, "Please enter your username."),
-      v.minLength(3, "Username should be 3 or more symbols"),
-    ]),
-    name: v.string([
-      v.minLength(1, "Please enter your name or nickname."),
-      v.minLength(3, "Name or nickname should be 3 or more symbols"),
-    ]),
-    password: v.string([
-      v.minLength(1, "Please enter your password."),
-      v.minLength(6, "Your password must have 6 characters or more."),
-    ]),
-    passwordConfirm: v.string([v.minLength(1, "Please confirm password")]),
-  },
-  [
-    v.forward(
-      v.custom(
-        (input) => input.password === input.passwordConfirm,
-        "The two password do not match"
-      ),
-      ["passwordConfirm"]
+      v.email("The email address is badly formatted")
     ),
-  ]
+    username: v.pipe(
+      v.string(),
+      v.minLength(1, "Please enter your username."),
+      v.minLength(3, "Username should be 3 or more symbols")
+    ),
+    name: v.pipe(
+      v.string(),
+      v.minLength(1, "Please enter your name or nickname."),
+      v.minLength(3, "Name or nickname should be 3 or more symbols")
+    ),
+    password: v.pipe(
+      v.string(),
+      v.minLength(1, "Please enter your password."),
+      v.minLength(8, "Your password must have 8 characters or more."),
+      v.regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        "Your password must have one uppercase letter, one lowercase letter and one number"
+      )
+    ),
+    passwordConfirm: v.pipe(
+      v.string(),
+      v.minLength(1, "Please confirm password")
+    ),
+  }),
+  v.forward(
+    v.check(
+      (input) => input.password === input.passwordConfirm,
+      "The two password do not match"
+    ),
+    ["passwordConfirm"]
+  )
 );
 
 const MovieActionSchema = v.object({
-  id: v.union([v.string([v.minValue(2)]), v.number([v.minValue(2)])]),
+  id: v.union([
+    v.pipe(v.string(), v.minValue(2)),
+    v.pipe(v.number(), v.minValue(2)),
+  ]),
   title: v.optional(v.string()),
-  poster: v.optional(v.string([v.includes("/"), v.endsWith(".jpg")])),
+  poster: v.optional(v.pipe(v.string(), v.includes("/"), v.endsWith(".jpg"))),
   button: v.picklist(["watched", "favorite", "later"]),
 });
 
 const UserUpdateSchema = v.object({
-  biography: v.string("About me should be a string", [
-    v.minLength(1, "Please enter something about yourself."),
-  ]),
-  name: v.string("Name should be a string", [
+  biography: v.pipe(
+    v.string("About me should be a string"),
+    v.minLength(1, "Please enter something about yourself.")
+  ),
+  name: v.pipe(
+    v.string("Name should be a string"),
     v.minLength(1, "Please enter your name"),
-    v.minLength(3, "Name should be 3 or more symbols long"),
-  ]),
+    v.minLength(3, "Name should be 3 or more symbols long")
+  ),
 });
 
 const IdSchema = v.optional(
@@ -73,9 +87,10 @@ const AvatarSchema = v.object({
   originalname: v.string("Original name is required"),
   encoding: v.string("Encoding is required"),
   mimetype: v.picklist(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
-  size: v.number([
-    v.maxValue(1024 * 1024 * 2, "The size must not exceed 2 MB"),
-  ]),
+  size: v.pipe(
+    v.number(),
+    v.maxValue(1024 * 1024 * 2, "The size must not exceed 2 MB")
+  ),
   // eslint-disable-next-line no-undef
   buffer: v.instance(Buffer),
 });
@@ -107,7 +122,6 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
-// validate id
 usersRouter.get("/:id", async (request, response) => {
   const { id } = request.params;
 

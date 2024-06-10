@@ -14,7 +14,7 @@ const getHash = async (pw) => {
   return testPasswordHash;
 };
 
-const userPassword = "123123";
+const userPassword = "Secret123";
 let createdUserId;
 
 let token;
@@ -47,7 +47,7 @@ describe("there is a user in the database", async () => {
   test("a log in attempt with incorrect credentials will fail", async () => {
     await api
       .post("/api/login")
-      .send({ username: helper.loginUser.username, password: "321321" })
+      .send({ username: helper.loginUser.username, password: "Secret321" })
       .expect(401);
   });
 
