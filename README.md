@@ -1,5 +1,11 @@
 # Kinology
 
+<p align="center">
+  <img src="https://github.com/timmchi/kinology-movie-app/main/assets/kinology-logo.png?raw=true" width="400" alt="logo"/>
+</p>
+
+---
+
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
@@ -29,6 +35,8 @@ You can also create your own account, to which you can then add movies you've al
 The frontend for the app was built with React, with a lot of styling based on MUI components. Backend was built with Node and it utilizes MongoDB to store data.
 
 You can check out the production version of Kinology [here](https://kinology-movie-app.onrender.com/)
+
+[Link](https://github.com/timmchi/kinology-movie-app/blob/main/timekeeping.md) to the timekeeping document.
 
 ## <a name="installation">Installation</a>
 
@@ -160,4 +168,4 @@ Kinology uses [TMDB api](https://www.themoviedb.org) to implement movie searchin
 
 ## <a name="fso">Fullstack open</a>
 
-This project is my submission for [Fullstack project](https://fullstackopen.com/en/), worth 10 credits, which is a part of Fullstackopen course. [Link](https://github.com/timmchi/kinology-movie-app/blob/main/timekeeping.md) to the timekeeping document.
+This project is my submission for [Fullstack project](https://fullstackopen.com/en/), worth 10 credits, which is a part of Fullstackopen course.
