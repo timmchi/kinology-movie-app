@@ -41,7 +41,7 @@ In order to run this app on your machine, you will need to have Node, Vite and n
 
 Then after cloning the repository, install the frontend dependencies by running:
 
-```
+```bash
 # Change to frontend directory
 cd kinology_frontend
 
@@ -54,7 +54,7 @@ npm run dev
 
 Then, go back to the root of the project, and install backend dependencies by running:
 
-```
+```bash
 # Change to backend directory
 cd kinology_backend
 
@@ -71,7 +71,7 @@ The above commands will start the app in development mode, and will watch out fo
 
 In order to build the application, change to kinology_backend directory `cd kinology_frontend` and run:
 
-```
+```bash
 # Build the app
 npm run build:ui
 
@@ -95,7 +95,7 @@ npm test
 
 Backend apis are tested using integration tests. To run them, change to kinology_backend directory and run the following command:
 
-```
+```bash
 npm test -- ./tests/comments_api.test.js &&
 npm test -- ./tests/login_api.test.js &&
 npm test -- ./tests/movies_api.test.js &&
@@ -110,13 +110,13 @@ E2E tests were built using Playwright and the code is available in the root dire
 
 You can run e2e tests by running the following command in project directory:
 
-```
+```bash
 npm run test:e2e
 ```
 
 If you would like to run e2e tests with ui, run the following command in project directory:
 
-```
+```bash
 npm run test -- --ui
 ```
 
