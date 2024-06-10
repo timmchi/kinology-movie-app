@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength } from "valibot";
+import { object, string, minLength, pipe } from "valibot";
 import SubmitButton from "../ReusableComponents/SubmitButton";
 import Stack from "@mui/joy/Stack";
 import { TextFieldElement } from "react-hook-form-mui";
@@ -40,9 +40,7 @@ const commentInputStyle = {
 };
 
 const CommentSchema = object({
-  content: string("Comment must be a string", [
-    minLength(1, "Comments can not be empty"),
-  ]),
+  content: pipe(string("Comment must be a string"), minLength(1, "Comments can not be empty"),),
 });
 
 const CommentForm = ({ commentAction, commentId, authorId, label }) => {

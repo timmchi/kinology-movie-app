@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import InputField from "../ReusableComponents/InputField";
 import { TextFieldElement } from "react-hook-form-mui";
-import { object, string, minLength, email } from "valibot";
+import { object, string, minLength, email, pipe } from "valibot";
 import SubmitButton from "../ReusableComponents/SubmitButton";
 import Stack from "@mui/joy/Stack";
 import contactService from "../../services/contact";
@@ -42,18 +42,12 @@ const textInputStyle = {
 };
 
 const ContactFormSchema = object({
-  email: string([
-    minLength(1, "Please enter your email."),
-    email("The email address is badly formatted"),
-  ]),
-  name: string([
-    minLength(1, "Please enter your name or nickname."),
-    minLength(3, "Name or nickname should be 3 or more symbols"),
-  ]),
-  message: string([
-    minLength(1, "Please enter your message"),
-    minLength(3, "Message should be 3 or more symbols "),
-  ]),
+  email: pipe(string(), minLength(1, "Please enter your email."),
+    email("The email address is badly formatted"),),
+  name: pipe(string(), minLength(1, "Please enter your name or nickname."),
+    minLength(3, "Name or nickname should be 3 or more symbols"),),
+  message: pipe(string(), minLength(1, "Please enter your message"),
+    minLength(3, "Message should be 3 or more symbols "),),
 });
 
 const ContactForm = ({ setOpen }) => {

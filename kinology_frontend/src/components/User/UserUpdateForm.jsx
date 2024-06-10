@@ -13,28 +13,22 @@ import {
   maxSize,
   instance,
   parse,
-  unknown,
+  unknown, pipe,
 } from "valibot";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 const UserUpdateSchema = object(
   {
-    bio: string("About you should be a string", [
-      minLength(1, "Please enter something about yourself."),
-    ]),
-    name: string("Name should be a string", [
-      minLength(1, "Please enter your name"),
-      minLength(3, "Name should be 3 or more symbols long"),
-    ]),
+    bio: pipe(string("About you should be a string"), minLength(1, "Please enter something about yourself."),),
+    name: pipe(string("Name should be a string"), minLength(1, "Please enter your name"),
+      minLength(3, "Name should be 3 or more symbols long"),),
   },
   unknown()
 );
 
-const FileSchema = instance(File, [
-  mimeType(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
-  maxSize(1024 * 1024 * 2),
-]);
+const FileSchema = pipe(instance(File), mimeType(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
+  maxSize(1024 * 1024 * 2),);
 
 const inputStyle = {
   bgcolor: "#79C094",

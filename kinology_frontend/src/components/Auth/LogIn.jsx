@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { object, string, minLength } from "valibot";
+import { object, string, minLength, pipe } from "valibot";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
@@ -14,14 +14,10 @@ import Stack from "@mui/joy/Stack";
 import PropTypes from "prop-types";
 
 const LoginSchema = object({
-  username: string("Username must be a string.", [
-    minLength(1, "Please enter your username."),
-    minLength(3, "Username needs to be at least 3 characters long."),
-  ]),
-  password: string("Your password must be a string.", [
-    minLength(1, "Password is required."),
-    minLength(6, "Your password must have 6 characters or more."),
-  ]),
+  username: pipe(string("Username must be a string."), minLength(1, "Please enter your username."),
+    minLength(3, "Username needs to be at least 3 characters long."),),
+  password: pipe(string("Your password must be a string."), minLength(1, "Password is required."),
+    minLength(6, "Your password must have 6 characters or more."),),
 });
 
 const credentialsInputStyle = {
