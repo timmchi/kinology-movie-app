@@ -13,4 +13,9 @@ const getSingleMovie = async (id) => {
   return response.data;
 };
 
-export default { search, getSingleMovie };
+const searchByTitle = async (title) => {
+  const response = await axios.post(`${baseUrl}/title`, title);
+  return response.data;
+};
+
+export default { search, getSingleMovie, searchByTitle };

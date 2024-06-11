@@ -7,6 +7,7 @@ const Movie = require("../models/movie");
 
 const baseMovieUrl = config.BASE_MOVIES_URL;
 const baseSingleMovieUrl = config.BASE_SINGLE_MOVIE_URL;
+const baseTitleQueryUrl = config.BASE_TITLE_QUERY_URL;
 
 const headers = {
   accept: "application/json",
@@ -16,19 +17,34 @@ const headers = {
 const searchQuerySchema = v.object({
   genres: v.array(v.string("Genre should be a string")),
   year: v.union([
-    v.pipe(v.string(), v.minValue("1874", "Movies can not be shot before 1874"),
+    v.pipe(
+      v.string(),
+      v.minValue("1874", "Movies can not be shot before 1874"),
       v.maxValue(
         `${new Date().getFullYear()}`,
         "Can not search for movies shot after current year"
-      ),),
+      )
+    ),
     v.literal(""),
   ]),
-  ratingUpper: v.pipe(v.number("Rating should be a number"), v.minValue(0, "Rating can not be lower than 0"),
-    v.maxValue(10, "Rating can not be higher than 10"),),
-  ratingLower: v.pipe(v.number("Rating should be a number"), v.minValue(0, "Rating can not be lower than 0"),
-    v.maxValue(10, "Rating can not be higher than 10"),),
-  country: v.pipe(v.string("Country should be a string"), v.maxLength(100, "Country name can not be this long"),),
-  page: v.pipe(v.number("Page should be a number"), v.maxValue(10, "Can not search for movies past page 10"),),
+  ratingUpper: v.pipe(
+    v.number("Rating should be a number"),
+    v.minValue(0, "Rating can not be lower than 0"),
+    v.maxValue(10, "Rating can not be higher than 10")
+  ),
+  ratingLower: v.pipe(
+    v.number("Rating should be a number"),
+    v.minValue(0, "Rating can not be lower than 0"),
+    v.maxValue(10, "Rating can not be higher than 10")
+  ),
+  country: v.pipe(
+    v.string("Country should be a string"),
+    v.maxLength(100, "Country name can not be this long")
+  ),
+  page: v.pipe(
+    v.number("Page should be a number"),
+    v.maxValue(10, "Can not search for movies past page 10")
+  ),
   director: v.string("Director should be a string"),
   actors: v.array(v.string("Actor should be a string")),
 });
@@ -121,6 +137,26 @@ moviesRouter.get("/:id", async (request, response) => {
   };
 
   response.status(200).send(movieObject);
+});
+
+moviesRouter.post("/title", async (request, response) => {
+  const { title } = request.body;
+
+  const titleQuery = title.replace(" ", "%20");
+
+  const url = `${baseTitleQueryUrl}?query=${titleQuery}&include_adult=false&language=en-US&page=1`;
+
+  const movieResponse = await axios.get(url, { headers });
+
+  const movieResults = movieResponse.data.results;
+
+  const movies = movieResults.map((movie) => ({
+    id: movie.id,
+    title: movie.title,
+    image: movie.poster_path,
+  }));
+
+  response.status(200).send(movies);
 });
 
 module.exports = moviesRouter;
