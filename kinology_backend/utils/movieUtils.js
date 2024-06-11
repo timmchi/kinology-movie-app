@@ -54,4 +54,10 @@ const queryCreator = (params) => {
   ].join("");
 };
 
-module.exports = { queryCreator, peopleSearch };
+const titleSearchUrlCreator = (query) => {
+  const url = `${config.BASE_TITLE_QUERY_URL}?query=${query}&include_adult=false&language=en-US&page=1`;
+
+  return url;
+};
+
+module.exports = { queryCreator, peopleSearch, titleSearchUrlCreator };

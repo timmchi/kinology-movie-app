@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import SearchIcon from "@mui/icons-material/Search";
 import { TextFieldElement } from "react-hook-form-mui";
 import Fab from "@mui/material/Fab";
+import Button from "@mui/material/Button";
+import ClearIcon from "@mui/icons-material/Clear";
 import { InputAdornment } from "@mui/material";
 import moviesService from "../../services/movies";
 import PropTypes from "prop-types";
@@ -66,6 +68,13 @@ const SearchByTitleBar = ({ setMovies }) => {
     console.log(movies);
   };
 
+  const resetForm = () => {
+    reset({
+      title: "",
+    });
+    setMovies([]);
+  };
+
   return (
     <form onSubmit={handleSubmit(logData)}>
       <div className="title-search-bar">
@@ -79,6 +88,9 @@ const SearchByTitleBar = ({ setMovies }) => {
             sx: { borderRadius: 0 },
             endAdornment: (
               <InputAdornment position="end">
+                <Button sx={{ color: "white" }} onClick={resetForm}>
+                  <ClearIcon sx={{ opacity: "0.7" }} />
+                </Button>
                 <Fab
                   size="small"
                   type="submit"

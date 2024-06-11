@@ -7,7 +7,6 @@ const Movie = require("../models/movie");
 
 const baseMovieUrl = config.BASE_MOVIES_URL;
 const baseSingleMovieUrl = config.BASE_SINGLE_MOVIE_URL;
-const baseTitleQueryUrl = config.BASE_TITLE_QUERY_URL;
 
 const headers = {
   accept: "application/json",
@@ -139,12 +138,18 @@ moviesRouter.get("/:id", async (request, response) => {
   response.status(200).send(movieObject);
 });
 
+const searchByTitleSchema = v.object({
+  title: v.pipe(v.string()),
+});
+
 moviesRouter.post("/title", async (request, response) => {
   const { title } = request.body;
 
-  const titleQuery = title.replace(" ", "%20");
+  const parsedTitle = v.parse(searchByTitleSchema, { title });
 
-  const url = `${baseTitleQueryUrl}?query=${titleQuery}&include_adult=false&language=en-US&page=1`;
+  const titleQuery = parsedTitle.title.replace(" ", "%20");
+
+  const url = movieUtils.titleSearchUrlCreator(titleQuery);
 
   const movieResponse = await axios.get(url, { headers });
 
