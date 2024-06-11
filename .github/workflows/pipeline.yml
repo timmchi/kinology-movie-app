@@ -11,7 +11,7 @@ on:
 jobs:
   setup_and_tests:
     runs-on: ubuntu-20.04
-
+    if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,7 +31,6 @@ jobs:
         run: npm run lint
 
       - name: Frontend unit tests
-        if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
         run: |
           cd kinology_frontend
           npm test
@@ -45,7 +44,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
-        if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
         run: |
           cd kinology_backend
           npm test -- ./tests/comments_api.test.js && 
@@ -97,7 +95,6 @@ jobs:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
           ETHEREAL_USER: ${{ secrets.ETHEREAL_USER }}
           ETHEREAL_PW: ${{ secrets.ETHEREAL_PW }}
-        if: ${{ !contains(toJson(github.event.commits.*.message),'#skip') }}
         run: DEBUG=pw:webserver npx playwright test --project=chromium
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
