@@ -367,6 +367,10 @@ a:hover {
   display: flex;
 }
 
+.title-search-bar {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   .box {
     padding: 2em;
