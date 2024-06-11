@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import LandingPage from "./components/LandingPage/LandingPage";
@@ -15,6 +15,7 @@ import loginService from "./services/login";
 import userService from "./services/users";
 import { useNotificationDispatch } from "./contexts/NotificationContext";
 import { useUserDispatch, useUserValue } from "./contexts/UserContext";
+import AuthVerify from "./common/AuthVerify";
 import { Navigate } from "react-router-dom";
 
 const App = () => {
@@ -38,6 +39,23 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // this is used in AuthVerify component, it is called when the page changes. If the user token has expired, user is asked to log in again
+  const logOut = useCallback(() => {
+    userDispatch({ type: "LOGOUT" });
+    window.localStorage.removeItem("loggedKinologyUser");
+
+    dispatch({
+      type: "SHOW",
+      payload: {
+        message: "Your session has run out, please log in again",
+        type: "success",
+      },
+    });
+    setTimeout(() => dispatch({ type: "HIDE" }), 5000);
+    navigate("/login");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userDispatch]);
+
   useEffect(() => {
     const fetchUsers = async () => {
       const fetchedUsers = await userService.getUsers();
@@ -46,27 +64,6 @@ const App = () => {
 
     fetchUsers();
   }, []);
-
-  // on mount checks if the user session has expired, if so, logs the user out.
-  useEffect(() => {
-    const handlePageLoad = () => {
-      if (window.localStorage.getItem("sessionExpired") === "true") {
-        window.localStorage.removeItem("sessionExpired");
-        console.log("expired, logging you out...");
-
-        dispatch({
-          type: "SHOW",
-          payload: {
-            message: "Your session has run out, please log in again",
-            type: "success",
-          },
-        });
-        setTimeout(() => dispatch({ type: "HIDE" }), 5000);
-        navigate("/login");
-      }
-    };
-    handlePageLoad();
-  }, [dispatch, userDispatch, navigate]);
 
   // This function is used in signing up
   const addUser = (user) => {
@@ -174,14 +171,6 @@ const App = () => {
         },
       });
       setTimeout(() => dispatch({ type: "HIDE" }), 5000);
-
-      // a bit of a hack, works in tandem with handlePageLoad. Token in backend is set for an hour, so after logging user token will be removed, expired token will be set, and then useEffect with handlePageLoad will take over. This will need a better implementation
-      setTimeout(() => {
-        window.localStorage.removeItem("loggedKinologyUser");
-        window.localStorage.setItem("sessionExpired", "true");
-        window.location.reload();
-      }, 60 * 60 * 1000);
-
       navigate("/");
     } catch (exception) {
       dispatch({
@@ -246,6 +235,8 @@ const App = () => {
         />
         <Route path="/test" element={<Test />} />
       </Routes>
+
+      <AuthVerify logOut={logOut} />
     </>
   );
 };
