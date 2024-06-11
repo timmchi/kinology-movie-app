@@ -954,6 +954,56 @@ describe("Kinology", () => {
         await clickButton(page, "Search");
       });
 
+      test("search by title bar can be filled and will return a movie", async ({
+        page,
+      }) => {
+        await page.getByLabel("Search by title").click();
+
+        await page
+          .getByLabel("Search by title")
+          .fill("killers of the flower moon");
+
+        await page
+          .locator("#search-function")
+          .getByRole("button")
+          .nth(1)
+          .click();
+
+        await expect(
+          page.getByRole("link", { name: "Killers of the Flower Moon" })
+        ).toBeVisible();
+      });
+
+      test("search by title bar can be reset", async ({ page }) => {
+        await page.getByLabel("Search by title").click();
+
+        await page
+          .getByLabel("Search by title")
+          .fill("killers of the flower moon");
+
+        await page
+          .locator("#search-function")
+          .getByRole("button")
+          .nth(1)
+          .click();
+
+        await linkIsVisible(page, "Killers of the Flower Moon");
+
+        await page
+          .locator("#search-function")
+          .getByRole("button")
+          .first()
+          .click();
+
+        await expect(
+          page.getByRole("link", { name: "Killers of the Flower Moon" })
+        ).not.toBeVisible();
+
+        await expect(
+          page.getByText("killers of the flower moon")
+        ).not.toBeVisible();
+      });
+
       test("search modal can be opened", async ({ page }) => {
         const searchButton = page.getByRole("button", { name: "Open Search" });
         await searchButton.click();
