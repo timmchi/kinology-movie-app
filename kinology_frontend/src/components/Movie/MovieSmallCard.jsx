@@ -16,7 +16,9 @@ const MovieSmallCard = ({ movie }) => {
           loading="lazy"
           height="150"
           alt={`${movie.title} poster`}
-          src={movie.image ? `${basePosterUrl}${movie?.image}` : placeholderUrl}
+          src={
+            movie?.poster ? `${basePosterUrl}${movie?.poster}` : placeholderUrl
+          }
         />
       </CardActionArea>
     </Card>
