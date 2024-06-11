@@ -5,6 +5,7 @@ import { TextFieldElement } from "react-hook-form-mui";
 import Fab from "@mui/material/Fab";
 import { InputAdornment } from "@mui/material";
 import moviesService from "../../services/movies";
+import PropTypes from "prop-types";
 
 const textInputStyle = {
   marginLeft: "3em",
@@ -97,3 +98,7 @@ const SearchByTitleBar = ({ setMovies }) => {
 };
 
 export default SearchByTitleBar;
+
+SearchByTitleBar.propTypes = {
+  setMovies: PropTypes.func.isRequired,
+};
