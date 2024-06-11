@@ -148,6 +148,10 @@ const postCommentForUser = async (page, username, comment) => {
   await waitForCommentCreation(page, comment);
 };
 
+const textIsVisible = async (page, text) => {
+  await expect(page.getByText(text)).toBeVisible({ timeout: 10000 });
+};
+
 export {
   loginWith,
   registerWith,
@@ -164,4 +168,5 @@ export {
   linkIsVisible,
   buttonIsVisible,
   postCommentForUser,
+  textIsVisible,
 };
