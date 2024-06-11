@@ -3,6 +3,7 @@ import SearchModal from "../Search/SearchModal";
 import MovieList from "../Movie/MovieList";
 import ScrollTop from "../ReusableComponents/ScrollTop";
 import Hero from "../Hero/Hero";
+import SearchByTitleBar from "../Search/SearchByTitleBar";
 import PropTypes from "prop-types";
 
 const LandingPage = ({ onButtonPress, onButtonUnpress }) => {
@@ -17,6 +18,7 @@ const LandingPage = ({ onButtonPress, onButtonUnpress }) => {
     <>
       <Hero goToSearch={goToSearch} />
       <div id="search-function" ref={searchRef}>
+        <SearchByTitleBar setMovies={setMovies} />
         <SearchModal setMovies={setMovies} />
         <MovieList
           movies={movies}

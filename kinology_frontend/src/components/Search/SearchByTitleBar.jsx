@@ -4,9 +4,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import { TextFieldElement } from "react-hook-form-mui";
 import Fab from "@mui/material/Fab";
 import { InputAdornment } from "@mui/material";
+import moviesService from "../../services/movies";
+import PropTypes from "prop-types";
 
 const textInputStyle = {
-  margin: 5,
+  marginLeft: "3em",
+  marginRight: "3em",
   backgroundColor: "rgba(206, 202, 182, 0.5)",
   label: { color: "white" },
   input: {
@@ -37,7 +40,7 @@ const textInputStyle = {
   },
 };
 
-const SearchByTitleBar = () => {
+const SearchByTitleBar = ({ setMovies }) => {
   const {
     handleSubmit,
     control,
@@ -57,8 +60,10 @@ const SearchByTitleBar = () => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  const logData = (data) => {
-    console.log(data);
+  const logData = async (data) => {
+    const movies = await moviesService.searchByTitle(data);
+    setMovies(movies);
+    console.log(movies);
   };
 
   return (
@@ -93,3 +98,7 @@ const SearchByTitleBar = () => {
 };
 
 export default SearchByTitleBar;
+
+SearchByTitleBar.propTypes = {
+  setMovies: PropTypes.func.isRequired,
+};
