@@ -1,3 +1,4 @@
+import { useState } from "react";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 import placeholderUrl from "../../../posterPlaceholder.png";
 import { Link } from "react-router-dom";
@@ -11,6 +12,8 @@ import MovieButton from "./MovieButton";
 import PropTypes from "prop-types";
 
 const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
+  const [posterIsLoaded, setPosterIsLoaded] = useState(false);
+
   const buttonPress = (event, functionWord) => {
     onButtonPress(event, functionWord, {
       id: movie.id,
@@ -28,7 +31,8 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
   return (
     <Card
       sx={{
-        maxWidth: 250,
+        width: 250,
+        height: 375,
         borderRadius: 5,
         marginBottom: 3,
         textAlign: "center",
@@ -39,14 +43,15 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
     >
       <CardActionArea component={Link} to={`/movies/${movie.id}`}>
         <div style={{ position: "relative" }}>
-          <CardMedia
-            component="picture"
-            loading="lazy"
-            sx={{ objectFit: "contain" }}
-          >
+          <CardMedia component="picture" sx={{ objectFit: "contain" }}>
             <img
               src={
-                movie.image ? `${basePosterUrl}${movie.image}` : placeholderUrl
+                // movie.image ? `${basePosterUrl}${movie.image}` : placeholderUrl
+                posterIsLoaded
+                  ? movie.image
+                    ? `${basePosterUrl}${movie.image}`
+                    : placeholderUrl
+                  : placeholderUrl
               }
               alt={
                 movie.image
@@ -54,6 +59,8 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
                   : `${movie.title} poster Icon made by Freepik from www.flaticon.com`
               }
               height="375"
+              loading="lazy"
+              onLoad={() => setPosterIsLoaded(true)}
             />
           </CardMedia>
 
