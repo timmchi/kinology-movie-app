@@ -46,13 +46,12 @@ describe("about page ", () => {
 
       await submitButton.click();
 
-      //   works locally but keeps failing in github actions, so commenting it out until better times
-      //   await page.waitForTimeout(3000);
+      await page.waitForTimeout(3000);
 
-      //   await expect(nameInput).not.toBeVisible({ timeout: 15000 });
-      //   await expect(emailInput).not.toBeVisible({ timeout: 15000 });
-      //   await expect(messageInput).not.toBeVisible({ timeout: 15000 });
-      //   await expect(submitButton).not.toBeVisible({ timeout: 15000 });
+      await expect(nameInput).not.toBeVisible({ timeout: 15000 });
+      await expect(emailInput).not.toBeVisible({ timeout: 15000 });
+      await expect(messageInput).not.toBeVisible({ timeout: 15000 });
+      await expect(submitButton).not.toBeVisible({ timeout: 15000 });
     });
 
     test("validation in contact form", async ({ page }) => {

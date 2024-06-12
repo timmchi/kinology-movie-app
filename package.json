@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:e2e": "playwright test --project=chromium",
+    "test:e2e": "playwright test ./tests/refactoredSpecs --project=chromium",
     "test:report": "playwright show-report",
     "lint": "cd kinology_frontend && npm run lint && cd ../kinology_backend && npm run eslint"
   },

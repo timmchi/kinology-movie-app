@@ -102,7 +102,7 @@ npm test -- ./tests/movies_api.test.js &&
 npm test -- ./tests/users_api.test.js
 ```
 
-or, alternatively, you can run the above commands one after the other. Unfortunately, as the tests use the database, they crash when executing them in parallel, hence why `npm test` is not an option here.
+or, alternatively, you can run the above commands one after the other. Unfortunately, as the tests use the database, they crash when executing them in parallel, hence why `npm test` is not an option here. Additionally, refrain from running backend tests and e2e tests at the same time, as due to database usage there will be conflicts. Same goes for running tests locally at the same time as github actions. A fix might be coming in the future.
 
 ### E2E Tests
 
@@ -117,8 +117,10 @@ npm run test:e2e
 If you would like to run e2e tests with ui, run the following command in project directory:
 
 ```bash
-npm run test -- --ui
+npm test -- ./tests/refactoredSpecs --ui
 ```
+
+Github actions uses test file CI_kinology.spec.js, however, while running tests locally I recommend using the folder refactoredSpecs inside the tests directory. It contains the same tests as the CI_kinology.spec.js, but refactored into separate smaller specs. Unfortunately, at the moment of writing, refactored specs are failing in github actions, and due to the fact that my account is currently very close to limit of Github actions, I am unable to do enough trial and error to get Github actions to work with refactored e2e tests. This is the reason for this workaround. A fix is possibly coming in the future once the limits for github actions resets.
 
 ## <a name="env-variables">Env variables</a>
 
