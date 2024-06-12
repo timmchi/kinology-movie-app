@@ -4,7 +4,7 @@ const {
   clickButton,
   linkIsVisible,
   textIsVisible,
-} = require("./helper");
+} = require("../helper");
 
 describe("Searching for movies", () => {
   beforeEach(async ({ page, request }) => {

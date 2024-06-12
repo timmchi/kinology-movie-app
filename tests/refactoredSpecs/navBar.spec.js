@@ -4,7 +4,7 @@ const {
   linkIsVisible,
   buttonIsVisible,
   textIsVisible,
-} = require("./helper");
+} = require("../helper");
 
 describe("elements in navbar", () => {
   beforeEach(async ({ page, request }) => {

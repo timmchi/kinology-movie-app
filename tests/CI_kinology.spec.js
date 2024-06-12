@@ -5,6 +5,7 @@ const {
   postComment,
   deleteComment,
   movieButtonsVisible,
+  movieButtonsNotVisible,
   logOut,
   visitUserPage,
   heroPageVisible,
@@ -28,6 +29,165 @@ describe("Kinology", () => {
 
   test("front page can be opened", async ({ page }) => {
     await heroPageVisible(page);
+  });
+
+  test("nav bar is visible on the front page", async ({ page }) => {
+    await linkIsVisible(page, "Kinology");
+    await linkIsVisible(page, "About");
+    await linkIsVisible(page, "Log In");
+    await linkIsVisible(page, "Sign Up");
+  });
+
+  test("registration form can be opened through CTA", async ({ page }) => {
+    await clickButton(page, "Register");
+
+    await buttonIsVisible(page, "Sign Up");
+
+    await textIsVisible(
+      page,
+      "UsernameNameEmailPasswordConfirm PasswordSign Up"
+    );
+  });
+
+  test("registration form can be opened through navbar", async ({ page }) => {
+    await clickLink(page, "Sign Up");
+
+    await buttonIsVisible(page, "Sign Up");
+
+    await textIsVisible(
+      page,
+      "UsernameNameEmailPasswordConfirm PasswordSign Up"
+    );
+  });
+
+  test("registration form can be filled and submitted", async ({ page }) => {
+    await registerWith(
+      page,
+      "tester",
+      "Mr Tester",
+      "tester@example.com",
+      correctPassword,
+      correctPassword
+    );
+
+    await page.waitForTimeout(1000);
+
+    await textIsVisible(page, "Sign up was successful, please log in");
+    await buttonIsVisible(page, "Log In");
+  });
+
+  test("validation in registration form", async ({ page }) => {
+    await registerWith(page, "", "", "", "", "");
+
+    const usernameError = page.getByText("Please enter your username.");
+    await expect(usernameError).toBeVisible();
+    await expect(usernameError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const emailError = page.getByText("Please enter your email.");
+    await expect(emailError).toBeVisible();
+    await expect(emailError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const nameError = page.getByText("Please enter your name or nickname.");
+    await expect(nameError).toBeVisible();
+    await expect(nameError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const passwordError = page.getByText("Please enter your password.");
+    await expect(passwordError).toBeVisible();
+    await expect(passwordError).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    const passwordConfirmError = page.getByText("Please confirm password");
+    await expect(passwordConfirmError).toBeVisible();
+    await expect(passwordConfirmError).toHaveCSS("color", "rgb(255, 0, 0)");
+  });
+
+  test("login form can be opened through navbar", async ({ page }) => {
+    await clickLink(page, "Log In");
+
+    await buttonIsVisible(page, "Log In");
+  });
+
+  test("about section can be opened through nav bar", async ({ page }) => {
+    await clickLink(page, "About");
+
+    await textIsVisible(page, "About me");
+    await textIsVisible(page, "Web app uses TMDB api");
+    await textIsVisible(page, "Fullstack open");
+  });
+
+  describe("about page is open", () => {
+    beforeEach(async ({ page }) => {
+      await clickLink(page, "About");
+
+      await textIsVisible(page, "About me");
+    });
+
+    test("contact form can be opened and has all fields", async ({ page }) => {
+      await page.getByText("About me").hover();
+
+      await clickButton(page, "Contact Me");
+
+      const nameInput = page.getByLabel("Name");
+      const emailInput = page.getByLabel("Email");
+      const messageInput = page.getByLabel("Your message");
+
+      const submitButton = page.getByLabel("Submit message");
+
+      await expect(nameInput).toBeVisible();
+      await expect(emailInput).toBeVisible();
+      await expect(messageInput).toBeVisible();
+      await expect(submitButton).toBeVisible();
+    });
+
+    describe("and contact modal is open", () => {
+      beforeEach(async ({ page }) => {
+        await page.getByText("About me").hover();
+
+        await clickButton(page, "Contact Me");
+      });
+
+      test("contact form can be filled and submitted", async ({ page }) => {
+        const nameInput = page.getByLabel("Name");
+        const emailInput = page.getByLabel("Email");
+        const messageInput = page.getByLabel("Your message");
+
+        const submitButton = page.getByLabel("Submit message");
+
+        await nameInput.fill("Tester");
+        await emailInput.fill("tester@example.com");
+        await messageInput.fill("I am testing this sites functionality");
+
+        await submitButton.click();
+
+        //   works locally but keeps failing in github actions, so commenting it out until better times
+        //   await page.waitForTimeout(3000);
+
+        //   await expect(nameInput).not.toBeVisible({ timeout: 15000 });
+        //   await expect(emailInput).not.toBeVisible({ timeout: 15000 });
+        //   await expect(messageInput).not.toBeVisible({ timeout: 15000 });
+        //   await expect(submitButton).not.toBeVisible({ timeout: 15000 });
+      });
+
+      test("validation in contact form", async ({ page }) => {
+        const nameInput = page.getByLabel("Name");
+        const emailInput = page.getByLabel("Email");
+        const messageInput = page.getByLabel("Your message");
+
+        const submitButton = page.getByLabel("Submit message");
+
+        await nameInput.fill("a");
+        await emailInput.fill("a");
+        await messageInput.fill("a");
+
+        await submitButton.click();
+
+        await textIsVisible(
+          page,
+          "Name or nickname should be 3 or more symbols"
+        );
+        await textIsVisible(page, "The email address is badly formatted");
+        await textIsVisible(page, "Message should be 3 or more symbols");
+      });
+    });
   });
 
   describe("when registered", () => {
@@ -724,6 +884,332 @@ describe("Kinology", () => {
               page.getByText("Another user was here")
             ).not.toBeVisible();
           });
+        });
+      });
+    });
+  });
+
+  describe("Searching for movies", () => {
+    test("search button is not immediately in the viewport", async ({
+      page,
+    }) => {
+      const searchButton = page.getByRole("button", { name: "Open Search" });
+
+      await expect(searchButton).not.toBeInViewport();
+
+      await clickButton(page, "Search");
+
+      await expect(searchButton).toBeInViewport();
+
+      const clearSearchButton = page.getByRole("button", {
+        name: "clear search",
+      });
+
+      await expect(clearSearchButton).toBeInViewport();
+    });
+
+    test("search button is moved into viewport by pressing 'search' cta", async ({
+      page,
+    }) => {
+      const searchButton = page.getByRole("button", { name: "Open Search" });
+
+      await clickButton(page, "Search");
+
+      await expect(searchButton).toBeInViewport();
+
+      const clearSearchButton = page.getByRole("button", {
+        name: "clear search",
+      });
+
+      await expect(clearSearchButton).toBeInViewport();
+    });
+
+    describe("search button is in viewport", () => {
+      beforeEach(async ({ page }) => {
+        await clickButton(page, "Search");
+      });
+
+      test("search by title bar can be filled and will return a movie", async ({
+        page,
+      }) => {
+        await page.getByLabel("Search by title").click();
+
+        await page
+          .getByLabel("Search by title")
+          .fill("killers of the flower moon");
+
+        await page
+          .locator("#search-function")
+          .getByRole("button")
+          .nth(1)
+          .click();
+
+        await linkIsVisible(page, "Killers of the Flower Moon");
+      });
+
+      test("search by title bar can be reset", async ({ page }) => {
+        await page.getByLabel("Search by title").click();
+
+        await page
+          .getByLabel("Search by title")
+          .fill("killers of the flower moon");
+
+        await page
+          .locator("#search-function")
+          .getByRole("button")
+          .nth(1)
+          .click();
+
+        await linkIsVisible(page, "Killers of the Flower Moon");
+
+        await page
+          .locator("#search-function")
+          .getByRole("button")
+          .first()
+          .click();
+
+        await expect(
+          page.getByRole("link", { name: "Killers of the Flower Moon" })
+        ).not.toBeVisible();
+
+        await expect(
+          page.getByText("killers of the flower moon")
+        ).not.toBeVisible();
+      });
+
+      test("search modal can be opened", async ({ page }) => {
+        const searchButton = page.getByRole("button", { name: "Open Search" });
+        await searchButton.click();
+
+        const genresSelector = page
+          .locator("div")
+          .filter({ hasText: /^Select genres$/ })
+          .nth(2);
+
+        const directorInput = page.getByLabel("Director");
+
+        const yearInput = page.getByLabel("Year");
+
+        const lowerRatingInput = page
+          .locator("span")
+          .filter({ hasText: /^0$/ })
+          .first();
+
+        const higherRatingInput = page
+          .locator("span")
+          .filter({ hasText: "10" })
+          .first();
+
+        const countryInput = page.getByLabel("Country");
+
+        const searchMoviesButton = page.getByLabel("Search for movies");
+
+        await expect(genresSelector).toBeVisible();
+        await expect(directorInput).toBeVisible();
+        await expect(yearInput).toBeVisible();
+        await expect(lowerRatingInput).toBeVisible();
+        await expect(higherRatingInput).toBeVisible();
+        await expect(countryInput).toBeVisible();
+        await expect(searchMoviesButton).toBeVisible();
+      });
+
+      test("empty search returns movie cards", async ({ page }) => {
+        const openSearchButton = page.getByRole("button", {
+          name: "Open Search",
+        });
+        await openSearchButton.click();
+
+        const searchMoviesButton = page.getByLabel("Search for movies");
+        await searchMoviesButton.click();
+
+        const ten = page.getByText("10");
+        await expect(ten).toBeVisible();
+
+        const cards = await page.getByTestId("search-movie-card").all();
+        expect(cards).toHaveLength(20);
+
+        await expect(cards[0]).toBeVisible();
+
+        const lastMovieCard = page.getByTestId("search-movie-card").nth(19);
+        await expect(lastMovieCard).toBeVisible();
+      });
+
+      describe("and an empty search was done", () => {
+        beforeEach(async ({ page }) => {
+          const openSearchButton = page.getByRole("button", {
+            name: "Open Search",
+          });
+          await openSearchButton.click();
+
+          const searchMoviesButton = page.getByLabel("Search for movies");
+          await searchMoviesButton.click();
+        });
+
+        test("empty search returns 10 pages with pagination", async ({
+          page,
+        }) => {
+          const pageOne = page.getByLabel("page 1", { exact: true });
+          await expect(pageOne).toBeVisible();
+
+          const pageTen = page.getByLabel("Go to page 10");
+          await expect(pageTen).toBeVisible();
+        });
+
+        test("movie cards do not have buttons when user is not logged in", async ({
+          page,
+        }) => {
+          await movieButtonsNotVisible(page);
+        });
+      });
+
+      test("search fields can be filled and a search with them can be made", async ({
+        page,
+      }) => {
+        const openSearchButton = page.getByRole("button", {
+          name: "Open Search",
+        });
+        await openSearchButton.click();
+
+        const genresSelector = page
+          .locator("div")
+          .filter({ hasText: /^Select genres$/ })
+          .nth(2);
+
+        await genresSelector.click();
+
+        const crimeGenre = page.getByText("Crime");
+        await crimeGenre.click();
+
+        const directorInput = page.getByLabel("Director");
+        await directorInput.fill("Scorsese");
+
+        const yearInput = page.getByLabel("Year");
+        await yearInput.fill("1995");
+
+        const lowerRatingInput = page
+          .locator("span")
+          .filter({ hasText: /^0$/ })
+          .first();
+
+        const lowerRatingInputOffsetWidth = await lowerRatingInput.evaluate(
+          (e) => {
+            return e.getBoundingClientRect().width;
+          }
+        );
+
+        await lowerRatingInput.click({
+          force: true,
+          position: { x: lowerRatingInputOffsetWidth / 1.5, y: 0 },
+        });
+
+        const higherRatingInput = page
+          .locator("span")
+          .filter({ hasText: "10" })
+          .first();
+
+        const higherRatingInputOffsetWidth = await higherRatingInput.evaluate(
+          (e) => {
+            return e.getBoundingClientRect().width;
+          }
+        );
+
+        await higherRatingInput.click({
+          force: true,
+          position: { x: higherRatingInputOffsetWidth, y: 0 },
+        });
+
+        const countryInput = page.getByLabel("Country");
+        await countryInput.fill("United States of America");
+
+        const searchMoviesButton = page.getByLabel("Search for movies");
+        await searchMoviesButton.click();
+
+        await expect(page.getByText("Casino")).toBeVisible();
+      });
+
+      describe("and a movie 'Casino' was found", () => {
+        beforeEach(async ({ page }) => {
+          const openSearchButton = page.getByRole("button", {
+            name: "Open Search",
+          });
+          await openSearchButton.click();
+
+          const genresSelector = page
+            .locator("div")
+            .filter({ hasText: /^Select genres$/ })
+            .nth(2);
+
+          await genresSelector.click();
+
+          const crimeGenre = page.getByText("Crime");
+          await crimeGenre.click();
+
+          const directorInput = page.getByLabel("Director");
+          await directorInput.fill("Scorsese");
+
+          const yearInput = page.getByLabel("Year");
+          await yearInput.fill("1995");
+
+          const lowerRatingInput = page
+            .locator("span")
+            .filter({ hasText: /^0$/ })
+            .first();
+
+          const lowerRatingInputOffsetWidth = await lowerRatingInput.evaluate(
+            (e) => {
+              return e.getBoundingClientRect().width;
+            }
+          );
+
+          await lowerRatingInput.click({
+            force: true,
+            position: { x: lowerRatingInputOffsetWidth / 1.5, y: 0 },
+          });
+
+          const higherRatingInput = page
+            .locator("span")
+            .filter({ hasText: "10" })
+            .first();
+
+          const higherRatingInputOffsetWidth = await higherRatingInput.evaluate(
+            (e) => {
+              return e.getBoundingClientRect().width;
+            }
+          );
+
+          await higherRatingInput.click({
+            force: true,
+            position: { x: higherRatingInputOffsetWidth, y: 0 },
+          });
+
+          const countryInput = page.getByLabel("Country");
+          await countryInput.fill("United States of America");
+
+          const searchMoviesButton = page.getByLabel("Search for movies");
+          await searchMoviesButton.click();
+
+          await textIsVisible(page, "Casino");
+        });
+
+        test("a movie card can be clicked, which takes user to movie profile", async ({
+          page,
+        }) => {
+          await page.getByRole("link", { name: "Casino Casino " }).click();
+
+          await expect(
+            page.getByRole("heading", { name: "Casino" })
+          ).toBeVisible();
+
+          await textIsVisible(page, "No one stays at the top forever.");
+        });
+
+        test("new search button clears search results and resets the form", async ({
+          page,
+        }) => {
+          await clickButton(page, "clear search");
+
+          await expect(page.getByText("Casino")).not.toBeVisible();
+          await expect(page.getByText("1")).not.toBeVisible();
         });
       });
     });

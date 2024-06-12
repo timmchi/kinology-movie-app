@@ -1,5 +1,5 @@
 const { test, describe, expect, beforeEach } = require("playwright/test");
-const { clickButton, clickLink, textIsVisible } = require("./helper");
+const { clickButton, clickLink, textIsVisible } = require("../helper");
 
 describe("about page ", () => {
   beforeEach(async ({ page }) => {
