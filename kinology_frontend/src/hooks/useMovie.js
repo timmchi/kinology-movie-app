@@ -50,7 +50,7 @@ const useMovie = (user, id) => {
       dispatch({
         type: "SHOW",
         payload: {
-          message: `Something went wrong when commenting on a movie ${movie}`,
+          message: `Something went wrong when commenting on a movie`,
           type: "error",
         },
       });

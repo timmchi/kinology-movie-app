@@ -95,7 +95,7 @@ jobs:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
           ETHEREAL_USER: ${{ secrets.ETHEREAL_USER }}
           ETHEREAL_PW: ${{ secrets.ETHEREAL_PW }}
-        run: DEBUG=pw:webserver npx playwright test --project=chromium
+        run: DEBUG=pw:webserver npx playwright test ./tests/CI_kinology.spec.js --project=chromium
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
