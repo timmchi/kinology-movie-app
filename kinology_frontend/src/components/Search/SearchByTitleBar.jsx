@@ -85,7 +85,9 @@ const SearchByTitleBar = ({ setMovies }) => {
           control={control}
           margin={"dense"}
           InputProps={{
-            sx: { borderRadius: 0 },
+            sx: {
+              borderRadius: 0,
+            },
             endAdornment: (
               <InputAdornment position="end">
                 <Button sx={{ color: "white" }} onClick={resetForm}>

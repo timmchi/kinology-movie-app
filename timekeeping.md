@@ -107,6 +107,8 @@
 | 10.6 | 0.5   | More consistent styling                                                                      |
 | 11.6 | 1     | New automatic logout on token expiration, small card poster fix                              |
 | 11.6 | 3     | SearchByTitle component, searching for a single movie functionality, tests for the component |
+| 12.6 | 2     | e2e refactoring, changing e2e setup locall and in github actions                             |
+| 12.6 | 1     | More consistent styling                                                                      |
 |      |       |                                                                                              |
 |      |       |                                                                                              |
 |      |       |                                                                                              |
@@ -114,6 +116,4 @@
 |      |       |                                                                                              |
 |      |       |                                                                                              |
 |      |       |                                                                                              |
-|      |       |                                                                                              |
-|      |       |                                                                                              |
-| tot  | 165   |                                                                                              |
+| tot  | 168   |                                                                                              |
