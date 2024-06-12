@@ -2,18 +2,10 @@ const { test, describe, expect, beforeEach } = require("playwright/test");
 const {
   loginWith,
   registerWith,
-  postComment,
-  deleteComment,
-  movieButtonsVisible,
-  logOut,
-  visitUserPage,
   heroPageVisible,
-  openCommentForm,
   clickButton,
-  clickLink,
   linkIsVisible,
   buttonIsVisible,
-  postCommentForUser,
   textIsVisible,
 } = require("../helper");
 
