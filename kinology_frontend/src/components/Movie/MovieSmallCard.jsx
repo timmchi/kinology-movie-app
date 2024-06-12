@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
@@ -8,10 +9,11 @@ import PropTypes from "prop-types";
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
 const MovieSmallCard = ({ movie }) => {
+  const [posterIsLoaded, setPosterIsLoaded] = useState(false);
   return (
-    <Card sx={{ maxWidth: 110 }}>
+    <Card sx={{ width: 100, height: 150 }}>
       <CardActionArea component={Link} to={`/movies/${movie.tmdbId}`}>
-        <CardMedia
+        {/* <CardMedia
           component="img"
           loading="lazy"
           height="150"
@@ -19,7 +21,22 @@ const MovieSmallCard = ({ movie }) => {
           src={
             movie?.poster ? `${basePosterUrl}${movie?.poster}` : placeholderUrl
           }
-        />
+        /> */}
+        <CardMedia component="picture" sx={{ objectFit: "contain" }}>
+          <img
+            src={
+              posterIsLoaded
+                ? movie.poster
+                  ? `${basePosterUrl}${movie.poster}`
+                  : placeholderUrl
+                : placeholderUrl
+            }
+            alt={`${movie.title} poster`}
+            height="150"
+            loading="lazy"
+            onLoad={() => setPosterIsLoaded(true)}
+          />
+        </CardMedia>
       </CardActionArea>
     </Card>
   );

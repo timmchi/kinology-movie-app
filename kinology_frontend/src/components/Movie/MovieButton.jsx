@@ -11,10 +11,10 @@ const movieButtonStyle = (pressed) => {
     },
     backgroundColor: pressed ? "#BDAC4E" : "primary",
     borderWidth: 2,
-    fontSize: 11,
+    fontSize: 10,
     paddingLeft: 2,
     paddingRight: 2,
-    color: "white",
+    color: pressed ? "black" : "white",
     marginRight: 1.5,
     boxShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
   };
