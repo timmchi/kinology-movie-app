@@ -42,6 +42,7 @@ app.get("/health", (req, res) => {
   res.send("ok");
 });
 
+// so that pages can be refreshed and shared, otherwise it crashes
 app.get("/*", function (req, res) {
   // eslint-disable-next-line no-undef
   res.sendFile(path.join(__dirname, "./dist/index.html"), function (err) {
