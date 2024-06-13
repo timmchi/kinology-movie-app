@@ -1,13 +1,16 @@
 const commentsRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const UserComment = require("../models/userComment");
-const User = require("../models/user");
-const Movie = require("../models/movie");
+const commentsUtils = require("../utils/commentsUtils");
+const routesUtils = require("../utils/routesUtils");
 const v = require("valibot");
 
 const CommentSchema = v.object({
   content: v.optional(
-    v.pipe(v.string("Comment must be a string"), v.minLength(1, "Comments can not be empty"),)
+    v.pipe(
+      v.string("Comment must be a string"),
+      v.minLength(1, "Comments can not be empty")
+    )
   ),
   author: v.optional(
     v.string(v.hexadecimal("The authorId hexadecimal is badly formatted."))
@@ -29,57 +32,6 @@ const MovieSchema = v.object({
   poster: v.optional(v.pipe(v.string(), v.includes("/"), v.endsWith(".jpg"))),
 });
 
-const fetchUser = async (userId) => {
-  const user = await User.findById(userId)
-    .populate("authoredComments")
-    .populate("profileComments");
-  return user;
-};
-
-const fetchComment = async (commentId) => {
-  const addedComment = await UserComment.findById(commentId)
-    .populate("author", { name: 1, avatar: 1, username: 1 })
-    .populate("receiver");
-
-  return addedComment;
-};
-
-const createComment = async (content, author, receiver, type) => {
-  const newComment =
-    type === "movie"
-      ? new UserComment({
-          content,
-          createdAt: Date.now(),
-          author,
-          movieReceiver: receiver,
-        })
-      : new UserComment({
-          content,
-          createdAt: Date.now(),
-          author,
-          receiver,
-        });
-
-  const savedComment = await newComment.save();
-  return savedComment;
-};
-
-const fetchMovie = async (movieId) => {
-  const movie = await Movie.findOne({ tmdbId: movieId });
-  return movie;
-};
-
-const createMovie = async (tmdbId, title, poster) => {
-  const movie = new Movie({
-    tmdbId,
-    title,
-    poster,
-  });
-  const savedMovie = await movie.save();
-
-  return savedMovie;
-};
-
 commentsRouter.get("/", async (request, response) => {
   const comments = await UserComment.find({});
   response.status(200).send(comments);
@@ -94,50 +46,10 @@ commentsRouter.get("/profile/:id", async (request, response) => {
     .populate("author", { name: 1, avatar: 1, username: 1 })
     .populate("receiver");
 
-  await fetchUser(parsedParams.receiver);
+  await routesUtils.fetchUser(parsedParams.receiver);
 
   response.status(200).send(comments);
 });
-
-const handleSameProfileComment = async (comment, user) => {
-  if (!user.authoredComments.includes(comment._id)) {
-    user.authoredComments = user.authoredComments.concat(comment._id);
-    user.profileComments = user.profileComments.concat(comment._id);
-  }
-};
-
-const handleDifferentProfileComment = async (comment, user, receiver) => {
-  if (!user.authoredComments.includes(comment._id)) {
-    user.authoredComments = user.authoredComments.concat(comment._id);
-    receiver.profileComments = receiver.profileComments.concat(comment._id);
-  }
-};
-
-const handleSameProfileCommentDeletion = async (comment, user) => {
-  if (user.authoredComments.includes(comment._id)) {
-    user.authoredComments = user.authoredComments.filter(
-      (c) => c._id.toString() !== comment._id.toString()
-    );
-    user.profileComments = user.profileComments.filter(
-      (c) => c._id.toString() !== comment._id.toString()
-    );
-  }
-};
-
-const handleDifferentProfileCommentDeletion = async (
-  comment,
-  user,
-  receiver
-) => {
-  if (user.authoredComments.includes(comment._id)) {
-    user.authoredComments = user.authoredComments.filter(
-      (c) => c._id.toString() !== comment._id.toString()
-    );
-    receiver.profileComments = receiver.profileComments.filter(
-      (c) => c._id.toString() !== comment._id.toString()
-    );
-  }
-};
 
 commentsRouter.post(
   "/profile/:id",
@@ -156,25 +68,29 @@ commentsRouter.post(
       receiver: id,
     });
 
-    const savedComment = await createComment(
+    const savedComment = await commentsUtils.createComment(
       parsedComment.content,
       parsedComment.author,
       parsedComment.receiver,
       "profile"
     );
 
-    const addedComment = await fetchComment(savedComment._id);
+    const addedComment = await commentsUtils.fetchComment(savedComment._id);
 
-    const author = await fetchUser(user._id);
-    const receiver = await fetchUser(user._id);
+    const author = await routesUtils.fetchUser(user._id);
+    const receiver = await routesUtils.fetchUser(user._id);
 
     if (author._id.toString() === receiver._id.toString()) {
-      await handleSameProfileComment(addedComment, author);
+      await commentsUtils.handleSameProfileComment(addedComment, author);
       await author.save();
     }
 
     if (author._id.toString() !== receiver._id.toString()) {
-      await handleDifferentProfileComment(addedComment, author, receiver);
+      await commentsUtils.handleDifferentProfileComment(
+        addedComment,
+        author,
+        receiver
+      );
       await Promise.all([author.save(), receiver.save()]);
     }
 
@@ -241,16 +157,19 @@ commentsRouter.delete(
     if (!commentToDelete)
       return response.status(404).json({ error: "no comment found" });
 
-    const author = await fetchUser(user._id);
-    const receiver = await fetchUser(parsedComment.receiver);
+    const author = await routesUtils.fetchUser(user._id);
+    const receiver = await routesUtils.fetchUser(parsedComment.receiver);
 
     if (author._id.toString() === receiver._id.toString()) {
-      await handleSameProfileCommentDeletion(commentToDelete, author);
+      await commentsUtils.handleSameProfileCommentDeletion(
+        commentToDelete,
+        author
+      );
       await author.save();
     }
 
     if (author._id.toString() !== receiver._id.toString()) {
-      await handleDifferentProfileCommentDeletion(
+      await commentsUtils.handleDifferentProfileCommentDeletion(
         commentToDelete,
         author,
         receiver
@@ -267,8 +186,8 @@ commentsRouter.get("/movie/:id", async (request, response) => {
 
   const parsedParams = v.parse(paramsIdSchema, { movieId: id });
 
-  const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-  //   const movie = await fetchMovie(parsedParams.movieId);
+  //   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+  const movie = await routesUtils.fetchMovie(parsedParams.movieId);
 
   if (!movie) return response.status(200).send([]);
 
@@ -297,12 +216,10 @@ commentsRouter.post(
 
     const parsedParams = v.parse(paramsIdSchema, { movieId: id });
 
-    // let movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-    let movie = await fetchMovie(parsedParams.movieId);
+    let movie = await routesUtils.fetchMovie(parsedParams.movieId);
 
-    // refactor
     if (!movie) {
-      movie = await createMovie(
+      movie = await routesUtils.createMovie(
         parsedParams.movieId,
         parsedMovie.title,
         parsedMovie.poster
@@ -315,8 +232,7 @@ commentsRouter.post(
       receiver: movie._id.toString(),
     });
 
-    // HERE IS THE BUG
-    const savedComment = await createComment(
+    const savedComment = await commentsUtils.createComment(
       parsedComment.content,
       parsedComment.author,
       parsedComment.receiver,
@@ -330,7 +246,7 @@ commentsRouter.post(
       avatar: 1,
     });
 
-    const author = await fetchUser(user._id);
+    const author = await routesUtils.fetchUser(user._id);
 
     author.authoredComments = author.authoredComments.concat(savedComment._id);
     movie.comments = movie.comments.concat(savedComment._id);
@@ -393,8 +309,8 @@ commentsRouter.delete(
     if (!commentToDelete)
       return response.status(404).json({ error: "no comment found" });
 
-    const movie = await fetchMovie(parsedParams.movieId);
-    const author = await fetchUser(user._id);
+    const movie = await routesUtils.fetchMovie(parsedParams.movieId);
+    const author = await routesUtils.fetchUser(user._id);
 
     movie.comments = movie.comments.filter(
       (c) => c._id.toString() !== parsedParams.commentId.toString()

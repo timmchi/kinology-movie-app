@@ -2,13 +2,13 @@ const axios = require("axios");
 const config = require("./config");
 const { isoCountrySearch } = require("./isoSearch");
 
-const basePersonUrl =
-  "https://api.themoviedb.org/3/search/person?include_adult=false&page=1&";
+const basePersonUrl = config.BASE_PERSON_URL;
 const headers = {
   accept: "application/json",
   Authorization: `Bearer ${config.TMDB_TOKEN}`,
 };
 
+// it is not possible to use people's names just as they are in TMDB's discover/find queries. The names need to be in the form of ids. This function takes care of that.
 const peopleSearch = async (people) => {
   const peopleIds = await Promise.all(
     people.map(async (name) => {

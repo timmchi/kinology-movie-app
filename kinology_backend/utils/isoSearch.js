@@ -1,5 +1,6 @@
 const { isoCodes } = require("../data/isocodes");
 
+// this binary search is used to find the ISO country code based on country's full name. Since the countries are in alphabetical order, binary search works well here.
 const isoCountrySearch = (countryName) => {
   let left = 0;
   let right = isoCodes.length - 1;

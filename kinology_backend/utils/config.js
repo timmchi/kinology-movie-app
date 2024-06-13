@@ -25,6 +25,9 @@ const BASE_SINGLE_MOVIE_URL = "https://api.themoviedb.org/3/movie/";
 
 const BASE_TITLE_QUERY_URL = "https://api.themoviedb.org/3/search/movie";
 
+const BASE_PERSON_URL =
+  "https://api.themoviedb.org/3/search/person?include_adult=false&page=1&";
+
 const ETHEREAL_USER = process.env.ETHEREAL_USER;
 const ETHEREAL_PW = process.env.ETHEREAL_PW;
 
@@ -40,6 +43,7 @@ module.exports = {
   BASE_MOVIES_URL,
   BASE_SINGLE_MOVIE_URL,
   BASE_TITLE_QUERY_URL,
+  BASE_PERSON_URL,
   ACCESS_KEY,
   SECRET_ACCESS_KEY,
   BUCKET_NAME,
