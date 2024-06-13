@@ -6,11 +6,11 @@ describe("about page ", () => {
     await page.goto("/");
     await clickLink(page, "About");
 
-    await textIsVisible(page, "About me");
+    await textIsVisible(page, "About author");
   });
 
   test("contact form can be opened and has all fields", async ({ page }) => {
-    await page.getByText("About me").hover();
+    await page.getByText("About author").hover();
 
     await clickButton(page, "Contact Me");
 
@@ -28,7 +28,7 @@ describe("about page ", () => {
 
   describe("and contact modal is open", () => {
     beforeEach(async ({ page }) => {
-      await page.getByText("About me").hover();
+      await page.getByText("About author").hover();
 
       await clickButton(page, "Contact Me");
     });

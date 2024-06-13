@@ -7,6 +7,7 @@ import UserProfileComments from "./UserProfileComments";
 import UserInfo from "./UserInfo";
 import UserAvatarAndEdit from "./UserAvatarAndEdit";
 import useUser from "../../hooks/useUser";
+import useComments from "../../hooks/useComments";
 import { useUserValue } from "../../contexts/UserContext";
 import PropTypes from "prop-types";
 
@@ -16,19 +17,25 @@ const User = ({ removeUser }) => {
   const {
     user,
     avatar,
-    comments,
+    // comments,
     favoriteMovies,
     watchedMovies,
     watchLaterMovies,
     updateFormRef,
     commentFormRef,
     updateUser,
-    createComment,
-    deleteComment,
-    updateComment,
+    // createComment,
+    // deleteComment,
+    // updateComment,
     deleteUser,
     setAvatar,
   } = useUser(currentUser, removeUser, id);
+
+  const { comments, createComment, deleteComment, updateComment } = useComments(
+    id,
+    "profile",
+    currentUser
+  );
 
   const updateForm = () => {
     return (

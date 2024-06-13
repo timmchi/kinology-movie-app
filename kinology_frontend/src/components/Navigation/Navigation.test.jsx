@@ -65,8 +65,8 @@ describe("testing routes", () => {
     );
 
     fireEvent.click(screen.getAllByText("About")[1]);
-    expect(screen.getByText(/About me/i)).toBeDefined();
-    expect(screen.getByText(/my favorite movies/i)).toBeDefined();
+    expect(screen.getByText(/About author/i)).toBeDefined();
+    expect(screen.getByText(/Author's favorite movies/i)).toBeDefined();
     expect(screen.getByText(/Web app uses TMDB api/i)).toBeDefined();
     expect(screen.getByText(/Fullstack open/i)).toBeDefined();
   });

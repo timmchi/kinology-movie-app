@@ -80,10 +80,7 @@ describe("dealing with profile comments", () => {
 
           await page.waitForTimeout(1000);
 
-          await textIsVisible(
-            page,
-            "Comment 'my comment' successfully created"
-          );
+          await textIsVisible(page, "Comment 'my comment' successfully added");
 
           await linkIsVisible(page, "Mr Tester my comment");
 
@@ -101,17 +98,18 @@ describe("dealing with profile comments", () => {
 
             await textIsVisible(
               page,
-              "Comment 'my comment' successfully created"
+              "Comment 'my comment' successfully added"
             );
           });
 
           test("a comment can be edited by its author", async ({ page }) => {
             await clickButton(page, "edit comment");
 
-            const commentInput = page.getByRole("textbox", { name: "comment" });
+            const commentInput = page.getByLabel("Edit your comment");
+
             await commentInput.fill("it has been edited");
 
-            await clickButton(page, "Submit comment");
+            await page.getByRole("list").getByLabel("Submit comment").click();
 
             await page.waitForTimeout(1000);
 

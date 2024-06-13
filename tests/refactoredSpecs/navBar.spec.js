@@ -40,7 +40,7 @@ describe("elements in navbar", () => {
   test("about section can be opened through nav bar", async ({ page }) => {
     await clickLink(page, "About");
 
-    await textIsVisible(page, "About me");
+    await textIsVisible(page, "About author");
     await textIsVisible(page, "Web app uses TMDB api");
     await textIsVisible(page, "Fullstack open");
   });

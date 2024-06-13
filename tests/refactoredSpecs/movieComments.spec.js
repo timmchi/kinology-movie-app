@@ -88,7 +88,7 @@ describe("dealing with movie comments", () => {
 
             await page.waitForTimeout(1000);
 
-            await textIsVisible(page, "Al Pacino rocks");
+            await linkIsVisible(page, "Al Pacino rocks");
             await textIsVisible(page, "Comment successfully updated");
           });
 
