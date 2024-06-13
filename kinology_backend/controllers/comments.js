@@ -37,106 +37,36 @@ commentsRouter.get("/", async (request, response) => {
   response.status(200).send(comments);
 });
 
-commentsRouter.get(
-  "/profile/:id",
-  middleware.validateParamsId,
-  async (request, response) => {
-    // const { id } = request.params;
-    const { receiver } = request.validatedParams;
+commentsRouter.get("/profile/:id", async (request, response) => {
+  const { id } = request.params;
 
-    // const parsedParams = v.parse(CommentSchema, { receiver: id });
+  const parsedParams = v.parse(CommentSchema, { receiver: id });
 
-    const comments = await UserComment.find({ receiver })
-      .populate("author", { name: 1, avatar: 1, username: 1 })
-      .populate("receiver");
+  const comments = await UserComment.find({ receiver: parsedParams.receiver })
+    .populate("author", { name: 1, avatar: 1, username: 1 })
+    .populate("receiver");
 
-    await routesUtils.fetchUser(receiver);
+  await routesUtils.fetchUser(parsedParams.receiver);
 
-    response.status(200).send(comments);
-  }
-);
-// commentsRouter.get("/profile/:id", async (request, response) => {
-//   const { id } = request.params;
+  response.status(200).send(comments);
+});
 
-//   const parsedParams = v.parse(CommentSchema, { receiver: id });
-
-//   const comments = await UserComment.find({ receiver: parsedParams.receiver })
-//     .populate("author", { name: 1, avatar: 1, username: 1 })
-//     .populate("receiver");
-
-//   await routesUtils.fetchUser(parsedParams.receiver);
-
-//   response.status(200).send(comments);
-// });
-
-// commentsRouter.post(
-//   "/profile/:id",
-//   middleware.tokenExtractor,
-//   middleware.userExtractor,
-//   async (request, response) => {
-//     const { id } = request.params;
-//     const user = request.user;
-//     const { content } = request.body;
-
-//     if (!user) return response.status(401).send({ error: "not authorized" });
-
-//     const parsedComment = v.parse(CommentSchema, {
-//       content,
-//       author: user._id.toString(),
-//       receiver: id,
-//     });
-
-//     const savedComment = await commentsUtils.createComment(
-//       parsedComment.content,
-//       parsedComment.author,
-//       parsedComment.receiver,
-//       "profile"
-//     );
-
-//     const addedComment = await commentsUtils.fetchComment(savedComment._id);
-
-//     const author = await routesUtils.fetchUser(user._id);
-//     const receiver = await routesUtils.fetchUser(user._id);
-
-//     if (author._id.toString() === receiver._id.toString()) {
-//       await commentsUtils.handleSameProfileComment(addedComment, author);
-//       await author.save();
-//     }
-
-//     if (author._id.toString() !== receiver._id.toString()) {
-//       await commentsUtils.handleDifferentProfileComment(
-//         addedComment,
-//         author,
-//         receiver
-//       );
-//       await Promise.all([author.save(), receiver.save()]);
-//     }
-
-//     response.status(201).send(addedComment);
-//   }
-// );
 commentsRouter.post(
   "/profile/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
-  middleware.validateComment,
   async (request, response) => {
     const { id } = request.params;
     const user = request.user;
-    const { content } = request.validatedBody;
+    const { content } = request.body;
 
     if (!user) return response.status(401).send({ error: "not authorized" });
 
-    // const parsedComment = v.parse(CommentSchema, {
-    //   content,
-    //   author: user._id.toString(),
-    //   receiver: id,
-    // });
-    const parsedComment = {
+    const parsedComment = v.parse(CommentSchema, {
       content,
       author: user._id.toString(),
       receiver: id,
-    };
+    });
 
     const savedComment = await commentsUtils.createComment(
       parsedComment.content,
@@ -251,48 +181,24 @@ commentsRouter.delete(
   }
 );
 
-commentsRouter.get(
-  "/movie/:id",
-  middleware.validateParamsId,
-  async (request, response) => {
-    //   const { id } = request.params;
-    const { movieId } = request.validatedParams;
+commentsRouter.get("/movie/:id", async (request, response) => {
+  const { id } = request.params;
 
-    //   const parsedParams = v.parse(paramsIdSchema, { movieId: id });
+  const parsedParams = v.parse(paramsIdSchema, { movieId: id });
 
-    //   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-    //   const movie = await routesUtils.fetchMovie(parsedParams.movieId);
-    const movie = await routesUtils.fetchMovie(movieId);
+  //   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
+  const movie = await routesUtils.fetchMovie(parsedParams.movieId);
 
-    if (!movie) return response.status(200).send([]);
+  if (!movie) return response.status(200).send([]);
 
-    const comments = await UserComment.find({
-      movieReceiver: movie?._id,
-    }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
+  const comments = await UserComment.find({
+    movieReceiver: movie?._id,
+  }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
 
-    movie.populate("comments");
+  movie.populate("comments");
 
-    response.status(200).send(comments);
-  }
-);
-// commentsRouter.get("/movie/:id", async (request, response) => {
-//   const { id } = request.params;
-
-//   const parsedParams = v.parse(paramsIdSchema, { movieId: id });
-
-//   //   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-//   const movie = await routesUtils.fetchMovie(parsedParams.movieId);
-
-//   if (!movie) return response.status(200).send([]);
-
-//   const comments = await UserComment.find({
-//     movieReceiver: movie?._id,
-//   }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
-
-//   movie.populate("comments");
-
-//   response.status(200).send(comments);
-// });
+  response.status(200).send(comments);
+});
 
 commentsRouter.post(
   "/movie/:id",

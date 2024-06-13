@@ -112,8 +112,8 @@
 | 13.6 | 0.25  | Dependabot added                                                                                |
 | 13.6 | 2     | UseComment hook, refactoring of useMovie and useUser, components utilize useComment, test fixes |
 | 13.6 | 1.25  | Backend routes refactoring, began working on moving validation to middleware                    |
+| 13.6 | 0.5   | e2e fixes                                                                                       |
 |      |       |                                                                                                 |
 |      |       |                                                                                                 |
 |      |       |                                                                                                 |
-|      |       |                                                                                                 |
-| tot  | 171.5 |                                                                                                 |
+| tot  | 172   |                                                                                                 |
