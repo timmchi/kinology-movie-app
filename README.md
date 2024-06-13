@@ -25,7 +25,7 @@
 
 ## <a name="what-is-this-app">What is this app?</a>
 
-Kinology is a web app that helps you decide which movie you should watch. You can search for movies based genre, year of release, actor, rating and other parameters, greatly simplifying choosing what to watch this evening.
+Kinology is a web app that helps you decide which movie you should watch. You can search for movies either through a simple title-based search, or through a detailed search based genre, year of release, actor, rating and other parameters, greatly simplifying choosing what to watch this evening.
 
 You can also create your own account, to which you can then add movies you've already seen, your favorite movies or movies you would like to watch. And you can also comment on movies and other users' profiles.
 
@@ -34,6 +34,10 @@ The frontend for the app was built with React, with a lot of styling based on MU
 You can check out the production version of Kinology [here](https://kinology-movie-app.onrender.com/)
 
 [Link](https://github.com/timmchi/kinology-movie-app/blob/main/timekeeping.md) to the timekeeping document.
+
+### Diagrams
+
+The diagrams available in the folder **[.diagrams](https://github.com/timmchi/kinology-movie-app/tree/main/diagrams)** contain some preliminary mockups of what the app was going to look and function like prior to actually starting the development. While some details are different from the final result, most of the functionality was implemented.
 
 ## <a name="installation">Installation</a>
 

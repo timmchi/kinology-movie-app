@@ -9,7 +9,7 @@ const About = () => {
     <div>
       <div className="aboutContainer">
         <div className="box">
-          <h2>About me</h2>
+          <h2>About author</h2>
           <div className="content">
             <div className="about-me-info">
               <div>
@@ -25,7 +25,7 @@ const About = () => {
                 <ContactModal />
               </div>
             </div>
-            <h3>My favorite movies</h3>
+            <h3>Kinology author&apos;s favorite movies</h3>
             <div className="profileMovieContainer about">
               {myFavoriteMovies.map((movie) => (
                 <div key={movie.tmdbId} className="movieSmallCard">

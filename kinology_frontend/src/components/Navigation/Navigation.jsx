@@ -41,7 +41,6 @@ const Navigation = (props) => {
     });
   };
 
-  // hamburger which opens this menu on smaller screens
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Link to="/" className="site-title">

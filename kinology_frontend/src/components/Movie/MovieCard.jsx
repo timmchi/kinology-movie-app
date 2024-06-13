@@ -28,6 +28,7 @@ const MovieCard = ({ movie, onButtonPress, onButtonUnpress, user }) => {
     });
   };
 
+  // setting card size was based on trial and error. Height is the maximum number before the background color appears on the card, and width is so that one row of cards is limited to 5 cards. As one page is maximum 20 cards, it is the most logical way of dividing them.
   return (
     <Card
       sx={{

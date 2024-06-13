@@ -24,11 +24,12 @@ const CommentList = ({ comments, onEdit, onDelete }) => {
 
   if (!comments || comments.length === 0)
     return (
-      <Typography variant="h5" sx={{ paddingTop: 2 }}>
+      <Typography variant="h6" sx={{ paddingTop: 2 }}>
         No comments yet...
       </Typography>
     );
 
+  // closes Togglable on successful edit
   const editComment = (content, commentId, authorId) => {
     editCommentRef.current.toggleVisibility();
     onEdit(commentId, content, authorId);

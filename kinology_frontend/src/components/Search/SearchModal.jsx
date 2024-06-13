@@ -81,6 +81,7 @@ const searchQuerySchema = object({
   director: string("Director should be a string"),
 });
 
+// search modal hosts so much of the search form logic because handle new search button is also in this component and separating the logic proved to be too difficult at the moment. Then there is pagination as well...I would appreciate if you could give me some pointers as to how to fix this.
 const SearchModal = ({ setMovies }) => {
   const {
     handleSubmit,
@@ -148,6 +149,7 @@ const SearchModal = ({ setMovies }) => {
       <Button onClick={handleNewSearch} variant="contained" sx={newSearchStyle}>
         clear search
       </Button>
+      {/* pagination controller changes the page and makes a request to search for movies with the next page number */}
       <PaginationController
         pages={totalPages}
         page={page}

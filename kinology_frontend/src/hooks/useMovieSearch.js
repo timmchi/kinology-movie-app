@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import moviesService from "../services/movies";
 
+// turns data from the form into format which will be accepted by the backend
 const transformData = (data, actors, pageValue) => {
   const { genresSelect, director, year, ratingUpper, ratingLower, country } =
     data;
@@ -55,6 +56,7 @@ const useMovieSearch = (setMovies, reset) => {
   const [actors, setActors] = useState([]);
   const [firstSearchData, setFirstSearchData] = useState(null);
   const [page, setPage] = useState(1);
+  // -1 to keep pagination hidden initially
   const [totalPages, setTotalPages] = useState(-1);
   const [open, setOpen] = useState(false);
 

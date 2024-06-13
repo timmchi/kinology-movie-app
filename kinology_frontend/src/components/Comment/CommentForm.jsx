@@ -40,7 +40,10 @@ const commentInputStyle = {
 };
 
 const CommentSchema = object({
-  content: pipe(string("Comment must be a string"), minLength(1, "Comments can not be empty"),),
+  content: pipe(
+    string("Comment must be a string"),
+    minLength(1, "Comments can not be empty")
+  ),
 });
 
 const CommentForm = ({ commentAction, commentId, authorId, label }) => {
@@ -61,7 +64,7 @@ const CommentForm = ({ commentAction, commentId, authorId, label }) => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  // comments are created and edited in the same way. On creation, commentId and authorId are not used, but on edit, they are
+  // comments are created and edited in the same way. On creation, commentId and authorId are not used, but on edit, they are, in order to verify the user has the permission to edit the comment (in backend)
   const submitComment = async ({ content }) => {
     commentAction(content, commentId, authorId);
   };

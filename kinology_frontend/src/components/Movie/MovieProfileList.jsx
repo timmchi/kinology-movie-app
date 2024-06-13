@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 const MovieProfileList = ({ movies, header }) => {
   const moviesList = movies;
 
+  // different keys are used to avoid issue with testing, where mock movie is used
   return (
     <div
       className="movieList"

@@ -9,7 +9,7 @@ const parseJwt = (token) => {
   }
 };
 
-// decodes the token on page change and decodes the token to see if it has expired. Source: https://www.bezkoder.com/react-logout-token-expired/
+// decodes the jwt token on location change to see if it has expired. Source: https://www.bezkoder.com/react-logout-token-expired/
 const AuthVerify = (props) => {
   let location = useLocation();
 

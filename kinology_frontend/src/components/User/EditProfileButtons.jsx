@@ -6,6 +6,7 @@ const EditProfileButtons = ({ user, updateForm, deleteUser }) => {
   const currentUser = useUserValue();
   return (
     <div className="profileButtons">
+      {/* checks if the comment author (user) is the same as the current logged in user (currentUser) */}
       {currentUser && currentUser?.username === user.username && (
         <>
           {updateForm()}

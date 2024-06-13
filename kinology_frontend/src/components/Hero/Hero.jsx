@@ -11,6 +11,7 @@ const ctaStyle = {
   },
 };
 
+// box 2 is used to move box1 to the right side of the screen on big screens, on mobile it hosts a background image that goes on top of the screen
 const Hero = ({ goToSearch }) => {
   const navigate = useNavigate();
   return (
