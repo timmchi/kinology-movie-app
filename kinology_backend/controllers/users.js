@@ -2,6 +2,7 @@ const usersRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const config = require("../utils/config");
 const routeUtils = require("../utils/routesUtils");
+const usersUtils = require("../utils/usersUtils");
 const Movie = require("../models/movie");
 const User = require("../models/user");
 const multer = require("multer");
@@ -174,32 +175,32 @@ usersRouter.get("/:id/avatar", async (request, response) => {
 
 // TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
 
-const handleWatchLaterAction = async (movie, user) => {
-  if (!movie.watchLaterBy.includes(user._id)) {
-    movie.watchLaterBy = movie.watchLaterBy.concat(user._id);
-  }
-  if (!user.watchLaterMovies.includes(movie._id)) {
-    user.watchLaterMovies = user.watchLaterMovies.concat(movie._id);
-  }
-};
+// const handleWatchLaterAction = async (movie, user) => {
+//   if (!movie.watchLaterBy.includes(user._id)) {
+//     movie.watchLaterBy = movie.watchLaterBy.concat(user._id);
+//   }
+//   if (!user.watchLaterMovies.includes(movie._id)) {
+//     user.watchLaterMovies = user.watchLaterMovies.concat(movie._id);
+//   }
+// };
 
-const handleWatchedAction = async (movie, user) => {
-  if (!movie.watchedBy.includes(user._id)) {
-    movie.watchedBy = movie.watchedBy.concat(user._id);
-  }
-  if (!user.watchedMovies.includes(movie._id)) {
-    user.watchedMovies = user.watchedMovies.concat(movie._id);
-  }
-};
+// const handleWatchedAction = async (movie, user) => {
+//   if (!movie.watchedBy.includes(user._id)) {
+//     movie.watchedBy = movie.watchedBy.concat(user._id);
+//   }
+//   if (!user.watchedMovies.includes(movie._id)) {
+//     user.watchedMovies = user.watchedMovies.concat(movie._id);
+//   }
+// };
 
-const handleFavoriteAction = async (movie, user) => {
-  if (!movie.favoritedBy.includes(user._id)) {
-    movie.favoritedBy = movie.favoritedBy.concat(user._id);
-  }
-  if (!user.favoriteMovies.includes(movie._id)) {
-    user.favoriteMovies = user.favoriteMovies.concat(movie._id);
-  }
-};
+// const handleFavoriteAction = async (movie, user) => {
+//   if (!movie.favoritedBy.includes(user._id)) {
+//     movie.favoritedBy = movie.favoritedBy.concat(user._id);
+//   }
+//   if (!user.favoriteMovies.includes(movie._id)) {
+//     user.favoriteMovies = user.favoriteMovies.concat(movie._id);
+//   }
+// };
 
 usersRouter.post(
   "/:id/movies",
@@ -236,11 +237,11 @@ usersRouter.post(
     }
 
     if (parsedMovieAction.button === "watched")
-      await handleWatchedAction(existingMovie, user);
+      await usersUtils.handleWatchedAction(existingMovie, user);
     if (parsedMovieAction.button === "favorite")
-      await handleFavoriteAction(existingMovie, user);
+      await usersUtils.handleFavoriteAction(existingMovie, user);
     if (parsedMovieAction.button === "later")
-      await handleWatchLaterAction(existingMovie, user);
+      await usersUtils.handleWatchLaterAction(existingMovie, user);
 
     await Promise.all([user.save(), existingMovie.save()]);
 
@@ -259,44 +260,44 @@ usersRouter.post(
   }
 );
 
-const handleUnwatchAction = async (movie, user) => {
-  if (movie.watchLaterBy.includes(user._id)) {
-    movie.watchLaterBy = movie.watchLaterBy.filter(
-      (userId) => userId.toString() !== user._id.toString()
-    );
-  }
-  if (user.watchLaterMovies.includes(movie._id)) {
-    user.watchLaterMovies = user.watchLaterMovies.filter(
-      (movieId) => movieId.toString() !== movie._id.toString()
-    );
-  }
-};
+// const handleUnwatchAction = async (movie, user) => {
+//   if (movie.watchLaterBy.includes(user._id)) {
+//     movie.watchLaterBy = movie.watchLaterBy.filter(
+//       (userId) => userId.toString() !== user._id.toString()
+//     );
+//   }
+//   if (user.watchLaterMovies.includes(movie._id)) {
+//     user.watchLaterMovies = user.watchLaterMovies.filter(
+//       (movieId) => movieId.toString() !== movie._id.toString()
+//     );
+//   }
+// };
 
-const handleUnseeAction = async (movie, user) => {
-  if (movie.watchedBy.includes(user._id)) {
-    movie.watchedBy = movie.watchedBy.filter(
-      (userId) => userId.toString() !== user._id.toString()
-    );
-  }
-  if (user.watchedMovies.includes(movie._id)) {
-    user.watchedMovies = user.watchedMovies.filter(
-      (movieId) => movieId.toString() !== movie._id.toString()
-    );
-  }
-};
+// const handleUnseeAction = async (movie, user) => {
+//   if (movie.watchedBy.includes(user._id)) {
+//     movie.watchedBy = movie.watchedBy.filter(
+//       (userId) => userId.toString() !== user._id.toString()
+//     );
+//   }
+//   if (user.watchedMovies.includes(movie._id)) {
+//     user.watchedMovies = user.watchedMovies.filter(
+//       (movieId) => movieId.toString() !== movie._id.toString()
+//     );
+//   }
+// };
 
-const handleUnfavoriteAction = async (movie, user) => {
-  if (movie.favoritedBy.includes(user._id)) {
-    movie.favoritedBy = movie.favoritedBy.filter(
-      (userId) => userId.toString() !== user._id.toString()
-    );
-  }
-  if (user.favoriteMovies.includes(movie._id)) {
-    user.favoriteMovies = user.favoriteMovies.filter(
-      (movieId) => movieId.toString() !== movie._id.toString()
-    );
-  }
-};
+// const handleUnfavoriteAction = async (movie, user) => {
+//   if (movie.favoritedBy.includes(user._id)) {
+//     movie.favoritedBy = movie.favoritedBy.filter(
+//       (userId) => userId.toString() !== user._id.toString()
+//     );
+//   }
+//   if (user.favoriteMovies.includes(movie._id)) {
+//     user.favoriteMovies = user.favoriteMovies.filter(
+//       (movieId) => movieId.toString() !== movie._id.toString()
+//     );
+//   }
+// };
 
 // deleting a movie from user profile
 usersRouter.delete(
@@ -322,11 +323,11 @@ usersRouter.delete(
     if (!existingMovie) return response.status(404);
 
     if (parsedMovieAction.button === "watched")
-      await handleUnseeAction(existingMovie, user);
+      await usersUtils.handleUnseeAction(existingMovie, user);
     if (parsedMovieAction.button === "favorite")
-      await handleUnfavoriteAction(existingMovie, user);
+      await usersUtils.handleUnfavoriteAction(existingMovie, user);
     if (parsedMovieAction.button === "later")
-      await handleUnwatchAction(existingMovie, user);
+      await usersUtils.handleUnwatchAction(existingMovie, user);
 
     await Promise.all([user.save(), existingMovie.save()]);
 
