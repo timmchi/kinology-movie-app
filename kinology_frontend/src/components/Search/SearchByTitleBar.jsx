@@ -42,6 +42,8 @@ const textInputStyle = {
   },
 };
 
+// this component does not have that much logic as it returns maximum of 20 movies and thus doesnt use pagination, which is why I felt like there was no need to move logic to a hook the way it is done in the searchform and searchmodal.
+// the reason for only returning 20 movies is that if a person is searching a movie by title, they know what they are looking for and will thus be satisfied with one of the first options in the list (TMDB returns movies based on popularity)
 const SearchByTitleBar = ({ setMovies }) => {
   const {
     handleSubmit,
@@ -62,12 +64,13 @@ const SearchByTitleBar = ({ setMovies }) => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  const logData = async (data) => {
+  const searchMovie = async (data) => {
     const movies = await moviesService.searchByTitle(data);
     setMovies(movies);
     console.log(movies);
   };
 
+  // this is separate from clear search which can is used to clear SearchForm component. Both clear the movies list though
   const resetForm = () => {
     reset({
       title: "",
@@ -76,7 +79,7 @@ const SearchByTitleBar = ({ setMovies }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(logData)}>
+    <form onSubmit={handleSubmit(searchMovie)}>
       <div className="title-search-bar">
         <TextFieldElement
           name={"title"}

@@ -63,6 +63,8 @@ const MovieButton = ({
     }
   };
 
+  // button changes based on if the user has added the movie to their profile list (favorite, seen, wathc list). Same buttons go on the movie card and single movie page. To the person reading this - if you know of a better way to implement this functionality, please mention it in the issue. Thanks!
+
   return (
     <Button
       variant={pressed ? "contained" : "outlined"}

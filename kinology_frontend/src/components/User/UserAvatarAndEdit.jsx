@@ -11,6 +11,7 @@ const UserAvatarAndEdit = ({
 }) => {
   return (
     <div className="userAvatar">
+      {/* if the user hasnt uploaded an avatar yet there will be an error with the link from aws, so a placeholder will be used instead */}
       <img
         src={avatar ? avatar : placeholderUrl}
         onError={() => setAvatar(placeholderUrl)}

@@ -25,6 +25,7 @@ const PaginationController = ({ pages, page, setPage, pageChange }) => {
 
   if (pages === -1) return "";
 
+  // limit of 10 pages is arbitrary and could be changed to more. I made this choice because I thought 200 movies would most likely be enough to choose something to watch.
   return (
     <Stack spacing={2}>
       <Pagination

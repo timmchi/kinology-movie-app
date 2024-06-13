@@ -8,20 +8,12 @@ import PropTypes from "prop-types";
 
 const basePosterUrl = "https://image.tmdb.org/t/p/original";
 
+// img component inside cardmedia is used to access attributes like onLoad to include placeholder
 const MovieSmallCard = ({ movie }) => {
   const [posterIsLoaded, setPosterIsLoaded] = useState(false);
   return (
     <Card sx={{ width: 100, height: 150 }}>
       <CardActionArea component={Link} to={`/movies/${movie.tmdbId}`}>
-        {/* <CardMedia
-          component="img"
-          loading="lazy"
-          height="150"
-          alt={`${movie.title} poster`}
-          src={
-            movie?.poster ? `${basePosterUrl}${movie?.poster}` : placeholderUrl
-          }
-        /> */}
         <CardMedia component="picture" sx={{ objectFit: "contain" }}>
           <img
             src={

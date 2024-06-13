@@ -47,7 +47,7 @@ const CommentView = ({ comment, editForm, onDelete }) => {
         </Typography>
       </ListItem>
       <div className="commentButtons">
-        {currentUser && (
+        {currentUser && ( // logged in user can see edit/delete buttons based on if he is the comment author/profile owner. Delete is visible to profile owner and comment author, edit only visible to comment author
           <>
             {currentUser.username === comment.author?.username && (
               <>

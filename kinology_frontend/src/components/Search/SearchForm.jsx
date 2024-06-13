@@ -31,6 +31,7 @@ const reactSelectStyles = {
     color: "#0A6847",
     fontWeight: 400,
   }),
+  // so dropdown options dont overlap with other components
   menuPortal: (base) => ({ ...base, zIndex: 9999 }),
   option: (styles) => ({
     ...styles,

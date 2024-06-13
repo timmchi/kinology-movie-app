@@ -25,6 +25,80 @@ import PropTypes from "prop-types";
 
 import useSignUp from "../../hooks/useSignUp";
 
+const credentialsInputStyle = {
+  bgcolor: "#79C094",
+  input: {
+    color: "white",
+    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+  },
+  borderRadius: 0,
+  padding: 1.5,
+  "--Input-placeholderOpacity": 1,
+  "--Input-focusedInset": "var(--any, )",
+  "--Input-focusedThickness": "2px",
+  "--Input-focusedHighlight": "#bdac4e !important",
+  "&:focus-within": {
+    borderColor: "#bdac4e",
+  },
+};
+
+const formLabelStyle = { color: "#f7e382", fontSize: 18 };
+
+const outerBoxStyle = {
+  width: { xs: "100%", md: "50vw" },
+  transition: "width var(--Transition-duration)",
+  transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
+  position: "relative",
+  zIndex: 1,
+  display: "flex",
+  justifyContent: "flex-end",
+  backdropFilter: "blur(12px)",
+  backgroundColor: "rgba(255 255 255 / 0.2)",
+};
+
+const middleBoxStyle = {
+  display: "flex",
+  flexDirection: "column",
+  minHeight: "100dvh",
+  width: "100%",
+  px: 2,
+};
+
+const imageBoxStyle = {
+  height: "100%",
+  position: "fixed",
+  right: 0,
+  top: 0,
+  bottom: 0,
+  left: { xs: 0, md: "50vw" },
+  transition:
+    "background-image var(--Transition-duration), left var(--Transition-duration) !important",
+  transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  backgroundImage:
+    "url(https://images.unsplash.com/photo-1589053739346-ed32227546a4?q=80&w=1031&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+};
+
+const innerBoxStyle = {
+  my: "auto",
+  py: 2,
+  pb: 5,
+  display: "flex",
+  flexDirection: "column",
+  gap: 2,
+  width: 400,
+  maxWidth: "100%",
+  mx: "auto",
+  textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
+  borderRadius: "sm",
+  "& form": { display: "flex", flexDirection: "column", gap: 2 },
+  [`& .MuiFormLabel-asterisk`]: {
+    visibility: "hidden",
+  },
+};
+
 const RegistrationSchema = pipe(
   object({
     email: pipe(
@@ -62,42 +136,6 @@ const RegistrationSchema = pipe(
   )
 );
 
-const credentialsInputStyle = {
-  bgcolor: "#79C094",
-  input: {
-    color: "white",
-    textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-  },
-  borderRadius: 0,
-  padding: 1.5,
-  "--Input-placeholderOpacity": 1,
-  "--Input-focusedInset": "var(--any, )",
-  "--Input-focusedThickness": "2px",
-  "--Input-focusedHighlight": "#bdac4e !important",
-  "&:focus-within": {
-    borderColor: "#bdac4e",
-  },
-};
-
-const formLabelStyle = { color: "#f7e382", fontSize: 18 };
-
-const imageBoxStyle = {
-  height: "100%",
-  position: "fixed",
-  right: 0,
-  top: 0,
-  bottom: 0,
-  left: { xs: 0, md: "50vw" },
-  transition:
-    "background-image var(--Transition-duration), left var(--Transition-duration) !important",
-  transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  backgroundImage:
-    "url(https://images.unsplash.com/photo-1589053739346-ed32227546a4?q=80&w=1031&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
-};
-
 const SignUpForm = ({ addUser }) => {
   const {
     register,
@@ -124,48 +162,9 @@ const SignUpForm = ({ addUser }) => {
 
   return (
     <div style={{ backgroundColor: "#397453" }}>
-      <Box
-        sx={{
-          width: { xs: "100%", md: "50vw" },
-          transition: "width var(--Transition-duration)",
-          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
-          position: "relative",
-          zIndex: 1,
-          display: "flex",
-          justifyContent: "flex-end",
-          backdropFilter: "blur(12px)",
-          backgroundColor: "rgba(255 255 255 / 0.2)",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "100dvh",
-            width: "100%",
-            px: 2,
-          }}
-        >
-          <Box
-            component="main"
-            sx={{
-              my: "auto",
-              py: 2,
-              pb: 5,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              width: 400,
-              maxWidth: "100%",
-              mx: "auto",
-              textShadow: "1px 1px 2px rgba(13, 4, 2, 1)",
-              borderRadius: "sm",
-              "& form": { display: "flex", flexDirection: "column", gap: 2 },
-              [`& .MuiFormLabel-asterisk`]: {
-                visibility: "hidden",
-              },
-            }}
-          >
+      <Box sx={outerBoxStyle}>
+        <Box sx={middleBoxStyle}>
+          <Box component="main" sx={innerBoxStyle}>
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography component="h1" level="h3" sx={{ color: "#f7e382" }}>

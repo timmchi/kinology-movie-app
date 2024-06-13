@@ -84,9 +84,6 @@ const UserUpdateForm = ({ updateUser }) => {
   }, [isSubmitSuccessful, reset]);
 
   const updatingUser = (data) => {
-    console.log(data.avatar);
-    console.log(data);
-
     const formData = new FormData();
     formData.append("avatar", data.avatar);
     formData.append("bio", data.bio);
@@ -120,6 +117,7 @@ const UserUpdateForm = ({ updateUser }) => {
           sx={inputStyle}
         />
         <Typography>Upload Avatar</Typography>
+        {/* mui file input used here to keep styling consistent with other elements. Another option would be to implement a drag and drop */}
         <Controller
           name="avatar"
           control={control}

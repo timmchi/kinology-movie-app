@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 
 const MovieList = ({ movies, onButtonPress, onButtonUnpress }) => {
   const user = useUserValue();
-  if (!movies) return <>no movies yet</>;
 
   const moviesList = movies;
 
+  // different keys are used to avoid issue with testing, where mock movie is used
   return (
     <div className="listContainer">
       <div className="cardsContainer">

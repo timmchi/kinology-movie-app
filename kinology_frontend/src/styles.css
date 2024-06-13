@@ -374,6 +374,10 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+  .moviePage {
+    padding: 1em;
+  }
+
   .box {
     padding: 2em;
   }
