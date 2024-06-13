@@ -219,7 +219,7 @@ describe("Kinology", () => {
 
           await textIsVisible(
             page,
-            "Comment 'Another user was here' successfully created"
+            "Comment 'Another user was here' successfully added"
           );
 
           await linkIsVisible(page, "Ms Toster Another user was here");

@@ -1,14 +1,21 @@
 import { useParams } from "react-router-dom";
 import MovieComments from "./MovieComments";
 import useMovie from "../../hooks/useMovie";
+import useComments from "../../hooks/useComments";
 import MovieProfilePoster from "./MovieProfilePoster";
 import MovieDescription from "./MovieDescription";
 import PropTypes from "prop-types";
 
 const Movie = ({ onButtonPress, onButtonUnpress, user }) => {
   const { id } = useParams();
-  const { movie, comments, createComment, deleteComment, updateComment } =
-    useMovie(user, id);
+  const { movie } = useMovie(id);
+
+  const { comments, createComment, deleteComment, updateComment } = useComments(
+    id,
+    "movie",
+    user,
+    movie
+  );
 
   const buttonPress = (event, functionWord) => {
     onButtonPress(event, functionWord, {

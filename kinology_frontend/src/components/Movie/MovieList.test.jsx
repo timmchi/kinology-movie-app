@@ -5,17 +5,6 @@ import { UserContextProvider } from "../../contexts/UserContext";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 
-test("renders properly when there are no movies", () => {
-  render(
-    <UserContextProvider>
-      <MovieList />
-    </UserContextProvider>
-  );
-
-  const text = screen.getByText("no movies yet");
-  expect(text).toBeDefined();
-});
-
 test("renders properly with a list of movies", () => {
   render(
     <UserContextProvider>

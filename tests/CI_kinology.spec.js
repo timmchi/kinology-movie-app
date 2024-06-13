@@ -109,7 +109,7 @@ describe("Kinology", () => {
   test("about section can be opened through nav bar", async ({ page }) => {
     await clickLink(page, "About");
 
-    await textIsVisible(page, "About me");
+    await textIsVisible(page, "About author");
     await textIsVisible(page, "Web app uses TMDB api");
     await textIsVisible(page, "Fullstack open");
   });
@@ -118,11 +118,11 @@ describe("Kinology", () => {
     beforeEach(async ({ page }) => {
       await clickLink(page, "About");
 
-      await textIsVisible(page, "About me");
+      await textIsVisible(page, "About author");
     });
 
     test("contact form can be opened and has all fields", async ({ page }) => {
-      await page.getByText("About me").hover();
+      await page.getByText("About author").hover();
 
       await clickButton(page, "Contact Me");
 
@@ -140,7 +140,7 @@ describe("Kinology", () => {
 
     describe("and contact modal is open", () => {
       beforeEach(async ({ page }) => {
-        await page.getByText("About me").hover();
+        await page.getByText("About author").hover();
 
         await clickButton(page, "Contact Me");
       });
@@ -422,10 +422,7 @@ describe("Kinology", () => {
 
           await page.waitForTimeout(1000);
 
-          await textIsVisible(
-            page,
-            "Comment 'my comment' successfully created"
-          );
+          await textIsVisible(page, "Comment 'my comment' successfully added");
 
           await linkIsVisible(page, "Mr Tester my comment");
 
@@ -443,17 +440,19 @@ describe("Kinology", () => {
 
             await textIsVisible(
               page,
-              "Comment 'my comment' successfully created"
+              "Comment 'my comment' successfully added"
             );
           });
 
           test("a comment can be edited by its author", async ({ page }) => {
             await clickButton(page, "edit comment");
 
-            const commentInput = page.getByRole("textbox", { name: "comment" });
+            // const commentInput = page.getByRole("textbox", { name: "comment" });
+            const commentInput = page.getByLabel("Edit your comment");
             await commentInput.fill("it has been edited");
 
-            await clickButton(page, "Submit comment");
+            // await clickButton(page, "Submit comment");
+            await page.getByRole("list").getByLabel("Submit comment").click();
 
             await page.waitForTimeout(1000);
 
@@ -731,7 +730,7 @@ describe("Kinology", () => {
 
             await page.waitForTimeout(1000);
 
-            await textIsVisible(page, "Al Pacino rocks");
+            await linkIsVisible(page, "Al Pacino rocks");
             await textIsVisible(page, "Comment successfully updated");
           });
 
@@ -803,7 +802,7 @@ describe("Kinology", () => {
 
           await textIsVisible(
             page,
-            "Comment 'Another user was here' successfully created"
+            "Comment 'Another user was here' successfully added"
           );
 
           await linkIsVisible(page, "Ms Toster Another user was here");

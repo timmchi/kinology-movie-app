@@ -85,7 +85,7 @@ npm run start
 
 ## <a name="tests">Tests</a>
 
-There are currently 220 tests in total. 91 Frontend unit tests, 75 backend integration tests, and 54 e2e tests.
+There are currently 219 tests in total. 90 Frontend unit tests, 75 backend integration tests, and 54 e2e tests.
 
 ### Unit tests
 

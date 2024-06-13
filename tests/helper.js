@@ -134,7 +134,7 @@ const buttonIsVisible = async (page, buttonName, not) => {
 
 const waitForCommentCreation = async (page, comment) => {
   await expect(
-    page.getByText(`Comment '${comment}' successfully created`)
+    page.getByText(`Comment '${comment}' successfully added`)
   ).toBeVisible({ timeout: 15000 });
 };
 
