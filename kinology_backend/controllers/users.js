@@ -3,13 +3,8 @@ const middleware = require("../utils/middleware");
 const config = require("../utils/config");
 const routeUtils = require("../utils/routesUtils");
 const usersUtils = require("../utils/usersUtils");
-const {
-  RegistrationSchema,
-  MovieActionSchema,
-  UserUpdateSchema,
-  IdSchema,
-  AvatarSchema,
-} = require("../utils/validationSchemas");
+const { MovieActionSchema } = require("../utils/validationSchemas");
+const validationMiddleware = require("../utils/validationMiddleware");
 const Movie = require("../models/movie");
 const User = require("../models/user");
 const multer = require("multer");
@@ -24,21 +19,15 @@ const upload = multer({ storage: storage });
 
 const v = require("valibot");
 
-usersRouter.post("/", async (request, response) => {
-  const { email, username, password, passwordConfirm, name } = request.body;
+usersRouter.post(
+  "/",
+  validationMiddleware.validateRegistrationCredentials,
+  async (request, response) => {
+    const savedUser = await routeUtils.createUser(request.parsedCredentials);
 
-  const parsedCredentials = v.parse(RegistrationSchema, {
-    email,
-    username,
-    password,
-    passwordConfirm,
-    name,
-  });
-
-  const savedUser = await routeUtils.createUser(parsedCredentials);
-
-  response.status(201).json(savedUser);
-});
+    response.status(201).json(savedUser);
+  }
+);
 
 usersRouter.get("/", async (request, response) => {
   const users = await User.find({})
@@ -51,105 +40,94 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
-usersRouter.get("/:id", async (request, response) => {
-  const { id } = request.params;
+usersRouter.get(
+  "/:id",
+  validationMiddleware.validateUserId,
+  async (request, response) => {
+    const user = await routeUtils.fetchUser(request.parsedId);
 
-  const parsedId = v.parse(IdSchema, id);
+    if (!user)
+      response.status(404).json({
+        error: "no user with such id exists",
+      });
 
-  const user = await routeUtils.fetchUser(parsedId);
+    // generating signed url
+    const avatarUrl = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand({
+        Bucket: bucketName,
+        Key: `${user.username}-avatar`,
+      }),
+      { expiresIn: 60 * 60 }
+    );
 
-  if (!user)
-    response.status(404).json({
-      error: "no user with such id exists",
-    });
+    response.json({ user, avatarUrl });
+  }
+);
 
-  // generating signed url
-  const avatarUrl = await getSignedUrl(
-    s3Client,
-    new GetObjectCommand({
-      Bucket: bucketName,
-      Key: `${user.username}-avatar`,
-    }),
-    { expiresIn: 60 * 60 }
-  );
+usersRouter.get(
+  "/:id/avatar",
+  validationMiddleware.validateUserId,
+  async (request, response) => {
+    const user = await routeUtils.fetchUser(request.parsedId);
 
-  response.json({ user, avatarUrl });
-});
+    if (!user)
+      response.status(404).json({
+        error: "no user with such id exists",
+      });
 
-// validate id
-usersRouter.get("/:id/avatar", async (request, response) => {
-  const { id } = request.params;
+    const avatarUrl = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand({
+        Bucket: bucketName,
+        Key: `${user.username}-avatar`,
+      }),
+      { expiresIn: 60 * 60 }
+    );
 
-  const parsedId = v.parse(IdSchema, id);
-
-  const user = await routeUtils.fetchUser(parsedId);
-
-  if (!user)
-    response.status(404).json({
-      error: "no user with such id exists",
-    });
-
-  const avatarUrl = await getSignedUrl(
-    s3Client,
-    new GetObjectCommand({
-      Bucket: bucketName,
-      Key: `${user.username}-avatar`,
-    }),
-    { expiresIn: 60 * 60 }
-  );
-
-  response.json(avatarUrl);
-});
+    response.json(avatarUrl);
+  }
+);
 
 usersRouter.post(
   "/:id/movies",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateUserId,
+  validationMiddleware.validateMovieAction,
   async (request, response) => {
-    const { movie, button } = request.body;
-    const { id } = request.params;
-    const parsedMovieAction = v.parse(MovieActionSchema, {
-      id: movie.id,
-      title: movie.title,
-      poster: movie.poster,
-      button,
-    });
+    const { id, title, poster, button } = request.parsedMovieAction;
 
-    const parsedId = v.parse(IdSchema, id);
-
-    const existingUser = await routeUtils.fetchUser(parsedId);
+    const existingUser = await routeUtils.fetchUser(request.parsedId);
     if (!existingUser)
       return response.status(404).json({ error: "user does not exist" });
 
     const user = request.user;
 
-    if (user._id.toString() !== parsedId) return response.status(401).end();
+    if (user._id.toString() !== request.parsedId)
+      return response.status(401).end();
 
-    let existingMovie = await routeUtils.fetchMovie(parsedMovieAction.id);
+    let existingMovie = await routeUtils.fetchMovie(id);
 
     if (!existingMovie) {
-      existingMovie = await routeUtils.createMovie(
-        parsedMovieAction.id,
-        parsedMovieAction.title,
-        parsedMovieAction.poster
-      );
+      existingMovie = await routeUtils.createMovie(id, title, poster);
     }
 
-    if (parsedMovieAction.button === "watched")
+    if (button === "watched")
       await usersUtils.handleWatchedAction(existingMovie, user);
-    if (parsedMovieAction.button === "favorite")
+    if (button === "favorite")
       await usersUtils.handleFavoriteAction(existingMovie, user);
-    if (parsedMovieAction.button === "later")
+    if (button === "later")
       await usersUtils.handleWatchLaterAction(existingMovie, user);
 
     await Promise.all([user.save(), existingMovie.save()]);
 
     const updatedSavedMovie = await Movie.findById(existingMovie._id).populate(
-      parsedMovieAction.button === "watched"
+      button === "watched"
         ? "watchedBy"
-        : parsedMovieAction.button === "favorite"
+        : button === "favorite"
         ? "favoritedBy"
-        : parsedMovieAction.button === "later"
+        : button === "later"
         ? "watchLaterBy"
         : null,
       { username: 1, name: 1 }
@@ -164,9 +142,10 @@ usersRouter.delete(
   "/:id/movies/:movieId",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateUserId,
   async (request, response) => {
     const { button } = request.body;
-    const { movieId, id } = request.params;
+    const { movieId } = request.params;
     const user = request.user;
 
     const parsedMovieAction = v.parse(MovieActionSchema, {
@@ -174,9 +153,8 @@ usersRouter.delete(
       button,
     });
 
-    const parsedId = v.parse(IdSchema, id);
-
-    if (user._id.toString() !== parsedId) return response.status(401).end();
+    if (user._id.toString() !== request.parsedId)
+      return response.status(401).end();
 
     const existingMovie = await routeUtils.fetchMovie(parsedMovieAction.id);
 
@@ -200,12 +178,13 @@ usersRouter.put(
   middleware.tokenExtractor,
   middleware.userExtractor,
   upload.single("avatar"),
+  validationMiddleware.validateUserId,
+  validationMiddleware.validateUserUpdate,
+  validationMiddleware.validateAvatar,
   async (request, response) => {
     const user = request.user;
 
-    const parsedId = v.parse(IdSchema, request.params.id);
-
-    const profileOwner = await routeUtils.fetchUser(parsedId);
+    const profileOwner = await routeUtils.fetchUser(request.parsedId);
 
     if (!profileOwner)
       return response.status(404).json({ error: "user does not exist" });
@@ -213,22 +192,9 @@ usersRouter.put(
     if (!profileOwner || user._id?.toString() !== profileOwner?._id?.toString())
       return response.status(401).json({ error: "token invalid" });
 
-    const { bio, name } = request.body;
-    const file = request.file;
+    const { biography, name } = request.parsedUserInfo;
 
-    const parsedUserInfo = v.parse(UserUpdateSchema, {
-      biography: bio,
-      name,
-    });
-
-    const parsedAvatar = v.parse(AvatarSchema, {
-      fieldname: file.fieldname,
-      originalname: file.originalname,
-      encoding: file.encoding,
-      mimetype: file.mimetype,
-      size: file.size,
-      buffer: file.buffer,
-    });
+    const parsedAvatar = request.parsedAvatar;
 
     // uploading avatar to s3 bucket
     const avatarBuffer = await sharp(parsedAvatar.buffer).toBuffer();
@@ -242,9 +208,9 @@ usersRouter.put(
 
     await s3Client.send(new PutObjectCommand(avatarUploadParams));
 
-    user.biography = parsedUserInfo.biography;
+    user.biography = biography;
     user.avatar = `${user.username}-avatar`;
-    user.name = parsedUserInfo.name;
+    user.name = name;
 
     await user.save();
 
@@ -262,17 +228,15 @@ usersRouter.put(
   }
 );
 
-// deleting a user
 usersRouter.delete(
   "/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateUserId,
   async (request, response) => {
     const user = request.user;
 
-    const parsedId = v.parse(IdSchema, request.params.id);
-
-    const profileOwner = await routeUtils.fetchUser(parsedId);
+    const profileOwner = await routeUtils.fetchUser(request.parsedId);
 
     if (!profileOwner)
       return response.status(404).json({ error: "user does not exist" });
