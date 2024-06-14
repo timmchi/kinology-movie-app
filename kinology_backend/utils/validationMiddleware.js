@@ -1,6 +1,7 @@
 const v = require("valibot");
 const validationSchemas = require("./validationSchemas");
 
+// comments route
 const validateComment = (req, res, next) => {
   const { id } = req.params;
   const { content } = req.body;
@@ -46,4 +47,80 @@ const validateMovie = (req, res, next) => {
   next();
 };
 
-module.exports = { validateComment, validateParamsIds, validateMovie };
+// contact route
+const validateMessage = (req, res, next) => {
+  const { name, email, message } = req.body;
+
+  const parsedContactData = v.parse(validationSchemas.MessageSchema, {
+    email,
+    name,
+    message,
+  });
+
+  req.parsedContactData = parsedContactData;
+
+  next();
+};
+
+// login route
+const validateLogin = (req, res, next) => {
+  const { username, password } = req.body;
+
+  const parsedLoginData = v.parse(validationSchemas.LoginSchema, {
+    username,
+    password,
+  });
+
+  req.parsedLoginData = parsedLoginData;
+
+  next();
+};
+
+// movies route
+const validateMovieQuery = (req, res, next) => {
+  const {
+    genres,
+    year,
+    ratingUpper,
+    ratingLower,
+    country,
+    page,
+    director,
+    actors,
+  } = req.body;
+
+  const parsedMovieQuery = v.parse(validationSchemas.searchQuerySchema, {
+    genres,
+    year,
+    ratingUpper,
+    ratingLower,
+    country,
+    page,
+    director,
+    actors,
+  });
+
+  req.parsedMovieQuery = parsedMovieQuery;
+
+  next();
+};
+
+const validateTitleSearch = (req, res, next) => {
+  const { title } = req.body;
+
+  const parsedTitle = v.parse(validationSchemas.searchByTitleSchema, { title });
+
+  req.parsedTitle = parsedTitle;
+
+  next();
+};
+
+module.exports = {
+  validateComment,
+  validateParamsIds,
+  validateMovie,
+  validateMessage,
+  validateLogin,
+  validateMovieQuery,
+  validateTitleSearch,
+};
