@@ -2,6 +2,10 @@ const axios = require("axios");
 const moviesRouter = require("express").Router();
 const config = require("../utils/config");
 const movieUtils = require("../utils/movieUtils");
+const {
+  searchQuerySchema,
+  searchByTitleSchema,
+} = require("../utils/validationSchemas");
 const v = require("valibot");
 const Movie = require("../models/movie");
 
@@ -12,41 +16,6 @@ const headers = {
   accept: "application/json",
   Authorization: `Bearer ${config.TMDB_TOKEN}`,
 };
-
-const searchQuerySchema = v.object({
-  genres: v.array(v.string("Genre should be a string")),
-  year: v.union([
-    v.pipe(
-      v.string(),
-      v.minValue("1874", "Movies can not be shot before 1874"),
-      v.maxValue(
-        `${new Date().getFullYear()}`,
-        "Can not search for movies shot after current year"
-      )
-    ),
-    v.literal(""),
-  ]),
-  ratingUpper: v.pipe(
-    v.number("Rating should be a number"),
-    v.minValue(0, "Rating can not be lower than 0"),
-    v.maxValue(10, "Rating can not be higher than 10")
-  ),
-  ratingLower: v.pipe(
-    v.number("Rating should be a number"),
-    v.minValue(0, "Rating can not be lower than 0"),
-    v.maxValue(10, "Rating can not be higher than 10")
-  ),
-  country: v.pipe(
-    v.string("Country should be a string"),
-    v.maxLength(100, "Country name can not be this long")
-  ),
-  page: v.pipe(
-    v.number("Page should be a number"),
-    v.maxValue(10, "Can not search for movies past page 10")
-  ),
-  director: v.string("Director should be a string"),
-  actors: v.array(v.string("Actor should be a string")),
-});
 
 const parseAndTurnIntoQuery = async (params) => {
   const parsedQueryParams = v.parse(searchQuerySchema, params);
@@ -135,10 +104,6 @@ moviesRouter.get("/:id", async (request, response) => {
   };
 
   response.status(200).send(movieObject);
-});
-
-const searchByTitleSchema = v.object({
-  title: v.pipe(v.string()),
 });
 
 moviesRouter.post("/title", async (request, response) => {

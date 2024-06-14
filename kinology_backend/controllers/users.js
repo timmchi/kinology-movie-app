@@ -3,6 +3,13 @@ const middleware = require("../utils/middleware");
 const config = require("../utils/config");
 const routeUtils = require("../utils/routesUtils");
 const usersUtils = require("../utils/usersUtils");
+const {
+  RegistrationSchema,
+  MovieActionSchema,
+  UserUpdateSchema,
+  IdSchema,
+  AvatarSchema,
+} = require("../utils/validationSchemas");
 const Movie = require("../models/movie");
 const User = require("../models/user");
 const multer = require("multer");
@@ -16,85 +23,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const v = require("valibot");
-
-const RegistrationSchema = v.pipe(
-  v.object({
-    email: v.pipe(
-      v.string(),
-      v.minLength(1, "Please enter your email."),
-      v.email("The email address is badly formatted")
-    ),
-    username: v.pipe(
-      v.string(),
-      v.minLength(1, "Please enter your username."),
-      v.minLength(3, "Username should be 3 or more symbols")
-    ),
-    name: v.pipe(
-      v.string(),
-      v.minLength(1, "Please enter your name or nickname."),
-      v.minLength(3, "Name or nickname should be 3 or more symbols")
-    ),
-    password: v.pipe(
-      v.string(),
-      v.minLength(1, "Please enter your password."),
-      v.minLength(8, "Your password must have 8 characters or more."),
-      v.regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-        "Your password must have one uppercase letter, one lowercase letter and one number"
-      )
-    ),
-    passwordConfirm: v.pipe(
-      v.string(),
-      v.minLength(1, "Please confirm password")
-    ),
-  }),
-  v.forward(
-    v.check(
-      (input) => input.password === input.passwordConfirm,
-      "The two password do not match"
-    ),
-    ["passwordConfirm"]
-  )
-);
-
-const MovieActionSchema = v.object({
-  id: v.union([
-    v.pipe(v.string(), v.minValue(2)),
-    v.pipe(v.number(), v.minValue(2)),
-  ]),
-  title: v.optional(v.string()),
-  poster: v.optional(v.pipe(v.string(), v.includes("/"), v.endsWith(".jpg"))),
-  button: v.picklist(["watched", "favorite", "later"]),
-});
-
-const UserUpdateSchema = v.object({
-  biography: v.pipe(
-    v.string("About me should be a string"),
-    v.minLength(1, "Please enter something about yourself.")
-  ),
-  name: v.pipe(
-    v.string("Name should be a string"),
-    v.minLength(1, "Please enter your name"),
-    v.minLength(3, "Name should be 3 or more symbols long")
-  ),
-});
-
-const IdSchema = v.optional(
-  v.string(v.hexadecimal("The receiverId hexadecimal is badly formatted."))
-);
-
-const AvatarSchema = v.object({
-  fieldname: v.string("Field name is required"),
-  originalname: v.string("Original name is required"),
-  encoding: v.string("Encoding is required"),
-  mimetype: v.picklist(["image/jpeg", "image/png", "image/jpg", "image/svg"]),
-  size: v.pipe(
-    v.number(),
-    v.maxValue(1024 * 1024 * 2, "The size must not exceed 2 MB")
-  ),
-  // eslint-disable-next-line no-undef
-  buffer: v.instance(Buffer),
-});
 
 usersRouter.post("/", async (request, response) => {
   const { email, username, password, passwordConfirm, name } = request.body;
@@ -173,35 +101,6 @@ usersRouter.get("/:id/avatar", async (request, response) => {
   response.json(avatarUrl);
 });
 
-// TODO in this route - Check if movie already exists in db, also disallow to add same movie multiple times to the same profile
-
-// const handleWatchLaterAction = async (movie, user) => {
-//   if (!movie.watchLaterBy.includes(user._id)) {
-//     movie.watchLaterBy = movie.watchLaterBy.concat(user._id);
-//   }
-//   if (!user.watchLaterMovies.includes(movie._id)) {
-//     user.watchLaterMovies = user.watchLaterMovies.concat(movie._id);
-//   }
-// };
-
-// const handleWatchedAction = async (movie, user) => {
-//   if (!movie.watchedBy.includes(user._id)) {
-//     movie.watchedBy = movie.watchedBy.concat(user._id);
-//   }
-//   if (!user.watchedMovies.includes(movie._id)) {
-//     user.watchedMovies = user.watchedMovies.concat(movie._id);
-//   }
-// };
-
-// const handleFavoriteAction = async (movie, user) => {
-//   if (!movie.favoritedBy.includes(user._id)) {
-//     movie.favoritedBy = movie.favoritedBy.concat(user._id);
-//   }
-//   if (!user.favoriteMovies.includes(movie._id)) {
-//     user.favoriteMovies = user.favoriteMovies.concat(movie._id);
-//   }
-// };
-
 usersRouter.post(
   "/:id/movies",
   middleware.tokenExtractor,
@@ -259,45 +158,6 @@ usersRouter.post(
     response.status(201).json(updatedSavedMovie);
   }
 );
-
-// const handleUnwatchAction = async (movie, user) => {
-//   if (movie.watchLaterBy.includes(user._id)) {
-//     movie.watchLaterBy = movie.watchLaterBy.filter(
-//       (userId) => userId.toString() !== user._id.toString()
-//     );
-//   }
-//   if (user.watchLaterMovies.includes(movie._id)) {
-//     user.watchLaterMovies = user.watchLaterMovies.filter(
-//       (movieId) => movieId.toString() !== movie._id.toString()
-//     );
-//   }
-// };
-
-// const handleUnseeAction = async (movie, user) => {
-//   if (movie.watchedBy.includes(user._id)) {
-//     movie.watchedBy = movie.watchedBy.filter(
-//       (userId) => userId.toString() !== user._id.toString()
-//     );
-//   }
-//   if (user.watchedMovies.includes(movie._id)) {
-//     user.watchedMovies = user.watchedMovies.filter(
-//       (movieId) => movieId.toString() !== movie._id.toString()
-//     );
-//   }
-// };
-
-// const handleUnfavoriteAction = async (movie, user) => {
-//   if (movie.favoritedBy.includes(user._id)) {
-//     movie.favoritedBy = movie.favoritedBy.filter(
-//       (userId) => userId.toString() !== user._id.toString()
-//     );
-//   }
-//   if (user.favoriteMovies.includes(movie._id)) {
-//     user.favoriteMovies = user.favoriteMovies.filter(
-//       (movieId) => movieId.toString() !== movie._id.toString()
-//     );
-//   }
-// };
 
 // deleting a movie from user profile
 usersRouter.delete(
