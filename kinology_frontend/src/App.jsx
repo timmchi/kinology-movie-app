@@ -8,7 +8,6 @@ import LogIn from "./components/Auth/LogIn";
 import SignUpForm from "./components/SignUp/SignUpForm";
 import User from "./components/User/User";
 import Users from "./components/User/Users";
-import Test from "./components/Test";
 import Movie from "./components/Movie/Movie";
 import NotificationAlert from "./components/Notification/Notification";
 import loginService from "./services/login";
@@ -233,7 +232,6 @@ const App = () => {
             )
           }
         />
-        <Route path="/test" element={<Test />} />
       </Routes>
 
       <AuthVerify logOut={logOut} />

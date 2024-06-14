@@ -67,7 +67,6 @@ const SearchByTitleBar = ({ setMovies }) => {
   const searchMovie = async (data) => {
     const movies = await moviesService.searchByTitle(data);
     setMovies(movies);
-    console.log(movies);
   };
 
   // this is separate from clear search which can is used to clear SearchForm component. Both clear the movies list though

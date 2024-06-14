@@ -20,8 +20,9 @@
 4. [Tests](#tests)
 5. [Env variables](#env-variables)
 6. [Github actions](#github-actions)
-7. [TMDB api](#tmdb)
-8. [Fullstack open](#fso)
+7. [TODOS](#todos)
+8. [TMDB api](#tmdb)
+9. [Fullstack open](#fso)
 
 ## <a name="what-is-this-app">What is this app?</a>
 
@@ -162,6 +163,13 @@ Workflows are available in the **[.github/workflows directory](https://github.co
 | :---------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | **[Deployment pipeline](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/pipeline.yml)** | Includes building, linting, tests and deployment to Render.</br></br>![Deployment pipeline](https://github.com/timmchi/kinology-movie-app/actions/workflows/pipeline.yml/badge.svg) |
 |   **[Healthcheck](https://github.com/timmchi/kinology-movie-app/tree/main/.github/workflows/healthcheck.yml)**    |     Checks if the app is running and available on Render. </br></br> ![Healthcheck](https://github.com/timmchi/kinology-movie-app/actions/workflows/healthcheck.yml/badge.svg)      |
+
+## <a name="todos">TODOS</a>
+
+Login/Registration using github
+Registration with confirmation
+More tests
+Docker
 
 ## <a name="tmdb">TMDB api</a>
 

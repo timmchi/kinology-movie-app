@@ -113,7 +113,7 @@
 | 13.6 | 2     | UseComment hook, refactoring of useMovie and useUser, components utilize useComment, test fixes |
 | 13.6 | 1.25  | Backend routes refactoring, began working on moving validation to middleware                    |
 | 13.6 | 0.5   | e2e fixes                                                                                       |
+| 14.6 | 5     | Moving validation to middleware, final touches                                                  |
 |      |       |                                                                                                 |
 |      |       |                                                                                                 |
-|      |       |                                                                                                 |
-| tot  | 172   |                                                                                                 |
+| tot  | 177   |                                                                                                 |
