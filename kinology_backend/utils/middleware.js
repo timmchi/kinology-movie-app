@@ -2,8 +2,6 @@ const jwt = require("jsonwebtoken");
 const logger = require("./logger");
 const User = require("../models/user");
 const config = require("./config");
-const v = require("valibot");
-const validationSchemas = require("./validationSchemas");
 
 const requestLogger = (request, response, next) => {
   logger.info("Method: ", request.method);
@@ -68,43 +66,10 @@ const userExtractor = async (request, response, next) => {
   next();
 };
 
-const validateComment = (req, res, next) => {
-  try {
-    const parsedData = v.parse(validationSchemas.CommentSchema, req.body);
-    req.validatedBody = parsedData;
-    next();
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-};
-
-const validateParamsId = (req, res, next) => {
-  try {
-    const parsedParams = v.parse(validationSchemas.paramsIdSchema, req.params);
-    req.validatedParams = parsedParams;
-    next();
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-};
-
-const validateMovie = (req, res, next) => {
-  try {
-    const parsedData = v.parse(validationSchemas.MovieSchema, req.body);
-    req.validatedBody = parsedData;
-    next();
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-};
-
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
   userExtractor,
-  validateComment,
-  validateParamsId,
-  validateMovie,
 };

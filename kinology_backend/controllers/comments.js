@@ -1,77 +1,45 @@
 const commentsRouter = require("express").Router();
 const middleware = require("../utils/middleware");
+const validationMiddleware = require("../utils/validationMiddleware");
 const UserComment = require("../models/userComment");
 const commentsUtils = require("../utils/commentsUtils");
 const routesUtils = require("../utils/routesUtils");
-const v = require("valibot");
-
-const CommentSchema = v.object({
-  content: v.optional(
-    v.pipe(
-      v.string("Comment must be a string"),
-      v.minLength(1, "Comments can not be empty")
-    )
-  ),
-  author: v.optional(
-    v.string(v.hexadecimal("The authorId hexadecimal is badly formatted."))
-  ),
-  receiver: v.optional(
-    v.string(v.hexadecimal("The receiverId hexadecimal is badly formatted."))
-  ),
-});
-
-const paramsIdSchema = v.object({
-  commentId: v.optional(
-    v.string(v.hexadecimal("The commentId hexadecimal is badly formatted"))
-  ),
-  movieId: v.optional(v.string(v.minValue("2"))),
-});
-
-const MovieSchema = v.object({
-  title: v.optional(v.string()),
-  poster: v.optional(v.pipe(v.string(), v.includes("/"), v.endsWith(".jpg"))),
-});
 
 commentsRouter.get("/", async (request, response) => {
   const comments = await UserComment.find({});
   response.status(200).send(comments);
 });
 
-commentsRouter.get("/profile/:id", async (request, response) => {
-  const { id } = request.params;
+commentsRouter.get(
+  "/profile/:id",
+  validationMiddleware.validateComment,
+  async (request, response) => {
+    const { receiver } = request.parsedData;
 
-  const parsedParams = v.parse(CommentSchema, { receiver: id });
+    const comments = await UserComment.find({ receiver })
+      .populate("author", { name: 1, avatar: 1, username: 1 })
+      .populate("receiver");
 
-  const comments = await UserComment.find({ receiver: parsedParams.receiver })
-    .populate("author", { name: 1, avatar: 1, username: 1 })
-    .populate("receiver");
+    await routesUtils.fetchUser(receiver);
 
-  await routesUtils.fetchUser(parsedParams.receiver);
-
-  response.status(200).send(comments);
-});
+    response.status(200).send(comments);
+  }
+);
 
 commentsRouter.post(
   "/profile/:id",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateComment,
   async (request, response) => {
-    const { id } = request.params;
     const user = request.user;
-    const { content } = request.body;
 
     if (!user) return response.status(401).send({ error: "not authorized" });
 
-    const parsedComment = v.parse(CommentSchema, {
-      content,
-      author: user._id.toString(),
-      receiver: id,
-    });
-
     const savedComment = await commentsUtils.createComment(
-      parsedComment.content,
-      parsedComment.author,
-      parsedComment.receiver,
+      request.parsedData.content,
+      request.parsedData.author,
+      request.parsedData.receiver,
       "profile"
     );
 
@@ -102,20 +70,20 @@ commentsRouter.put(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateParamsIds,
+  validationMiddleware.validateComment,
   async (request, response) => {
-    const { commentId } = request.params;
-    const { authorId, content } = request.body;
     const user = request.user;
 
-    const parsedComment = v.parse(CommentSchema, { content, author: authorId });
-    const parsedParams = v.parse(paramsIdSchema, { commentId });
+    const { commentId } = request.parsedParamsData;
+    const { author, content } = request.parsedData;
 
-    if (!user || user._id.toString() !== parsedComment.author)
+    if (!user || user._id.toString() !== author)
       return response.status(401).json({ error: "not authorized" });
 
     const updatedComment = await UserComment.findByIdAndUpdate(
-      parsedParams.commentId,
-      { content: parsedComment.content },
+      commentId,
+      { content },
       { new: true }
     )
       .populate("author", { name: 1, avatar: 1, username: 1 })
@@ -132,33 +100,27 @@ commentsRouter.delete(
   "/profile/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateParamsIds,
+  validationMiddleware.validateComment,
   async (request, response) => {
-    const { id, commentId } = request.params;
-    const { authorId } = request.body;
     const user = request.user;
 
-    const parsedComment = v.parse(CommentSchema, {
-      author: authorId,
-      receiver: id,
-    });
-    const parsedParams = v.parse(paramsIdSchema, { commentId });
+    const { commentId } = request.parsedParamsData;
 
     if (
       !user ||
-      (user._id.toString() !== parsedComment.author.toString() &&
-        user._id.toString() !== parsedComment.receiver.toString())
+      (user._id.toString() !== request.parsedData.author.toString() &&
+        user._id.toString() !== request.parsedData.receiver.toString())
     )
       return response.status(401).json({ error: "not authorized" });
 
-    const commentToDelete = await UserComment.findByIdAndDelete(
-      parsedParams.commentId
-    );
+    const commentToDelete = await UserComment.findByIdAndDelete(commentId);
 
     if (!commentToDelete)
       return response.status(404).json({ error: "no comment found" });
 
     const author = await routesUtils.fetchUser(user._id);
-    const receiver = await routesUtils.fetchUser(parsedComment.receiver);
+    const receiver = await routesUtils.fetchUser(request.parsedData.receiver);
 
     if (author._id.toString() === receiver._id.toString()) {
       await commentsUtils.handleSameProfileCommentDeletion(
@@ -181,61 +143,51 @@ commentsRouter.delete(
   }
 );
 
-commentsRouter.get("/movie/:id", async (request, response) => {
-  const { id } = request.params;
+commentsRouter.get(
+  "/movie/:movieId",
+  validationMiddleware.validateParamsIds,
+  async (request, response) => {
+    const { movieId } = request.parsedParamsData;
 
-  const parsedParams = v.parse(paramsIdSchema, { movieId: id });
+    const movie = await routesUtils.fetchMovie(movieId);
 
-  //   const movie = await Movie.findOne({ tmdbId: parsedParams.movieId });
-  const movie = await routesUtils.fetchMovie(parsedParams.movieId);
+    if (!movie) return response.status(200).send([]);
 
-  if (!movie) return response.status(200).send([]);
+    const comments = await UserComment.find({
+      movieReceiver: movie?._id,
+    }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
 
-  const comments = await UserComment.find({
-    movieReceiver: movie?._id,
-  }).populate("author", { name: 1, id: 1, username: 1, avatar: 1 });
+    movie.populate("comments");
 
-  movie.populate("comments");
-
-  response.status(200).send(comments);
-});
+    response.status(200).send(comments);
+  }
+);
 
 commentsRouter.post(
-  "/movie/:id",
+  "/movie/:movieId",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateParamsIds,
+  validationMiddleware.validateComment,
+  validationMiddleware.validateMovie,
   async (request, response) => {
-    const { id } = request.params;
     const user = request.user;
-    const { content, movieTitle, moviePoster } = request.body;
 
-    const parsedMovie = v.parse(MovieSchema, {
-      title: movieTitle,
-      poster: moviePoster,
-    });
+    const { movieId } = request.parsedParamsData;
+    const { title, poster } = request.parsedMovieData;
 
-    const parsedParams = v.parse(paramsIdSchema, { movieId: id });
-
-    let movie = await routesUtils.fetchMovie(parsedParams.movieId);
+    let movie = await routesUtils.fetchMovie(movieId);
 
     if (!movie) {
-      movie = await routesUtils.createMovie(
-        parsedParams.movieId,
-        parsedMovie.title,
-        parsedMovie.poster
-      );
+      movie = await routesUtils.createMovie(movieId, title, poster);
     }
 
-    const parsedComment = v.parse(CommentSchema, {
-      content,
-      author: user._id.toString(),
-      receiver: movie._id.toString(),
-    });
+    const { receiver, content, author } = request.parsedData;
 
     const savedComment = await commentsUtils.createComment(
-      parsedComment.content,
-      parsedComment.author,
-      parsedComment.receiver,
+      content,
+      author,
+      receiver,
       "movie"
     );
 
@@ -246,11 +198,13 @@ commentsRouter.post(
       avatar: 1,
     });
 
-    const author = await routesUtils.fetchUser(user._id);
+    const commentAuthor = await routesUtils.fetchUser(user._id);
 
-    author.authoredComments = author.authoredComments.concat(savedComment._id);
+    commentAuthor.authoredComments = commentAuthor.authoredComments.concat(
+      savedComment._id
+    );
     movie.comments = movie.comments.concat(savedComment._id);
-    await Promise.all([author.save(), movie.save()]);
+    await Promise.all([commentAuthor.save(), movie.save()]);
 
     response.status(201).send(savedComment);
   }
@@ -260,21 +214,20 @@ commentsRouter.put(
   "/movie/:id/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateParamsIds,
+  validationMiddleware.validateComment,
   async (request, response) => {
-    const { commentId } = request.params;
     const user = request.user;
-    const { authorId, content } = request.body;
 
-    const parsedParams = v.parse(paramsIdSchema, { commentId });
+    const { commentId } = request.parsedParamsData;
+    const { content, author } = request.parsedData;
 
-    const parsedComment = v.parse(CommentSchema, { content, author: authorId });
-
-    if (!user || user._id.toString() !== parsedComment.author)
+    if (!user || user._id.toString() !== author)
       return response.status(401).json({ error: "not authorized" });
 
     const updatedComment = await UserComment.findByIdAndUpdate(
-      parsedParams.commentId,
-      { content: parsedComment.content },
+      commentId,
+      { content },
       { new: true }
     )
       .populate("author", { name: 1, avatar: 1, username: 1, id: 1 })
@@ -288,38 +241,36 @@ commentsRouter.put(
 );
 
 commentsRouter.delete(
-  "/movie/:id/:commentId",
+  "/movie/:movieId/:commentId",
   middleware.tokenExtractor,
   middleware.userExtractor,
+  validationMiddleware.validateParamsIds,
+  validationMiddleware.validateComment,
   async (request, response) => {
-    const { id, commentId } = request.params;
     const user = request.user;
-    const { authorId } = request.body;
 
-    const parsedParams = v.parse(paramsIdSchema, { commentId, movieId: id });
-    const parsedComment = v.parse(CommentSchema, { author: authorId });
+    const { commentId, movieId } = request.parsedParamsData;
+    const { author } = request.parsedData;
 
-    if (!user || user._id.toString() !== parsedComment.author)
+    if (!user || user._id.toString() !== author)
       return response.status(401).json({ error: "not authorized" });
 
-    const commentToDelete = await UserComment.findByIdAndDelete(
-      parsedParams.commentId
-    );
+    const commentToDelete = await UserComment.findByIdAndDelete(commentId);
 
     if (!commentToDelete)
       return response.status(404).json({ error: "no comment found" });
 
-    const movie = await routesUtils.fetchMovie(parsedParams.movieId);
-    const author = await routesUtils.fetchUser(user._id);
+    const movie = await routesUtils.fetchMovie(movieId);
+    const commentAuthor = await routesUtils.fetchUser(user._id);
 
     movie.comments = movie.comments.filter(
-      (c) => c._id.toString() !== parsedParams.commentId.toString()
+      (c) => c._id.toString() !== commentId.toString()
     );
-    author.authoredComments = author.authoredComments.filter(
-      (c) => c._id.toString() !== parsedParams.commentId.toString()
+    commentAuthor.authoredComments = commentAuthor.authoredComments.filter(
+      (c) => c._id.toString() !== commentId.toString()
     );
 
-    await Promise.all([author.save(), movie.save()]);
+    await Promise.all([commentAuthor.save(), movie.save()]);
 
     response.status(204).end();
   }
