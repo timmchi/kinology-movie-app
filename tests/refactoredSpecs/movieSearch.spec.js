@@ -14,7 +14,7 @@ describe("Searching for movies", () => {
   });
 
   test("search button is not immediately in the viewport", async ({ page }) => {
-    const searchButton = page.getByRole("button", { name: "Open Search" });
+    const searchButton = page.getByRole("button", { name: "Advanced Search" });
 
     await expect(searchButton).not.toBeInViewport();
 
@@ -32,7 +32,7 @@ describe("Searching for movies", () => {
   test("search button is moved into viewport by pressing 'search' cta", async ({
     page,
   }) => {
-    const searchButton = page.getByRole("button", { name: "Open Search" });
+    const searchButton = page.getByRole("button", { name: "Advanced Search" });
 
     await clickButton(page, "Search");
 
@@ -91,7 +91,9 @@ describe("Searching for movies", () => {
     });
 
     test("search modal can be opened", async ({ page }) => {
-      const searchButton = page.getByRole("button", { name: "Open Search" });
+      const searchButton = page.getByRole("button", {
+        name: "Advanced Search",
+      });
       await searchButton.click();
 
       const genresSelector = page
@@ -128,7 +130,7 @@ describe("Searching for movies", () => {
 
     test("empty search returns movie cards", async ({ page }) => {
       const openSearchButton = page.getByRole("button", {
-        name: "Open Search",
+        name: "Advanced Search",
       });
       await openSearchButton.click();
 
@@ -150,7 +152,7 @@ describe("Searching for movies", () => {
     describe("and an empty search was done", () => {
       beforeEach(async ({ page }) => {
         const openSearchButton = page.getByRole("button", {
-          name: "Open Search",
+          name: "Advanced Search",
         });
         await openSearchButton.click();
 
@@ -179,7 +181,7 @@ describe("Searching for movies", () => {
       page,
     }) => {
       const openSearchButton = page.getByRole("button", {
-        name: "Open Search",
+        name: "Advanced Search",
       });
       await openSearchButton.click();
 
@@ -243,7 +245,7 @@ describe("Searching for movies", () => {
     describe("and a movie 'Casino' was found", () => {
       beforeEach(async ({ page }) => {
         const openSearchButton = page.getByRole("button", {
-          name: "Open Search",
+          name: "Advanced Search",
         });
         await openSearchButton.click();
 

@@ -114,6 +114,6 @@
 | 13.6 | 1.25  | Backend routes refactoring, began working on moving validation to middleware                    |
 | 13.6 | 0.5   | e2e fixes                                                                                       |
 | 14.6 | 5     | Moving validation to middleware, final touches                                                  |
+| 4.8  | 1.5   | Fixing movie comments bug, test fixes                                                           |
 |      |       |                                                                                                 |
-|      |       |                                                                                                 |
-| tot  | 177   |                                                                                                 |
+| tot  | 178.5 |                                                                                                 |

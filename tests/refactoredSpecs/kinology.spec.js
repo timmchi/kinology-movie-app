@@ -96,7 +96,7 @@ describe("Kinology", () => {
         beforeEach(async ({ page }) => {
           await clickButton(page, "Search");
 
-          await clickButton(page, "Open Search");
+          await clickButton(page, "Advanced Search");
 
           const genresSelector = page
             .locator("div")

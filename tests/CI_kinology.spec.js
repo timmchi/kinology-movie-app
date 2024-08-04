@@ -316,7 +316,7 @@ describe("Kinology", () => {
         beforeEach(async ({ page }) => {
           await clickButton(page, "Search");
 
-          await clickButton(page, "Open Search");
+          await clickButton(page, "Advanced Search");
 
           const genresSelector = page
             .locator("div")
@@ -892,7 +892,9 @@ describe("Kinology", () => {
     test("search button is not immediately in the viewport", async ({
       page,
     }) => {
-      const searchButton = page.getByRole("button", { name: "Open Search" });
+      const searchButton = page.getByRole("button", {
+        name: "Advanced Search",
+      });
 
       await expect(searchButton).not.toBeInViewport();
 
@@ -910,7 +912,9 @@ describe("Kinology", () => {
     test("search button is moved into viewport by pressing 'search' cta", async ({
       page,
     }) => {
-      const searchButton = page.getByRole("button", { name: "Open Search" });
+      const searchButton = page.getByRole("button", {
+        name: "Advanced Search",
+      });
 
       await clickButton(page, "Search");
 
@@ -977,7 +981,9 @@ describe("Kinology", () => {
       });
 
       test("search modal can be opened", async ({ page }) => {
-        const searchButton = page.getByRole("button", { name: "Open Search" });
+        const searchButton = page.getByRole("button", {
+          name: "Advanced Search",
+        });
         await searchButton.click();
 
         const genresSelector = page
@@ -1014,7 +1020,7 @@ describe("Kinology", () => {
 
       test("empty search returns movie cards", async ({ page }) => {
         const openSearchButton = page.getByRole("button", {
-          name: "Open Search",
+          name: "Advanced Search",
         });
         await openSearchButton.click();
 
@@ -1036,7 +1042,7 @@ describe("Kinology", () => {
       describe("and an empty search was done", () => {
         beforeEach(async ({ page }) => {
           const openSearchButton = page.getByRole("button", {
-            name: "Open Search",
+            name: "Advanced Search",
           });
           await openSearchButton.click();
 
@@ -1065,7 +1071,7 @@ describe("Kinology", () => {
         page,
       }) => {
         const openSearchButton = page.getByRole("button", {
-          name: "Open Search",
+          name: "Advanced Search",
         });
         await openSearchButton.click();
 
@@ -1129,7 +1135,7 @@ describe("Kinology", () => {
       describe("and a movie 'Casino' was found", () => {
         beforeEach(async ({ page }) => {
           const openSearchButton = page.getByRole("button", {
-            name: "Open Search",
+            name: "Advanced Search",
           });
           await openSearchButton.click();
 
