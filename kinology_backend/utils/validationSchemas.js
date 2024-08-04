@@ -14,6 +14,9 @@ const CommentSchema = v.object({
   receiver: v.optional(
     v.string(v.hexadecimal("The receiverId hexadecimal is badly formatted."))
   ),
+  movieReceiver: v.optional(
+    v.string(v.number("The movieId is badly formatted."))
+  ),
 });
 
 const paramsIdSchema = v.object({

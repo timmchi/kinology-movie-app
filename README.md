@@ -166,9 +166,14 @@ Workflows are available in the **[.github/workflows directory](https://github.co
 
 ## <a name="todos">TODOS</a>
 
+Implement React Query for communication with backend
+
 Login/Registration using github
+
 Registration with confirmation
+
 More tests
+
 Docker
 
 ## <a name="tmdb">TMDB api</a>
