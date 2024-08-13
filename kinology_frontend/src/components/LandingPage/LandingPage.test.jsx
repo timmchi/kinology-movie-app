@@ -19,6 +19,6 @@ test("landing page renders properly", () => {
   const cards = container.querySelector(".cardsContainer");
   expect(cards).not.toBeNull();
 
-  expect(screen.getByText("Open Search")).toBeDefined();
+  expect(screen.getByText("Advanced Search")).toBeDefined();
   expect(screen.getByText("clear search")).toBeDefined();
 });

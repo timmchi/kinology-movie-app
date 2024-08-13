@@ -182,12 +182,12 @@ commentsRouter.post(
       movie = await routesUtils.createMovie(movieId, title, poster);
     }
 
-    const { receiver, content, author } = request.parsedData;
+    const { content, author } = request.parsedData;
 
     const savedComment = await commentsUtils.createComment(
       content,
       author,
-      receiver,
+      movie.id,
       "movie"
     );
 

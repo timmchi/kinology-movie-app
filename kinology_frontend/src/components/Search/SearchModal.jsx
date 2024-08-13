@@ -123,7 +123,7 @@ const SearchModal = ({ setMovies }) => {
         onClick={() => setOpen(true)}
         sx={modalOpenStyle}
       >
-        Open Search
+        Advanced Search
       </Button>
       <Modal
         aria-labelledby="modal-title"
